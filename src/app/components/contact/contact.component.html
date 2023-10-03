@@ -1,1 +1,32 @@
-<p>contact works!</p>
+<div class="contact-page">
+    <div class="contact-info">
+        <div class="contact-text-container">
+            <h2>Contact Information</h2>
+            <p><i class="material-icons inline-icon">push_pin</i> Unit 15, Hilsea Industrial Estate Limberline Spur, Portsmouth, PO3 5JW</p>
+            <p><i class="material-icons inline-icon">mail</i> support@hellenicgrocery.co.uk</p>
+            <p><i class="material-icons inline-icon">call</i> 023 9307 9735</p>
+        </div>
+        <div class="map-container">
+            <iframe width="100%" height="300" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?z=18&t=m&q=PO3 5JW&ie=UTF8&&output=embed">
+            </iframe>
+        </div>
+    </div>
+    <div class="form-container">
+        <h1>Contact Us</h1>
+        <form id="contact-form">
+            <div class="form-group">
+                <label for="name">Name*:</label>
+                <input type="text" id="contact-form-name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email*:</label>
+                <input type="email" id="contact-form-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message*:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+            <button id="contact-submit" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
