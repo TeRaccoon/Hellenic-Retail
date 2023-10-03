@@ -1,5 +1,5 @@
 <nav class="navbar">
-    <a routerLink="/home" class="nav-logo">
+    <a routerLink="/" class="nav-logo">
         <img src="assets/logo.jpg" alt="Food Retail Logo">
     </a>
     <ul id="nav-links" class="nav-links">
@@ -11,6 +11,14 @@
         </li>
         <li class="nav-item">
             <a routerLink="/contact" class="nav-link">Contact</a>
+        </li>
+        <li *ngFor="let category of categories; let i = index" class="nav-item dropdown">
+            <a class="nav-link">{{ category }}</a>
+            <div class="dropdown-content">
+                <a *ngFor="let subcategory of subcategories[i][0].split(','); let k = index" (click)="selectCategory('items-sub-category', subcategory.trim())" [routerLink]="['/products', subcategory.trim()]">
+                    {{ subcategory.trim() }}
+                </a>
+            </div>
         </li>
         <li id="shopping-cart" class="nav-item">
             <a (click)="showCart()" class="nav-link"><i class="material-icons inline-icon">shopping_cart</i></a>
