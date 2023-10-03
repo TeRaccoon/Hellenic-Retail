@@ -15,7 +15,7 @@ export class SlideshowComponent implements OnInit {
   constructor(private renderer: Renderer2, private dataService: DataService) { }
 
   ngOnInit() {
-    this.startSlideShow();
+    this.loadSlideShow();
   }
 
   ngOnDestroy() {
@@ -58,6 +58,7 @@ export class SlideshowComponent implements OnInit {
       this.slideIndex = n;
     }
   }
+  
   async loadSlideShow() {
     this.startSlideShow();
     this.dataService.collectData("featured").subscribe((data: any) => {

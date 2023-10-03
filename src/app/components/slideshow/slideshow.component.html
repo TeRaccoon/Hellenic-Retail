@@ -1,8 +1,8 @@
 <div id="slideshow-container" class="slideshow-container">
     <div *ngFor="let product of featuredProducts; let i = index" [style.display]="i === slideIndex ? 'block' : 'none'" class="slide fade">
-        <img [src]="'images/' + product.image_file_name" [alt]="product.item_name" (click)="selectItem(product.stock_code)">
+        <img [src]="'/assets/products/' + product.image_file_name" [alt]="product.item_name" (click)="selectItem(product.stock_code)">
         <div class="slide-text">{{ product.item_name }}</div>
     </div>
-    <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-    <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    <a class="prev" (click)="changeSlide(-1)">&#10094;</a>
+    <a class="next" (click)="changeSlide(1)">&#10095;</a>
 </div>
