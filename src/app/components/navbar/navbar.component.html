@@ -12,14 +12,18 @@
         <li class="nav-item">
             <a routerLink="/contact" class="nav-link">Contact</a>
         </li>
-        <li *ngFor="let category of categories; let i = index" class="nav-item dropdown">
-            <a class="nav-link">{{ category }}</a>
-            <div class="dropdown-content">
-                <a *ngFor="let subcategory of subcategories[i][0].split(','); let k = index" (click)="selectCategory('items-sub-category', subcategory.trim())" [routerLink]="['/products', subcategory.trim()]">
-                    {{ subcategory.trim() }}
-                </a>
-            </div>
-        </li>
+        <ng-container *ngIf="categories && subcategories">
+            <li *ngFor="let category of categories; let i = index" class="nav-item dropdown">
+                <a class="nav-link">{{ category }}</a>
+                <div class="dropdown-content">
+                    <ng-container *ngIf="subcategories[i]">
+                        <a *ngFor="let subcategory of subcategories[i][0].split(','); let k = index" (click)="selectCategory('items-sub-category', subcategory.trim())" [routerLink]="['/products', subcategory.trim()]">
+                            {{ subcategory.trim() }}
+                        </a>
+                    </ng-container>
+                </div>
+            </li>
+        </ng-container>
         <li id="shopping-cart" class="nav-item">
             <a (click)="showCart()" class="nav-link"><i class="material-icons inline-icon">shopping_cart</i></a>
         </li>
