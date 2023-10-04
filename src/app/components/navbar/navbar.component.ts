@@ -31,7 +31,6 @@ export class NavbarComponent {
       this.categories = data;
     });
     this.dataService.collectData("subcategories").subscribe((data: any) => {
-      console.log(data);
       this.subcategories = data;
     });
   }
