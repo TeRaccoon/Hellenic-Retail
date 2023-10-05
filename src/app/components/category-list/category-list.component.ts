@@ -30,4 +30,27 @@ export class CategoryListComponent {
   changeCategory(category: string, categoryType: string) {
     
   }
+  setActive(selectedCategory: any, isSubcategory: boolean) {
+    console.log(selectedCategory);
+    if (isSubcategory) {
+
+    } else {
+          // Reset all categories to inactive
+          this.categories.forEach(function(cat) {
+            cat.active = false;
+        });
+
+        // Set the selected category to active
+        selectedCategory.active = true;
+    }
+  }
+  // showDropdown(selectedCategory: any) {
+  //   // Hide all categories
+  //   this.categories.forEach(function(cat) {
+  //       cat.show = false;
+  //   });
+
+  //   // Show the selected category
+  //   selectedCategory.show = true;
+  // }
 }
