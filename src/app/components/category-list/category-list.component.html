@@ -1,9 +1,9 @@
 <div class="sidebar">
     <ng-container *ngIf="categories && subcategories">
-        <button *ngFor="let category of categories; let i = index" class="dropdown-btn">
+        <button *ngFor="let category of categories; let i = index" (click)="setActive(category, false)" ng-class="{'active': category.active, 'inactive': !category.active}" class="dropdown-btn" type="button">
             {{ category }}
             <fa-icon class="right icon" [icon]="faCaretDown"></fa-icon>
-            <ng-container *ngIf="subcategories[i]">
+            <ng-container *ngIf="subcategories[i] && category.active">
                 <div class="dropdown-container">
                     <a *ngFor="let subcategory of subcategories[i][0].split(','); let k = index" (click)="changeCategory(category, 'category')">
                         {{ subcategory.trim() }}
