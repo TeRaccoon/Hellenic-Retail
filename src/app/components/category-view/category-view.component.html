@@ -1,4 +1,7 @@
 <app-category-list></app-category-list>
 <div class="product-grid">
-
+    <div *ngFor="let product of products; let i = index" class="product-grid-item">
+        <img [src]="'/assets/products/' + product.image_file_name">
+        <p>{{ product.brand }}</p>
+    </div>
 </div>

@@ -12,6 +12,19 @@ export class CategoryViewComponent {
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    
+    this.loadProductGrid();
+  }
+
+  loadProductGrid() {
+    let filter = localStorage.getItem("filter");
+
+    if (filter !== null) {
+      this.dataService.collectData("items-category", filter).subscribe((data: any) => {
+        this.products = data;
+        console.log(data);
+      });
+    } else {
+      console.error('No "filter" found in localStorage.');
+    }
   }
 }
