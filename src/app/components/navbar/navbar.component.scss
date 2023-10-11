@@ -1,13 +1,76 @@
+.category-bar,
+.intro-bar,
 .navbar {
+    margin: auto;
+    width: 60%;
     font-family: 'Montserrat', sans-serif;
-    background-color: rgb(255, 255, 255);
-    border-radius: 10px;
-    margin: 10px;
-    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.intro-bar,
+.navbar {
+    background-color: rgb(255, 255, 255);
+}
+
+.navbar {
+    padding: 10px 0 10px 0;
+}
+
+.category-bar {
+    font-weight: bold;
+}
+
+.intro-bar {
+    font-size: 14px;
+}
+
+.intro-bar p {
+    border: 1px solid#000000;
+    border-style: none solid;
+    padding: 10px;
+    margin: 0px;
+}
+
+.search-container {
+    display: inline-block;
+}
+
+.search-container input {
+    border: 1px solid #e9e9e9;
+    padding: 6px 12px;
+    border-radius: 0px;
+    font-size: 100%;
+    width: 100%
+}
+
+.search-container button {
+    border: 1px solid #e9e9e9;
+    padding: 6px 12px;
+    border-radius: 0px;
+    background-color: #FFFFFF;
+    font-size: 100%;
+}
+
+.bottom-border {
+    border-bottom: 1px solid#000000;
+}
+
+.container {
+    width: 100%
+}
+
+.hellenic-blue {
+    background-color: rgb(0, 140, 255);
+}
+
+.white {
+    background-color: rgb(255, 255, 255);
+}
+
+.hamburger {
+    background-color: rgb(0, 119, 255);
 }
 
 .nav-logo {
@@ -23,24 +86,21 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    gap: 20px;
+    margin: 0px;
+    padding: 0px;
 }
 
 .nav-link {
     font-size: 18px;
-    color: #000000;
-    /* White text color */
+    color: #ffffff;
     text-decoration: none;
     transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-    color: #2188FF;
-    cursor: pointer;
+    display: inline-block;
+    margin: 10px 0 10px 0;
 }
 
 .nav-logo img {
-    width: 100px;
+    width: 70px;
     height: auto;
 }
 
@@ -58,10 +118,12 @@
 
 .dropdown {
     position: relative;
+    color: #FFFFFF;
+    padding: 0 10px 0 10px;
 }
 
 .dropdown-icon {
-    float: right;
+    padding: 0 10px 0 10px;
 }
 
 .dropdown-content {
@@ -95,9 +157,4 @@
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
     border-radius: 5px;
-}
-
-.dropdown-content a:hover {
-    background-color: #F2F2F2;
-    color: #2188FF;
 }
