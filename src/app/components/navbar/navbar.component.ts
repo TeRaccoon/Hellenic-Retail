@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { faCaretDown, faBars, faEnvelope, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +8,12 @@ import { DataService } from '../../services/data.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  categories: any[] = [];
+  faCaretDown = faCaretDown;
+  faBars = faBars;
+  faEnvelope = faEnvelope;
+  faSearch = faSearch;
+
+  categories: string[] = [];
   subcategories: any[] = [];
 
   constructor(private dataService: DataService) { }
@@ -37,6 +43,7 @@ export class NavbarComponent {
 
   selectCategory(query: string, filter: string) {
     localStorage.setItem("query", query);
+    console.log(filter);
     localStorage.setItem("filter", filter);
   }
 }

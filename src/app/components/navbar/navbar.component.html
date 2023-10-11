@@ -1,8 +1,19 @@
+<div class="container bottom-border">
+    <div class="intro-bar">
+        <p>Welcome to Hellenic Grocery</p>
+        <p>
+            <fa-icon class="dropdown-icon" [icon]="faEnvelope"></fa-icon>support@hellenic.co.uk</p>
+    </div>
+</div>
 <nav class="navbar">
     <a routerLink="/" class="nav-logo">
         <img src="assets/logo.jpg" alt="Food Retail Logo">
     </a>
-    <ul id="nav-links" class="nav-links">
+    <div class="search-container">
+        <input type="text" placeholder="Search for products, categories, brands, sku..." name="search">
+        <button type="submit"><fa-icon class="dropdown-icon" [icon]="faSearch"></fa-icon></button>
+    </div>
+    <!-- <ul id="nav-links" class="nav-links">
         <li class="nav-item">
             <a routerLink="/home" class="nav-link">Home</a>
         </li>
@@ -14,10 +25,10 @@
         </li>
         <ng-container *ngIf="categories && subcategories">
             <li *ngFor="let category of categories; let i = index" class="nav-item dropdown">
-                <a class="nav-link">{{ category }}</a>
+                <a (click)="selectCategory('items-category', category)" [routerLink]="['/products', category]" class="nav-link">{{ category }}</a>
                 <div class="dropdown-content">
                     <ng-container *ngIf="subcategories[i]">
-                        <a *ngFor="let subcategory of subcategories[i][0].split(','); let k = index" (click)="selectCategory('items-sub-category', subcategory.trim())" [routerLink]="['/products', subcategory.trim()]">
+                        <a *ngFor="let subcategory of subcategories[i][0].split(','); let k = index" (click)="selectCategory('items-sub-category', subcategory)" [routerLink]="['/products', subcategory.trim()]">
                             {{ subcategory.trim() }}
                         </a>
                     </ng-container>
@@ -30,5 +41,22 @@
         <li id="login-button" class="nav-item">
             <a (click)="showLogin()" class="nav-link"><i class="material-icons inline-icon">person</i></a>
         </li>
-    </ul>
+    </ul> -->
 </nav>
+<div class="hellenic-blue">
+    <nav class="category-bar">
+        <ul class="nav-links">
+            <ng-container *ngIf="categories">
+                <li class="nav-item dropdown hamburger">
+                    <p class="nav-link">Shopping By Categories</p>
+                    <fa-icon class="dropdown-icon" [icon]="faBars"></fa-icon>
+                    <div class="dropdown-content">
+                        <a *ngFor="let category of categories; let i = index">
+                            {{ category }}
+                        </a>
+                    </div>
+                </li>
+            </ng-container>
+        </ul>
+    </nav>
+</div>
