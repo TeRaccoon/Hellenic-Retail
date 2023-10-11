@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -6,25 +7,22 @@ import { DataService } from 'src/app/services/data.service';
   templateUrl: './category-view.component.html',
   styleUrls: ['./category-view.component.scss']
 })
-export class CategoryViewComponent {
+export class CategoryViewComponent implements OnInit {
+  category: string = '';
   products: any[] = [];
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private router: ActivatedRoute) {}
 
   ngOnInit() {
-    this.loadProductGrid();
+    this.router.params.subscribe(params => {
+      this.category = params['category'];
+      this.loadProductGrid();
+    });
   }
 
   loadProductGrid() {
-    let filter = localStorage.getItem("filter");
-
-    if (filter !== null) {
-      this.dataService.collectData("items-category", filter).subscribe((data: any) => {
-        this.products = data;
-        console.log(data);
-      });
-    } else {
-      console.error('No "filter" found in localStorage.');
-    }
+    this.dataService.collectData("items-category", this.category).subscribe((data: any) => {
+      this.products = data;
+    });
   }
 }
