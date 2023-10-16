@@ -1,0 +1,5 @@
+<div class="category-row">
+    <a *ngFor="let category of categories; let i = index;">
+        <img [src]="'assets/uploads/admin_uploads/' + category + '.png'"> {{ category}}
+    </a>
+</div>

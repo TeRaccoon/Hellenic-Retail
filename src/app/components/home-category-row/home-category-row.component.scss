@@ -1,0 +1,27 @@
+.category-row {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    width: 68%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 130px;
+    max-height: 130px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 30px;
+    a {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding: 5px;
+    }
+    img {
+        border-radius: 50%;
+        height: 130px;
+        max-height: 130px;
+        width: 130px;
+        max-width: 130px;
+        object-fit: cover;
+    }
+}

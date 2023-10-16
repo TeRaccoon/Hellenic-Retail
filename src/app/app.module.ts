@@ -11,6 +11,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { SlideshowComponent } from './components/slideshow/slideshow.component';
 import { CategoryViewComponent } from './components/category-view/category-view.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
+import { HomeCategoryRowComponent } from './components/home-category-row/home-category-row.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CategoryListComponent } from './components/category-list/category-list.
     ContactComponent,
     SlideshowComponent,
     CategoryViewComponent,
-    CategoryListComponent
+    CategoryListComponent,
+    HomeCategoryRowComponent
   ],
   imports: [
     BrowserModule,
