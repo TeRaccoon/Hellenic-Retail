@@ -2,62 +2,30 @@
     font-family: 'Montserrat', sans-serif;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
     position: relative;
     width: auto;
     height: 600px;
     max-height: 600px;
-    margin: 10px;
-    padding: 10px 20px;
 }
 
 .slide {
     display: none;
-    margin: 10px;
+    height: 600px;
+    max-height: 600px;
 }
 
 .slide img {
     margin-left: auto;
     margin-right: auto;
     display: block;
-    padding: 30px;
-    height: 500px;
-    max-height: 600px;
-    max-width: 600px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .slide-text {
     text-align: center;
     font-size: 20px;
-}
-
-.prev,
-.next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 24px;
-    font-weight: bold;
-    padding: 10px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    z-index: 1;
-}
-
-.prev:hover,
-.next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.prev {
-    left: 0;
-}
-
-.next {
-    right: 0;
 }
 
 .fade {

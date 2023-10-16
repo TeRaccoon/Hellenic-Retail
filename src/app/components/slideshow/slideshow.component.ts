@@ -10,7 +10,7 @@ import { DataService } from '../../services/data.service';
 export class SlideshowComponent implements OnInit {
   slideIndex: number = 0;
   timer: Subscription | undefined;
-  featuredProducts: any[] = [];
+  imageNames: any[] = [];
 
   constructor(private renderer: Renderer2, private dataService: DataService) { }
 
@@ -31,7 +31,6 @@ export class SlideshowComponent implements OnInit {
   }
 
   startSlideShow() {
-    console.log("started");
     this.timer = interval(5000).subscribe(() => {
       this.changeSlide(1);
     });
@@ -48,7 +47,7 @@ export class SlideshowComponent implements OnInit {
   }
 
   showSlide(n: number) {
-    let slides = this.featuredProducts.length;
+    let slides = this.imageNames.length;
   
     if (n >= slides) {
       this.slideIndex = 0;
@@ -61,8 +60,8 @@ export class SlideshowComponent implements OnInit {
   
   async loadSlideShow() {
     this.startSlideShow();
-    this.dataService.collectData("featured").subscribe((data: any) => {
-      this.featuredProducts = data;
+    this.dataService.collectData("home-slideshow").subscribe((data: any) => {
+      this.imageNames = data;
     });
   }
 }

@@ -1,10 +1,8 @@
 <div id="slideshow-container" class="slideshow-container">
-    <ng-container *ngIf="featuredProducts">
-        <div *ngFor="let product of featuredProducts; let i = index" [style.display]="i === slideIndex ? 'block' : 'none'" class="slide fade">
-            <img [src]="'/assets/products/' + product.image_file_name" [alt]="product.item_name" (click)="selectItem(product.stock_code)">
-            <div class="slide-text">{{ product.item_name }}</div>
+    <ng-container *ngIf="imageNames">
+        <div *ngFor="let imageName of imageNames; let i = index" [style.display]="i === slideIndex ? 'block' : 'none'" class="slide fade">
+            <img [src]="'assets/uploads/admin_uploads/' + imageName" [alt]="imageName">
+            <!-- <div class="slide-text">{{ product.item_name }}</div> -->
         </div>
     </ng-container>
-    <a class="prev" (click)="changeSlide(-1)">&#10094;</a>
-    <a class="next" (click)="changeSlide(1)">&#10095;</a>
 </div>
