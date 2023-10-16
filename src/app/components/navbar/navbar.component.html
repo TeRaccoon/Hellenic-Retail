@@ -2,7 +2,7 @@
     <div class="intro-bar">
         <p>Welcome to Hellenic Grocery</p>
         <p>
-            <fa-icon class="dropdown-icon" [icon]="faEnvelope"></fa-icon>support@hellenic.co.uk</p>
+            <fa-icon [icon]="faEnvelope"></fa-icon> support@hellenic.co.uk</p>
     </div>
 </div>
 <nav class="navbar">
@@ -11,7 +11,33 @@
     </a>
     <div class="search-container">
         <input type="text" placeholder="Search for products, categories, brands, sku..." name="search">
-        <button type="submit"><fa-icon class="dropdown-icon" [icon]="faSearch"></fa-icon></button>
+        <select>
+            <option value="all">All Categories</option>
+            <option *ngFor="let category of categories; let i = index;" value=category>
+                {{ category }}
+            </option>
+        </select>
+        <button type="submit"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
+    </div>
+    <div class="account-section">
+        <a>
+            <div class="icon-container">
+                <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
+            </div>
+            Account
+        </a>
+        <a>
+            <div class="icon-container">
+                <fa-icon class="interact-icon" [icon]="faHeart"></fa-icon>
+            </div>
+            Wishlist
+        </a>
+        <a>
+            <div class="icon-container">
+                <fa-icon class="interact-icon" [icon]="faCartShopping"></fa-icon>
+            </div>
+            Cart
+        </a>
     </div>
     <!-- <ul id="nav-links" class="nav-links">
         <li class="nav-item">
@@ -48,10 +74,10 @@
         <ul class="nav-links">
             <ng-container *ngIf="categories">
                 <li class="nav-item dropdown hamburger">
-                    <p class="nav-link">Shopping By Categories</p>
-                    <fa-icon class="dropdown-icon" [icon]="faBars"></fa-icon>
+                    <p class="nav-link">Shop By Categories</p>
+                    <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
                     <div class="dropdown-content">
-                        <a *ngFor="let category of categories; let i = index">
+                        <a *ngFor="let category of categories; let i = index;">
                             {{ category }}
                         </a>
                     </div>
