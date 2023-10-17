@@ -26,7 +26,6 @@ export class SlideshowComponent implements OnInit {
     if (this.timer) {
       this.timer.unsubscribe();
     }
-    // location.href = "view.php";
     localStorage.setItem("stockCode", stockCode);
   }
 
