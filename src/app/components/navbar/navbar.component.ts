@@ -26,12 +26,10 @@ export class NavbarComponent {
   }
 
   showCart() {
-    // Add your logic for showing the cart here
     console.log('Cart button clicked');
   }
 
   showLogin() {
-    // Add your logic for showing the login form here
     console.log('Login button clicked');
   }
 
