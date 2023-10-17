@@ -1,0 +1,13 @@
+<div class="signup-container">
+    <ng-container *ngIf="signupImage">
+        <div class="background-image" [style.background-image]="'url(assets/uploads/admin_uploads/' + signupImage + ')'">
+            <div>
+                <div class="signup-form">
+                    <label>Stay home & get your daily needs from our shop</label>
+                    <input type="email" required placeholder="Your email address">
+                </div>
+                <img src="assets/logo.jpg" alt="Food Retail Logo">
+            </div>
+        </div>
+    </ng-container>
+</div>

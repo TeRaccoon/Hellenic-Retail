@@ -1,0 +1,35 @@
+$hellenicblue: rgb(0, 140, 255);
+.signup-container {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: auto;
+    height: 400px;
+    max-height: 400px;
+    margin-top: 30px;
+    .background-image {
+        height: 100%;
+        background-repeat: repeat-x;
+        display: flex;
+        div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            img {
+                border-radius: 10px;
+            }
+            .signup-form {
+                background-color: $hellenicblue;
+                border-radius: 10px;
+                padding: 20px;
+                label {
+                    font-size: 25px;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
