@@ -1,0 +1,18 @@
+<div class="grid-wrapper">
+    <h2>Best Selling Products</h2>
+    <div class="grid-container">
+        <div class="product-container" *ngFor="let product of topProducts; let i = index;">
+            <img [src]="'assets/uploads/admin_uploads/' + product.image_location" />
+            <p class="product-name">{{ product.item_name }}</p>
+            <div class="price-container">
+                <ng-container *ngIf="product.offer_id != null && product.offer_start != null else elseBlock">
+                    <p class="product-price">£{{ product.offer_id | number: '1.2-2' }}</p>
+                    <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <p class="product-price">£{{ product.price | number: '1.2-2' }}</p>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
