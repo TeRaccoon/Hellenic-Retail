@@ -12,6 +12,8 @@ import { SlideshowComponent } from './components/slideshow/slideshow.component';
 import { CategoryViewComponent } from './components/category-view/category-view.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { HomeCategoryRowComponent } from './components/home-category-row/home-category-row.component';
+import { HomeTopProductsComponent } from './components/home-top-products/home-top-products.component';
+import { HomeNewsletterSignupComponent } from './components/home-newsletter-signup/home-newsletter-signup.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { HomeCategoryRowComponent } from './components/home-category-row/home-ca
     SlideshowComponent,
     CategoryViewComponent,
     CategoryListComponent,
-    HomeCategoryRowComponent
+    HomeCategoryRowComponent,
+    HomeTopProductsComponent,
+    HomeNewsletterSignupComponent
   ],
   imports: [
     BrowserModule,
