@@ -1,0 +1,41 @@
+$hellenicblue: rgb(0, 140, 255);
+.card-container {
+    width: 68%;
+    display: flex;
+    margin: 15px auto;
+    gap: 10px;
+    .card {
+        display: flex;
+        flex: 1;
+        background-size: 100%;
+        background-position-x: right;
+        height: 250px;
+        transition: background-size 0.7s ease;
+        img {
+            max-width: 40%;
+            max-height: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        div {
+            margin: 20px;
+            width: 38%;
+            button {
+                background-color: $hellenicblue;
+                color: white;
+                font-weight: bold;
+                font-size: 17px;
+                padding: 8px 18px;
+                border: none;
+                margin-top: 10px;
+            }
+        }
+        h4 {
+            margin: 0px;
+            font-size: 24px;
+        }
+    }
+    .card:hover {
+        background-size: 110%;
+    }
+}

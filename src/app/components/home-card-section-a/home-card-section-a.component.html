@@ -1,0 +1,19 @@
+<div class="card-container">
+    <ng-container *ngFor="let card of [card1, card2]; let cardIndex = index">
+        <ng-container *ngIf="card">
+            <div class="card" [style.background-image]="'url(assets/uploads/admin_uploads/' + cardLocations[cardIndex] + ')'">
+                <div>
+                    <ng-container *ngFor="let item of card; let i = index">
+                        <ng-container *ngIf="item.element_type === 'Header'">
+                            <h4>{{ item.text_content }}</h4>
+                        </ng-container>
+                        <ng-container *ngIf="item.element_type === 'Paragraph'">
+                            <p>{{ item.text_content }}</p>
+                        </ng-container>
+                    </ng-container>
+                    <button>Shop now</button>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>
