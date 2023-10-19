@@ -1,0 +1,92 @@
+$hellenicblue: rgb(0, 140, 255);
+.featured {
+    width: 68%;
+    margin-left: auto;
+    margin-right: auto;
+    .featured-container {
+        display: flex;
+        gap: 10px;
+        .background-card {
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            .annotation {
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                height: 100%;
+                width: 100%;
+                h2 {
+                    padding: 15px;
+                    background-color: $hellenicblue;
+                    border-radius: 20px 0 0 20px;
+                    width: fit-content;
+                    color: white;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                }
+            }
+        }
+        .product-card {
+            transition: box-shadow 0.6s ease;
+            .product-name {
+                transition: color 0.6s ease
+            }
+            img {
+                margin: 5px;
+                max-width: 100%;
+                max-height: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+            p {
+                align-self: flex-start;
+                padding-left: 10px;
+                margin: 5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 90%;
+            }
+            .price-container {
+                display: flex;
+                align-self: flex-start;
+                .product-price {
+                    font-weight: bold;
+                }
+                .old-price {
+                    text-decoration: line-through;
+                    color: #333333;
+                }
+            }
+            .discount-banner {
+                p {
+                    position: absolute;
+                    background-color: $hellenicblue;
+                    color: white;
+                    width: auto;
+                    margin: 10px 0;
+                    padding: 5px 15px;
+                    border-radius: 0 10px 10px 0;
+                }
+            }
+            &:hover {
+                z-index: 1;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                .product-name {
+                    color: $hellenicblue;
+                }
+            }
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #cccccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+        }
+    }
+    h1 {
+        border-bottom: 3px solid $hellenicblue;
+    }
+}
