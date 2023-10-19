@@ -28,7 +28,6 @@ export class HomeTopProductsComponent {
         console.log(product.offer_id);
         switch (product.offer_id) {
           case 1:
-            console.log("Also here");
             product.offer_id = product.price * 0.95;
             break;
         }
