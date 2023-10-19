@@ -15,6 +15,7 @@ import { HomeCategoryRowComponent } from './components/home-category-row/home-ca
 import { HomeTopProductsComponent } from './components/home-top-products/home-top-products.component';
 import { HomeNewsletterSignupComponent } from './components/home-newsletter-signup/home-newsletter-signup.component';
 import { HomeCardSectionAComponent } from './components/home-card-section-a/home-card-section-a.component';
+import { HomeFeaturedComponent } from './components/home-featured/home-featured.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { HomeCardSectionAComponent } from './components/home-card-section-a/home
     HomeCategoryRowComponent,
     HomeTopProductsComponent,
     HomeNewsletterSignupComponent,
-    HomeCardSectionAComponent
+    HomeCardSectionAComponent,
+    HomeFeaturedComponent
   ],
   imports: [
     BrowserModule,
