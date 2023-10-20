@@ -39,35 +39,6 @@
             Cart
         </a>
     </div>
-    <!-- <ul id="nav-links" class="nav-links">
-        <li class="nav-item">
-            <a routerLink="/home" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item">
-            <a routerLink="/about" class="nav-link">About Us</a>
-        </li>
-        <li class="nav-item">
-            <a routerLink="/contact" class="nav-link">Contact</a>
-        </li>
-        <ng-container *ngIf="categories && subcategories">
-            <li *ngFor="let category of categories; let i = index" class="nav-item dropdown">
-                <a (click)="selectCategory('items-category', category)" [routerLink]="['/products', category]" class="nav-link">{{ category }}</a>
-                <div class="dropdown-content">
-                    <ng-container *ngIf="subcategories[i]">
-                        <a *ngFor="let subcategory of subcategories[i][0].split(','); let k = index" (click)="selectCategory('items-sub-category', subcategory)" [routerLink]="['/products', subcategory.trim()]">
-                            {{ subcategory.trim() }}
-                        </a>
-                    </ng-container>
-                </div>
-            </li>
-        </ng-container>
-        <li id="shopping-cart" class="nav-item">
-            <a (click)="showCart()" class="nav-link"><i class="material-icons inline-icon">shopping_cart</i></a>
-        </li>
-        <li id="login-button" class="nav-item">
-            <a (click)="showLogin()" class="nav-link"><i class="material-icons inline-icon">person</i></a>
-        </li>
-    </ul> -->
 </nav>
 <div class="hellenic-blue">
     <nav class="category-bar">
@@ -77,7 +48,7 @@
                     <p class="nav-link">Shop By Categories</p>
                     <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
                     <div class="dropdown-content">
-                        <a *ngFor="let category of categories; let i = index;">
+                        <a *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
                             {{ category }}
                         </a>
                     </div>
