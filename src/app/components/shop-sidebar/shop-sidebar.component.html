@@ -1,0 +1,15 @@
+<div class="sidebar-container">
+    <div class="sidebar">
+        <h2>Filter By Price</h2>
+        <ul>
+            <ng-container *ngIf="prices">
+                <li *ngFor="let price of prices; let i = index;">
+                    <div class="list-item">
+                        <div class="toggle-icon"></div>
+                        <a>{{ price }}</a>
+                    </div>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+</div>

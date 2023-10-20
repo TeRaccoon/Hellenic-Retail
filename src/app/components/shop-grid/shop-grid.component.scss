@@ -1,0 +1,19 @@
+$hellenicblue: rgb(0, 140, 255);
+.shop-grid-container {
+    display: flex;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    .shop-grid-header {
+        border-bottom: 1px solid $hellenicblue;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        div {
+            display: inline-flex;
+            align-items: center;
+        }
+    }
+}

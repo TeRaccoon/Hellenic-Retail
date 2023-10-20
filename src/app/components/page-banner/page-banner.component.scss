@@ -1,0 +1,13 @@
+.banner-container {
+    display: flex;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    h1 {
+        margin: 0px;
+    }
+}

@@ -1,0 +1,43 @@
+$hellenicblue: rgb(0, 140, 255);
+.sidebar-container {
+    width: 16%;
+    position: absolute;
+    .sidebar {
+        margin: 15px;
+        padding: 15px;
+        background-color: #FFFFFF;
+        border: 1px solid #cccccc;
+    }
+    h2 {
+        margin: 0;
+    }
+    ul {
+        padding: 0px;
+        list-style: none;
+        li {
+            transition: color 0.5s ease;
+            .list-item {
+                display: flex;
+                align-items: center;
+                .toggle-icon {
+                    background-color: #cccccc;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 10px;
+                    border: 1px solid #000000;
+                    margin: 10px;
+                    transition: background-color 0.5s ease, border 0.5s ease;
+                }
+            }
+            &:hover {
+                .list-item {
+                    color: #{$hellenicblue};
+                    .toggle-icon {
+                        background-color: #000000;
+                        border: 1px solid #868686
+                    }
+                }
+            }
+        }
+    }
+}

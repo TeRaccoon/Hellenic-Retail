@@ -9,13 +9,15 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { SlideshowComponent } from './components/slideshow/slideshow.component';
-import { CategoryViewComponent } from './components/category-view/category-view.component';
-import { CategoryListComponent } from './components/category-list/category-list.component';
 import { HomeCategoryRowComponent } from './components/home-category-row/home-category-row.component';
 import { HomeTopProductsComponent } from './components/home-top-products/home-top-products.component';
 import { HomeNewsletterSignupComponent } from './components/home-newsletter-signup/home-newsletter-signup.component';
 import { HomeCardSectionAComponent } from './components/home-card-section-a/home-card-section-a.component';
 import { HomeFeaturedComponent } from './components/home-featured/home-featured.component';
+import { ShopComponent } from './components/shop/shop.component';
+import { PageBannerComponent } from './components/page-banner/page-banner.component';
+import { ShopSidebarComponent } from './components/shop-sidebar/shop-sidebar.component';
+import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +26,15 @@ import { HomeFeaturedComponent } from './components/home-featured/home-featured.
     HomeComponent,
     ContactComponent,
     SlideshowComponent,
-    CategoryViewComponent,
-    CategoryListComponent,
     HomeCategoryRowComponent,
     HomeTopProductsComponent,
     HomeNewsletterSignupComponent,
     HomeCardSectionAComponent,
-    HomeFeaturedComponent
+    HomeFeaturedComponent,
+    ShopComponent,
+    PageBannerComponent,
+    ShopSidebarComponent,
+    ShopGridComponent
   ],
   imports: [
     BrowserModule,

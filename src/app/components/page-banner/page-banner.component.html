@@ -1,0 +1,6 @@
+<ng-container *ngIf="bannerImage">
+    <div class="banner-container" [style.background-image]="'url(assets/uploads/admin_uploads/' + bannerImage + ')'">
+        <h1>{{ lastSegment }}</h1>
+        <h2>{{ fullPath }}</h2>
+    </div>
+</ng-container>
