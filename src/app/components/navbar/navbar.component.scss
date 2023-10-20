@@ -35,6 +35,8 @@ $hellenicblue: rgb(0, 140, 255);
 
 .search-container {
     display: inline-flex;
+    flex: 1;
+    justify-content: center;
 }
 
 .search-container input,
@@ -47,13 +49,13 @@ $hellenicblue: rgb(0, 140, 255);
     padding: 12px;
 }
 
-.search-container input,
-.search-container select {
-    width: 100%
+.search-container input {
+    width: 30%
 }
 
 .search-container button {
     background-color: $hellenicblue;
+    color: #FFFFFF;
 }
 
 .account-section {
