@@ -2,7 +2,7 @@
     <div class="shop-grid-header">
         <div>
             <h3>Shop</h3>
-            <p>Showing {{ resultsAmount }} products</p>
+            <p>(Showing {{ resultsAmount }} products)</p>
         </div>
         <div>
             <label>Show:</label>
@@ -17,5 +17,30 @@
                 <option>Sort by price: Low to High</option>
             </select>
         </div>
+    </div>
+    <div class="product-container">
+        <ng-container *ngIf="products">
+            <div class="product" *ngFor="let product of products; let i = index;">
+                <ng-container *ngIf="product.discount && product.discount != null">
+                    <div class="discount-banner">
+                        <p>{{ product.discount }}% OFF</p>
+                    </div>
+                </ng-container>
+                <img [alt]="product.name" [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                <p class="brand">{{ product.brand }}</p>
+                <p class="name">{{ product.name }}</p>
+                <ng-container *ngIf="oldPrices[i] != null else elseBlock">
+                    <div class="price-container">
+                        <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
+                        <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+                    </div>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <div class="price-container">
+                        <p class="price">£{{ product.price | number: '1.2-2' }}</p>
+                    </div>
+                </ng-template>
+            </div>
+        </ng-container>
     </div>
 </div>
