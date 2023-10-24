@@ -18,6 +18,8 @@ import { ShopComponent } from './components/shop/shop.component';
 import { PageBannerComponent } from './components/page-banner/page-banner.component';
 import { ShopSidebarComponent } from './components/shop-sidebar/shop-sidebar.component';
 import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
+import { ViewComponent } from './components/view/view.component';
+import { NavbarCategorySearchComponent } from './components/navbar-category-search/navbar-category-search.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
     ShopComponent,
     PageBannerComponent,
     ShopSidebarComponent,
-    ShopGridComponent
+    ShopGridComponent,
+    ViewComponent,
+    NavbarCategorySearchComponent
   ],
   imports: [
     BrowserModule,
