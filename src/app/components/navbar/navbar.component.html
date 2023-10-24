@@ -1,3 +1,4 @@
+<app-navbar-category-search></app-navbar-category-search>
 <div class="container bottom-border">
     <div class="intro-bar">
         <p>Welcome to Hellenic Grocery</p>
@@ -10,14 +11,37 @@
         <img src="assets/logo.jpg" alt="Food Retail Logo">
     </a>
     <div class="search-container">
-        <input type="text" placeholder="Search for products, categories, brands, sku..." name="search">
-        <select>
-            <option value="all">All Categories</option>
-            <option *ngFor="let category of categories; let i = index;" value=category>
-                {{ category }}
-            </option>
-        </select>
-        <button type="submit"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
+        <div class="search-options">
+            <input (input)="search($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
+            <select>
+                <option value="all">All Categories</option>
+                <option *ngFor="let category of categories; let i = index;" value=category>
+                    {{ category }}
+                </option>
+            </select>
+            <button type="submit"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
+        </div>
+        <div class="search-dropdown">
+            <div class="search-dropdown-items">
+                <a class="search-results" *ngFor="let product of searchResults; let i = index;" [routerLink]="'/view/' + product.name">
+                    <div>
+                        <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                        <p> {{ product.name }} </p>
+                    </div>
+                    <ng-container *ngIf="oldPrices[i] != null else elseBlock">
+                        <div class="price-container">
+                            <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
+                            <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+                        </div>
+                    </ng-container>
+                    <ng-template #elseBlock>
+                        <div class="price-container">
+                            <p class="price">£{{ product.price | number: '1.2-2' }}</p>
+                        </div>
+                    </ng-template>
+                </a>
+            </div>
+        </div>
     </div>
     <div class="account-section">
         <a>
@@ -40,20 +64,3 @@
         </a>
     </div>
 </nav>
-<div class="hellenic-blue">
-    <nav class="category-bar">
-        <ul class="nav-links">
-            <ng-container *ngIf="categories">
-                <li class="nav-item dropdown hamburger">
-                    <p class="nav-link">Shop By Categories</p>
-                    <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
-                    <div class="dropdown-content">
-                        <a *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
-                            {{ category }}
-                        </a>
-                    </div>
-                </li>
-            </ng-container>
-        </ul>
-    </nav>
-</div>
