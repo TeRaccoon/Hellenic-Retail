@@ -8,31 +8,44 @@ import { DataService } from '../../services/data.service';
   styleUrls: ['./shop-grid.component.scss']
 })
 export class ShopGridComponent {
-  resultsAmount: any;
+  resultsAmount: number | undefined;
   products: any[] = [];
-  oldPrices: any[] = [];
+  oldPrices: (number | null)[] = [];
 
   constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
   
   ngOnInit() {
     this.route.params.subscribe(params => {
-      const category = params['category'];
-      this.loadProducts(category);
+      // const category = params['category'];
+      // this.loadProducts(category);
+      console.log(params);
     });
   }
 
   async loadProducts(category:string) {
     this.dataService.collectData("products-from-category", category).subscribe((data: any) => {
-      this.products = data;
+      this.products = Array.isArray(data) ? data : [data];
       this.resultsAmount = data.length === undefined ? 1 : data.length;
-      data.forEach((product: any) => {
+
+      this.oldPrices = this.products.map((product: any) => {
         if (product.discount && product.discount != null) {
-          this.oldPrices.push(product.price * ((100 - product.discount) / 100));
+          return product.price * ((100 - product.discount) / 100);
         } else {
-          this.oldPrices.push(null);
+          return null;
         }
       });
-      console.log(this.oldPrices);
     });
+  }
+  changeSorting(event: any) {
+    const selectedOption = event.target.value;
+    switch (selectedOption) {
+      case "high-low":
+        this.products.sort((a, b) => b.price - a.price);
+        break;
+
+      case "low-high":
+        this.products.sort((a, b) => a.price - b.price);
+        break;
+    }
   }
 }
