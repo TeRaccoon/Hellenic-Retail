@@ -1,25 +1,42 @@
+$hellenicblue: rgb(0, 140, 255);
 .category-row {
     font-weight: bold;
     width: 68%;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     margin-left: auto;
     margin-right: auto;
     padding-top: 30px;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
     a {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
+        text-decoration: none;
         padding: 10px;
+        transition: color 0.5s ease;
     }
-    img {
-        border-radius: 50%;
-        height: 130px;
-        max-height: 130px;
-        width: 130px;
-        max-width: 130px;
-        object-fit: cover;
-        padding-bottom: 5px;
+    .image-container {
+        height: 150px;
+        width: 150px;
+        overflow: hidden;
+        border-radius: 100px;
+        img {
+            border-radius: 50%;
+            object-fit: cover;
+            height: 95%;
+            width: 95%;
+            transition: transform 0.5s ease;
+        }
+    }
+    &:hover {
+        cursor: pointer;
+        color: $hellenicblue;
+        img {
+            transform: scale(1.1);
+        }
     }
 }
