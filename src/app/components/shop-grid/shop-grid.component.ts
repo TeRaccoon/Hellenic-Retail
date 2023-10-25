@@ -12,13 +12,12 @@ export class ShopGridComponent {
   products: any[] = [];
   oldPrices: (number | null)[] = [];
 
-  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private dataService: DataService, private route: ActivatedRoute) { }
   
   ngOnInit() {
     this.route.params.subscribe(params => {
-      // const category = params['category'];
-      // this.loadProducts(category);
-      console.log(params);
+      const category = params['category'];
+      this.loadProducts(category);
     });
   }
 
