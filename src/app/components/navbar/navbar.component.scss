@@ -18,10 +18,6 @@ $hellenicblue: rgb(0, 140, 255);
     padding: 10px 0 10px 0;
 }
 
-.category-bar {
-    font-weight: bold;
-}
-
 .intro-bar {
     font-size: 14px;
 }
@@ -105,6 +101,8 @@ $hellenicblue: rgb(0, 140, 255);
                 }
                 .price-container {
                     display: flex;
+                    justify-content: space-between;
+                    width: 20%;
                     .price {
                         font-weight: bold;
                     }
@@ -155,16 +153,8 @@ $hellenicblue: rgb(0, 140, 255);
     width: 100%
 }
 
-.hellenic-blue {
-    background-color: $hellenicblue;
-}
-
 .white {
     background-color: rgb(255, 255, 255);
-}
-
-.hamburger {
-    background-color: rgb(0, 119, 255);
 }
 
 .nav-logo {
@@ -173,24 +163,6 @@ $hellenicblue: rgb(0, 140, 255);
     color: #FFFFFF;
     /* White text color */
     text-decoration: none;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin: 0px;
-    padding: 0px;
-}
-
-.nav-link {
-    font-size: 18px;
-    color: #ffffff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    display: inline-block;
-    margin: 10px 0 10px 0;
 }
 
 .nav-logo img {
@@ -216,10 +188,6 @@ $hellenicblue: rgb(0, 140, 255);
     padding: 5px 10px;
 }
 
-.text-icon {
-    padding: 0 15px;
-}
-
 .interact-icon {
     color: black;
     transition: color 0.3s ease;
@@ -227,38 +195,4 @@ $hellenicblue: rgb(0, 140, 255);
 
 .interact-icon:hover {
     color: $hellenicblue;
-}
-
-.dropdown-content {
-    position: absolute;
-    background-color: #FFFFFF;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 235px;
-    z-index: 1;
-    opacity: 0;
-    visibility: hidden;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    transform-origin: top center;
-    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
-    a {
-        border-bottom: 1px solid #b9b9b9;
-        display: block;
-        padding: 10px 15px;
-        color: #333333;
-        text-decoration: none;
-        transition: background-color 0.5s ease, color 0.5s ease;
-    }
-    a:hover {
-        color: $hellenicblue;
-        background-color: #eeeeee;
-    }
-}
-
-.dropdown:hover .dropdown-content {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%);
-    transition-delay: 0s, 0s, 0s;
 }

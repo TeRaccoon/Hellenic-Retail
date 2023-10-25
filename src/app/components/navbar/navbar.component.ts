@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { faCaretDown, faBars, faEnvelope, faSearch, faUser, faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faEnvelope, faSearch, faUser, faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-navbar',
@@ -9,7 +9,6 @@ import { faCaretDown, faBars, faEnvelope, faSearch, faUser, faHeart, faCartShopp
 })
 export class NavbarComponent {
   faCaretDown = faCaretDown;
-  faBars = faBars;
   faEnvelope = faEnvelope;
   faSearch = faSearch;
   faUser = faUser;
