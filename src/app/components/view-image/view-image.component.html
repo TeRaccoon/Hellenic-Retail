@@ -1,0 +1,12 @@
+<div class="view-image-container">
+    <ng-container *ngIf="product && productImages">
+        <div class="image-sidebar">
+            <div *ngFor="let image of productImages;">
+                <img [src]="'assets/uploads/admin_uploads/' + image">
+            </div>
+        </div>
+        <div class="main-image-container" (mousemove)="zoomImage($event)" (mouseleave)="resetZoom()">
+            <img [src]="'assets/uploads/admin_uploads/' + product.primary_image" [style.transform]="'scale(' + zoomFactor + ') translate(' + zoomX + '%, ' + zoomY + '%)'">
+        </div>
+    </ng-container>
+</div>
