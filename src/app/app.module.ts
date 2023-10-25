@@ -20,6 +20,9 @@ import { ShopSidebarComponent } from './components/shop-sidebar/shop-sidebar.com
 import { ShopGridComponent } from './components/shop-grid/shop-grid.component';
 import { ViewComponent } from './components/view/view.component';
 import { NavbarCategorySearchComponent } from './components/navbar-category-search/navbar-category-search.component';
+import { ViewImageComponent } from './components/view-image/view-image.component';
+import { ViewDetailsComponent } from './components/view-details/view-details.component';
+import { ViewRelatedComponent } from './components/view-related/view-related.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { NavbarCategorySearchComponent } from './components/navbar-category-sear
     ShopSidebarComponent,
     ShopGridComponent,
     ViewComponent,
-    NavbarCategorySearchComponent
+    NavbarCategorySearchComponent,
+    ViewImageComponent,
+    ViewDetailsComponent,
+    ViewRelatedComponent
   ],
   imports: [
     BrowserModule,
