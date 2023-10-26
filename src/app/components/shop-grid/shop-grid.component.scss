@@ -53,6 +53,7 @@ $hellenicblue: rgb(0, 140, 255);
             }
             .discount-banner {
                 p {
+                    z-index: 1;
                     position: absolute;
                     background-color: $hellenicblue;
                     color: white;
