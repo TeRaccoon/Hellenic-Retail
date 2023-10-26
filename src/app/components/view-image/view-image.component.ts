@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ViewImageComponent {
   product: any;
   productImages: any;
+  primaryImage: string | null = '';
   zoomFactor: number = 1;
   zoomX: number = 0;
   zoomY: number = 0;
@@ -26,13 +27,33 @@ export class ViewImageComponent {
   async loadProduct(productName: string) {
     this.dataService.collectData("product-view", productName).subscribe((data: any) => {
       this.product = data;
+      this.primaryImage = this.product.primary_image;
+      console.log(this.primaryImage);
       this.loadProductImages(this.product.id);
     });
   }
   async loadProductImages(retailItemID: any) {
+    console.log(retailItemID);
     this.dataService.collectData("product-view-images", retailItemID).subscribe((data: any) => {
       this.productImages = data;
     })
+  }
+
+  changeImage(event: Event) {
+    const target = event.target as HTMLImageElement;
+    if (target && target.getAttribute('data-image') != null) {
+      this.primaryImage = target.getAttribute('data-image');
+    }
+    const containers = document.querySelectorAll('.sidebar-image-container');
+    containers.forEach(d => d.classList.remove('active'));
+    const targetParent = target.parentElement;
+    if (targetParent != null) {
+      targetParent.classList.add('active');
+    }
+  }
+  
+  openImage() {
+    window.open('assets/uploads/admin_uploads/' + this.primaryImage, '_blank');
   }
 
   zoomImage(event: MouseEvent | null) {
@@ -46,11 +67,11 @@ export class ViewImageComponent {
       const mouseX = event.clientX - containerX;
       const mouseY = event.clientY - containerY;
   
-      const zoomFactor = 1.5;
+      const zoomFactor = 1.25;
       this.zoomFactor = zoomFactor;
   
-      this.zoomX = (mouseX / boundingBox.width) * zoomFactor * 75 - 75;
-      this.zoomY = (mouseY / boundingBox.height) * zoomFactor * 75 - 75;
+      this.zoomX = (mouseX / boundingBox.width) * zoomFactor * 25 - 25;
+      this.zoomY = (mouseY / boundingBox.height) * zoomFactor * 25 - 25;
     }
   }
   

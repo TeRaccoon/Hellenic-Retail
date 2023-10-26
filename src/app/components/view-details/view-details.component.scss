@@ -1,3 +1,75 @@
+$hellenicblue: #008cff;
 .view-details-container {
     display: flex;
+    flex-direction: column;
+    .price-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+        .price {
+            font-weight: bold;
+            font-size: 25px;
+        }
+        .old-price {
+            text-decoration: line-through;
+            color: #888888;
+            font-size: 20px;
+        }
+    }
+    .description {
+        width: 90%;
+    }
+    .purchasing-options {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        input[type="number"] {
+            width: 50px;
+            height: 20px;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        button {
+            height: 45px;
+            width: 130px;
+            padding: 10px;
+            color: #ffffff;
+            border: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+        }
+        .cart {
+            background-color: #26901b;
+        }
+        .purchase {
+            background-color: $hellenicblue;
+        }
+        .cart:hover {
+            background-color: #1a8022;
+        }
+        .purchase:hover {
+            background-color: #0077ff;
+        }
+    }
+    .other-options {
+        display: flex;
+        justify-content: space-between;
+        width: 43%;
+        p {
+            transition: color 0.4s ease;
+        }
+        p:hover {
+            color: $hellenicblue;
+        }
+    }
 }

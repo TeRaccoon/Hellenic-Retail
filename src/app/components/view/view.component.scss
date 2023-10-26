@@ -1,4 +1,13 @@
 .product-view-container {
+    display: flex;
+    justify-content: flex-start;
     margin: 50px auto 0 auto;
     width: 68%;
+    gap: 30px;
+    app-view-details {
+        width: 50%;
+    }
+    app-view-image {
+        flex: 1;
+    }
 }

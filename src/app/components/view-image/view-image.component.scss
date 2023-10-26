@@ -1,12 +1,28 @@
+$hellenicblue: #008cff;
 .view-image-container {
     display: flex;
-    width: 68%;
     .main-image-container {
         border: 1px solid #cccccc;
+        width: 500px;
         overflow: hidden;
         img {
+            height: 100%;
+            width: 100%;
             object-fit: contain;
             transform-origin: top left;
+            cursor: pointer;
+        }
+        .discount-banner {
+            p {
+                z-index: 1;
+                position: absolute;
+                background-color: $hellenicblue;
+                color: white;
+                width: auto;
+                margin: 10px 0;
+                padding: 5px 15px;
+                border-radius: 0 10px 10px 0;
+            }
         }
     }
     .image-sidebar {
@@ -16,15 +32,23 @@
         gap: 15px;
         margin-right: 15px;
         height: 500px;
-        width: 15%;
-        div {
+        width: 20%;
+        .sidebar-image-container {
             height: 25%;
             width: 100%;
             border: 1px solid #cccccc;
+            transition: border 0.4s ease, box-shadow 0.4s ease;
             img {
                 height: 100%;
                 width: 100%;
                 object-fit: contain;
+            }
+            &:hover {
+                border: 1px solid #555555;
+            }
+            &.active {
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                border: 1px solid #555555;
             }
         }
     }

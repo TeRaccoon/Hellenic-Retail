@@ -1,4 +1,37 @@
 <div class="view-details-container">
     <p>{{ fullPath }}</p>
-    <h1>{{ product.item_name }}</h1>
+    <ng-container *ngIf="product">
+        <h1>{{ product.name }}</h1>
+        <ng-container *ngIf="oldPrice != null else elseBlock">
+            <div class="price-container">
+                <p class="price">£{{ oldPrice | number: '1.2-2' }}</p>
+                <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+            </div>
+        </ng-container>
+        <ng-template #elseBlock>
+            <div class="price-container">
+                <p class="price">£{{ product.price | number: '1.2-2' }}</p>
+            </div>
+        </ng-template>
+        <p class="description">{{ product.description }}</p>
+        <div class="purchasing-options">
+            <input type="number" value="1">
+            <button class="cart">Add To Cart</button>
+            <button class="purchase">Buy Now</button>
+        </div>
+        <div class="other-options">
+            <p>
+                <fa-icon [icon]="faHeart"></fa-icon> Add to wishlist</p>
+            <p>
+                <fa-icon [icon]="faEye"></fa-icon> View similar</p>
+        </div>
+        <div class="share-options">
+            <p>Share: </p>
+            <a>
+                <fa-icon [icon]="faClipboard"></fa-icon>
+            </a>
+            <a>
+                <fa-icon [icon]="faFace" </a>
+        </div>
+    </ng-container>
 </div>

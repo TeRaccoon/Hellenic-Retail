@@ -1,12 +1,17 @@
 <div class="view-image-container">
     <ng-container *ngIf="product && productImages">
         <div class="image-sidebar">
-            <div *ngFor="let image of productImages;">
-                <img [src]="'assets/uploads/admin_uploads/' + image">
+            <div class="sidebar-image-container" *ngFor="let image of productImages; let isFirst = first" [ngClass]="{'active': isFirst}">
+                <img (click)="changeImage($event)" [src]="'assets/uploads/admin_uploads/' + image" [attr.data-image]="image">
             </div>
         </div>
         <div class="main-image-container" (mousemove)="zoomImage($event)" (mouseleave)="resetZoom()">
-            <img [src]="'assets/uploads/admin_uploads/' + product.primary_image" [style.transform]="'scale(' + zoomFactor + ') translate(' + zoomX + '%, ' + zoomY + '%)'">
+            <ng-container *ngIf="product.discount && product.discount != null">
+                <div class="discount-banner">
+                    <p>{{ product.discount }}% OFF</p>
+                </div>
+            </ng-container>
+            <img (click)="openImage()" [src]="'assets/uploads/admin_uploads/' + primaryImage" [style.transform]="'scale(' + zoomFactor + ') translate(' + zoomX + '%, ' + zoomY + '%)'">
         </div>
     </ng-container>
 </div>
