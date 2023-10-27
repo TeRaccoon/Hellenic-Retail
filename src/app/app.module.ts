@@ -23,6 +23,9 @@ import { NavbarCategorySearchComponent } from './components/navbar-category-sear
 import { ViewImageComponent } from './components/view-image/view-image.component';
 import { ViewDetailsComponent } from './components/view-details/view-details.component';
 import { ViewRelatedComponent } from './components/view-related/view-related.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { CreateAccountFormComponent } from './components/create-account-form/create-account-form.component';
+import { FormService } from './services/form.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,9 @@ import { ViewRelatedComponent } from './components/view-related/view-related.com
     NavbarCategorySearchComponent,
     ViewImageComponent,
     ViewDetailsComponent,
-    ViewRelatedComponent
+    ViewRelatedComponent,
+    LoginFormComponent,
+    CreateAccountFormComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +57,9 @@ import { ViewRelatedComponent } from './components/view-related/view-related.com
     HttpClientModule,
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [
+    FormService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { FormService } from '../../services/form.service';
+import { NgModule } from '@angular/core';
 import { faCaretDown, faEnvelope, faSearch, faUser, faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -7,6 +9,7 @@ import { faCaretDown, faEnvelope, faSearch, faUser, faHeart, faCartShopping } fr
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
+
 export class NavbarComponent {
   faCaretDown = faCaretDown;
   faEnvelope = faEnvelope;
@@ -20,10 +23,14 @@ export class NavbarComponent {
   products: any[] = [];
   searchResults: any[] = [];
   oldPrices: (number | null)[] = [];
+  loginVisible = false;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
+    this.formService.getLoginFormVisibility().subscribe((visible) => {
+      this.loginVisible = visible;
+    });
     this.loadNavBar();
   }
 
@@ -32,7 +39,7 @@ export class NavbarComponent {
   }
 
   showLogin() {
-    console.log('Login button clicked');
+    this.loginVisible = true;
   }
 
   async loadNavBar() {
@@ -80,5 +87,9 @@ export class NavbarComponent {
     const inputElement = event.target as HTMLInputElement;
     let inputValue = inputElement.value;
     this.searchResults = this.products.filter((product) => product.name.toLowerCase().includes(inputValue.toLowerCase()));
+  }
+
+  showAccount() {
+
   }
 }

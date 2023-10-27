@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="account-section">
-        <a>
+        <a (click)="showLogin()">
             <div class="icon-container">
                 <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
             </div>
@@ -64,3 +64,6 @@
     </div>
 </nav>
 <app-navbar-category-search></app-navbar-category-search>
+<ng-container *ngIf="loginVisible">
+    <app-login-form></app-login-form>
+</ng-container>
