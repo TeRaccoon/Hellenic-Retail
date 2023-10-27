@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faHeart, faEye, faClipboard,  } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faEye, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-view-details',
@@ -17,7 +18,7 @@ export class ViewDetailsComponent {
   fullPath: string = '';
   oldPrice: (number | null) = null;
 
-  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router, private clipboard: Clipboard) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -25,6 +26,14 @@ export class ViewDetailsComponent {
       this.fullPath = decodeURI(this.router.url);
       this.loadProduct(productName);
     });
+  }
+
+  share(option: string) {
+    switch(option) {
+      case 'clipboard':
+        this.clipboard.copy(textToCopy);
+        break;
+    }
   }
 
   async loadProduct(productName: string) {
