@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
-import { NgModule } from '@angular/core';
 import { faCaretDown, faEnvelope, faSearch, faUser, faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 
 export class NavbarComponent {
@@ -23,23 +22,19 @@ export class NavbarComponent {
   products: any[] = [];
   searchResults: any[] = [];
   oldPrices: (number | null)[] = [];
-  loginVisible = false;
+  loginVisible = 'hidden';
 
   constructor(private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
     this.formService.getLoginFormVisibility().subscribe((visible) => {
-      this.loginVisible = visible;
+      this.loginVisible = visible ? 'visible' : 'hidden';
     });
     this.loadNavBar();
   }
 
   showCart() {
     console.log('Cart button clicked');
-  }
-
-  showLogin() {
-    this.loginVisible = true;
   }
 
   async loadNavBar() {
@@ -63,15 +58,20 @@ export class NavbarComponent {
     });
   }
 
-  selectCategory(query: string, filter: string) {
-    localStorage.setItem("query", query);
-    localStorage.setItem("filter", filter);
+  changeCategory(event: Event) {
+    const option = event.target as HTMLInputElement;
+    let value = option.value;
+    console.log(value);
+    if (value == 'all') {
+      this.searchResults = this.products;
+    } else {
+      this.searchResults = this.products.filter((product) => product.category.toLowerCase().includes(value.toLowerCase()));
+    }
   }
 
   onInputFocus() {
     const dropdown = document.querySelector('.search-dropdown-items');
     if (dropdown) {
-      console.log("applied");
       dropdown.classList.add('focused');
     }
   }
@@ -91,5 +91,12 @@ export class NavbarComponent {
 
   showAccount() {
 
+  }
+
+  toggleLogin() {
+    let state = this.loginVisible == 'visible' ? 'hidden' : 'visible';
+    if (state == 'visible') {
+      this.formService.showLoginForm();
+    }
   }
 }

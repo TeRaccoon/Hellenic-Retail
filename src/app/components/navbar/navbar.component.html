@@ -12,9 +12,9 @@
     <div class="search-container">
         <div class="search-options">
             <input (input)="search($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
-            <select>
+            <select (change)="changeCategory($event)">
                 <option value="all">All Categories</option>
-                <option *ngFor="let category of categories; let i = index;" value=category>
+                <option *ngFor="let category of categories; let i = index;" [value]="category">
                     {{ category }}
                 </option>
             </select>
@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="account-section">
-        <a (click)="showLogin()">
+        <a (click)="toggleLogin()">
             <div class="icon-container">
                 <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
             </div>
