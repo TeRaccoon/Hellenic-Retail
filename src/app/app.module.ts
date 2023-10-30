@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,6 +27,7 @@ import { ViewRelatedComponent } from './components/view-related/view-related.com
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { CreateAccountFormComponent } from './components/create-account-form/create-account-form.component';
 import { FormService } from './services/form.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { FormService } from './services/form.service';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
   providers: [
     FormService

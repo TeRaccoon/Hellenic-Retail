@@ -1,20 +1,36 @@
-<div class="form-container">
+<div [@loginAnimation]="loginVisible" class="form-container">
     <div class="login-form">
         <div class="text-section">
-            <h1>Login</h1>
-            <p>Get access to your orders, wishlist and more!</p>
+            <div>
+                <h1>Login</h1>
+                <p>Get access to your orders, wishlist and more!</p>
+            </div>
+            <a>Create Account</a>
         </div>
         <div class="input-section">
-            <input type="text" placeholder="Enter email address">
-            <input type="text" placeholder="Enter password">
-            <div class="login-options">
-                <div>
-                    <label for="remember-me">Remember me</label>
-                    <input type="checkbox" id="remember-me" name="remember-me" value="remember-me">
+            <span (click)="toggleLogin()" class="close">&times;</span>
+            <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
+                <div *ngFor="let error of errorMessages.email">
+                    <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError(error.type)">
+                        {{ error.message }}
+                    </div>
                 </div>
-                <a>Forgot your password?</a>
-            </div>
-
+                <input type="text" required formControlName="email" placeholder="Enter email address">
+                <div *ngFor="let error of errorMessages.password">
+                    <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type)">
+                        {{ error.message }}
+                    </div>
+                </div>
+                <input type="password" required formControlName="password" placeholder="Enter password">
+                <div class="login-options">
+                    <div>
+                        <label for="remember-me">Remember me</label>
+                        <input type="checkbox" id="remember-me" name="remember-me" value="remember-me">
+                    </div>
+                    <a>Forgot your password?</a>
+                </div>
+                <button type="submit" [disabled]="loginForm.invalid">Login</button>
+            </form>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 $hellenicblue: rgb(0, 140, 255);
 .form-container {
+    display: none;
     position: fixed;
     z-index: 3;
     left: 0;
@@ -10,9 +11,12 @@ $hellenicblue: rgb(0, 140, 255);
     padding-top: 60px;
     .login-form {
         display: flex;
-        width: 40%;
+        width: 35%;
         margin: 15% auto;
         .text-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             color: #ffffff;
             background-color: $hellenicblue;
             padding: 40px;
@@ -20,34 +24,70 @@ $hellenicblue: rgb(0, 140, 255);
             h1 {
                 margin: 0px;
             }
+            a {
+                text-decoration: underline;
+                cursor: pointer;
+            }
         }
         .input-section {
             display: flex;
             flex-direction: column;
             flex: 1;
+            position: relative;
             background-color: #ffffff;
             padding: 35px;
-            input {
-                margin: 0px 0px 20px 0px;
-                font-size: 15px;
-                padding: 15px;
-                border: 1px solid #cccccc;
-                &:focus::placeholder {
-                    color: white;
+            .close {
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-size: 25px;
+                padding: 0 5px;
+                border-radius: 0 0 0 20px;
+                background-color: $hellenicblue;
+                color: white;
+                transition: color 0.6s ease;
+                &:hover {
+                    color: red;
                 }
             }
-            .login-options {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                div {
-                    display: flex;
-                    align-items: center;
-                    input[type=checkbox] {
-                        color: $hellenicblue;
-                        font-weight: bold;
-                        margin: 10px;
+            form {
+                display: contents;
+                input {
+                    margin: 0px 0px 20px 0px;
+                    font-size: 15px;
+                    padding: 15px;
+                    border: 1px solid #cccccc;
+                    &:focus::placeholder {
+                        color: white;
                     }
+                }
+                .error {
+                    color: red;
+                }
+                .login-options {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    color: $hellenicblue;
+                    div {
+                        display: flex;
+                        align-items: center;
+                        input[type=checkbox] {
+                            color: $hellenicblue;
+                            font-weight: bold;
+                            margin: 10px;
+                        }
+                    }
+                }
+                button {
+                    cursor: pointer;
+                    font-family: 'Poppins', sans-serif;
+                    color: white;
+                    font-size: 18px;
+                    background-color: $hellenicblue;
+                    border: 0;
+                    padding: 8px;
+                    margin-top: 10px;
                 }
             }
         }
