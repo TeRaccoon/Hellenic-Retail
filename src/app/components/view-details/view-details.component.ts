@@ -48,7 +48,6 @@ export class ViewDetailsComponent {
       if (this.product.discount && this.product.discount != null) {
         this.oldPrice = this.product.price * ((100 - this.product.discount) / 100);
       }
-      console.log(data);
     });
   }
 }
