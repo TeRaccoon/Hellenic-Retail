@@ -55,7 +55,7 @@
             </div>
             Wishlist
         </a>
-        <a>
+        <a (click)="toggleCart()">
             <div class="icon-container">
                 <fa-icon class="interact-icon" [icon]="faCartShopping"></fa-icon>
             </div>
@@ -66,4 +66,7 @@
 <app-navbar-category-search></app-navbar-category-search>
 <ng-container *ngIf="loginVisible">
     <app-login-form></app-login-form>
+</ng-container>
+<ng-container *ngIf="cartVisible">
+    <app-cart-popup></app-cart-popup>
 </ng-container>

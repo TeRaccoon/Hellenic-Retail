@@ -23,6 +23,7 @@ export class NavbarComponent {
   searchResults: any[] = [];
   oldPrices: (number | null)[] = [];
   loginVisible = 'hidden';
+  cartVisible = 'hidden';
 
   constructor(private dataService: DataService, private formService: FormService) { }
 
@@ -31,10 +32,6 @@ export class NavbarComponent {
       this.loginVisible = visible ? 'visible' : 'hidden';
     });
     this.loadNavBar();
-  }
-
-  showCart() {
-    console.log('Cart button clicked');
   }
 
   async loadNavBar() {
@@ -97,6 +94,12 @@ export class NavbarComponent {
     let state = this.loginVisible == 'visible' ? 'hidden' : 'visible';
     if (state == 'visible') {
       this.formService.showLoginForm();
+    }
+  }
+  toggleCart() {
+    let state = this.cartVisible == 'visible' ? 'hidden' : 'visible';
+    if (state == 'visible') {
+      this.formService.showCartForm();
     }
   }
 }
