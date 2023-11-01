@@ -34,8 +34,8 @@ export class CartPopupComponent {
 
   toggleCart() {
     let state = this.cartVisible == 'visible' ? 'hidden' : 'visible';
-    if (state == 'visible') {
-      this.formService.showCartForm();
+    if (state == 'hidden') {
+      this.formService.hideCartForm();
     }
   }
 }

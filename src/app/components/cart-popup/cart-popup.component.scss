@@ -14,6 +14,20 @@
         background-color: #eeeeee;
         .header-section {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #cccccc;
+            padding: 10px;
+            h1 {
+                font-size: 20px;
+                margin: 0px;
+            }
+            .close {
+                font-size: 30px;
+                &:hover {
+                    color: red;
+                }
+            }
         }
     }
 }
