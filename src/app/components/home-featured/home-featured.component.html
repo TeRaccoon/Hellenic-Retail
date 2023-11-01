@@ -7,16 +7,22 @@
                     <h2>{{ featuredData.text_content }}</h2>
                 </div>
             </div>
-            <div class="product-card card" *ngFor="let item of featuredProducts; let i = index;">
-                <ng-container *ngIf="item.discount && item.discount != null">
+            <div class="product-card card" *ngFor="let product of featuredProducts; let i = index;">
+                <ng-container *ngIf="product.discount && product.discount != null">
                     <div class="discount-banner">
-                        <p>{{ item.discount }}% OFF</p>
+                        <p>{{ product.discount }}% OFF</p>
                     </div>
                 </ng-container>
-                <img [src]="'assets/uploads/admin_uploads/' + item.image_file_name">
-                <p class="product-name">{{ item.item_name }}</p>
+                <img [src]="'assets/uploads/admin_uploads/' + product.image_file_name">
+                <p class="product-name">{{ product.item_name }}</p>
                 <div class="price-container">
-                    <p class="product-price">£{{ item.price | number: '1.2-2' }}</p>
+                    <ng-container *ngIf="oldPrices[i] != null else elseBlock">
+                        <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
+                        <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+                    </ng-container>
+                    <ng-template #elseBlock>
+                        <p class="price">£{{ product.price | number: '1.2-2' }}</p>
+                    </ng-template>
                 </div>
             </div>
         </ng-container>
