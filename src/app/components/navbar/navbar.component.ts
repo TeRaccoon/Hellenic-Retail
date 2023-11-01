@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { faCaretDown, faEnvelope, faSearch, faUser, faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -25,7 +27,7 @@ export class NavbarComponent {
   loginVisible = 'hidden';
   cartVisible = 'hidden';
 
-  constructor(private dataService: DataService, private formService: FormService) { }
+  constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
     this.formService.getLoginFormVisibility().subscribe((visible) => {
@@ -87,7 +89,14 @@ export class NavbarComponent {
   }
 
   showAccount() {
-
+    this.authService.isLoggedIn().subscribe((data) => {
+      if (data) {
+        this.router.navigate(['/account']);
+      }
+      else {
+        this.toggleLogin();
+      }
+    })
   }
 
   toggleLogin() {
