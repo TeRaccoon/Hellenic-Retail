@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
+import { AuthService } from '../../services/auth.service';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -40,10 +41,10 @@ export class LoginFormComponent {
     ]
   };
 
-  constructor(private router: Router, private dataService: DataService, private formService: FormService, private fb: FormBuilder) { 
+  constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder) { 
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required]]
     });
   }
 
@@ -64,8 +65,10 @@ export class LoginFormComponent {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
       this.dataService.submitFormData('login', this.loginForm.value).subscribe((data: any) => {
-        if (data == 'true') {
-          
+        if (typeof data === 'number') {
+          this.toggleLogin();
+          this.authService.login(data);
+          this.router.navigate(['/account']);
         }
         else {
           this.loginError = data;

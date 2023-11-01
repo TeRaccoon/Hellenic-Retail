@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FormService {
   private isLoginVisible = new BehaviorSubject<boolean>(false);
   private isCartVisible = new BehaviorSubject<boolean>(false);
