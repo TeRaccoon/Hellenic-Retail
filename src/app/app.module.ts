@@ -29,6 +29,7 @@ import { CreateAccountFormComponent } from './components/create-account-form/cre
 import { FormService } from './services/form.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CartPopupComponent } from './components/cart-popup/cart-popup.component';
+import { AccountComponent } from './components/account/account.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { CartPopupComponent } from './components/cart-popup/cart-popup.component
     ViewRelatedComponent,
     LoginFormComponent,
     CreateAccountFormComponent,
-    CartPopupComponent
+    CartPopupComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +66,6 @@ import { CartPopupComponent } from './components/cart-popup/cart-popup.component
     ReactiveFormsModule
   ],
   providers: [
-    FormService
   ],
   bootstrap: [AppComponent]
 })

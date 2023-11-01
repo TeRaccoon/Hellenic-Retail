@@ -1,0 +1,38 @@
+<app-page-banner></app-page-banner>
+<div class="account-container">
+    <div *ngIf="loggedIn == null">
+        <h1>Loading...</h1>
+    </div>
+    <div class="account-details" *ngIf="loggedIn == true">
+        <h1>Account Details</h1>
+        <ng-container *ngIf="userData != null">
+            <form [formGroup]="changeAccountDetails" (ngSubmit)="submitChanges()">
+                <div class="detail">
+                    <label for="forename">Forename</label>
+                    <input formControlName="forename" [disabled]="edit" [ngClass]="{'enabled': edit}" id="forename" [value]="userData.forename">
+                </div>
+                <div class="detail">
+                    <label for="surname">Surname</label>
+                    <input formControlName="surname" [disabled]="edit" [ngClass]="{'enabled': edit}" id="surname" [value]="userData.surname">
+                </div>
+                <div class="detail">
+                    <label for="email">Forename</label>
+                    <input formControlName="email" [disabled]="edit" [ngClass]="{'enabled': edit}" id="email" [value]="userData.email">
+                </div>
+                <div class="detail">
+                    <label for="primary-phone">Phone number (primary)</label>
+                    <input formControlName="primary-phone" [disabled]="edit" [ngClass]="{'enabled': edit}" id="primary-phone" [value]="userData.phone_number_primary">
+                </div>
+                <div class="detail">
+                    <label for="secondary-phone">Phone number (secondary)</label>
+                    <input formControlName="secondary-phone" [disabled]="edit" [ngClass]="{'enabled': edit}" id="secondary-phone" [value]="userData.phone_number_secondary">
+                </div>
+                <div>
+                    <button (click)="toggleEdit()">Edit</button>
+                    <button type="submit" [disabled]="changeAccountDetails.invalid">Save</button>
+                    <button (click)="cancelEdit()">Cancel</button>
+                </div>
+            </form>
+        </ng-container>
+    </div>
+</div>

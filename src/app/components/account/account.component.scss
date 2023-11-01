@@ -1,0 +1,29 @@
+.account-container {
+    width: 68%;
+    margin: 0 auto;
+    .account-details {
+        display: flex;
+        flex-direction: column;
+        width: 45%;
+        >div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #cccccc;
+            font-size: 18px;
+            label {
+                font-weight: bold;
+                width: 100%;
+            }
+            input {
+                font-size: 18px;
+                border: none;
+                background-color: #ffffff;
+                width: 100%;
+            }
+            .enabled {
+                border-bottom: 2px solid #008cff;
+            }
+        }
+    }
+}
