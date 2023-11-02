@@ -9,28 +9,28 @@
             <form [formGroup]="changeAccountDetails" (ngSubmit)="submitChanges()">
                 <div class="detail">
                     <label for="forename">Forename</label>
-                    <input formControlName="forename" [disabled]="edit" [ngClass]="{'enabled': edit}" id="forename" [value]="userData.forename">
+                    <input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="forename" id="forename">
                 </div>
                 <div class="detail">
                     <label for="surname">Surname</label>
-                    <input formControlName="surname" [disabled]="edit" [ngClass]="{'enabled': edit}" id="surname" [value]="userData.surname">
+                    <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="surname" id="surname">
                 </div>
                 <div class="detail">
                     <label for="email">Forename</label>
-                    <input formControlName="email" [disabled]="edit" [ngClass]="{'enabled': edit}" id="email" [value]="userData.email">
+                    <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="email" id="email">
                 </div>
                 <div class="detail">
                     <label for="primary-phone">Phone number (primary)</label>
-                    <input formControlName="primary-phone" [disabled]="edit" [ngClass]="{'enabled': edit}" id="primary-phone" [value]="userData.phone_number_primary">
+                    <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="primaryPhone" id="primary-phone">
                 </div>
                 <div class="detail">
                     <label for="secondary-phone">Phone number (secondary)</label>
-                    <input formControlName="secondary-phone" [disabled]="edit" [ngClass]="{'enabled': edit}" id="secondary-phone" [value]="userData.phone_number_secondary">
+                    <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="secondaryPhone" id="secondary-phone">
                 </div>
                 <div>
-                    <button (click)="toggleEdit()">Edit</button>
+                    <button type="button" (click)="toggleEdit()">Edit</button>
                     <button type="submit" [disabled]="changeAccountDetails.invalid">Save</button>
-                    <button (click)="cancelEdit()">Cancel</button>
+                    <button type="button" (click)="cancelEdit()">Cancel</button>
                 </div>
             </form>
         </ng-container>

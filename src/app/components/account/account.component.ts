@@ -12,13 +12,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AccountComponent {
   changeAccountDetails: FormGroup;
   loggedIn: boolean | null = null;
-  userData: any;
+  userData: any = null;
   edit = false;
 
   constructor(private dataService: DataService, private formService: FormService, private authService: AuthService, private fb: FormBuilder) {
     this.changeAccountDetails = this.fb.group({
-      
-    })
+      forename: [{ value: '', disabled: true }, [Validators.required]],
+      surname: [{ value: '', disabled: true }, [Validators.required]],
+      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+      primaryPhone: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(7), Validators.maxLength(14)]],
+      secondaryPhone: [{ value: '', disabled: true }, [Validators.minLength(7), Validators.maxLength(14)]]      
+    });
   }
 
   ngOnInit() {
@@ -36,6 +40,13 @@ export class AccountComponent {
       if (userID != null) {
         this.dataService.collectData('user-details', userID.toString()).subscribe((userData: any) => {
           this.userData = userData;
+          this.changeAccountDetails.patchValue({
+            forename: this.userData.forename,
+            surname: this.userData.surname,
+            email: this.userData.email,
+            primaryPhone: this.userData.phone_number_primary,
+            secondaryPhone: this.userData.phone_number_secondary
+          });
         });
       }
     });
@@ -45,5 +56,14 @@ export class AccountComponent {
   }
   cancelEdit() {
     this.edit = false;
+  }
+  submitChanges() {
+    console.log("Submitting");
+    if (this.changeAccountDetails.valid) {
+      const formData = this.changeAccountDetails.value;
+      this.dataService.submitFormData('change-account-details', formData).subscribe((data: any) => {
+        
+      });
+    }
   }
 }
