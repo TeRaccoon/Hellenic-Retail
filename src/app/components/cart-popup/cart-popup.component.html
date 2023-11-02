@@ -4,4 +4,14 @@
             <h1>Shopping Cart</h1>
             <span (click)="toggleCart()" class="close">&times;</span>
         </div>
+        <div class="cart-section">
+            <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
+                <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                <div>
+                    <p>{{ product.item_name }}</p>
+                    <input type=number [value]="cart[i].quantity">
+                    <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                </div>
+            </div>
+        </div>
     </div>
