@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { CartService } from '../../services/cart.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -14,7 +15,7 @@ export class HomeTopProductsComponent {
   topProducts: any[] = [];
   oldPrices: (number | null)[] = [];
 
-  constructor(private dataService: DataService) { }
+  constructor(private cartService: CartService, private dataService: DataService) { }
 
   ngOnInit() {
     this.loadProducts();
@@ -36,5 +37,9 @@ export class HomeTopProductsComponent {
 
   openImage(imageLocation: string) {
     window.open('assets/uploads/admin_uploads/' + imageLocation, '_blank');
+  }
+
+  addToCart(productID: number, quantity: number) {
+    this.cartService.addToCart(productID, quantity);
   }
 }

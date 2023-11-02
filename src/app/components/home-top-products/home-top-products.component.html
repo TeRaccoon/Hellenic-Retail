@@ -19,7 +19,7 @@
                 </ng-template>
             </div>
             <div class="product-options">
-                <button>Add to cart</button>
+                <button (click)="addToCart(product.id, 1)">Add to cart</button>
                 <p>
                     <fa-icon [icon]="faHeart"></fa-icon>
                 </p>
