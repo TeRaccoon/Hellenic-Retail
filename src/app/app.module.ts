@@ -26,7 +26,6 @@ import { ViewDetailsComponent } from './components/view-details/view-details.com
 import { ViewRelatedComponent } from './components/view-related/view-related.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { CreateAccountFormComponent } from './components/create-account-form/create-account-form.component';
-import { FormService } from './services/form.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CartPopupComponent } from './components/cart-popup/cart-popup.component';
 import { AccountComponent } from './components/account/account.component';
