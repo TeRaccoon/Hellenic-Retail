@@ -21,7 +21,7 @@ export class AccountComponent {
       surname: [{ value: '', disabled: true }, [Validators.required]],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       primaryPhone: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(7), Validators.maxLength(14)]],
-      secondaryPhone: [{ value: '', disabled: true }, [Validators.minLength(7), Validators.maxLength(14)]]      
+      secondaryPhone: [{ value: '', disabled: true }]      
     });
   }
 
@@ -53,17 +53,27 @@ export class AccountComponent {
   }
   toggleEdit() {
     this.edit = !this.edit;
+    Object.keys(this.changeAccountDetails.controls).forEach(controlName => {
+      let control = this.changeAccountDetails.get(controlName);
+      if (control) {
+        control.disabled ? control.enable() : control.disable();
+      }
+    });
   }
   cancelEdit() {
     this.edit = false;
   }
   submitChanges() {
-    console.log("Submitting");
-    if (this.changeAccountDetails.valid) {
-      const formData = this.changeAccountDetails.value;
-      this.dataService.submitFormData('change-account-details', formData).subscribe((data: any) => {
-        
-      });
-    }
+    this.authService.getUserID().subscribe((data) => {
+      const userID = data;
+      if (userID != null) {
+        let formData = this.changeAccountDetails.value;
+        formData['userID'] = userID;
+        console.log(formData);
+        this.dataService.submitFormData('change-account-details', formData).subscribe((data: any) => {
+          
+        });
+      }
+    });
   }
 }

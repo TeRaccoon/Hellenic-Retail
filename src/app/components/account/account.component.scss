@@ -1,3 +1,4 @@
+$hellenicblue: rgb(0, 140, 255);
 .account-container {
     width: 68%;
     margin: 0 auto;
@@ -26,6 +27,15 @@
             }
             .enabled {
                 color: #000000;
+            }
+            button {
+                cursor: pointer;
+                font-family: 'Poppins', sans-serif;
+                color: white;
+                font-size: 16px;
+                background-color: $hellenicblue;
+                border: 0;
+                padding: 4px 18px;
             }
         }
     }

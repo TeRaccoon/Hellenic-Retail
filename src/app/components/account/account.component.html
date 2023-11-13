@@ -10,22 +10,37 @@
                 <div class="detail">
                     <label for="forename">Forename</label>
                     <input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="forename" id="forename">
+                    <div *ngIf="changeAccountDetails.get('forename')?.hasError('required') && changeAccountDetails.get('forename')?.touched">
+                        Forename is required.
+                    </div>
                 </div>
                 <div class="detail">
                     <label for="surname">Surname</label>
                     <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="surname" id="surname">
+                    <div *ngIf="changeAccountDetails.get('surname')?.hasError('required') && changeAccountDetails.get('surname')?.touched">
+                        Surname is required.
+                    </div>
                 </div>
                 <div class="detail">
-                    <label for="email">Forename</label>
+                    <label for="email">Email</label>
                     <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="email" id="email">
+                    <div *ngIf="changeAccountDetails.get('email')?.hasError('required') && changeAccountDetails.get('email')?.touched">
+                        Email is empty or invalid.
+                    </div>
                 </div>
                 <div class="detail">
                     <label for="primary-phone">Phone number (primary)</label>
                     <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="primaryPhone" id="primary-phone">
+                    <div *ngIf="changeAccountDetails.get('primary-phone')?.hasError('required') && changeAccountDetails.get('primary-phone')?.touched">
+                        Primary phone is empty or invalid.
+                    </div>
                 </div>
                 <div class="detail">
                     <label for="secondary-phone">Phone number (secondary)</label>
                     <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="secondaryPhone" id="secondary-phone">
+                    <div *ngIf="changeAccountDetails.get('secondary-phone')?.hasError('required') && changeAccountDetails.get('secondary-phone')?.touched">
+                        Secondary phone is empty or invalid.
+                    </div>
                 </div>
                 <div>
                     <button type="button" (click)="toggleEdit()">Edit</button>
