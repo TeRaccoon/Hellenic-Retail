@@ -10,6 +10,7 @@
         <div class="input-section">
             <span (click)="toggleLogin()" class="close">&times;</span>
             <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
+                <p class="error">{{ loginError }}</p>
                 <div *ngFor="let error of errorMessages.email">
                     <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError(error.type)">
                         {{ error.message }}
