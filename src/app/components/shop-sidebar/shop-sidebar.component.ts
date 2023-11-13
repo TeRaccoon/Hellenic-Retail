@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-shop-sidebar',
@@ -7,8 +8,19 @@ import { Component } from '@angular/core';
 })
 export class ShopSidebarComponent {
   prices = ["£0.01-£5.00", "£5.00-£10.00", "£10.00-£15.00", "£15.00+"];
+  maxPrices = [5, 10, 15, 999];
+  minPrices = [0.01, 5, 10, 15]
+  priceFilterIndex : number = -1;
+
+  constructor(private filterService: FilterService) { }
 
   ngOnInit() {
     
+  }
+
+  selectFilter(index: number) {
+    this.priceFilterIndex = index;
+    this.filterService.setMaxPrice(this.maxPrices[index]);
+    this.filterService.setMinPrice(this.minPrices[index]);
   }
 }

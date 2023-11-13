@@ -36,11 +36,16 @@ $hellenicblue: rgb(0, 140, 255);
                 .list-item {
                     color: #{$hellenicblue};
                     .toggle-icon {
-                        background-color: #000000;
+                        background-color: #bbbbbb;
                         border: 1px solid #868686
                     }
                 }
             }
         }
     }
+}
+
+.selected {
+    background-color: #{$hellenicblue}!important;
+    border: 1px solid #555555!important;
 }

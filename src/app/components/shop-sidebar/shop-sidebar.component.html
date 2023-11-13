@@ -5,8 +5,8 @@
             <ng-container *ngIf="prices">
                 <li *ngFor="let price of prices; let i = index;">
                     <div class="list-item">
-                        <div class="toggle-icon"></div>
-                        <a>{{ price }}</a>
+                        <div [ngClass]="priceFilterIndex == i ? 'selected' : ''" class="toggle-icon"></div>
+                        <a (click)="selectFilter(i)">{{ price }}</a>
                     </div>
                 </li>
             </ng-container>
