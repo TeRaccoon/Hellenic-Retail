@@ -33,8 +33,6 @@ export class CartPopupComponent {
   constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) {}
 
   ngOnInit() {
-    this.cart = this.cartService.getCartItems();
-
     this.formService.getCartFormVisibility().subscribe((visible) => {
       this.cartVisible = visible ? 'visible' : 'hidden';
     });
@@ -42,6 +40,12 @@ export class CartPopupComponent {
     this.cartService.getIDs().subscribe((ids) => {
       this.cartIDs = ids;
     });
+
+    this.cartService.getCartItems().subscribe((items) => {
+      this.cart = items;
+      this.cartProducts = [];
+      this.loadCartData();
+    })
 
     this.loadCartData();
   }
@@ -53,9 +57,6 @@ export class CartPopupComponent {
     }
   }
   async loadCartData() {
-    this.cartService.getIDs().subscribe((ids) => {
-      this.cartIDs = ids;
-    });
     for (let i = 0; i < this.cartIDs.length; i++) {
       this.dataService.collectData('product-from-id', this.cartIDs[i].toString()).subscribe((product:any) => {
 

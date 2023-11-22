@@ -1,40 +1,51 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+interface CartItem {
+  productID: number;
+  quantity: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartItems: { productID: number, quantity: number }[] = [];
+  private cartItems = new BehaviorSubject<{ productID: number, quantity: number }[]>([]);
   private cartIDs = new BehaviorSubject<number[]>([]);
 
   constructor() {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
-      this.cartItems = JSON.parse(storedCart);
-      const productIDs = this.cartItems.map(product => product.productID);
-      this.cartIDs.next(productIDs);
+      try {
+        const parsedCart: CartItem[] = JSON.parse(storedCart);
+        this.cartItems.next(parsedCart);
+  
+        const productIDs = parsedCart.map(product => product.productID);
+        this.cartIDs.next(productIDs);
+      } catch (error) {
+        console.error('Error parsing stored cart:', error);
+      }
     }
   }
 
   addToCart(productID: number, quantity: number) {
-    const existingCartItem = this.cartItems.find(cartItem => cartItem.productID === productID);
-
-    if (existingCartItem) {
-      existingCartItem.quantity += quantity;
+    const currentCartItems = this.cartItems.getValue();
+    const existingCartItemIndex = currentCartItems.findIndex(cartItem => cartItem.productID === productID);
+  
+    if (existingCartItemIndex !== -1) {
+      currentCartItems[existingCartItemIndex].quantity += quantity;
     } else {
-      this.cartItems.push({ productID, quantity });
-
-      const productIDs = this.cartItems.map(product => product.productID)
-      productIDs.push(productID);
+      currentCartItems.push({ productID, quantity });
+  
+      const productIDs = currentCartItems.map(product => product.productID);
       this.cartIDs.next(productIDs);
-      
-      console.log(this.cartIDs);
     }
-    localStorage.setItem('cart', JSON.stringify(this.cartItems));
+  
+    this.cartItems.next(currentCartItems);
+    localStorage.setItem('cart', JSON.stringify(currentCartItems));
   }
 
-  getCartItems() {
+  getCartItems(): Observable<{ productID: number, quantity: number }[]> {
     return this.cartItems;
   }
   getIDs(): Observable<number[]> {
