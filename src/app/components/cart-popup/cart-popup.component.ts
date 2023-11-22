@@ -53,6 +53,9 @@ export class CartPopupComponent {
     }
   }
   async loadCartData() {
+    this.cartService.getIDs().subscribe((ids) => {
+      this.cartIDs = ids;
+    });
     for (let i = 0; i < this.cartIDs.length; i++) {
       this.dataService.collectData('product-from-id', this.cartIDs[i].toString()).subscribe((product:any) => {
 

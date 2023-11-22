@@ -7,10 +7,15 @@
         <div class="cart-section">
             <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
                 <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
-                <div>
-                    <p>{{ product.item_name }}</p>
-                    <input type=number [value]="cart[i].quantity">
-                    <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                <div class="cart-row-details">
+                    <div>
+                        <p>{{ product.item_name }}</p>
+                        <input type=number [value]="cart[i].quantity">
+                        <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                    </div>
+                    <div class="cart-row-options">
+                        <button>X</button>
+                    </div>
                 </div>
             </div>
         </div>
