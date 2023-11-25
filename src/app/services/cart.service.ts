@@ -45,6 +45,20 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify(currentCartItems));
   }
 
+  removeFromCart(productID: number) {
+    const currentCartItems = this.cartItems.getValue();
+    const currentCartIds = this.cartIDs.getValue();
+    if (productID != null) {
+      const updatedCartItems = currentCartItems.filter((product) => product.productID != productID);
+      const updatedCartIds = currentCartIds.filter((id) => id != productID);
+
+      this.cartItems.next(updatedCartItems);
+      this.cartIDs.next(updatedCartIds);
+
+      localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+    }
+  }
+
   getCartItems(): Observable<{ productID: number, quantity: number }[]> {
     return this.cartItems;
   }

@@ -39,15 +39,14 @@ export class CartPopupComponent {
 
     this.cartService.getIDs().subscribe((ids) => {
       this.cartIDs = ids;
+      this.loadCartData();
     });
 
     this.cartService.getCartItems().subscribe((items) => {
       this.cart = items;
       this.cartProducts = [];
-      this.loadCartData();
-    })
+    });
 
-    this.loadCartData();
   }
 
   toggleCart() {
@@ -56,17 +55,23 @@ export class CartPopupComponent {
       this.formService.hideCartForm();
     }
   }
+
+  removeFromCart(productId: number) {
+    this.cartService.removeFromCart(productId);
+  }
+
   async loadCartData() {
     for (let i = 0; i < this.cartIDs.length; i++) {
       this.dataService.collectData('product-from-id', this.cartIDs[i].toString()).subscribe((product:any) => {
-
         this.cartProducts.push(product);
         let price = product.retail_price * this.cart[i].quantity;
         if (product.discount != null) {
           price = price * ((100 - product.discount) / 100);
         }
         this.prices.push(price);
+        console.log(this.cartProducts);
       });
+
     }
   }
 }
