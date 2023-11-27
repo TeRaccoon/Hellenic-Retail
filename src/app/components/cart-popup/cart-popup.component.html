@@ -5,18 +5,20 @@
             <span (click)="toggleCart()" class="close">&times;</span>
         </div>
         <div class="cart-section">
-            <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
-                <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
-                <div class="cart-row-details">
-                    <p class="product-name">{{ product.item_name }}</p>
-                    <div class="cart-price-options">
-                        <input type=number [value]="cart[i].quantity">
-                        <p>£{{ prices[i] | number: '1.2-2' }}</p>
-                    </div>
-                    <div class="cart-row-options">
-                        <button (click)="removeFromCart(cart[i].productID)">×</button>
+            <ng-container *ngIf="loaded">
+                <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
+                    <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                    <div class="cart-row-details">
+                        <p class="product-name">{{ product.item_name }}</p>
+                        <div class="cart-price-options">
+                            <input (change)="changeQuantity($event, product.ID)" type=number [value]="cart[i].quantity">
+                            <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                        </div>
+                        <div class="cart-row-options">
+                            <button (click)="removeFromCart(product.ID)">×</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </ng-container>
         </div>
     </div>

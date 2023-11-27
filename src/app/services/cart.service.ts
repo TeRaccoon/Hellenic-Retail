@@ -28,6 +28,16 @@ export class CartService {
     }
   }
 
+  changeQuantity(productID: number, quantity: number) {
+    const currentCartItems = this.cartItems.getValue();
+    const existingCartItemIndex = currentCartItems.findIndex(cartItem => cartItem.productID === productID);
+    if (existingCartItemIndex !== -1) {
+      currentCartItems[existingCartItemIndex].quantity = quantity;
+      this.cartItems.next(currentCartItems);
+      localStorage.setItem('cart', JSON.stringify(currentCartItems));
+    }
+  }
+
   addToCart(productID: number, quantity: number) {
     const currentCartItems = this.cartItems.getValue();
     const existingCartItemIndex = currentCartItems.findIndex(cartItem => cartItem.productID === productID);
