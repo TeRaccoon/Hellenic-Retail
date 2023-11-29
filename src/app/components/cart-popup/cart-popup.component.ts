@@ -69,7 +69,7 @@ export class CartPopupComponent {
   }
 
   changeQuantity(event: any, productID: number) {
-    const quantity = event.target.value;
+    const quantity = parseInt(event.target.value);
     this.cartService.changeQuantity(productID, quantity);
   }
 
