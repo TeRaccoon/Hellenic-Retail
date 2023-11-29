@@ -29,6 +29,10 @@ import { CreateAccountFormComponent } from './components/create-account-form/cre
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CartPopupComponent } from './components/cart-popup/cart-popup.component';
 import { AccountComponent } from './components/account/account.component';
+import { CheckoutCouponComponent } from './components/checkout-coupon/checkout-coupon.component';
+import { CheckoutBillingComponent } from './components/checkout-billing/checkout-billing.component';
+import { CheckoutOrderSummaryComponent } from './components/checkout-order-summary/checkout-order-summary.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +58,11 @@ import { AccountComponent } from './components/account/account.component';
     LoginFormComponent,
     CreateAccountFormComponent,
     CartPopupComponent,
-    AccountComponent
+    AccountComponent,
+    CheckoutCouponComponent,
+    CheckoutBillingComponent,
+    CheckoutOrderSummaryComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,
