@@ -1,22 +1,35 @@
 <div [@cartAnimation]="cartVisible" class="form-container">
     <div class="cart-form">
-        <div class="header-section">
-            <h1>Shopping Cart</h1>
-            <span (click)="toggleCart()" class="close">&times;</span>
-        </div>
-        <div class="cart-section">
-            <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
-                <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
-                <div class="cart-row-details">
-                    <div>
-                        <p>{{ product.item_name }}</p>
-                        <input type=number [value]="cart[i].quantity">
-                        <p>£{{ prices[i] | number: '1.2-2' }}</p>
+        <div>
+            <div class="header-section">
+                <h1>Shopping Cart</h1>
+                <span (click)="toggleCart()" class="close">&times;</span>
+            </div>
+            <div class="cart-section">
+                <ng-container *ngIf="loaded">
+                    <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
+                        <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                        <div class="cart-row-details">
+                            <p class="product-name">{{ product.item_name }}</p>
+                            <div class="cart-price-options">
+                                <input (change)="changeQuantity($event, product.ID)" type=number [value]="cart[i].quantity">
+                                <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                            </div>
+                            <div class="cart-row-options">
+                                <button (click)="removeFromCart(product.ID)">×</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="cart-row-options">
-                        <button>X</button>
-                    </div>
-                </div>
+                </ng-container>
             </div>
         </div>
+        <div class="options-section">
+            <div>
+                <p>Subtotal:</p>
+                <p class="subtotal-value">£{{ subtotal | number: '1.2-2' }}</p>
+            </div>
+            <button>Checkout</button>
+            <button (click)="clearCart()" class="red">Clear cart</button>
+        </div>
     </div>
+</div>

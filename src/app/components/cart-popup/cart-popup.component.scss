@@ -1,3 +1,4 @@
+$hellenicblue: rgb(0, 140, 255);
 .form-container {
     display: none;
     position: fixed;
@@ -8,7 +9,10 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
     .cart-form {
-        width: 18%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 16%;
         height: 100%;
         margin-left: auto;
         background-color: #ffffff;
@@ -42,9 +46,12 @@
                 .cart-row-details {
                     display: flex;
                     flex-direction: row;
+                    justify-content: space-between;
+                    gap: 10px;
                     input[type="number"] {
                         width: 35px;
                         height: 22px;
+                        padding: 2px 7px;
                         border: 1px solid #dddddd;
                         font-size: 16px;
                         color: #333;
@@ -55,9 +62,29 @@
                             border-color: #007bff;
                         }
                     }
+                    .product-name {
+                        margin: 10px 0;
+                        width: 70%;
+                        max-lines: 2;
+                    }
+                    .cart-price-options {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    }
                     .cart-row-options {
                         display: flex;
-                        align-items: center;
+                        align-items: flex-start;
+                        button {
+                            background-color: transparent;
+                            border: none;
+                            margin: 0 0 0 10px;
+                            transition: color 0.6s ease;
+                            font-size: 20px;
+                            &:hover {
+                                color: red;
+                            }
+                        }
                     }
                 }
                 img {
@@ -66,6 +93,45 @@
                 }
                 p {
                     font-size: 15px;
+                    margin: 0px;
+                }
+            }
+        }
+        .options-section {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            gap: 5px;
+            font-weight: bold;
+            border-top: 2px solid #cccccc;
+            >div {
+                display: flex;
+                justify-content: space-between;
+                p {
+                    margin: 5px 0;
+                }
+                .subtotal-value {
+                    color: $hellenicblue;
+                    font-size: 18px;
+                }
+            }
+            button {
+                cursor: pointer;
+                font-weight: bold;
+                border: none;
+                background-color: $hellenicblue;
+                color: white;
+                font-size: 16px;
+                padding: 12px 18px;
+                transition: background-color 0.6s ease;
+                &:hover {
+                    background-color: #006ee4;
+                }
+            }
+            .red {
+                background-color: red;
+                &:hover {
+                    background-color: rgb(212, 0, 0);
                 }
             }
         }
