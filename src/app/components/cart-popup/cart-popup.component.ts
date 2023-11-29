@@ -82,15 +82,17 @@ export class CartPopupComponent {
     forkJoin(observables).pipe(
       tap((products: any[]) => {
         products.forEach((product, i) => {
-          this.cartProducts.push(product);
+          if (this.cart[i]) {
+            this.cartProducts.push(product);
   
-          let price = product.retail_price * this.cart[i].quantity;
-  
-          if (product.discount != null) {
-            price = price * ((100 - product.discount) / 100);
+            let price = product.retail_price * this.cart[i].quantity;
+    
+            if (product.discount != null) {
+              price = price * ((100 - product.discount) / 100);
+            }
+    
+            this.prices.push(price);
           }
-  
-          this.prices.push(price);
         });
       }),
       catchError(error => {
