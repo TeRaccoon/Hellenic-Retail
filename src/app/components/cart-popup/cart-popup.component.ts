@@ -32,6 +32,7 @@ export class CartPopupComponent {
   displayProducts: any[] = [];
   cartIDs: number[] = [];
   prices: number[] = [];
+  subtotal = 0;
   loaded = false;
 
   constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) {}
@@ -73,8 +74,14 @@ export class CartPopupComponent {
     this.cartService.changeQuantity(productID, quantity);
   }
 
+  clearCart() {
+    this.cartService.clearCart();
+  }
+
   loadCartData() {
     this.cartProducts = [];
+    this.subtotal = 0;
+    this.prices = [];
     const observables = this.cartIDs.map(id =>
       this.dataService.collectData('product-from-id', id.toString())
     );
@@ -86,6 +93,7 @@ export class CartPopupComponent {
             this.cartProducts.push(product);
   
             let price = product.retail_price * this.cart[i].quantity;
+            this.subtotal += price;
     
             if (product.discount != null) {
               price = price * ((100 - product.discount) / 100);

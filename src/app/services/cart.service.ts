@@ -69,6 +69,12 @@ export class CartService {
     }
   }
 
+  clearCart() {
+    this.cartItems.next([]);
+    this.cartIDs.next([]);
+    localStorage.removeItem('cart');
+  }
+
   getCartItems(): Observable<{ productID: number, quantity: number }[]> {
     return this.cartItems;
   }
