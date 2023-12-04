@@ -1,1 +1,16 @@
-<p>checkout-coupon works!</p>
+<div class="coupon-section">
+    <div class="coupon-information">
+        <fa-icon class="interact-icon" [icon]="faInfoCircle"></fa-icon>
+        <p>Have a coupon? <a (click)="shown = !shown">Click here to enter your code</a></p>
+    </div>
+    <div [ngClass]="{'shown': shown}" class="coupon-form">
+        <form>
+            <div class="heading">
+                <p>If you have a coupon code, please apply it below.</p>
+            </div>
+            <div class="options"></div>
+            <input type="text" placeholder="Coupon code" required>
+            <button type="submit">Apply coupon</button>
+        </form>
+    </div>
+</div>
