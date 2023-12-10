@@ -5,4 +5,13 @@
     margin: 50px auto 0 auto;
     width: 68%;
     gap: 30px;
+    .details-container {
+        display: flex;
+        .checkout-billing-container {
+            width: 65%;
+        }
+        .checkout-summary-container {
+            width: 35%;
+        }
+    }
 }

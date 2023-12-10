@@ -1,0 +1,44 @@
+<div class="summary-container">
+    <h3>Your order</h3>
+    <table class="product-table">
+        <ng-container *ngIf="cartProducts">
+            <tr>
+                <th class="width65">Product</th>
+                <th>Subtotal</th>
+            </tr>
+            <tr *ngFor="let product of cartProducts; let i = index">
+                <td class="row-details">
+                    <div>
+                        <img [alt]="product.name" [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                        <p>{{ cartData[i].quantity }}</p>
+                    </div>
+                    <p>{{ product.name }}</p>
+                </td>
+                <td class="row-price">
+                    <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="title">Subtotal</p>
+                </td>
+                <td>
+                    <p class="row-price">£{{ total | number: '1.2-2' }}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="title">Delivery</p>
+                </td>
+                <td *ngIf="total < 60; else elseBlock">
+                    <p class="row-price">£7.50</p>
+                </td>
+                <td>
+                    <ng-template #elseBlock>
+                        <p class="row-price">--</p>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-container>
+    </table>
+</div>
