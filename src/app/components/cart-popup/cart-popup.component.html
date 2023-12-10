@@ -10,7 +10,7 @@
                     <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
                         <img [src]="'assets/uploads/admin_uploads/' + product.image_location">
                         <div class="cart-row-details">
-                            <p class="product-name">{{ product.item_name }}</p>
+                            <p class="product-name">{{ product.name }}</p>
                             <div class="cart-price-options">
                                 <input (change)="changeQuantity($event, product.ID)" type=number [value]="cart[i].quantity">
                                 <p>£{{ prices[i] | number: '1.2-2' }}</p>
