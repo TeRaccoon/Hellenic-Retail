@@ -1,0 +1,42 @@
+$hellenicblue: rgb(0, 140, 255);
+.form-container {
+    .billing-form {
+        width: 95%;
+        .single {
+            flex-direction: column;
+            gap: 0px!important;
+        }
+        .row {
+            display: flex;
+            gap: 30px;
+            margin: 15px 0;
+            div {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            label {
+                font-size: 15px;
+                font-weight: bold;
+                margin: 3px;
+            }
+            input,
+            textarea {
+                font-size: 17px;
+                font-family: 'Poppins', sans-serif;
+                padding: 10px;
+                margin: 7px 0px;
+                outline: none;
+                border: 1px solid #888888;
+                outline: 1px solid #fff;
+                transition: border 0.4s ease, outline 0.3s ease;
+                &:focus,
+                &:hover {
+                    outline: none;
+                    border: 1px solid $hellenicblue;
+                    outline: 1px solid $hellenicblue;
+                }
+            }
+        }
+    }
+}

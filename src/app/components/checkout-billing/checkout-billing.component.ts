@@ -17,7 +17,7 @@ export class CheckoutBillingComponent {
       streetAddress1: ['', Validators.required],
       streetAddress2: [''],
       town: ['', Validators.required],
-      county: ['', Validators.required],
+      county: [''],
       postcode: ['', Validators.required],
       phone: ['', Validators.required, Validators.minLength(7), Validators.maxLength(14)],
       email: ['', [Validators.required, Validators.email]],
