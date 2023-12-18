@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-home-featured',
@@ -7,6 +8,9 @@ import { DataService } from '../../services/data.service';
   styleUrls: ['./home-featured.component.scss']
 })
 export class HomeFeaturedComponent {
+  faHeart = faHeart;
+  faEye = faEye;
+  
   featuredProducts: any[] = [];
   oldPrices: (number | null)[] = [];
   featuredData: any;
@@ -18,7 +22,7 @@ export class HomeFeaturedComponent {
   }
 
   async loadOffers() {
-    this.dataService.collectData('featured', '3').subscribe((data: any) => {
+    this.dataService.collectData('featured', '4').subscribe((data: any) => {
       this.featuredProducts = data;
       this.oldPrices = this.featuredProducts.map((product: any) => {
         if (product.discount && product.discount != null) {
@@ -32,5 +36,9 @@ export class HomeFeaturedComponent {
     this.dataService.collectData('section-data', 'home-featured').subscribe((data: any) => {
       this.featuredData = data;
     });
+  }
+
+  openImage(imageLocation: string) {
+    window.open('assets/uploads/admin_uploads/' + imageLocation, '_blank');
   } 
 }
