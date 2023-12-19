@@ -18,33 +18,46 @@ $hellenicblue: rgb(0, 140, 255);
     .coupon-form {
         width: 45%;
         margin: 20px auto;
-        padding: 0 30px;
+        padding: 0 20px;
         height: 0px;
         border: 3px dashed $hellenicblue;
         overflow: hidden;
-        transition: padding 1.6s ease, height 1.6s ease;
-        button {
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            color: white;
-            font-size: 18px;
-            background-color: $hellenicblue;
-            border: 0;
-            padding: 8px;
-            margin-top: 10px;
+        opacity: 0;
+        transition: padding 1.6s ease, height 1.6s ease, opacity 0s ease 1.6s;
+        .heading {
+            p {
+                margin: 8px;
+            }
         }
-        input {
-            margin: 0px 0px 20px 0px;
-            font-size: 15px;
-            padding: 15px;
-            border: 1px solid #cccccc;
-            &:focus::placeholder {
+        .options {
+            display: flex;
+            button {
+                cursor: pointer;
+                font-family: 'Poppins', sans-serif;
                 color: white;
+                font-size: 15px;
+                background-color: $hellenicblue;
+                border: 0;
+                padding: 8px;
+                margin: 5px;
+                flex-shrink: 0;
+            }
+            input {
+                font-size: 15px;
+                padding: 10px 15px;
+                border: 1px solid #cccccc;
+                margin: 5px;
+                width: 100%;
+                &:focus::placeholder {
+                    color: white;
+                }
             }
         }
     }
     .shown {
-        padding: 30px;
-        height: 130px;
+        padding: 20px;
+        height: 100px;
+        opacity: 1;
+        transition: padding 1.6s ease, height 1.6s ease, opacity 1.6s ease 0s;
     }
 }

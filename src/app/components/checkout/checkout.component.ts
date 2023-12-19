@@ -16,7 +16,7 @@ export class CheckoutComponent {
       "First Name": ['', Validators.required],
       "Last Name": ['', Validators.required],
       "Company Name": [''],
-      "Street Address 1": ['', Validators.required],
+      "Street Address": ['', Validators.required],
       "Street Address 2": [''],
       "Town / City": ['', Validators.required],
       "County": [''],
