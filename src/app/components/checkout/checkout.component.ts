@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-checkout',
@@ -8,27 +9,28 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CheckoutComponent {
   billingForm: FormGroup;
+  faCircleExclamation = faCircleExclamation;
 
   constructor(private fb: FormBuilder) {
     this.billingForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      companyName: [''],
-      streetAddress1: ['', Validators.required],
-      streetAddress2: [''],
-      town: ['', Validators.required],
-      county: [''],
-      postcode: ['', Validators.required],
-      phone: ['', Validators.required, Validators.minLength(7), Validators.maxLength(14)],
-      email: ['', [Validators.required, Validators.email]],
+      "First Name": ['', Validators.required],
+      "Last Name": ['', Validators.required],
+      "Company Name": [''],
+      "Street Address 1": ['', Validators.required],
+      "Street Address 2": [''],
+      "Town / City": ['', Validators.required],
+      "County": [''],
+      "Postcode": ['', Validators.required],
+      "Phone": ['', [Validators.required, Validators.minLength(7), Validators.maxLength(14)]],
+      "Email address": ['', [Validators.required, Validators.email]],
       orderNotes: ['']
     });
   }
 
   formSubmit() {
+    console.log(this.billingForm.controls);
     if (this.billingForm.valid) {
       const formData = this.billingForm.value;
-      console.log(formData)
     }
   }
 }

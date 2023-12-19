@@ -53,6 +53,21 @@ $hellenicblue: rgb(0, 140, 255);
                         }
                     }
                 }
+                .error-container {
+                    width: 95%;
+                    div {
+                        display: flex;
+                        align-items: center;
+                        background-color: #eeeeee;
+                        border-bottom: 3px solid rgb(200, 0, 0);
+                        padding: 8px 20px;
+                        margin: 10px 0px;
+                        p {
+                            margin: 0px;
+                            padding: 0px 8px;
+                        }
+                    }
+                }
             }
         }
         .checkout-summary-container {
