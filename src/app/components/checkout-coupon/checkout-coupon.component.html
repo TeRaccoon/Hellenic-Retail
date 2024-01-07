@@ -1,0 +1,17 @@
+<div class="coupon-section">
+    <div class="coupon-information">
+        <fa-icon class="interact-icon" [icon]="faInfoCircle"></fa-icon>
+        <p>Have a coupon? <a (click)="shown = !shown">Click here to enter your code</a></p>
+    </div>
+    <div [ngClass]="{'shown': shown}" class="coupon-form">
+        <form [formGroup]="couponForm" (ngSubmit)="formSubmit()">
+            <div class="heading">
+                <p>If you have a coupon code, please apply it below.</p>
+            </div>
+            <div class="options">
+                <input formControlName="code" type="text" placeholder="Coupon code" required>
+                <button type="submit">Apply coupon</button>
+            </div>
+        </form>
+    </div>
+</div>

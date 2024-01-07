@@ -1,0 +1,62 @@
+$hellenicblue: rgb(0, 140, 255);
+.coupon-section {
+    .coupon-information {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        p {
+            margin: 10px;
+        }
+        a {
+            font-weight: bold;
+            color: $hellenicblue;
+            cursor: pointer;
+        }
+    }
+    .coupon-form {
+        width: 45%;
+        margin: 20px auto;
+        padding: 0 20px;
+        height: 0px;
+        border: 3px dashed transparent;
+        overflow: hidden;
+        transition: padding 1.6s ease, height 1.6s ease, border 0.4s ease 1.2s;
+        .heading {
+            p {
+                margin: 8px;
+            }
+        }
+        .options {
+            display: flex;
+            button {
+                cursor: pointer;
+                font-family: 'Poppins', sans-serif;
+                color: white;
+                font-size: 15px;
+                background-color: $hellenicblue;
+                border: 0;
+                padding: 8px;
+                margin: 5px;
+                flex-shrink: 0;
+            }
+            input {
+                font-size: 15px;
+                padding: 10px 15px;
+                border: 1px solid #cccccc;
+                margin: 5px;
+                width: 100%;
+                &:focus::placeholder {
+                    color: white;
+                }
+            }
+        }
+    }
+    .shown {
+        padding: 20px;
+        height: 100px;
+        border: 3px dashed $hellenicblue;
+        transition: padding 1.6s ease, height 1.6s ease, border 0s ease 0s;
+    }
+}

@@ -1,0 +1,66 @@
+$hellenicblue: rgb(0, 140, 255);
+h3 {
+    margin: 5px;
+    font-size: 22px;
+}
+
+.product-table {
+    padding: 8px;
+    width: 100%;
+    border-collapse: collapse;
+    tr {
+        margin: 5px;
+        border-bottom: 1px solid #ccc;
+        th {
+            text-align: left;
+            padding: 10px;
+        }
+        .width65 {
+            width: 55%;
+        }
+        .row-details {
+            display: flex;
+            height: 75px;
+            div {
+                display: flex;
+                justify-content: flex-end;
+                width: 50%;
+                img {
+                    margin: 5px;
+                    max-width: 100%;
+                    max-height: 100%;
+                    object-fit: contain;
+                }
+                p {
+                    position: absolute;
+                    margin: 6px;
+                    border-radius: 15px;
+                    padding: 3px;
+                    background-color: $hellenicblue;
+                    color: white;
+                    text-align: center;
+                    width: 18px;
+                    height: 18px;
+                    font-size: 12px;
+                }
+            }
+            >p {
+                font-size: 15px;
+                margin: 5px 15px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100%
+            }
+        }
+        .row-price {
+            padding: 2px 15px;
+            font-weight: bold;
+            color: $hellenicblue;
+        }
+        .title {
+            font-weight: bold;
+            padding: 10px;
+            margin: 5px;
+        }
+    }
+}

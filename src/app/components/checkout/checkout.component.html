@@ -1,0 +1,72 @@
+<app-page-banner></app-page-banner>
+<div class="checkout-view-container">
+    <form [formGroup]="billingForm" (ngSubmit)="formSubmit()">
+        <app-checkout-coupon></app-checkout-coupon>
+        <div class="details-container">
+            <div class="checkout-billing-container">
+                <div class="form-container">
+                    <h1>Billing details</h1>
+                    <div class="error-container">
+                        <ng-container *ngFor="let control of billingForm.controls | keyvalue">
+                            <div *ngIf="billingForm.get(control.key)?.touched && billingForm.get(control.key)?.invalid">
+                                <fa-icon class="interact-icon" [icon]="faCircleExclamation"></fa-icon>
+                                <p>{{ control.key | titlecase }} is invalid!</p>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="billing-form">
+                        <div class="row">
+                            <div>
+                                <label>First name*</label>
+                                <input type="text" required formControlName="First Name">
+                            </div>
+                            <div>
+                                <label>Last name*</label>
+                                <input type="text" required formControlName="Last Name">
+                            </div>
+                        </div>
+                        <div class="row single">
+                            <label>Company name (optional)</label>
+                            <input type="text" formControlName="Company Name">
+                        </div>
+                        <div class="row single">
+                            <label>Street address*</label>
+                            <input type="text" required formControlName="Street Address" placeholder="House number and street name">
+                            <input type="text" formControlName="Street Address 2" placeholder="Apartment, suite, unit etc. (optional)">
+                        </div>
+                        <div class="row single">
+                            <label>Town / City*</label>
+                            <input type="text" required formControlName="Town / City">
+                        </div>
+                        <div class="row single">
+                            <label>County</label>
+                            <input type="text" formControlName="County">
+                        </div>
+                        <div class="row single">
+                            <label>Postcode</label>
+                            <input type="text" required formControlName="Postcode">
+                        </div>
+                        <div class="row single">
+                            <label>Phone*</label>
+                            <input type="text" required formControlName="Phone">
+                        </div>
+                        <div class="row single">
+                            <label>Email address*</label>
+                            <input type="text" required formControlName="Email address">
+                        </div>
+                        <h2>Additional information</h2>
+                        <div class="row single">
+                            <label>Order notes (optional)</label>
+                            <textarea rows="10" class="message" type="text" formControlName="orderNotes" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="checkout-summary-container">
+                <app-checkout-order-summary></app-checkout-order-summary>
+                <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a>privacy policy</a>.</p>
+                <button type="submit" [disabled]="billingForm.invalid">Place order</button>
+            </div>
+        </div>
+    </form>
+</div>
