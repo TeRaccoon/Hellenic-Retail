@@ -1,13 +1,14 @@
 $hellenicblue: #008cff;
 .view-details-container {
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
     .price-container {
         display: flex;
         justify-content: flex-start;
         align-items: center;
         gap: 10px;
         .price {
+            margin: 0px;
             font-weight: bold;
             font-size: 25px;
         }
@@ -19,6 +20,9 @@ $hellenicblue: #008cff;
     }
     .description {
         width: 90%;
+    }
+    .quantity-message {
+        color: red;
     }
     .purchasing-options {
         display: flex;
@@ -49,13 +53,13 @@ $hellenicblue: #008cff;
             transition: background-color 0.2s ease;
         }
         .cart {
-            background-color: #26901b;
+            background-color: #36b329;
         }
         .purchase {
             background-color: $hellenicblue;
         }
         .cart:hover {
-            background-color: #1a8022;
+            background-color: #24a12f;
         }
         .purchase:hover {
             background-color: #0077ff;
