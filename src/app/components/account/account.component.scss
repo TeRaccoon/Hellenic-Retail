@@ -6,12 +6,13 @@ $hellenicblue: rgb(0, 140, 255);
         display: flex;
         flex-direction: column;
         width: 45%;
-        form>div {
+        .detail {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #cccccc;
             font-size: 18px;
+            padding: 10px;
             label {
                 font-weight: bold;
                 width: 100%;
@@ -28,6 +29,13 @@ $hellenicblue: rgb(0, 140, 255);
             .enabled {
                 color: #000000;
             }
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            padding: 10px;
             button {
                 cursor: pointer;
                 font-family: 'Poppins', sans-serif;
@@ -35,6 +43,7 @@ $hellenicblue: rgb(0, 140, 255);
                 font-size: 16px;
                 background-color: $hellenicblue;
                 border: 0;
+                border-radius: 5px;
                 padding: 4px 18px;
             }
         }
