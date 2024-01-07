@@ -64,7 +64,7 @@ export class LoginFormComponent {
   formSubmit() {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-      this.dataService.submitFormData('login', this.loginForm.value).subscribe((data: any) => {
+      this.dataService.submitFormData('login', formData).subscribe((data: any) => {
         if (typeof data === 'number') {
           this.toggleLogin();
           this.authService.login(data);

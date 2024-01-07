@@ -60,7 +60,6 @@ export class NavbarComponent {
   changeCategory(event: Event) {
     const option = event.target as HTMLInputElement;
     let value = option.value;
-    console.log(value);
     if (value == 'all') {
       this.searchResults = this.products;
     } else {
