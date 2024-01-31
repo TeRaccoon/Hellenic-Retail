@@ -8,7 +8,7 @@
         <tr *ngFor="let product of cartProducts; let i = index">
             <td class="row-details">
                 <div>
-                    <img [alt]="product.name" [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                    <img [alt]="product.name" [src]="'../uploads/' + product.image_location">
                     <p>{{ cartData[i].quantity }}</p>
                 </div>
                 <p>{{ product.name }}</p>

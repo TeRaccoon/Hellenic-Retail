@@ -1,7 +1,7 @@
 <div id="slideshow-container" class="slideshow-container">
     <ng-container *ngIf="imageNames">
         <div *ngFor="let imageName of imageNames; let i = index" [style.display]="i === slideIndex ? 'block' : 'none'" class="slide fade">
-            <img [src]="'assets/uploads/admin_uploads/' + imageName" [alt]="imageName">
+            <img [src]="'../uploads/' + imageName" [alt]="imageName">
             <!-- <div class="slide-text">{{ product.item_name }}</div> -->
         </div>
     </ng-container>

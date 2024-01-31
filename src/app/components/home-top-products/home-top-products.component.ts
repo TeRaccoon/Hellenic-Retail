@@ -37,7 +37,7 @@ export class HomeTopProductsComponent {
   }
 
   openImage(imageLocation: string) {
-    window.open('assets/uploads/admin_uploads/' + imageLocation, '_blank');
+    window.open('../uploads/' + imageLocation, '_blank');
   }
 
   async addToCart(productID: number, quantity: number) {

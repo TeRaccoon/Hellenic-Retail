@@ -22,7 +22,7 @@ export class HomeNewsletterSignupComponent {
   }
 
   getBackgroundImage(signupImage: string): SafeStyle {
-    const imageUrl = 'assets/uploads/admin_uploads/' + signupImage;
+    const imageUrl = '../uploads/' + signupImage;
     return this.sanitizer.bypassSecurityTrustStyle(`url(${imageUrl})`);
   }
 }

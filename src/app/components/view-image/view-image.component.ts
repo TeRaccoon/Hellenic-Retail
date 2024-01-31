@@ -53,7 +53,7 @@ export class ViewImageComponent {
   }
   
   openImage() {
-    window.open('assets/uploads/admin_uploads/' + this.primaryImage, '_blank');
+    window.open('../uploads/' + this.primaryImage, '_blank');
   }
 
   zoomImage(event: MouseEvent | null) {

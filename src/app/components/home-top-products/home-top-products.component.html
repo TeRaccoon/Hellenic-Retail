@@ -7,7 +7,7 @@
                     <p>{{ product.discount }}% OFF</p>
                 </div>
             </ng-container>
-            <img [src]="'assets/uploads/admin_uploads/' + product.image_location" />
+            <img [src]="'../uploads/' + product.image_location" />
             <a class="product-name" [routerLink]="'/view/' + product.item_name">{{ product.item_name }}</a>
             <div class="price-container">
                 <ng-container *ngIf="oldPrices[i] != null else elseBlock">

@@ -27,7 +27,7 @@
                         <p>{{ product.discount }}% OFF</p>
                     </div>
                 </ng-container>
-                <img [alt]="product.name" [src]="'assets/uploads/admin_uploads/' + product.image_location">
+                <img [alt]="product.name" [src]="'../uploads/' + product.image_location">
                 <p class="brand">{{ product.brand }}</p>
                 <p class="name">{{ product.name }}</p>
                 <ng-container *ngIf="oldPrices[i] != null else elseBlock">
