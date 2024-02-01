@@ -92,9 +92,8 @@ export class CartPopupComponent {
     forkJoin(observables).pipe(
       tap((products: any[]) => {
         products.forEach((product, i) => {
-          if (this.cart[i]) {
+          if (this.cart[i] && product != null) {
             this.cartProducts.push(product);
-  
             let price = product.retail_price * this.cart[i].quantity;
             this.subtotal += price;
     

@@ -30,7 +30,6 @@ export class HomeTopProductsComponent {
       this.topProducts = data;
       this.oldPrices = this.topProducts.map((product: any) => {
         if (product.discount && product.discount != null) {
-          console.log(product.discount);
           return product.price * ((100 - product.discount) / 100);
         } else {
           return null;
