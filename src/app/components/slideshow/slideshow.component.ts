@@ -11,10 +11,12 @@ export class SlideshowComponent implements OnInit {
   slideIndex: number = 0;
   timer: Subscription | undefined;
   imageNames: any[] = [];
+  imageUrl = '';
 
-  constructor(private renderer: Renderer2, private dataService: DataService) { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
     this.loadSlideShow();
   }
 

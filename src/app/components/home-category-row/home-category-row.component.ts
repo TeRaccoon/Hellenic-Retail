@@ -8,10 +8,12 @@ import { DataService } from '../../services/data.service';
 })
 export class HomeCategoryRowComponent {
   categories: string[] = [];
+  imageUrl = '';
 
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
     this.loadData();
   }
   async loadData() {

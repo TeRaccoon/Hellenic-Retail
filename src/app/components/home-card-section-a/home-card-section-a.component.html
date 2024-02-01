@@ -1,7 +1,7 @@
 <div class="card-container">
     <ng-container *ngFor="let card of [card1, card2]; let cardIndex = index">
         <ng-container *ngIf="card">
-            <div class="card" [style.background-image]="'url(../uploads/' + cardLocations[cardIndex] + ')'">
+            <div class="card" [style.background-image]="'url(' + imageUrl + cardLocations[cardIndex] + ')'">
                 <div>
                     <ng-container *ngFor="let item of card; let i = index">
                         <ng-container *ngIf="item.element_type === 'Header'">

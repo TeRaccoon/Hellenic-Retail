@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class DataService {
   constructor(private http: HttpClient) {}
+  uploadURL = `http://localhost/uploads/`;
 
   collectData(query: string, filter?: string): Observable<any[]> {
     let url = `http://localhost/API/retail_query_handler.php?query=${query}`;
@@ -18,5 +19,9 @@ export class DataService {
   submitFormData(query:string, userData: any) {
     const url = 'http://localhost/API/retail_query_handler.php';
     return this.http.post(url, { query, userData });
+  }
+
+  getUploadURL() {
+    return this.uploadURL;
   }
 }

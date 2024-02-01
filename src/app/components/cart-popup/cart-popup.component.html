@@ -8,7 +8,7 @@
             <div class="cart-section">
                 <ng-container *ngIf="loaded">
                     <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
-                        <img [src]="'../uploads/' + product.image_location">
+                        <img [src]="imageUrl + product.image_location">
                         <div class="cart-row-details">
                             <p class="product-name">{{ product.name }}</p>
                             <div class="cart-price-options">

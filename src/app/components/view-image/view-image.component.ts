@@ -15,9 +15,12 @@ export class ViewImageComponent {
   zoomX: number = 0;
   zoomY: number = 0;
 
+  imageUrl = '';
+
   constructor(private dataService: DataService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
     this.route.params.subscribe(params => {
       const productName = params['productName'];
       this.loadProduct(productName);
@@ -53,7 +56,7 @@ export class ViewImageComponent {
   }
   
   openImage() {
-    window.open('../uploads/' + this.primaryImage, '_blank');
+    window.open(this.imageUrl + this.primaryImage, '_blank');
   }
 
   zoomImage(event: MouseEvent | null) {

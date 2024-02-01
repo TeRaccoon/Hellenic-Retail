@@ -9,20 +9,17 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 })
 export class HomeNewsletterSignupComponent {
   signupImage: any;
+  imageUrl = '';
 
   constructor(private dataService: DataService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.loadImage();
+    this.imageUrl = this.dataService.getUploadURL();
   }
   loadImage() {
     this.dataService.collectData("home-signup").subscribe((data: any) => {
       this.signupImage = data;
     });
-  }
-
-  getBackgroundImage(signupImage: string): SafeStyle {
-    const imageUrl = '../uploads/' + signupImage;
-    return this.sanitizer.bypassSecurityTrustStyle(`url(${imageUrl})`);
   }
 }

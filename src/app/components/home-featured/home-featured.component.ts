@@ -11,10 +11,13 @@ export class HomeFeaturedComponent {
   oldPrices: (number | null)[] = [];
   featuredData: any;
 
+  imageUrl = '';
+
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.loadOffers();
+    this.imageUrl = this.dataService.getUploadURL();
   }
 
   async loadOffers() {

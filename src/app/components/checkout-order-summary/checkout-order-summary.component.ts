@@ -16,10 +16,13 @@ export class CheckoutOrderSummaryComponent {
   cartIDs: number[] = [];
   prices : number[] = [];
   total = 0;
+  imageUrl = '';
 
   constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) {}
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
+
     this.loadData();
 
     this.cartService.getIDs().subscribe((ids) => {

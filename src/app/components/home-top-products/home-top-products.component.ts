@@ -16,9 +16,12 @@ export class HomeTopProductsComponent {
   topProducts: any[] = [];
   oldPrices: (number | null)[] = [];
 
+  imageUrl = '';
+
   constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
     this.loadProducts();
   }
 
@@ -37,7 +40,7 @@ export class HomeTopProductsComponent {
   }
 
   openImage(imageLocation: string) {
-    window.open('../uploads/' + imageLocation, '_blank');
+    window.open(this.imageUrl + imageLocation, '_blank');
   }
 
   async addToCart(productID: number, quantity: number) {

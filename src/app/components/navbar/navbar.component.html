@@ -7,7 +7,7 @@
 </div>
 <nav class="navbar">
     <a routerLink="/" class="nav-logo">
-        <img src="assets/logo.jpg" alt="Food Retail Logo">
+        <img [src]='imageUrl + "/logo.jpg"' alt="Food Retail Logo">
     </a>
     <div class="search-container">
         <div class="search-options">
@@ -24,7 +24,7 @@
             <div class="search-dropdown-items">
                 <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;" [routerLink]="'/view/' + product.name">
                     <div>
-                        <img [src]="'../uploads/' + product.image_location">
+                        <img [src]="imageUrl + product.image_location">
                         <p> {{ product.name }} </p>
                     </div>
                     <ng-container *ngIf="oldPrices[i] != null else elseBlock">

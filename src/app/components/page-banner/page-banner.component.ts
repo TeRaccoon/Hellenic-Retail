@@ -12,9 +12,12 @@ export class PageBannerComponent {
   lastSegment: string = '';
   fullPath: string = '';
 
+  imageUrl = '';
+
   constructor(private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
     this.loadBannerImage();
     this.route.params.subscribe(params => {
       this.lastSegment = params['category'];

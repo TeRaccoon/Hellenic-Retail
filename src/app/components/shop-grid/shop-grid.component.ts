@@ -12,9 +12,12 @@ export class ShopGridComponent {
   products: any[] = [];
   oldPrices: (number | null)[] = [];
 
+  imageUrl = '';
+
   constructor(private dataService: DataService, private route: ActivatedRoute) { }
   
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
     this.route.params.subscribe(params => {
       const category = params['category'];
       this.loadProducts(category);

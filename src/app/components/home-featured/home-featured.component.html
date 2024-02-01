@@ -2,7 +2,7 @@
     <h1>Featured Products</h1>
     <div class="featured-container">
         <ng-container *ngIf="featuredData && featuredProducts">
-            <div class="background-card card" [style.background-image]="'url(../uploads/' + featuredData.image_file_name + ')'">
+            <div class="background-card card" [style.background-image]="'url(' + imageUrl + featuredData.image_file_name + ')'">
                 <div class="annotation">
                     <h2>{{ featuredData.text_content }}</h2>
                 </div>
@@ -13,7 +13,7 @@
                         <p>{{ product.discount }}% OFF</p>
                     </div>
                 </ng-container>
-                <img [src]="'../uploads/' + product.image_file_name">
+                <img [src]="imageUrl + product.image_file_name">
                 <p class="product-name">{{ product.item_name }}</p>
                 <div class="price-container">
                     <ng-container *ngIf="oldPrices[i] != null else elseBlock">

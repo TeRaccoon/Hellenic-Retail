@@ -27,9 +27,12 @@ export class NavbarComponent {
   loginVisible = 'hidden';
   cartVisible = 'hidden';
 
+  imageUrl = '';
+
   constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
     this.formService.getLoginFormVisibility().subscribe((visible) => {
       this.loginVisible = visible ? 'visible' : 'hidden';
     });

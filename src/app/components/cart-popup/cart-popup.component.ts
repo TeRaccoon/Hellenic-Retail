@@ -34,10 +34,13 @@ export class CartPopupComponent {
   prices: number[] = [];
   subtotal = 0;
   loaded = false;
+  imageUrl = '';
 
   constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) {}
 
   ngOnInit() {
+    this.imageUrl = this.dataService.getUploadURL();
+
     this.formService.getCartFormVisibility().subscribe((visible) => {
       this.cartVisible = visible ? 'visible' : 'hidden';
     });

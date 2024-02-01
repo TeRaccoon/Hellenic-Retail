@@ -11,10 +11,14 @@ export class HomeCardSectionAComponent {
   card2: any;
   cardLocations: any[] = [];
 
+  imageUrl = '';
+
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.loadSections();
+    this.imageUrl = this.dataService.getUploadURL();
+    console.log(this.imageUrl);
   }
 
   async loadSections() {
