@@ -50,6 +50,9 @@ $hellenicblue: rgb(0, 140, 255);
     .search-options {
         width: 100%;
         display: flex;
+        select {
+            cursor: pointer;
+        }
         input,
         select,
         button {
@@ -58,6 +61,7 @@ $hellenicblue: rgb(0, 140, 255);
             background-color: #FFFFFF;
             font-size: 100%;
             padding: 12px 20px;
+            cursor: pointer;
         }
         input {
             width: 100%
@@ -156,6 +160,7 @@ $hellenicblue: rgb(0, 140, 255);
 .interact-icon {
     color: black;
     transition: color 0.3s ease;
+    cursor: pointer;
     &:hover {
         color: $hellenicblue;
     }

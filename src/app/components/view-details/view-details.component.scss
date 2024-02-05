@@ -54,9 +54,11 @@ $hellenicblue: #008cff;
         }
         .cart {
             background-color: #36b329;
+            cursor: pointer;
         }
         .purchase {
             background-color: $hellenicblue;
+            cursor: pointer;
         }
         .cart:hover {
             background-color: #24a12f;
@@ -71,6 +73,7 @@ $hellenicblue: #008cff;
         width: 43%;
         p {
             transition: color 0.4s ease;
+            cursor: pointer;
         }
         p:hover {
             color: $hellenicblue;
@@ -83,6 +86,7 @@ $hellenicblue: #008cff;
             padding: 10px;
             font-size: 20px;
             transition: color 0.5s ease;
+            cursor: pointer;
         }
         a:hover {
             color: $hellenicblue;
