@@ -19,7 +19,7 @@
                                 <p>£{{ prices[i] | number: '1.2-2' }}</p>
                             </div>
                             <div class="cart-row-options">
-                                <button (click)="removeFromCart(product.ID)">×</button>
+                                <button (click)="removeFromCart(cart[i].productID)">×</button>
                             </div>
                         </div>
                     </div>
