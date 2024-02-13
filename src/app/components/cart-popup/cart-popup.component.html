@@ -12,9 +12,9 @@
                         <div class="cart-row-details">
                             <p class="product-name">{{ product.name }}</p>
                             <div class="cart-price-options">
-                                <input (change)="changeQuantity($event, product.ID)" type=number [value]="cart[i].quantity">
+                                <input (change)="changeQuantity($event, cart[i].productID)" type=number [value]="cart[i].quantity">
                                 <ng-container *ngIf="product.discount">
-                                    <p>£{{ product.retail_price | number: '1.2-2'}}</p>
+                                    <p>£{{ product.retail_price * cart[i].quantity | number: '1.2-2'}}</p>
                                 </ng-container>
                                 <p>£{{ prices[i] | number: '1.2-2' }}</p>
                             </div>
