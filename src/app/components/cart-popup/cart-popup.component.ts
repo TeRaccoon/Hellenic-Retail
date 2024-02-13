@@ -5,6 +5,7 @@ import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-cart-popup',
@@ -35,6 +36,8 @@ export class CartPopupComponent {
   subtotal = 0;
   loaded = false;
   imageUrl = '';
+
+  faX = faX;
 
   constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) {}
 
