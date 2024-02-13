@@ -98,12 +98,12 @@ export class CartPopupComponent {
           if (this.cart[i] && product != null) {
             this.cartProducts.push(product);
             let price = product.retail_price * this.cart[i].quantity;
-            this.subtotal += price;
     
             if (product.discount != null) {
               price = price * ((100 - product.discount) / 100);
             }
-    
+            
+            this.subtotal += price;
             this.prices.push(price);
           }
         });
