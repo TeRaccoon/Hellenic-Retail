@@ -28,7 +28,9 @@ import { Router } from '@angular/router';
 export class LoginFormComponent {
   loginForm: FormGroup;
   loginVisible = 'visible';
-  loginError:string = '';
+  loginError: string = '';
+
+  submitted = false;
 
   errorMessages = {
     email: [
@@ -62,6 +64,7 @@ export class LoginFormComponent {
   }
 
   formSubmit() {
+    this.submitted = true;
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
       this.dataService.submitFormData('login', formData).subscribe((data: any) => {
