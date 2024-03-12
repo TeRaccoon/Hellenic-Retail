@@ -61,15 +61,16 @@ $hellenicblue: rgb(0, 140, 255);
             background-color: #FFFFFF;
             font-size: 100%;
             padding: 12px 20px;
-            cursor: pointer;
         }
         input {
-            width: 100%
+            width: 100%;
+            cursor: text;
         }
         button {
             background-color: $hellenicblue;
             color: #FFFFFF;
             border: 1px solid $hellenicblue;
+            cursor: pointer;
         }
     }
     .search-dropdown {
