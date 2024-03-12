@@ -7,22 +7,29 @@
             </div>
             <div class="cart-section">
                 <ng-container *ngIf="loaded">
-                    <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
-                        <img [src]="imageUrl + product.image_location">
-                        <div class="cart-row-details">
-                            <p class="product-name">{{ product.name }}</p>
-                            <div class="cart-price-options">
-                                <input (change)="changeQuantity($event, cart[i].productID)" type=number [value]="cart[i].quantity">
-                                <ng-container *ngIf="product.discount">
-                                    <p>£{{ product.retail_price * cart[i].quantity | number: '1.2-2'}}</p>
-                                </ng-container>
-                                <p>£{{ prices[i] | number: '1.2-2' }}</p>
-                            </div>
-                            <div class="cart-row-options">
-                                <button (click)="removeFromCart(cart[i].productID)"><fa-icon [icon]="faX" /></button>
+                    <ng-container *ngIf="cartProducts.length > 0 else cartEmpty">
+                        <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
+                            <img [src]="imageUrl + product.image_location">
+                            <div class="cart-row-details">
+                                <p class="product-name">{{ product.name }}</p>
+                                <div class="cart-price-options">
+                                    <input (change)="changeQuantity($event, cart[i].productID)" type=number [value]="cart[i].quantity">
+                                    <ng-container *ngIf="product.discount">
+                                        <p>£{{ product.retail_price * cart[i].quantity | number: '1.2-2'}}</p>
+                                    </ng-container>
+                                    <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                                </div>
+                                <div class="cart-row-options">
+                                    <button (click)="removeFromCart(cart[i].productID)"><fa-icon [icon]="faX" /></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-container>
+                    <ng-template #cartEmpty>
+                        <div class="cart-empty-container">
+                            <p>Your cart is empty!</p>
+                        </div>
+                    </ng-template>
                 </ng-container>
                 <div *ngIf="confirmationPopupVisible" class="confirmation-message">
                     <p>Are you sure you want to clear your cart?</p>
