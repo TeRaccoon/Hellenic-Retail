@@ -27,6 +27,7 @@ $hellenicblue: rgb(0, 140, 255);
             }
         }
         .product-card {
+            cursor: pointer;
             transition: box-shadow 0.6s ease;
             .product-name {
                 transition: color 0.6s ease

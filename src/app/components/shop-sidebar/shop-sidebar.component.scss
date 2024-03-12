@@ -35,6 +35,7 @@ $hellenicblue: rgb(0, 140, 255);
             &:hover {
                 .list-item {
                     color: #{$hellenicblue};
+                    cursor: pointer;
                     .toggle-icon {
                         background-color: #bbbbbb;
                         border: 1px solid #868686

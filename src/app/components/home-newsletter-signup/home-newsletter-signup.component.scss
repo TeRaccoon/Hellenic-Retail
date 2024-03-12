@@ -58,6 +58,11 @@ $hellenicblue: rgb(0, 140, 255);
                         font-size: 15px;
                         font-weight: bold;
                         color: white;
+                        transition: background-color 0.3s;
+                        cursor: pointer;
+                        &:hover {
+                            background-color: rgb(1, 118, 213);
+                        }
                     }
                 }
             }
