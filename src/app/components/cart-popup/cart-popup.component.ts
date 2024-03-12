@@ -36,6 +36,7 @@ export class CartPopupComponent {
   subtotal = 0;
   loaded = false;
   imageUrl = '';
+  confirmationPopupVisible = false;
 
   faX = faX;
 
@@ -80,8 +81,14 @@ export class CartPopupComponent {
     this.cartService.changeQuantity(productID, quantity);
   }
 
+  changeConfirmationPopupState(visible: boolean) {
+    this.confirmationPopupVisible = visible;
+  }
+
+
   clearCart() {
     this.cartService.clearCart();
+    this.confirmationPopupVisible = false;
   }
 
   loadCartData() {

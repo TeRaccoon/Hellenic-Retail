@@ -24,6 +24,11 @@
                         </div>
                     </div>
                 </ng-container>
+                <div *ngIf="confirmationPopupVisible" class="confirmation-message">
+                    <p>Are you sure you want to clear your cart?</p>
+                    <button (click)="changeConfirmationPopupState(false)">Cancel</button>
+                    <button (click)="clearCart()">Clear</button>
+                </div>
             </div>
         </div>
         <div class="options-section">
@@ -32,7 +37,7 @@
                 <p class="subtotal-value">£{{ subtotal | number: '1.2-2' }}</p>
             </div>
             <button (click)="toggleCart()" [routerLink]="'/checkout'">Checkout</button>
-            <button (click)="clearCart()" class="red">Clear cart</button>
+            <button (click)="changeConfirmationPopupState(true)" class="red">Clear cart</button>
         </div>
     </div>
 </div>
