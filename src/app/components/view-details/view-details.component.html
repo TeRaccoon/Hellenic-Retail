@@ -34,7 +34,7 @@
         <div class="share-options">
             <p>Share: </p>
             <a (click)="share('clipboard')">
-                <fa-icon [icon]="faClipboard"></fa-icon>
+                <fa-icon [@clipboardAnimation]="clipboardState" [icon]="faClipboard"></fa-icon>
             </a>
             <a>
                 <fa-icon [icon]="faFacebook"></fa-icon>

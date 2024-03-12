@@ -7,11 +7,25 @@ import { faFacebook, faTwitter, faInstagram } from '@fortawesome/free-brands-svg
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-view-details',
   templateUrl: './view-details.component.html',
-  styleUrls: ['./view-details.component.scss']
+  styleUrls: ['./view-details.component.scss'],
+  animations: [
+    trigger('clipboardAnimation', [
+      state('active', style({
+        color: '#36b329'
+      })),
+      transition('inactive => active', [
+        animate('0.2s')
+      ]),
+      transition('active => inactive', [
+        animate('0.2s')
+      ]),
+    ]),
+  ]
 })
 export class ViewDetailsComponent {
   faHeart = faHeart;
@@ -27,6 +41,8 @@ export class ViewDetailsComponent {
   oldPrice: (number | null) = null;
   quantity = 1;
 
+  clipboardState: string = 'inactive';
+
   constructor(private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private router: Router, private clipboard: Clipboard, private location: Location) { }
 
   ngOnInit() {
@@ -41,6 +57,10 @@ export class ViewDetailsComponent {
     switch(option) {
       case 'clipboard':
         this.clipboard.copy("https://hellenicgrocery.co.uk/" + this.location.path());
+        this.clipboardState = 'active';
+        setTimeout(() => {
+          this.clipboardState = 'inactive';
+        }, 500);
         break;
     }
   }
