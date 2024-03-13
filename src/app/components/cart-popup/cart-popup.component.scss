@@ -72,6 +72,12 @@ $hellenicblue: rgb(0, 140, 255);
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
+                        .price-container {
+                            display: flex;
+                            p {
+                                margin: 5px;
+                            }
+                        }
                     }
                     .cart-row-options {
                         display: flex;
