@@ -77,6 +77,10 @@ $hellenicblue: rgb(0, 140, 255);
                             p {
                                 margin: 5px;
                             }
+                            .original-price {
+                                color: red;
+                                text-decoration: line-through;
+                            }
                         }
                     }
                     .cart-row-options {
