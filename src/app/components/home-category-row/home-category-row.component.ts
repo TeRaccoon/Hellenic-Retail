@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home-category-row',
@@ -7,18 +8,20 @@ import { DataService } from '../../services/data.service';
   styleUrls: ['./home-category-row.component.scss']
 })
 export class HomeCategoryRowComponent {
-  categories: string[] = [];
+  categories: any[] = [];
   imageUrl = '';
 
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
-    this.loadData();
+    this.getCategories();
   }
-  async loadData() {
-    this.dataService.collectData("categories").subscribe((data: any) => {
-      this.categories = data;
-    });
+
+  async getCategories() {
+    let categories = await lastValueFrom(this.dataService.collectData("visible-categories"));
+    if (categories != null) {
+      this.categories = categories;
+    }
   }
 }

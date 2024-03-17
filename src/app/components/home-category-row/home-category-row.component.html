@@ -1,8 +1,8 @@
 <div class="category-row">
-    <div class="category" *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
+    <div class="category" *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category.name">
         <div class="image-container">
-            <img [src]="imageUrl + category + '.png' ">
+            <img [src]="category.location == null ? imageUrl + 'placeholder.jpg' : imageUrl + category.location">
         </div>
-        <a>{{ category }}</a>
+        <a>{{ category.name }}</a>
     </div>
 </div>
