@@ -4,6 +4,7 @@ import { FormService } from '../../services/form.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { faCaretDown, faEnvelope, faSearch, faUser, faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -40,16 +41,21 @@ export class NavbarComponent {
   }
 
   async loadNavBar() {
-    this.dataService.collectData("categories").subscribe((data: any) => {
-      this.categories = data;
-    });
-    this.dataService.collectData("subcategories").subscribe((data: any) => {
-      this.subcategories = data;
-    });
-    this.dataService.collectData("products").subscribe((data: any) => {
-      this.products = data;
-      this.searchResults = data;
-      
+    let categories = await lastValueFrom(this.dataService.collectData("categories"));
+    if (categories != null) {
+      this.categories = categories;
+    }
+
+    let subcategories = await lastValueFrom(this.dataService.collectData("subcategories"));
+    if (subcategories != null) {
+      this.subcategories = subcategories;
+    }
+
+    let products = await lastValueFrom(this.dataService.collectData("products"));
+    if (products != null) {
+      this.products = products;
+      this.searchResults = products;
+
       this.oldPrices = this.products.map((product: any) => {
         if (product.discount && product.discount != null) {
           return product.price * ((100 - product.discount) / 100);
@@ -57,7 +63,7 @@ export class NavbarComponent {
           return null;
         }
       });
-    });
+    }
   }
 
   changeCategory(event: Event) {
