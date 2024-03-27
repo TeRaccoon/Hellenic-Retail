@@ -1,6 +1,6 @@
 <div [@cartAnimation]="cartVisible" class="form-container">
     <div class="cart-form">
-        <div>
+        <div class="cart-body">
             <div class="header-section">
                 <h1>Shopping Cart</h1>
                 <span (click)="toggleCart()" class="close">&times;</span>
@@ -35,8 +35,10 @@
                 </ng-container>
                 <div *ngIf="confirmationPopupVisible" class="confirmation-message">
                     <p>Are you sure you want to clear your cart?</p>
-                    <button (click)="changeConfirmationPopupState(false)">Cancel</button>
-                    <button (click)="clearCart()">Clear</button>
+                    <div class="clear-button-container">
+                        <button class="button" (click)="changeConfirmationPopupState(false)">Cancel</button>
+                        <button class="button" (click)="clearCart()">Clear</button>
+                    </div>
                 </div>
             </div>
         </div>
