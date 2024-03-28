@@ -44,6 +44,12 @@ $hellenicblue: rgb(0, 140, 255);
                 flex-direction: column;
                 height: 100%;
                 justify-content: space-between;
+                .cart-empty-container {
+                    p {
+                        text-align: center;
+                        font-weight: bold;
+                    }
+                }
                 .confirmation-message {
                     display: flex;
                     flex-direction: column;
