@@ -47,6 +47,7 @@ $hellenicblue: rgb(0, 140, 255);
                 .confirmation-message {
                     display: flex;
                     flex-direction: column;
+                    border-top: 2px solid #cccccc;
                     .clear-button-container {
                         display: flex;
                         justify-content: space-between;
