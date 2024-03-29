@@ -3,6 +3,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home-top-products',
@@ -26,15 +27,15 @@ export class HomeTopProductsComponent {
   }
 
   async loadProducts() {
-    this.dataService.collectData('top-products', '10').subscribe((data: any) => {
-      this.topProducts = data;
-      this.oldPrices = this.topProducts.map((product: any) => {
-        if (product.discount && product.discount != null) {
-          return product.price * ((100 - product.discount) / 100);
-        } else {
-          return null;
-        }
-      });
+    let topProducts = await lastValueFrom(this.dataService.collectData('top-products', '10'));
+    this.topProducts = Array.isArray(topProducts) ? topProducts : [topProducts];
+    
+    this.oldPrices = this.topProducts.map((product: any) => {
+      if (product.discount && product.discount != null) {
+        return product.price * ((100 - product.discount) / 100);
+      } else {
+        return null;
+      }
     });
   }
 
@@ -43,7 +44,7 @@ export class HomeTopProductsComponent {
   }
 
   async addToCart(productID: number, quantity: number) {
-    await this.cartService.addToCart(productID, quantity);
-    await this.formService.showCartForm();
+    this.cartService.addToCart(productID, quantity);
+    this.formService.showCartForm();
   }
 }
