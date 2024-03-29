@@ -13,7 +13,7 @@
                         <p>{{ product.discount }}% OFF</p>
                     </div>
                 </ng-container>
-                <img [src]="imageUrl + product.image_file_name">
+                <img [src]="product.image_file_name == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_file_name">
                 <p class="product-name">{{ product.item_name }}</p>
                 <div class="price-container">
                     <ng-container *ngIf="oldPrices[i] != null else elseBlock">
