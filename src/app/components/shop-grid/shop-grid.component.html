@@ -19,29 +19,33 @@
             </select>
         </div>
     </div>
-    <div class="product-container">
-        <ng-container *ngIf="products">
-            <div class="product" *ngFor="let product of products; let i = index;" [routerLink]="'/view/' + product.name">
-                <ng-container *ngIf="product.discount && product.discount != null">
-                    <div class="discount-banner">
-                        <p>{{ product.discount }}% OFF</p>
-                    </div>
-                </ng-container>
-                <img [alt]="product.name" [src]="imageUrl + product.image_location">
-                <p class="brand">{{ product.brand }}</p>
-                <p class="name">{{ product.name }}</p>
+    <div class="grid-container">
+        <div class="product-container" *ngFor="let product of products; let i = index;">
+            <ng-container *ngIf="product.discount && product.discount != null">
+                <div class="discount-banner">
+                    <p>{{ product.discount }}% OFF</p>
+                </div>
+            </ng-container>
+            <img [routerLink]="'/view/' + product.name" [src]="product.image_location == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_location" />
+            <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
+            <div class="price-container">
                 <ng-container *ngIf="oldPrices[i] != null else elseBlock">
-                    <div class="price-container">
-                        <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
-                        <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
-                    </div>
+                    <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
+                    <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
                 </ng-container>
                 <ng-template #elseBlock>
-                    <div class="price-container">
-                        <p class="price">£{{ product.price | number: '1.2-2' }}</p>
-                    </div>
+                    <p class="product-price">£{{ product.price | number: '1.2-2' }}</p>
                 </ng-template>
             </div>
-        </ng-container>
+            <div class="product-options">
+                <button (click)="addToCart(product.id, 1)">Add to cart</button>
+                <p>
+                    <fa-icon [icon]="faHeart"></fa-icon>
+                </p>
+                <p (click)="openImage(product.image_location)">
+                    <fa-icon [icon]="faEye"></fa-icon>
+                </p>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../../services/data.service';
+import { CartService } from 'src/app/services/cart.service';
+import { FormService } from 'src/app/services/form.service';
+import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-shop-grid',
@@ -8,13 +11,16 @@ import { DataService } from '../../services/data.service';
   styleUrls: ['./shop-grid.component.scss']
 })
 export class ShopGridComponent {
+  faHeart = faHeart;
+  faEye = faEye;
+  
   resultsAmount: number | undefined;
   products: any[] = [];
   oldPrices: (number | null)[] = [];
 
   imageUrl = '';
 
-  constructor(private dataService: DataService, private route: ActivatedRoute) { }
+  constructor(private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private formService: FormService) { }
   
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
@@ -49,5 +55,14 @@ export class ShopGridComponent {
         this.products.sort((a, b) => a.price - b.price);
         break;
     }
+  }
+
+  openImage(imageLocation: string) {
+    window.open(this.imageUrl + imageLocation, '_blank');
+  }
+
+  async addToCart(productID: number, quantity: number) {
+    this.cartService.addToCart(productID, quantity);
+    this.formService.showCartForm();
   }
 }

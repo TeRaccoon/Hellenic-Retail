@@ -35,26 +35,24 @@ $hellenicblue: rgb(0, 140, 255);
             }
         }
     }
-    .product-container {
+    .grid-container {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 10px;
-        margin-top: 20px;
-        .product {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+        flex: 1;
+        .product-container {
+            background-color: #FFFFFF;
+            border: 1px solid #cccccc;
             display: flex;
             flex-direction: column;
-            border: 1px solid #cccccc;
+            align-items: center;
+            justify-content: space-between;
+            height: 300px;
+            overflow: hidden;
             transition: box-shadow 0.6s ease;
-            img {
-                margin: 5px;
-                max-width: 100%;
-                max-height: 100%;
-                height: 100%;
-                object-fit: contain;
-            }
             .discount-banner {
+                width: 100%;
                 p {
-                    z-index: 1;
                     position: absolute;
                     background-color: $hellenicblue;
                     color: white;
@@ -64,20 +62,37 @@ $hellenicblue: rgb(0, 140, 255);
                     border-radius: 0 10px 10px 0;
                 }
             }
-            p {
+            .product-name {
+                cursor: pointer;
+                transition: color 0.6s ease
+            }
+            img {
+                margin: 5px;
+                max-width: 100%;
+                max-height: 100%;
+                min-height: 55%;
+                object-fit: contain;
+                flex: 1;
+                cursor: pointer;
+            }
+            p,
+            a {
+                text-decoration: none;
+                color: #000000;
+                align-self: flex-start;
+                padding-left: 10px;
+                margin: 5px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                margin: 5px;
-                padding: 2px 0;
-            }
-            .brand {
-                color: #555555;
-                font-size: 12px;
-                margin: 0 5px;
+                width: 90%;
             }
             .price-container {
                 display: flex;
+                align-self: flex-start;
+                p {
+                    width: auto;
+                }
                 .price {
                     font-weight: bold;
                 }
@@ -86,11 +101,34 @@ $hellenicblue: rgb(0, 140, 255);
                     color: #333333;
                 }
             }
+            .product-options {
+                display: flex;
+                height: 0px;
+                transition: height 0.6s ease;
+                width: 100%;
+                justify-content: flex-start;
+                button {
+                    font-size: 16px;
+                    font-weight: bold;
+                    padding: 4px 15px;
+                    margin: 10px;
+                    background-color: $hellenicblue;
+                    border: none;
+                    color: #ffffff;
+                    cursor: pointer;
+                }
+                p {
+                    margin: auto 0;
+                    width: auto;
+                }
+            }
             &:hover {
                 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-                cursor: pointer;
-                .name {
+                .product-name {
                     color: $hellenicblue;
+                }
+                .product-options {
+                    height: 50px;
                 }
             }
         }
