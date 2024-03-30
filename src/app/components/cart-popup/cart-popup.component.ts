@@ -26,6 +26,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
     ]),
   ]
 })
+
 export class CartPopupComponent {
   cartVisible = 'visible';
   cart: { productID: number, quantity: number }[] = [];

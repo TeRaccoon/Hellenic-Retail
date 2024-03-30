@@ -70,7 +70,7 @@ export class AccountComponent {
         let formData = this.changeAccountDetails.value;
         formData['userID'] = userID;
         console.log(formData);
-        this.dataService.submitFormData('change-account-details', formData).subscribe((data: any) => {
+        this.dataService.submitFormDataQuery('change-account-details', formData).subscribe((data: any) => {
           
         });
       }
