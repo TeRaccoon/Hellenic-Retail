@@ -41,6 +41,9 @@ $hellenicblue: rgb(0, 140, 255);
                     flex-direction: row;
                     justify-content: flex-end;
                     width: 400px;
+                    .error {
+                        border: 2px solid red;
+                    }
                     input {
                         border-radius: 40px;
                         padding: 14px;

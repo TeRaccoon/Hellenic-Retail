@@ -3,11 +3,20 @@
         <div class="background-image" [style.background-image]="'url(' + imageUrl + signupImage + ')'">
             <div>
                 <div class="signup-form">
-                    <label>Stay home & get your daily needs from our shop</label>
-                    <div class="signup-form-footer">
-                        <input type="email" required placeholder="Your email address">
-                        <button type="submit">Sign up</button>
-                    </div>
+                    <form [formGroup]="signupForm" (ngSubmit)="submit()">
+                        <label>Stay home & get your daily needs from our shop</label>
+                        <div class="signup-form-footer">
+                            <input formControlName="email" [class]="invalid ? 'error' : ''" type="email" required placeholder="Your email address">
+                            <button type="submit">
+                                <ng-container *ngIf="!submitted; else formSubmitted">
+                                    Sign Up
+                                </ng-container>
+                                <ng-template #formSubmitted>
+                                    <fa-icon [icon]="faCheck"></fa-icon>
+                                </ng-template>
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <img [src]="imageUrl + 'logo.jpg'" alt="Food Retail Logo">
             </div>

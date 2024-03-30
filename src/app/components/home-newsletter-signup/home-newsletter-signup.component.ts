@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { lastValueFrom } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-home-newsletter-signup',
@@ -8,18 +10,40 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
   styleUrls: ['./home-newsletter-signup.component.scss']
 })
 export class HomeNewsletterSignupComponent {
+  signupForm: FormGroup;
+
   signupImage: any;
   imageUrl = '';
 
-  constructor(private dataService: DataService, private sanitizer: DomSanitizer) { }
+  invalid = false;
+  submitted = false;
+
+  faCheck = faCheck;
+
+  constructor(private dataService: DataService, private fb: FormBuilder) {
+    this.signupForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+    this.signupForm.addControl('action', this.fb.control('add'));
+    this.signupForm.addControl('table_name', this.fb.control("mailing_list"));
+  }
 
   ngOnInit() {
     this.loadImage();
     this.imageUrl = this.dataService.getUploadURL();
   }
-  loadImage() {
-    this.dataService.collectData("home-signup").subscribe((data: any) => {
-      this.signupImage = data;
-    });
+
+  async loadImage() {
+    this.signupImage = await lastValueFrom(this.dataService.collectData("home-signup"));
+  }
+
+  async submit() {
+    if (this.signupForm.invalid) {
+      this.invalid = true;
+      return;
+    }
+
+    await lastValueFrom(this.dataService.submitFormData(this.signupForm.value));
+    this.submitted = true;
   }
 }
