@@ -1,4 +1,4 @@
-import { forkJoin } from 'rxjs';
+import { forkJoin, lastValueFrom } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
@@ -33,7 +33,6 @@ export class CartPopupComponent {
   cartProducts: any[] = [];
   displayProducts: any[] = [];
   cartIDs: number[] = [];
-  prices: number[] = [];
   subtotal = 0;
   loaded = false;
   imageUrl = '';
@@ -92,34 +91,32 @@ export class CartPopupComponent {
     this.confirmationPopupVisible = false;
   }
 
-  loadCartData() {
-    this.cartProducts = [];
+  async loadCartData() {
+    let cartProducts: any[] = [];
     this.subtotal = 0;
-    this.prices = [];
-    const observables = this.cartIDs.map(id =>
-      this.dataService.collectData('product-from-id', id.toString())
-    );
-  
-    forkJoin(observables).pipe(
-      tap((products: any[]) => {
-        products.forEach((product, i) => {
-          if (this.cart[i] && product != null) {
-            this.cartProducts.push(product);
-            let price = product.retail_price * this.cart[i].quantity;
-    
-            if (product.discount != null) {
-              price = price * ((100 - product.discount) / 100);
-            }
-            
-            this.subtotal += price;
-            this.prices.push(price);
-          }
-        });
-      }),
-      catchError(error => {
-        console.error('Error in loadCartData:', error);
-        throw error;
-      })
-    ).subscribe();
+
+    await Promise.all(this.cartIDs.map(async(id) => {
+      if (id !== null) {
+        cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
+      }
+    }));
+
+    cartProducts.forEach((product, index) => {
+      if (this.cart[index] && product != null) {
+        let individualPrice = product.retail_price;
+        let discountedPrice = individualPrice;
+
+        if (product.discount != null) {
+          discountedPrice = individualPrice * ((100 - product.discount) / 100);
+        }
+
+        product.total = individualPrice * this.cart[index].quantity;
+        product.discounted_total = discountedPrice * this.cart[index].quantity;
+
+        this.subtotal += product.discounted_total;
+      }
+    });
+
+    this.cartProducts = cartProducts;
   }
 }
