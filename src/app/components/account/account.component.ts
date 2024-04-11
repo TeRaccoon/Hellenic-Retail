@@ -69,7 +69,6 @@ export class AccountComponent {
       if (userID != null) {
         let formData = this.changeAccountDetails.value;
         formData['userID'] = userID;
-        console.log(formData);
         this.dataService.submitFormDataQuery('change-account-details', formData).subscribe((data: any) => {
           
         });

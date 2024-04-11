@@ -28,7 +28,6 @@ export class CheckoutComponent {
   }
 
   formSubmit() {
-    console.log(this.billingForm.controls);
     if (this.billingForm.valid) {
       const formData = this.billingForm.value;
     }

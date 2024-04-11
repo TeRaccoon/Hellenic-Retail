@@ -95,7 +95,6 @@ export class CartPopupComponent {
   async loadCartData() {
     let cartProducts: any[] = [];
     this.subtotal = 0;
-    console.log(this.cartIDs);
     await Promise.all(this.cartIDs.map(async(id) => {
       if (id !== null) {
         cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
@@ -106,7 +105,6 @@ export class CartPopupComponent {
       if (this.cart[index] && product != null) {
         let individualPrice = product.retail_price;
         let discountedPrice = individualPrice;
-        console.log(product.discount);
         if (product.discount != null) {
           discountedPrice = individualPrice * ((100 - product.discount) / 100);
         }

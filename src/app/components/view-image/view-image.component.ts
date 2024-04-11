@@ -31,12 +31,10 @@ export class ViewImageComponent {
     this.dataService.collectData("product-view", productName).subscribe((data: any) => {
       this.product = data;
       this.primaryImage = this.product.primary_image;
-      console.log(this.primaryImage);
       this.loadProductImages(this.product.id);
     });
   }
   async loadProductImages(retailItemID: any) {
-    console.log(retailItemID);
     this.dataService.collectData("product-view-images", retailItemID).subscribe((data: any) => {
       this.productImages = data;
     })
