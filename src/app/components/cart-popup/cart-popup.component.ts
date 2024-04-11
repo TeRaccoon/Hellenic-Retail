@@ -45,24 +45,22 @@ export class CartPopupComponent {
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
 
-    this.formService.getCartFormVisibility().subscribe((visible) => {
+    this.formService.getCartFormVisibility().subscribe(async(visible) => {
       this.cartVisible = visible ? 'visible' : 'hidden';
-    });
 
-    this.cartService.getIDs().subscribe((ids) => {
-      this.cartIDs = ids;
-    });
-
-    this.cartService.getCartItems().subscribe((items) => {
-      this.cart = items;
-      this.loaded = false;
-      this.loadCart();
+      if (visible) {
+        this.loaded = false;
+        await this.getCartData();
+        this.loaded = true;
+      }
     });
 
   }
-  async loadCart() {
-    await this.loadCartData();
-    this.loaded = true;
+
+  async getCartData() {
+    this.cartIDs = this.cartService.getIDs();
+    this.cart = this.cartService.getCartItems();
+    this.loadCartData();
   }
 
   toggleCart() {
@@ -72,13 +70,15 @@ export class CartPopupComponent {
     }
   }
 
-  removeFromCart(productId: number) {
+  async removeFromCart(productId: number) {
     this.cartService.removeFromCart(productId);
+    this.getCartData();
   }
 
   changeQuantity(event: any, productID: number) {
     const quantity = parseInt(event.target.value);
     this.cartService.changeQuantity(productID, quantity);
+    this.getCartData();
   }
 
   changeConfirmationPopupState(visible: boolean) {
@@ -89,12 +89,13 @@ export class CartPopupComponent {
   clearCart() {
     this.cartService.clearCart();
     this.confirmationPopupVisible = false;
+    this.getCartData();
   }
 
   async loadCartData() {
     let cartProducts: any[] = [];
     this.subtotal = 0;
-
+    console.log(this.cartIDs);
     await Promise.all(this.cartIDs.map(async(id) => {
       if (id !== null) {
         cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
@@ -105,7 +106,7 @@ export class CartPopupComponent {
       if (this.cart[index] && product != null) {
         let individualPrice = product.retail_price;
         let discountedPrice = individualPrice;
-
+        console.log(product.discount);
         if (product.discount != null) {
           discountedPrice = individualPrice * ((100 - product.discount) / 100);
         }
@@ -114,6 +115,10 @@ export class CartPopupComponent {
         product.discounted_total = discountedPrice * this.cart[index].quantity;
 
         this.subtotal += product.discounted_total;
+
+        if (product.image_location === null) {
+          product.image_location = 'placeholder.jpg';
+        }
       }
     });
 

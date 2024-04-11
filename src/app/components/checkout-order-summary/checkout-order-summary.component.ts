@@ -25,16 +25,12 @@ export class CheckoutOrderSummaryComponent {
 
     this.loadData();
 
-    this.cartService.getIDs().subscribe((ids) => {
-      this.cartIDs = ids;
-    });
+    this.cartIDs = this.cartService.getIDs();
   }
 
   async loadData() {
-    await this.cartService.getCartItems().subscribe((products) => {
-      this.cartData = products;
-    });
-    await this.loadCartData();
+    this.cartData = this.cartService.getCartItems();
+    this.loadCartData();
   }
 
   loadCartData() {
