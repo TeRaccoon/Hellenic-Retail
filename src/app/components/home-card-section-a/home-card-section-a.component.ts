@@ -18,7 +18,6 @@ export class HomeCardSectionAComponent {
   ngOnInit() {
     this.loadSections();
     this.imageUrl = this.dataService.getUploadURL();
-    console.log(this.imageUrl);
   }
 
   async loadSections() {
@@ -29,7 +28,6 @@ export class HomeCardSectionAComponent {
     this.dataService.collectData("section-data", "home-section-A-card-2").subscribe((data: any) => {
       this.card2 = data;
       this.cardLocations.push(this.card2[0].image_file_name);
-      console.log(this.cardLocations);
     });
   }
 }
