@@ -16,13 +16,13 @@
                         {{ error.message }}
                     </div>
                 </div>
-                <input type="text" required formControlName="email" placeholder="Enter email address">
+                <input [class]="inputHasError('email') ? 'error-input' : ''" type="text" required formControlName="email" placeholder="Enter email address">
                 <div *ngFor="let error of errorMessages.password">
                     <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type)">
                         {{ error.message }}
                     </div>
                 </div>
-                <input type="password" required formControlName="password" placeholder="Enter password">
+                <input [class]="inputHasError('password') ? 'error-input' : ''" type="password" required formControlName="password" placeholder="Enter password">
                 <div class="login-options">
                     <div>
                         <label for="remember-me">Remember me</label>
@@ -30,7 +30,7 @@
                     </div>
                     <a>Forgot your password?</a>
                 </div>
-                <button type="submit" [disabled]="loginForm.invalid">Login</button>
+                <button type="submit">Login</button>
             </form>
         </div>
     </div>

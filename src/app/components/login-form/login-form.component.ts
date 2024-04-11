@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -46,7 +47,8 @@ export class LoginFormComponent {
   constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder) { 
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
+      action: ['customer-login']
     });
   }
 
@@ -63,20 +65,21 @@ export class LoginFormComponent {
     }
   }
 
-  formSubmit() {
+  inputHasError(field: string) {
+    return this.loginForm.get(field)?.invalid && this.submitted;
+  }
+
+  async formSubmit() {
     this.submitted = true;
     if (this.loginForm.valid) {
-      const formData = this.loginForm.value;
-      this.dataService.submitFormDataQuery('login', formData).subscribe((data: any) => {
-        if (typeof data === 'number') {
-          this.toggleLogin();
-          this.authService.login(data);
-          this.router.navigate(['/account']);
-        }
-        else {
-          this.loginError = data;
-        }
-      });
+      let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
+      if (loginResponse.success) {
+        this.authService.login(loginResponse.data);
+        this.router.navigate(['/account']);
+        this.loginVisible = 'hidden';
+      } else {
+        this.loginError = loginResponse.message;
+      }
     }
   }
 }

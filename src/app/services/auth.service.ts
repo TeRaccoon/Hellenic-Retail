@@ -6,13 +6,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AuthService {
     private isAuthenticated = new BehaviorSubject<boolean>(false);
-    private userID = new BehaviorSubject<number | null>(null);
+    private email = new BehaviorSubject<number | null>(null);
 
     constructor() {}
 
-    login(userID: number) {
+    login(email: number) {
+        this.email.next(email);
         this.isAuthenticated.next(true);
-        this.userID.next(userID);
     }
 
     logout() {
@@ -24,6 +24,6 @@ export class AuthService {
     }
 
     getUserID(): Observable<number | null> {
-        return this.userID.asObservable();
+        return this.email.asObservable();
     }
 }
