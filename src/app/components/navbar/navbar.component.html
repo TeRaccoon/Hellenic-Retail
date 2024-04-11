@@ -57,7 +57,7 @@
         </a>
         <a (click)="toggleCart()">
             <div class="icon-container">
-                <fa-icon class="interact-icon" [icon]="faCartShopping"></fa-icon>
+                <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
             </div>
             Cart
         </a>

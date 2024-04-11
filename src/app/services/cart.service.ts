@@ -12,6 +12,7 @@ interface CartItem {
 export class CartService {
   private cartItems = new BehaviorSubject<{ productID: number, quantity: number }[]>([]);
   private cartIDs = new BehaviorSubject<number[]>([]);
+  private updated = new BehaviorSubject<boolean>(false);
 
   constructor() {
     const storedCart = localStorage.getItem('cart');
@@ -53,6 +54,8 @@ export class CartService {
   
     this.cartItems.next(currentCartItems);
     localStorage.setItem('cart', JSON.stringify(currentCartItems));
+
+    this.requestUpdate();
   }
 
   removeFromCart(productID: number) {
@@ -78,7 +81,20 @@ export class CartService {
   getCartItems(): Observable<{ productID: number, quantity: number }[]> {
     return this.cartItems;
   }
+
   getIDs(): Observable<number[]> {
     return this.cartIDs;
+  }
+
+  getUpdateRequest(): Observable<boolean> {
+    return this.updated.asObservable();
+  }
+
+  requestUpdate() {
+    this.updated.next(true);
+  }
+
+  performUpdate() {
+    this.updated.next(false);
   }
 }

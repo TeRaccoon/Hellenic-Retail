@@ -5,11 +5,29 @@ import { AuthService } from 'src/app/services/auth.service';
 import { faCaretDown, faEnvelope, faSearch, faUser, faHeart, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
+  animations: [
+    trigger('cartAnimation', [
+      state('active', style({
+        color: '#36b329'
+      })),
+      state('inactive', style({
+        color: '#000000'
+      })),
+      transition('inactive => active', [
+        animate('0.4s ease-in-out')
+      ]),
+      transition('active => inactive', [
+        animate('0.4s ease-in-out')
+      ]),
+    ]),
+  ]
 })
 
 export class NavbarComponent {
@@ -27,17 +45,38 @@ export class NavbarComponent {
   oldPrices: (number | null)[] = [];
   loginVisible = 'hidden';
   cartVisible = 'hidden';
+  cartState: string = 'inactive';
 
   imageUrl = '';
 
-  constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService) { }
+  constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private cartService: CartService) { }
 
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
+
+    this.getLoginVisibility();
+    this.getCartUpdates();
+
+    this.loadNavBar();
+  }
+
+  async getLoginVisibility() {
     this.formService.getLoginFormVisibility().subscribe((visible) => {
       this.loginVisible = visible ? 'visible' : 'hidden';
     });
-    this.loadNavBar();
+  }
+
+  async getCartUpdates() {
+    this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
+      if (updateRequested) {
+        this.cartService.performUpdate();
+        this.cartState = 'active';
+        
+        setTimeout(() => {
+          this.cartState = 'inactive';
+        }, 500);
+      }
+    });
   }
 
   async loadNavBar() {
