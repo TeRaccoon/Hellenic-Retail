@@ -52,9 +52,9 @@ export class CartPopupComponent {
         this.loaded = false;
         await this.getCartData();
         this.loaded = true;
+        this.confirmationPopupVisible = false;
       }
     });
-
   }
 
   async getCartData() {
