@@ -41,7 +41,10 @@ export class NavbarComponent {
   categories: string[] = [];
   subcategories: any[] = [];
   products: any[] = [];
+
   searchResults: any[] = [];
+  categoryFilter: string | null = null;
+
   loginVisible = 'hidden';
   cartVisible = 'hidden';
   cartState: string = 'inactive';
@@ -92,10 +95,7 @@ export class NavbarComponent {
     let products = await lastValueFrom(this.dataService.collectData("products"));
     if (products != null) {
       products = this.replaceNullImages(products);
-
-      console.log("🚀 ~ NavbarComponent ~ loadNavBar ~ products:", products)
       products = this.calculatePrices(products);
-      console.log("🚀 ~ NavbarComponent ~ loadNavBar ~ products:", products)
 
       this.products = products;
       this.searchResults = products;
@@ -118,9 +118,9 @@ export class NavbarComponent {
     const option = event.target as HTMLInputElement;
     let value = option.value;
     if (value == 'all') {
-      this.searchResults = this.products;
+      this.categoryFilter = null
     } else {
-      this.searchResults = this.products.filter((product) => product.category.toLowerCase().includes(value.toLowerCase()));
+      this.searchResults = this.products.filter((product) => product.category !== null && product.category.toLowerCase().includes(value.toLowerCase()));
     }
   }
 
@@ -141,8 +141,11 @@ export class NavbarComponent {
   search(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     let inputValue = inputElement.value;
-    this.searchResults = this.products.filter((product) => product.name.toLowerCase().includes(inputValue.toLowerCase()));
-    console.log("🚀 ~ NavbarComponent ~ search ~ this.searchResults:", this.searchResults)
+    if (this.categoryFilter === null) {
+      this.searchResults = this.products.filter((product) => product.category != null && product.name.toLowerCase().includes(inputValue.toLowerCase()));
+    } else {
+      this.searchResults = this.products.filter((product) => product.category != null && product.category === this.categoryFilter && product.name.toLowerCase().includes(inputValue.toLowerCase()));
+    }
   }
 
   showAccount() {
