@@ -136,7 +136,7 @@ export class NavbarComponent {
   }
 
   showAccount() {
-    this.authService.isLoggedIn().subscribe((data) => {
+    this.authService.isLoggedInObservable().subscribe((data) => {
       if (data) {
         this.router.navigate(['/account']);
       }

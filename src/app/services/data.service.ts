@@ -18,6 +18,16 @@ export class DataService {
     }
     return this.http.get<any[]>(url);
   }
+
+  collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {
+    let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
+    if (filter != null) {
+      const queryParams = Object.entries(filter).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+      url += `&${queryParams}`;
+    }
+    return this.http.get<any>(url);
+  }
+
   submitFormDataQuery(query:string, data: any) {
     const url = 'http://localhost/API/retail_query_handler.php';
     return this.http.post(url, { query, data });
