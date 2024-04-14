@@ -6,8 +6,10 @@ import { faHeart, faEye, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faTwitter, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { lastValueFrom } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
+import { FormService } from 'src/app/services/form.service';
 
 @Component({
   selector: 'app-view-details',
@@ -40,10 +42,11 @@ export class ViewDetailsComponent {
   fullPath: string = '';
   oldPrice: (number | null) = null;
   quantity = 1;
+  inWishlist = false;
 
   clipboardState: string = 'inactive';
 
-  constructor(private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private router: Router, private clipboard: Clipboard, private location: Location) { }
+  constructor(private authService: AuthService, private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private router: Router, private clipboard: Clipboard, private location: Location, private formService: FormService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -66,16 +69,24 @@ export class ViewDetailsComponent {
   }
 
   async loadProduct(productName: string) {
-    this.dataService.collectData("product-view-details", productName).subscribe((data: any) => {
-      this.product = data;
-      this.outOfStock = this.product.quantity < 1 ? true : false;
-      if (this.product.discount && this.product.discount != null) {
-        this.oldPrice = this.product.price * ((100 - this.product.discount) / 100);
-      }
-    });
+    let productDetails = await lastValueFrom(this.dataService.collectData("product-view-details", productName));
+    this.product = productDetails;
+    this.outOfStock = this.product.quantity < 1 ? true : false;
+    if (this.product.discount && this.product.discount != null) {
+      this.oldPrice = this.product.price * ((100 - this.product.discount) / 100);
+    }
+
+    if (this.authService.isLoggedIn()) {
+      let customerEmail = this.authService.getUserEmail();
+      this.inWishlist = await lastValueFrom(this.dataService.collectDataComplex("is-product-in-wishlist", {email: customerEmail, product_id: this.product.id}));
+    }
   }
 
   addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
+  }
+  
+  addToWishlist(productID: number) {
+    this.cartService.addToWishlist(productID);
   }
 }

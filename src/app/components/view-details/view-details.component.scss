@@ -74,6 +74,9 @@ $hellenicblue: #008cff;
         p {
             transition: color 0.4s ease;
             cursor: pointer;
+            .red {
+                color: rgb(255, 81, 110);
+            }
         }
         p:hover {
             color: $hellenicblue;

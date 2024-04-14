@@ -4,6 +4,7 @@ import { DataService } from '../../services/data.service';
 import { CartService } from 'src/app/services/cart.service';
 import { FormService } from 'src/app/services/form.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-shop-grid',
@@ -44,6 +45,7 @@ export class ShopGridComponent {
       });
     });
   }
+  
   changeSorting(event: any) {
     const selectedOption = event.target.value;
     switch (selectedOption) {
@@ -64,5 +66,16 @@ export class ShopGridComponent {
   async addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
     this.formService.showCartForm();
+  }
+
+  async addToWishlist(productID: number) {
+    this.cartService.addToWishlist(productID);    
+    let customerID = await lastValueFrom(this.dataService.collectData("user-id-from-email"));
+    let form = {
+      action: "add",
+      retail_item_id: productID,
+      customer_id: customerID
+    };
+    this.dataService.submitFormData(form);
   }
 }

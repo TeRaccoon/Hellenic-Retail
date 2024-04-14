@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
+import { AuthService } from './auth.service';
+import { DataService } from './data.service';
+import { FormService } from './form.service';
 
 interface CartItem {
   productID: number;
@@ -14,7 +17,7 @@ export class CartService {
   private cartIDs: number[] = [];
   private updated = new BehaviorSubject<boolean>(false);
 
-  constructor() {
+  constructor(private authService: AuthService, private dataService: DataService, private formService: FormService) {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
       try {
@@ -96,5 +99,25 @@ export class CartService {
 
   performUpdate() {
     this.updated.next(false);
+  }
+
+  async addToWishlist(productID: number) {
+    let customerEmail = this.authService.getUserEmail();
+    if (customerEmail != null) {
+      let customerID = await lastValueFrom(this.dataService.collectData("user-id-from-email", customerEmail));
+      
+      let form = {
+        action: "add",
+        retail_item_id: productID,
+        customer_id: customerID,
+        table_name: "wishlist"
+      };
+      let response = await lastValueFrom(this.dataService.submitFormData(form));
+      let popupMessage = response.success ? "Product Added" : "Whoops! Something went wrong. Please try again"
+      this.formService.setPopupMessage(popupMessage);
+    } else {
+      this.formService.setPopupMessage("Please login to use your wishlist!");
+    }
+    this.formService.showPopup();
   }
 }
