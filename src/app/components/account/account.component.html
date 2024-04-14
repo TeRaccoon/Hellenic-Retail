@@ -3,7 +3,7 @@
     <div *ngIf="loggedIn == null">
         <h1>Loading...</h1>
     </div>
-    <div class="account-details" *ngIf="loggedIn == true">
+    <div class="account-details" *ngIf="loggedIn">
         <h1>Account Details</h1>
         <ng-container *ngIf="userData != null">
             <form [formGroup]="changeAccountDetails" (ngSubmit)="submitChanges()">

@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from '../../services/form.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-account',
@@ -26,31 +27,37 @@ export class AccountComponent {
   }
 
   ngOnInit() {
-    this.authService.isLoggedIn().subscribe((data) => {
-      this.loggedIn = data;
-      if (!data) {
+    this.checkLogin();
+  }
+
+  async checkLogin() {
+    this.authService.isLoggedInObservable().subscribe(loggedIn => {
+      this.loggedIn = loggedIn;
+      if (!loggedIn) {
         this.formService.showLoginForm();
+      } else {
+        this.loadAccountDetails();
       }
-    });
-    this.loadAccountDetails();
+    });    
   }
+
   async loadAccountDetails() {
-    this.authService.getUserID().subscribe((data) => {
-      const userID = data;
-      if (userID != null) {
-        this.dataService.collectData('user-details', userID.toString()).subscribe((userData: any) => {
-          this.userData = userData;
-          this.changeAccountDetails.patchValue({
-            forename: this.userData.forename,
-            surname: this.userData.surname,
-            email: this.userData.email,
-            primaryPhone: this.userData.phone_number_primary,
-            secondaryPhone: this.userData.phone_number_secondary
-          });
+    let email = this.authService.getUserEmail();
+
+    if (email != null) {
+      this.dataService.collectData('user-details-from-email', email.toString()).subscribe((userData: any) => {
+        this.userData = userData;
+        this.changeAccountDetails.patchValue({
+          forename: this.userData.forename,
+          surname: this.userData.surname,
+          email: this.userData.email,
+          primaryPhone: this.userData.phone_number_primary,
+          secondaryPhone: this.userData.phone_number_secondary
         });
-      }
-    });
+      });
+    }
   }
+
   toggleEdit() {
     this.edit = !this.edit;
     Object.keys(this.changeAccountDetails.controls).forEach(controlName => {
@@ -60,19 +67,18 @@ export class AccountComponent {
       }
     });
   }
+
   cancelEdit() {
     this.edit = false;
   }
+
   submitChanges() {
-    this.authService.getUserID().subscribe((data) => {
-      const userID = data;
-      if (userID != null) {
-        let formData = this.changeAccountDetails.value;
-        formData['userID'] = userID;
-        this.dataService.submitFormDataQuery('change-account-details', formData).subscribe((data: any) => {
-          
-        });
-      }
-    });
+    let email = this.authService.getUserEmail();
+
+    if (email != null) {
+      let formData = this.changeAccountDetails.value;
+      formData['email'] = email;
+      this.dataService.submitFormDataQuery('change-account-details', formData);
+    }
   }
 }
