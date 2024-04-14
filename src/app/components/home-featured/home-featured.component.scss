@@ -112,6 +112,9 @@ $hellenicblue: rgb(0, 140, 255);
                     p {
                         margin: auto 0;
                         width: auto;
+                        fa-icon {
+                            cursor: pointer;
+                        }
                     }
                 }
                 &:hover {
