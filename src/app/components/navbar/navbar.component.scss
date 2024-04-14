@@ -164,6 +164,6 @@ $hellenicblue: rgb(0, 140, 255);
     transition: color 0.3s ease;
     cursor: pointer;
     &:hover {
-        color: $hellenicblue;
+        color: $hellenicblue !important;
     }
 }
