@@ -42,7 +42,6 @@ export class NavbarComponent {
   subcategories: any[] = [];
   products: any[] = [];
   searchResults: any[] = [];
-  oldPrices: (number | null)[] = [];
   loginVisible = 'hidden';
   cartVisible = 'hidden';
   cartState: string = 'inactive';
@@ -93,17 +92,20 @@ export class NavbarComponent {
     let products = await lastValueFrom(this.dataService.collectData("products"));
     if (products != null) {
       products = this.replaceNullImages(products);
+
+      console.log("🚀 ~ NavbarComponent ~ loadNavBar ~ products:", products)
+      products = this.calculatePrices(products);
+      console.log("🚀 ~ NavbarComponent ~ loadNavBar ~ products:", products)
+
       this.products = products;
       this.searchResults = products;
-
-      this.oldPrices = this.products.map((product: any) => {
-        if (product.discount && product.discount != null) {
-          return product.price * ((100 - product.discount) / 100);
-        } else {
-          return null;
-        }
-      });
     }
+  }
+
+  calculatePrices(products: any[]) {
+    return products.map(product => {
+      return { ...product, discounted_price: product.discount === null ? null : product.price * ((100 - product.discount ) / 100)};
+    });
   }
 
   replaceNullImages(products: any[]) {
@@ -140,6 +142,7 @@ export class NavbarComponent {
     const inputElement = event.target as HTMLInputElement;
     let inputValue = inputElement.value;
     this.searchResults = this.products.filter((product) => product.name.toLowerCase().includes(inputValue.toLowerCase()));
+    console.log("🚀 ~ NavbarComponent ~ search ~ this.searchResults:", this.searchResults)
   }
 
   showAccount() {

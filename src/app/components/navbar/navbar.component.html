@@ -27,17 +27,10 @@
                         <img [src]="product.image_location">
                         <p> {{ product.name }} </p>
                     </div>
-                    <ng-container *ngIf="oldPrices[i] != null else elseBlock">
-                        <div class="price-container">
-                            <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
-                            <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
-                        </div>
-                    </ng-container>
-                    <ng-template #elseBlock>
-                        <div class="price-container">
-                            <p class="price">£{{ product.price | number: '1.2-2' }}</p>
-                        </div>
-                    </ng-template>
+                    <div class="price-container">
+                        <p [class]="product.discount === null ? 'price' : 'old-price'">£{{ product.price | number: '1.2-2' }}</p>
+                        <p *ngIf="product.discount !== null" class="price">£{{ product.discounted_price | number: '1.2-2' }}</p>
+                    </div>
                 </a>
             </div>
         </div>
