@@ -32,6 +32,8 @@ import { AccountComponent } from './components/account/account.component';
 import { CheckoutCouponComponent } from './components/checkout-coupon/checkout-coupon.component';
 import { CheckoutOrderSummaryComponent } from './components/checkout-order-summary/checkout-order-summary.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { PopupComponent } from './components/popup/popup.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
     AccountComponent,
     CheckoutCouponComponent,
     CheckoutOrderSummaryComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    WishlistComponent,
+    PopupComponent
   ],
   imports: [
     BrowserModule,
