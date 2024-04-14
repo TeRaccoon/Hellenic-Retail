@@ -92,6 +92,7 @@ export class NavbarComponent {
 
     let products = await lastValueFrom(this.dataService.collectData("products"));
     if (products != null) {
+      products = this.replaceNullImages(products);
       this.products = products;
       this.searchResults = products;
 
@@ -103,6 +104,12 @@ export class NavbarComponent {
         }
       });
     }
+  }
+
+  replaceNullImages(products: any[]) {
+    return products.map(product => {
+      return { ...product, image_location: product['image_location'] == null ? this.imageUrl + "placeholder.jpg" : this.imageUrl + product['image_location'] };
+    });
   }
 
   changeCategory(event: Event) {

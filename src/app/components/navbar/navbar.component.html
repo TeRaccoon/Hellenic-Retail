@@ -24,7 +24,7 @@
             <div class="search-dropdown-items">
                 <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;" [routerLink]="'/view/' + product.name">
                     <div>
-                        <img [src]="imageUrl + product.image_location">
+                        <img [src]="product.image_location">
                         <p> {{ product.name }} </p>
                     </div>
                     <ng-container *ngIf="oldPrices[i] != null else elseBlock">
