@@ -6,12 +6,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AuthService {
     private isAuthenticated = new BehaviorSubject<boolean>(false);
-    private email = new BehaviorSubject<number | null>(null);
+    private email: string | null = null
 
     constructor() {}
 
-    login(email: number) {
-        this.email.next(email);
+    login(email: string) {
+        this.email = email;
         this.isAuthenticated.next(true);
     }
 
@@ -19,11 +19,15 @@ export class AuthService {
         this.isAuthenticated.next(false);
     }
 
-    isLoggedIn(): Observable<boolean> {
+    isLoggedInObservable(): Observable<boolean> {
         return this.isAuthenticated.asObservable();
     }
 
-    getUserID(): Observable<number | null> {
-        return this.email.asObservable();
+    isLoggedIn() {
+        return this.isAuthenticated.getValue();
+    }
+
+    getUserEmail() {
+        return this.email
     }
 }
