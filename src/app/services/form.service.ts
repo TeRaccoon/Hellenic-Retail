@@ -7,6 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class FormService {
   private isLoginVisible = new BehaviorSubject<boolean>(false);
   private isCartVisible = new BehaviorSubject<boolean>(false);
+  private isPopupVisible = new BehaviorSubject<boolean>(false);
+  private popupMessage = "";
 
   constructor() {}
 
@@ -30,5 +32,25 @@ export class FormService {
   }
   getCartFormVisibility(): Observable<boolean> {
     return this.isCartVisible.asObservable();
+  }
+
+  showPopup() {
+    this.isPopupVisible.next(true);
+  }
+
+  hidePopup() {
+    this.isPopupVisible.next(false);
+  }
+
+  getPopupVisibility(): Observable<boolean> {
+    return this.isPopupVisible.asObservable();
+  }
+
+  setPopupMessage(popupMessage: string) {
+    this.popupMessage = popupMessage;
+  }
+
+  getPopupMessage() {
+    return this.popupMessage;
   }
 }
