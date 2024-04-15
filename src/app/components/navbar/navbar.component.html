@@ -11,7 +11,7 @@
     </a>
     <div class="search-container">
         <div class="search-options">
-            <input (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
+            <input (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" (keydown.enter)="search()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
             <select (change)="changeCategory($event)">
                 <option value="all">All Categories</option>
                 <option *ngFor="let category of categories; let i = index;" [value]="category">
