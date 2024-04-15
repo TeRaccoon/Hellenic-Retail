@@ -117,12 +117,27 @@ export class NavbarComponent {
 
   changeCategory(event: Event) {
     const option = event.target as HTMLInputElement;
-    let value = option.value;
-    if (value == 'all') {
-      this.categoryFilter = null
-    } else {
-      this.searchResults = this.products.filter((product) => product.category !== null && product.category.toLowerCase().includes(value.toLowerCase()));
+    const value = option.value.toLowerCase();
+    this.categoryFilter = value === 'all' ? null : value;
+    this.applyFilters();
+  }
+  
+  searchFilter(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    this.searchStringFilter = inputElement.value.trim().toLowerCase();
+    this.applyFilters();
+  }
+  
+  applyFilters() {
+    if (this.categoryFilter === null && !this.searchStringFilter) {
+      this.searchResults = this.products;
+      return;
     }
+  
+    this.searchResults = this.products.filter(product =>
+      (this.categoryFilter === null || product.category?.toLowerCase() === this.categoryFilter) &&
+      (!this.searchStringFilter || product.name.toLowerCase().includes(this.searchStringFilter))
+    );
   }
 
   onInputFocus() {
@@ -136,16 +151,6 @@ export class NavbarComponent {
     const dropdown = document.querySelector('.search-dropdown-items');
     if (dropdown) {
       dropdown.classList.remove('focused');
-    }
-  }
-
-  searchFilter(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.searchStringFilter = inputElement.value;
-    if (this.categoryFilter === null) {
-      this.searchResults = this.products.filter((product) => product.category != null && product.name.toLowerCase().includes(this.searchStringFilter.toLowerCase()));
-    } else {
-      this.searchResults = this.products.filter((product) => product.category != null && product.category === this.categoryFilter && product.name.toLowerCase().includes(this.searchStringFilter.toLowerCase()));
     }
   }
 
