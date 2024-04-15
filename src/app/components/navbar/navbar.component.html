@@ -11,14 +11,14 @@
     </a>
     <div class="search-container">
         <div class="search-options">
-            <input (input)="search($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
+            <input (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
             <select (change)="changeCategory($event)">
                 <option value="all">All Categories</option>
                 <option *ngFor="let category of categories; let i = index;" [value]="category">
                     {{ category }}
                 </option>
             </select>
-            <button type="submit"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
+            <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
         </div>
         <div class="search-dropdown">
             <div class="search-dropdown-items">

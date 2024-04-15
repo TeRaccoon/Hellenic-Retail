@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
 
 export const apiUrlBase = "http://localhost/API/";
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
+  shopFilter = new BehaviorSubject<string | null>(null);
+
   constructor(private http: HttpClient) {}
   uploadURL = `http://localhost/uploads/`;
   
@@ -52,5 +54,13 @@ export class DataService {
 
   getUploadURL() {
     return this.uploadURL;
+  }
+
+  setShopFilter(filter: string) {
+    this.shopFilter.next(filter);
+  }
+
+  getShopFilter() {
+    return this.shopFilter.asObservable();
   }
 }

@@ -9,6 +9,7 @@ export class FormService {
   private isCartVisible = new BehaviorSubject<boolean>(false);
   private isPopupVisible = new BehaviorSubject<boolean>(false);
   private popupMessage = "";
+  private bannerMessage = new BehaviorSubject<string>("");
 
   constructor() {}
 
@@ -52,5 +53,13 @@ export class FormService {
 
   getPopupMessage() {
     return this.popupMessage;
+  }
+
+  setBannerMessage(message: string) {
+    this.bannerMessage.next(message);
+  }
+
+  getBannerMessage(): Observable<string>  {
+    return this.bannerMessage.asObservable();
   }
 }

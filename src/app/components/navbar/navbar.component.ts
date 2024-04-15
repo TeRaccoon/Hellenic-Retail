@@ -44,6 +44,7 @@ export class NavbarComponent {
 
   searchResults: any[] = [];
   categoryFilter: string | null = null;
+  searchStringFilter = "";
 
   loginVisible = 'hidden';
   cartVisible = 'hidden';
@@ -138,13 +139,22 @@ export class NavbarComponent {
     }
   }
 
-  search(event: Event) {
+  searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
-    let inputValue = inputElement.value;
+    this.searchStringFilter = inputElement.value;
     if (this.categoryFilter === null) {
-      this.searchResults = this.products.filter((product) => product.category != null && product.name.toLowerCase().includes(inputValue.toLowerCase()));
+      this.searchResults = this.products.filter((product) => product.category != null && product.name.toLowerCase().includes(this.searchStringFilter.toLowerCase()));
     } else {
-      this.searchResults = this.products.filter((product) => product.category != null && product.category === this.categoryFilter && product.name.toLowerCase().includes(inputValue.toLowerCase()));
+      this.searchResults = this.products.filter((product) => product.category != null && product.category === this.categoryFilter && product.name.toLowerCase().includes(this.searchStringFilter.toLowerCase()));
+    }
+  }
+
+  search() {
+    if (this.searchResults.length == 1) {
+      this.router.navigate(['/view/' + this.searchResults[0].name]);
+    } else {
+      this.dataService.setShopFilter(this.searchStringFilter);
+      this.router.navigate(['/shop']);
     }
   }
 
@@ -160,15 +170,9 @@ export class NavbarComponent {
   }
 
   toggleLogin() {
-    let state = this.loginVisible == 'visible' ? 'hidden' : 'visible';
-    if (state == 'visible') {
-      this.formService.showLoginForm();
-    }
+    this.loginVisible == 'hidden' && this.formService.showLoginForm(); 
   }
   toggleCart() {
-    let state = this.cartVisible == 'visible' ? 'hidden' : 'visible';
-    if (state == 'visible') {
-      this.formService.showCartForm();
-    }
+    this.cartVisible == 'hidden' && this.formService.showCartForm();
   }
 }

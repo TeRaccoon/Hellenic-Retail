@@ -20,32 +20,39 @@
         </div>
     </div>
     <div class="grid-container">
-        <div class="product-container" *ngFor="let product of products; let i = index;">
-            <ng-container *ngIf="product.discount && product.discount != null">
-                <div class="discount-banner">
-                    <p>{{ product.discount }}% OFF</p>
-                </div>
-            </ng-container>
-            <img [routerLink]="'/view/' + product.name" [src]="product.image_location == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_location" />
-            <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
-            <div class="price-container">
-                <ng-container *ngIf="oldPrices[i] != null else elseBlock">
-                    <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
-                    <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+        <ng-container *ngIf="products.length > 0 else noProducts">
+            <div class="product-container" *ngFor="let product of products; let i = index;">
+                <ng-container *ngIf="product.discount && product.discount != null">
+                    <div class="discount-banner">
+                        <p>{{ product.discount }}% OFF</p>
+                    </div>
                 </ng-container>
-                <ng-template #elseBlock>
-                    <p class="product-price">£{{ product.price | number: '1.2-2' }}</p>
-                </ng-template>
+                <img [routerLink]="'/view/' + product.name" [src]="product.image_location == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_location" />
+                <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
+                <div class="price-container">
+                    <ng-container *ngIf="oldPrices[i] != null else elseBlock">
+                        <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
+                        <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+                    </ng-container>
+                    <ng-template #elseBlock>
+                        <p class="product-price">£{{ product.price | number: '1.2-2' }}</p>
+                    </ng-template>
+                </div>
+                <div class="product-options">
+                    <button (click)="addToCart(product.id, 1)">Add to cart</button>
+                    <p (click)="addToWishlist(product.id)">
+                        <fa-icon [icon]="faHeart"></fa-icon>
+                    </p>
+                    <p (click)="openImage(product.image_location)">
+                        <fa-icon [icon]="faEye"></fa-icon>
+                    </p>
+                </div>
             </div>
-            <div class="product-options">
-                <button (click)="addToCart(product.id, 1)">Add to cart</button>
-                <p (click)="addToWishlist(product.id)">
-                    <fa-icon [icon]="faHeart"></fa-icon>
-                </p>
-                <p (click)="openImage(product.image_location)">
-                    <fa-icon [icon]="faEye"></fa-icon>
-                </p>
+        </ng-container>
+        <ng-template #noProducts>
+            <div class="no-products-container">
+                <h2>There were no products found matching your selection!</h2>
             </div>
-        </div>
+        </ng-template>
     </div>
 </div>

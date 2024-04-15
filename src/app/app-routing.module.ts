@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'shop/:category', component: ShopComponent },
+  { path: 'shop', component: ShopComponent },
   { path: 'view/:productName', component: ViewComponent },
   { path: 'account', component: AccountComponent },
   { path: 'checkout', component: CheckoutComponent },

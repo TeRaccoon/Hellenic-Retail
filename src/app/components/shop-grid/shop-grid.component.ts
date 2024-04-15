@@ -18,6 +18,7 @@ export class ShopGridComponent {
   resultsAmount: number | undefined;
   products: any[] = [];
   oldPrices: (number | null)[] = [];
+  messageSet = false;
 
   imageUrl = '';
 
@@ -25,25 +26,53 @@ export class ShopGridComponent {
   
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
+    this.formService.setBannerMessage('Showing results')
+    this.getShopFilter();
+  }
+
+  getShopFilter() {
     this.route.params.subscribe(params => {
       const category = params['category'];
-      this.loadProducts(category);
+      if (category !== undefined) {
+        this.formService.setBannerMessage(`Showing results for: ${category}`);
+      }
+      this.loadProducts(category, null);
+    });
+    this.dataService.getShopFilter().subscribe(filter => {
+      if (filter !== null) {
+        this.formService.setBannerMessage(`Showing results for: ${filter}`);
+      }
+      this.loadProducts(undefined, filter)
     });
   }
 
-  async loadProducts(category:string) {
-    this.dataService.collectData("products-from-category", category).subscribe((data: any) => {
-      this.products = Array.isArray(data) ? data : [data];
-      this.resultsAmount = data.length === undefined ? 1 : data.length;
+  async loadProducts(category: string | undefined, filter: string | null) {
+    let products = [];
+    if (category !== undefined) {
+      products = await lastValueFrom(this.dataService.collectData("products-from-category", category));
+    } else {
+      products = await lastValueFrom(this.dataService.collectData("products"));
+    }
+    products = Array.isArray(products) ? products : [products];
+    if (filter != null) {
+      products = this.filterByString(filter, products);
+    }
 
-      this.oldPrices = this.products.map((product: any) => {
-        if (product.discount && product.discount != null) {
-          return product.price * ((100 - product.discount) / 100);
-        } else {
-          return null;
-        }
-      });
+    this.resultsAmount = products.length === undefined ? 1 : products.length;
+
+    this.oldPrices = this.products.map((product: any) => {
+      if (product.discount && product.discount != null) {
+        return product.price * ((100 - product.discount) / 100);
+      } else {
+        return null;
+      }
     });
+
+    this.products = products;
+  }
+
+  filterByString(filter: string, products: any[]) {
+    return products.filter((product) => product.name.toLowerCase().includes(filter.toLowerCase()));
   }
   
   changeSorting(event: any) {
