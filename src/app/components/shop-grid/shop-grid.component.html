@@ -6,11 +6,11 @@
         </div>
         <div>
             <label>Show:</label>
-            <select>
-                <option>6</option>
-                <option>9</option>
-                <option>12</option>
-                <option>24</option>
+            <select (change)="changeItemsPerPage($event)">
+                <option>10</option>
+                <option>15</option>
+                <option>20</option>
+                <option>30</option>
             </select>
             <select (change)="changeSorting($event)">
                 <option>Default Sorting</option>
@@ -21,7 +21,7 @@
     </div>
     <div class="grid-container">
         <ng-container *ngIf="products.length > 0 else noProducts">
-            <div class="product-container" *ngFor="let product of products; let i = index;">
+            <div class="product-container" *ngFor="let product of products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); let i = index;">
                 <ng-container *ngIf="product.discount && product.discount != null">
                     <div class="discount-banner">
                         <p>{{ product.discount }}% OFF</p>
@@ -54,5 +54,13 @@
                 <h2>There were no products found matching your selection!</h2>
             </div>
         </ng-template>
+    </div>
+    <div class="footer">
+        <div class="page-options">
+            <button *ngIf="currentPage > 1" (click)="currentPage = currentPage - 1">Previous</button>
+            <button [class]="currentPage == 1 ? 'active-page' : ''" (click)="currentPage = 1"> {{ 1 }}</button>
+            <button *ngFor="let pageNumber of getPageRange()" [class]="currentPage == pageNumber ? 'active-page' : ''" (click)="currentPage = pageNumber">{{ pageNumber }}</button>
+            <button *ngIf="currentPage < totalPages" (click)="currentPage = currentPage + 1">Next</button>
+        </div>
     </div>
 </div>

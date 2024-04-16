@@ -15,10 +15,14 @@ export class ShopGridComponent {
   faHeart = faHeart;
   faEye = faEye;
   
-  resultsAmount: number | undefined;
+  resultsAmount = 0;
   products: any[] = [];
   oldPrices: (number | null)[] = [];
   messageSet = false;
+  
+  itemsPerPage = 10;
+  currentPage = 1;
+  totalPages = 1;
 
   imageUrl = '';
 
@@ -59,6 +63,7 @@ export class ShopGridComponent {
     }
 
     this.resultsAmount = products.length === undefined ? 1 : products.length;
+    this.totalPages = Math.round(this.resultsAmount / this.itemsPerPage + 1);
 
     this.oldPrices = this.products.map((product: any) => {
       if (product.discount && product.discount != null) {
@@ -106,5 +111,36 @@ export class ShopGridComponent {
       customer_id: customerID
     };
     this.dataService.submitFormData(form);
+  }
+
+  changeItemsPerPage(event: any) {
+    this.itemsPerPage = event.target.value;
+
+    this.totalPages = Math.round(this.resultsAmount / this.itemsPerPage + 1);
+    console.log("🚀 ~ ShopGridComponent ~ loadProducts ~ this.totalPages:", this.totalPages);
+  }
+
+  getPageRange(): number[] {
+    const range = [];
+    var start = this.currentPage;
+    
+    if (this.currentPage > this.totalPages -2 && this.totalPages -2 > 0) {
+      start = this.totalPages - 2;
+    }
+    if (start == 1 && this.totalPages > 1) {
+      start += 2;
+    }
+    else if (start == 2 && this.totalPages > 1) {
+      start += 1;
+    }
+    for (let i = start - 1; i < start + 2 && i < this.totalPages && this.totalPages > 1; i++) {
+      range.push(i);
+    }
+
+    if (this.totalPages > 1) {
+      range.push(this.totalPages);
+    }
+
+    return range;
   }
 }
