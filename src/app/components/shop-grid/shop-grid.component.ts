@@ -83,6 +83,21 @@ export class ShopGridComponent {
   changeSorting(event: any) {
     const selectedOption = event.target.value;
     switch (selectedOption) {
+      case "default":
+        this.products.sort((a, b) => {
+          const nameA = a.name.toLowerCase();
+          const nameB = b.name.toLowerCase();
+        
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        });
+        break;
+        
       case "high-low":
         this.products.sort((a, b) => b.price - a.price);
         break;
