@@ -4,6 +4,7 @@ import { FormService } from '../../services/form.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -16,7 +17,7 @@ export class AccountComponent {
   userData: any = null;
   edit = false;
 
-  constructor(private dataService: DataService, private formService: FormService, private authService: AuthService, private fb: FormBuilder) {
+  constructor(private router: Router, private dataService: DataService, private formService: FormService, private authService: AuthService, private fb: FormBuilder) {
     this.changeAccountDetails = this.fb.group({
       forename: [{ value: '', disabled: true }, [Validators.required]],
       surname: [{ value: '', disabled: true }, [Validators.required]],
@@ -80,5 +81,10 @@ export class AccountComponent {
       formData['email'] = email;
       this.dataService.submitFormDataQuery('change-account-details', formData);
     }
+  }
+
+  async logout() {
+    await this.router.navigate(['/home']);
+    this.authService.logout();
   }
 }

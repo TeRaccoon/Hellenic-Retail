@@ -8,6 +8,7 @@ import { ViewComponent } from './components/view/view.component';
 import { AccountComponent } from './components/account/account.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { CreateAccountFormComponent } from './components/create-account-form/create-account-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path: 'view/:productName', component: ViewComponent },
   { path: 'account', component: AccountComponent },
   { path: 'checkout', component: CheckoutComponent },
-  { path: 'wishlist', component: WishlistComponent}
+  { path: 'wishlist', component: WishlistComponent },
+  { path: 'create-account', component: CreateAccountFormComponent }
 ];
 
 @NgModule({

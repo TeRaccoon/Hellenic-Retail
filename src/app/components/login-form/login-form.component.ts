@@ -82,4 +82,9 @@ export class LoginFormComponent {
       }
     }
   }
+
+  createAccount() {
+    this.router.navigate(['/create-account']);
+    this.formService.hideLoginForm();
+  }
 }

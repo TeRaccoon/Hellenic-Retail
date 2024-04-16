@@ -1,1 +1,30 @@
-<p>create-account-form works!</p>
+<app-page-banner></app-page-banner>
+<div class="container">
+    <div class="form-container">
+        <h1>Please fill in the following fields</h1>
+        <p class="error-message">{{ error }}</p>
+        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+            <label>Forename*</label>
+            <input [class]="inputHasError('forename') ? 'error-input' : ''" type="text" formControlName="forename">
+            <label>Surname*</label>
+            <input [class]="inputHasError('surname') ? 'error-input' : ''" type="text" formControlName="surname">
+            <label>Phone number*</label>
+            <input [class]="inputHasError('phoneNumber') ? 'error-input' : ''" type="tel" formControlName="phoneNumber">
+            <label>Email*</label>
+            <input [class]="inputHasError('email') ? 'error-input' : ''" type="email" formControlName="email">
+            <label>Address Line One*</label>
+            <input [class]="inputHasError('addressLineOne') ? 'error-input' : ''" type="text" formControlName="addressLineOne">
+            <label>Address Line Two</label>
+            <input [class]="inputHasError('addressLineTwo') ? 'error-input' : ''" type="text" formControlName="addressLineTwo">
+            <label>Address Line Three</label>
+            <input [class]="inputHasError('addressLineThree') ? 'error-input' : ''" type="text" formControlName="addressLineThree">
+            <label>Postcode*</label>
+            <input [class]="inputHasError('Postcode') ? 'error-input' : ''" type="text" formControlName="postcode">
+            <label>Password*</label>
+            <input [class]="inputHasError('password') ? 'error-input' : ''" type="password" formControlName="password">
+            <label>Password Repeat*</label>
+            <input [class]="inputHasError('passwordRepeat') ? 'error-input' : ''" type="password" formControlName="passwordRepeat">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>

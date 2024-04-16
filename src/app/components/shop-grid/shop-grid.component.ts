@@ -115,9 +115,7 @@ export class ShopGridComponent {
 
   changeItemsPerPage(event: any) {
     this.itemsPerPage = event.target.value;
-
-    this.totalPages = Math.round(this.resultsAmount / this.itemsPerPage + 1);
-    console.log("🚀 ~ ShopGridComponent ~ loadProducts ~ this.totalPages:", this.totalPages);
+    this.totalPages = Math.trunc(this.resultsAmount / this.itemsPerPage + 1);
   }
 
   getPageRange(): number[] {
