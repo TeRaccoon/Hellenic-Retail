@@ -8,7 +8,7 @@
                         <div class="signup-form-footer">
                             <input formControlName="email" [class]="invalid ? 'error' : ''" type="email" required placeholder="Your email address">
                             <button type="submit">
-                                <ng-container *ngIf="!submitted; else formSubmitted">
+                                <ng-container *ngIf="!signedUp; else formSubmitted">
                                     Sign Up
                                 </ng-container>
                                 <ng-template #formSubmitted>

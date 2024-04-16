@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { lastValueFrom } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FormService } from 'src/app/services/form.service';
 
 @Component({
   selector: 'app-home-newsletter-signup',
@@ -16,11 +17,11 @@ export class HomeNewsletterSignupComponent {
   imageUrl = '';
 
   invalid = false;
-  submitted = false;
+  signedUp = false;
 
   faCheck = faCheck;
 
-  constructor(private dataService: DataService, private fb: FormBuilder) {
+  constructor(private dataService: DataService, private fb: FormBuilder, private formService: FormService) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
@@ -39,11 +40,19 @@ export class HomeNewsletterSignupComponent {
 
   async submit() {
     if (this.signupForm.invalid) {
+      this.formService.setPopupMessage("Please enter a valid email!");
+      this.formService.showPopup();
       this.invalid = true;
       return;
     }
 
-    await lastValueFrom(this.dataService.submitFormData(this.signupForm.value));
-    this.submitted = true;
+    let response = await lastValueFrom(this.dataService.submitFormData(this.signupForm.value));
+    if (response.success) {
+      this.signedUp = true;
+      this.formService.setPopupMessage("Signed up successfully!");
+    } else {
+      this.formService.setPopupMessage("You are already signed up!")
+    }
+    this.formService.showPopup();
   }
 }
