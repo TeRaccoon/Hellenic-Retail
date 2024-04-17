@@ -5,6 +5,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { FormService } from 'src/app/services/form.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-shop-grid',
@@ -19,6 +20,8 @@ export class ShopGridComponent {
   products: any[] = [];
   oldPrices: (number | null)[] = [];
   messageSet = false;
+  maxPrice: number | null = null;
+  minPrice: number | null = null;
   
   itemsPerPage = 10;
   currentPage = 1;
@@ -26,7 +29,7 @@ export class ShopGridComponent {
 
   imageUrl = '';
 
-  constructor(private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private formService: FormService) { }
+  constructor(private filterService: FilterService, private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private formService: FormService) { }
   
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
@@ -47,6 +50,13 @@ export class ShopGridComponent {
         this.formService.setBannerMessage(`Showing results for: ${filter}`);
       }
       this.loadProducts(undefined, filter)
+    });
+    this.filterService.getFilterUpdated().subscribe(updated => {
+      if (updated) {
+        this.maxPrice = this.filterService.getMaxPrice();
+        this.minPrice = this.filterService.getMinPrice();
+        this.filterService.filterUpdateReceived();
+      }
     });
   }
 
@@ -155,5 +165,15 @@ export class ShopGridComponent {
     }
 
     return range;
+  }
+
+  isInPriceRange(product: any) {
+    if (this.maxPrice != null && this.minPrice != null) {
+      if (product.price >= this.minPrice && product.price <= this.maxPrice) {
+        return true;
+      }
+      return false;
+    }
+    return true;
   }
 }

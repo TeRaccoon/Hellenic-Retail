@@ -8,19 +8,23 @@ import { FilterService } from 'src/app/services/filter.service';
 })
 export class ShopSidebarComponent {
   prices = ["£0.01-£5.00", "£5.00-£10.00", "£10.00-£15.00", "£15.00+"];
-  maxPrices = [5, 10, 15, 999];
-  minPrices = [0.01, 5, 10, 15]
+  maxPrices = [1.50, 5, 10, 999];
+  minPrices = [0.01, 1.50, 25, 25]
   priceFilterIndex : number = -1;
 
   constructor(private filterService: FilterService) { }
-
-  ngOnInit() {
-    
-  }
 
   selectFilter(index: number) {
     this.priceFilterIndex = index;
     this.filterService.setMaxPrice(this.maxPrices[index]);
     this.filterService.setMinPrice(this.minPrices[index]);
+    this.filterService.filterUpdateRequested();
+  }
+
+  clearFilter() {
+    this.priceFilterIndex = -1;
+    this.filterService.setMaxPrice(null);
+    this.filterService.setMinPrice(null);
+    this.filterService.filterUpdateRequested();
   }
 }
