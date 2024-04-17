@@ -1,4 +1,4 @@
-import { forkJoin } from 'rxjs';
+import { forkJoin, lastValueFrom } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
@@ -11,10 +11,9 @@ import { DataService } from 'src/app/services/data.service';
   styleUrls: ['./checkout-order-summary.component.scss']
 })
 export class CheckoutOrderSummaryComponent {
-  cartData: any;
+  cart: { productID: number, quantity: number }[] = [];
   cartProducts: any[] = [];
   cartIDs: number[] = [];
-  prices : number[] = [];
   total = 0;
   imageUrl = '';
 
@@ -22,33 +21,43 @@ export class CheckoutOrderSummaryComponent {
 
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
-
     this.loadData();
-
-    this.cartIDs = this.cartService.getIDs();
   }
 
   async loadData() {
-    this.cartData = this.cartService.getCartItems();
+    this.cart = this.cartService.getCartItems();
+    this.cartIDs = this.cartService.getIDs();
     this.loadCartData();
   }
 
-  loadCartData() {
-    const observables = this.cartIDs.map(id =>
-      this.dataService.collectData('product-from-id', id.toString())
-    );
-    forkJoin(observables).pipe(
-      tap((products: any[]) => {
-        products.forEach((product, i) => {
-          this.cartProducts.push(product);
-          this.prices.push(product.retail_price * this.cartData[i].quantity);
-          this.total += this.prices[i];
-        });
-      }),
-      catchError(error => {
-        console.error('Error in loadCartData:', error);
-        throw error;
-      })
-    ).subscribe();
+  async loadCartData() {
+    let cartProducts: any[] = [];
+    this.total = 0;
+    await Promise.all(this.cartIDs.map(async(id) => {
+      if (id !== null) {
+        cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
+      }
+    }));
+
+    cartProducts.forEach((product, index) => {
+      if (this.cart[index] && product != null) {
+        let individualPrice = product.retail_price;
+        let discountedPrice = individualPrice;
+        if (product.discount != null) {
+          discountedPrice = individualPrice * ((100 - product.discount) / 100);
+        }
+
+        product.total = individualPrice * this.cart[index].quantity;
+        product.discounted_total = discountedPrice * this.cart[index].quantity;
+
+        this.total += product.discounted_total;
+
+        if (product.image_location === null) {
+          product.image_location = 'placeholder.jpg';
+        }
+      }
+    });
+
+    this.cartProducts = cartProducts;
   }
 }

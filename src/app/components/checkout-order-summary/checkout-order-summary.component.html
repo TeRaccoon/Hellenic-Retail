@@ -9,12 +9,12 @@
             <td class="row-details">
                 <div>
                     <img [alt]="product.name" [src]="imageUrl + product.image_location">
-                    <p>{{ cartData[i].quantity }}</p>
+                    <p>{{ cart[i].quantity }}</p>
                 </div>
                 <p>{{ product.name }}</p>
             </td>
             <td class="row-price">
-                <p>£{{ prices[i] | number: '1.2-2' }}</p>
+                <p>£{{ product.discounted_total | number: '1.2-2' }}</p>
             </td>
         </tr>
         <tr>
