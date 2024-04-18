@@ -77,8 +77,8 @@ export class ViewDetailsComponent {
     }
 
     if (this.authService.isLoggedIn()) {
-      let customerEmail = this.authService.getUserEmail();
-      this.inWishlist = await lastValueFrom(this.dataService.collectDataComplex("is-product-in-wishlist", {email: customerEmail, product_id: this.product.id}));
+      let customerID = this.authService.getUserID();
+      this.inWishlist = await lastValueFrom(this.dataService.collectDataComplex("is-product-in-wishlist", {id: customerID, product_id: this.product.id}));
     }
   }
 

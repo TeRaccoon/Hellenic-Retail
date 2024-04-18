@@ -43,10 +43,10 @@ export class AccountComponent {
   }
 
   async loadAccountDetails() {
-    let email = this.authService.getUserEmail();
+    let id = this.authService.getUserID();
 
-    if (email != null) {
-      this.dataService.collectData('user-details-from-email', email.toString()).subscribe((userData: any) => {
+    if (id != null) {
+      this.dataService.collectData('user-details-from-id', id.toString()).subscribe((userData: any) => {
         this.userData = userData;
         this.changeAccountDetails.patchValue({
           forename: this.userData.forename,
@@ -74,11 +74,11 @@ export class AccountComponent {
   }
 
   submitChanges() {
-    let email = this.authService.getUserEmail();
+    let id = this.authService.getUserID();
 
-    if (email != null) {
+    if (id != null) {
       let formData = this.changeAccountDetails.value;
-      formData['email'] = email;
+      formData['id'] = id;
       this.dataService.submitFormDataQuery('change-account-details', formData);
     }
   }

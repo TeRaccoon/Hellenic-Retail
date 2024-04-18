@@ -1,17 +1,36 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { apiUrlBase } from './data.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
     private isAuthenticated = new BehaviorSubject<boolean>(false);
-    private email: string | null = null
+    private userID: string | null = null
 
-    constructor() {}
+    constructor(private http: HttpClient) {
+        this.checkLogin();
+    }
 
-    login(email: string) {
-        this.email = email;
+    checkLogin() {
+        const url = apiUrlBase + 'manage_data.php';
+    
+        return this.http
+            .post(url, { action: 'check-login-customer' }, { withCredentials: true })
+            .pipe(
+            map((response: any) => {
+                if (response.data != null) {
+                    this.userID = response.data;
+                }
+                return response;
+            })
+        );
+    }
+
+    login(userID: string) {
+        this.userID = userID;
         this.isAuthenticated.next(true);
     }
 
@@ -27,7 +46,7 @@ export class AuthService {
         return this.isAuthenticated.getValue();
     }
 
-    getUserEmail() {
-        return this.email
+    getUserID() {
+        return this.userID
     }
 }

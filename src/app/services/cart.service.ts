@@ -102,10 +102,8 @@ export class CartService {
   }
 
   async addToWishlist(productID: number) {
-    let customerEmail = this.authService.getUserEmail();
-    if (customerEmail != null) {
-      let customerID = await lastValueFrom(this.dataService.collectData("user-id-from-email", customerEmail));
-      
+    let customerID = this.authService.getUserID();
+    if (customerID != null) {      
       let form = {
         action: "add",
         retail_item_id: productID,

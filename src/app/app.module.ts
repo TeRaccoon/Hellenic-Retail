@@ -34,6 +34,7 @@ import { CheckoutOrderSummaryComponent } from './components/checkout-order-summa
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { PopupComponent } from './components/popup/popup.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { PopupComponent } from './components/popup/popup.component';
     FormsModule
   ],
   providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]
 })

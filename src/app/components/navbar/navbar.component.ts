@@ -163,15 +163,14 @@ export class NavbarComponent {
     }
   }
 
-  showAccount() {
-    this.authService.isLoggedInObservable().subscribe((data) => {
-      if (data) {
-        this.router.navigate(['/account']);
-      }
-      else {
-        this.toggleLogin();
-      }
-    })
+  async showAccount() {
+    let loginResponse = await lastValueFrom(this.authService.checkLogin());
+    console.log("🚀 ~ NavbarComponent ~ showAccount ~ loginResponse:", loginResponse)
+    if (loginResponse.success) {
+      this.router.navigate(['/account']);
+    } else {
+      this.toggleLogin();
+    }
   }
 
   toggleLogin() {
