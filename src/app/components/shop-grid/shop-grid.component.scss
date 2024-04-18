@@ -7,6 +7,32 @@ $hellenicblue: rgb(0, 140, 255);
     margin-left: auto;
     margin-right: auto;
     justify-content: center;
+    .footer {
+        .page-options {
+            margin-top: 10px;
+            .active-page {
+                background-color: #008cff;
+                color: white;
+                border: 1px solid #008cff;
+                &:hover {
+                    background-color: #0082ed;
+                    border: 1px solid #0082ed;
+                }
+            }
+            button {
+                background-color: white;
+                font-size: 16px;
+                outline: none;
+                border: 1px solid #cccccc;
+                margin: 2px;
+                padding: 5px;
+                cursor: pointer;
+                &:hover {
+                    background-color: #eaeef3;
+                }
+            }
+        }
+    }
     .shop-grid-header {
         border-bottom: 1px solid $hellenicblue;
         display: flex;
