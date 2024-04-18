@@ -32,14 +32,13 @@ export class AccountComponent {
   }
 
   async checkLogin() {
-    this.authService.isLoggedInObservable().subscribe(loggedIn => {
-      this.loggedIn = loggedIn;
-      if (!loggedIn) {
-        this.formService.showLoginForm();
-      } else {
-        this.loadAccountDetails();
-      }
-    });    
+    let loginResponse = await lastValueFrom(this.authService.checkLogin());
+    if (loginResponse.success) {
+      this.loggedIn = true;
+      this.loadAccountDetails();
+    } else {
+      this.formService.showLoginForm();
+    }   
   }
 
   async loadAccountDetails() {

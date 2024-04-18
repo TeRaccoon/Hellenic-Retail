@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, map } from 'rxjs';
 import { apiUrlBase } from './data.service';
 import { HttpClient } from '@angular/common/http';
 
@@ -34,9 +34,24 @@ export class AuthService {
         this.isAuthenticated.next(true);
     }
 
-    logout() {
+    async logout() {
+        const url = apiUrlBase + 'manage_data.php';
+    
         this.isAuthenticated.next(false);
-    }
+    
+        const logoutResponse = await lastValueFrom(
+          this.http.post<{ success: boolean; message: string }>(
+            url,
+            { action: 'logout' },
+            { withCredentials: true }
+          )
+        );
+        if (logoutResponse.success) {
+          return true;
+        }
+    
+        return false;
+      }
 
     isLoggedInObservable(): Observable<boolean> {
         return this.isAuthenticated.asObservable();
