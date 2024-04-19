@@ -75,7 +75,6 @@ export class LoginFormComponent {
       let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
       if (loginResponse.success) {
         this.authService.login(this.loginForm.get('email')?.value);
-        this.router.navigate(['/account']);
         this.loginVisible = 'hidden';
       } else {
         this.loginError = loginResponse.message;

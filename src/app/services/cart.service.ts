@@ -102,17 +102,40 @@ export class CartService {
   }
 
   async addToWishlist(productID: number) {
-    let customerID = this.authService.getUserID();
-    if (customerID != null) {      
-      let form = {
-        action: "add",
-        retail_item_id: productID,
-        customer_id: customerID,
-        table_name: "wishlist"
-      };
-      let response = await lastValueFrom(this.dataService.submitFormData(form));
-      let popupMessage = response.success ? "Product Added" : "Whoops! Something went wrong. Please try again"
-      this.formService.setPopupMessage(popupMessage);
+    let loginResponse = await lastValueFrom(this.authService.checkLogin());
+    if (loginResponse.success) {
+      let customerID = this.authService.getUserID();
+      if (customerID != null) {      
+        let form = {
+          action: "add",
+          item_id: productID,
+          customer_id: customerID,
+          table_name: "wishlist"
+        };
+        let response = await lastValueFrom(this.dataService.submitFormData(form));
+        let popupMessage = response.success ? "Product added to wishlist!" : "Whoops! Something went wrong. Please try again"
+        this.formService.setPopupMessage(popupMessage);
+      }
+    } else {
+      this.formService.setPopupMessage("Please login to use your wishlist!");
+    }
+    this.formService.showPopup();
+  }
+
+  async removeFromWishlist(wishlistID: number) {
+    let loginResponse = await lastValueFrom(this.authService.checkLogin());
+    if (loginResponse.success) {
+      let customerID = this.authService.getUserID();
+      if (customerID != null) {      
+        let form = {
+          action: "delete",
+          id: wishlistID,
+          table_name: "wishlist"
+        };
+        let response = await lastValueFrom(this.dataService.submitFormData(form));
+        let popupMessage = response.success ? "Product removed from wishlist!" : "Whoops! Something went wrong. Please try again";
+        this.formService.setPopupMessage(popupMessage);
+      }
     } else {
       this.formService.setPopupMessage("Please login to use your wishlist!");
     }

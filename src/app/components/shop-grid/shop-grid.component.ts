@@ -128,14 +128,7 @@ export class ShopGridComponent {
   }
 
   async addToWishlist(productID: number) {
-    this.cartService.addToWishlist(productID);    
-    let customerID = await lastValueFrom(this.dataService.collectData("user-id-from-email"));
-    let form = {
-      action: "add",
-      retail_item_id: productID,
-      customer_id: customerID
-    };
-    this.dataService.submitFormData(form);
+    this.cartService.addToWishlist(productID);
   }
 
   changeItemsPerPage(event: any) {
