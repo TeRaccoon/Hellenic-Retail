@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-view-image',
@@ -28,16 +29,14 @@ export class ViewImageComponent {
   }
 
   async loadProduct(productName: string) {
-    this.dataService.collectData("product-view", productName).subscribe((data: any) => {
-      this.product = data;
-      this.primaryImage = this.product.primary_image;
-      this.loadProductImages(this.product.id);
-    });
-  }
-  async loadProductImages(retailItemID: any) {
-    this.dataService.collectData("product-view-images", retailItemID).subscribe((data: any) => {
-      this.productImages = data;
-    })
+    let product = await lastValueFrom<any>(this.dataService.collectData("product-view", productName));
+    if (product['primary_image'] == null) {
+      product['primary_image'] = 'placeholder.jpg';
+    }
+    
+    this.product = product;
+    this.primaryImage = this.product.primary_image;
+    this.productImages = await lastValueFrom(this.dataService.collectData("product-view-images", product.id));
   }
 
   changeImage(event: Event) {
