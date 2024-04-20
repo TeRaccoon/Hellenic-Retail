@@ -64,6 +64,8 @@ export class ViewDetailsComponent {
         setTimeout(() => {
           this.clipboardState = 'inactive';
         }, 500);
+        this.formService.setPopupMessage("Copied to clipboard!");
+        this.formService.showPopup();
         break;
     }
   }
