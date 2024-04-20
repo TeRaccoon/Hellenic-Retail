@@ -6,7 +6,7 @@
                     <form [formGroup]="signupForm" (ngSubmit)="submit()">
                         <label>Stay home & get your daily needs from our shop</label>
                         <div class="signup-form-footer">
-                            <input formControlName="email" [class]="invalid ? 'error' : ''" type="email" required placeholder="Your email address">
+                            <input formControlName="email" type="email" required placeholder="Your email address">
                             <button type="submit">
                                 <ng-container *ngIf="!signedUp; else formSubmitted">
                                     Sign Up
