@@ -40,7 +40,8 @@ export class HomeTopProductsComponent {
   }
 
   openImage(imageLocation: string) {
-    window.open(this.imageUrl + imageLocation, '_blank');
+    this.formService.setImageViewerUrl(this.imageUrl + imageLocation);
+    this.formService.showImageViewer();
   }
 
   async addToCart(productID: number, quantity: number) {
