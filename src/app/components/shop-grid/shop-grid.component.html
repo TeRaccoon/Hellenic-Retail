@@ -60,7 +60,7 @@
     <div class="footer">
         <div class="page-options">
             <button *ngIf="currentPage > 1" (click)="currentPage = currentPage - 1">Previous</button>
-            <button *ngIf="products.length > 0" [class]="currentPage == 1 ? 'active-page' : ''" (click)="currentPage = 1"> {{ 1 }}</button>
+            <button *ngIf="products.length > 0 && totalPages > 1" [class]="currentPage == 1 ? 'active-page' : ''" (click)="currentPage = 1"> {{ 1 }}</button>
             <button *ngFor="let pageNumber of getPageRange()" [class]="currentPage == pageNumber ? 'active-page' : ''" (click)="currentPage = pageNumber">{{ pageNumber }}</button>
             <button *ngIf="currentPage < totalPages" (click)="currentPage = currentPage + 1">Next</button>
         </div>
