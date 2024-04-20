@@ -1,0 +1,6 @@
+<div *ngIf="visible" class="container">
+    <div class="image-container">
+        <fa-icon (click)="close()" [icon]="faX" />
+        <img [src]="imageUrl" />
+    </div>
+</div>
