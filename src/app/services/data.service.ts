@@ -52,6 +52,23 @@ export class DataService {
     );
   }
 
+  processTransaction(data: any) {
+    const url = apiUrlBase + 'payment.php';
+    return this.http.post(url, data, {withCredentials: true}).pipe(
+      map((response: any) => {
+        if (response) {
+          return response;
+        } else {
+          throw new Error('Unexpected response format');
+        }
+      }),
+      catchError((error: any) => {
+        console.error('HTTP error occurred:', error);
+        return throwError(error);
+      })
+    );
+  }
+
   getUploadURL() {
     return this.uploadURL;
   }
