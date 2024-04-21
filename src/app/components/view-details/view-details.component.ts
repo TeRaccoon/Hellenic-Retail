@@ -91,4 +91,10 @@ export class ViewDetailsComponent {
   addToWishlist(productID: number) {
     this.cartService.addToWishlist(productID);
   }
+
+  buyNow(productID: number, quantity: number) {
+    this.cartService.addToCart(productID, 1);
+    this.cartService.changeQuantity(productID, quantity);
+    this.router.navigate(['/checkout']);
+  }
 }

@@ -23,7 +23,7 @@
         <div class="purchasing-options">
             <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
             <button (click)="addToCart(product.id, this.quantity)" [disabled]="outOfStock" class="cart">Add To Cart</button>
-            <button [disabled]="outOfStock" class="purchase">Buy Now</button>
+            <button (click)="buyNow(product.id, this.quantity)" [disabled]="outOfStock" class="purchase">Buy Now</button>
         </div>
         <div class="other-options">
             <p (click)="addToWishlist(product.id)">
