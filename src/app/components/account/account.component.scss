@@ -2,6 +2,7 @@ $hellenicblue: rgb(0, 140, 255);
 .account-container {
     width: 68%;
     margin: 0 auto;
+    min-height: 60vh;
     .account-details {
         display: flex;
         flex-direction: column;
