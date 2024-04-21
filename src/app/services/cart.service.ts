@@ -112,8 +112,15 @@ export class CartService {
           customer_id: customerID,
           table_name: "wishlist"
         };
-        let response = await lastValueFrom(this.dataService.submitFormData(form));
-        let popupMessage = response.success ? "Product added to wishlist!" : "Whoops! Something went wrong. Please try again"
+        let inWishlist = await lastValueFrom(this.dataService.collectDataComplex("is-product-in-wishlist", {id: customerID, product_id: productID}));
+
+        let popupMessage = "Product already in wishlist!";
+        
+        if (inWishlist < 1) {
+          let response = await lastValueFrom(this.dataService.submitFormData(form));
+          popupMessage = response.success ? "Product added to wishlist!" : "Whoops! Something went wrong. Please try again";
+        }
+
         this.formService.setPopupMessage(popupMessage);
       }
     } else {

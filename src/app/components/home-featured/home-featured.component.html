@@ -27,7 +27,7 @@
                     </div>
                     <div class="product-options">
                         <button (click)="addToCart(product.id, 1)">Add to cart</button>
-                        <p>
+                        <p (click)="addToWishlist(product.id)">
                             <fa-icon [icon]="faHeart"></fa-icon>
                         </p>
                         <p (click)="openImage(product.image_location)">

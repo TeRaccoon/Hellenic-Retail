@@ -48,4 +48,8 @@ export class HomeTopProductsComponent {
     this.cartService.addToCart(productID, quantity);
     this.formService.showCartForm();
   }
+
+  addToWishlist(productID: number) {
+    this.cartService.addToWishlist(productID);
+  }
 }

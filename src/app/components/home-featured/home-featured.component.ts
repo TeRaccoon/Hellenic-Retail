@@ -51,4 +51,8 @@ export class HomeFeaturedComponent {
     this.cartService.addToCart(productID, quantity);
     this.formService.showCartForm();
   }
+
+  async addToWishlist(productID: number) {
+    this.cartService.addToWishlist(productID);
+  }
 }
