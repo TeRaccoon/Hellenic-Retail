@@ -29,9 +29,13 @@ export class ShopGridComponent {
 
   imageUrl = '';
 
+  category: any = undefined;
+  filter: any = null;
+
   constructor(private filterService: FilterService, private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private formService: FormService) { }
   
   ngOnInit() {
+    this.products = [];
     this.imageUrl = this.dataService.getUploadURL();
     this.formService.setBannerMessage('Showing results')
     this.getShopFilter();
@@ -40,16 +44,18 @@ export class ShopGridComponent {
   getShopFilter() {
     this.route.params.subscribe(params => {
       const category = params['category'];
+      this.category = category;
       if (category !== undefined) {
         this.formService.setBannerMessage(`Showing results for: ${category}`);
       }
       this.loadProducts(category, null);
     });
     this.dataService.getShopFilter().subscribe(filter => {
-      if (filter !== null) {
+      this.filter = filter;
+      if (filter !== null && filter != "") {
         this.formService.setBannerMessage(`Showing results for: ${filter}`);
+        this.loadProducts(undefined, filter);
       }
-      this.loadProducts(undefined, filter)
     });
     this.filterService.getFilterUpdated().subscribe(updated => {
       if (updated) {
@@ -62,7 +68,7 @@ export class ShopGridComponent {
 
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
-    if (category !== undefined) {
+    if (category !== undefined && this.category !== undefined) {
       products = await lastValueFrom(this.dataService.collectData("products-from-category", category));
     } else {
       products = await lastValueFrom(this.dataService.collectData("products"));

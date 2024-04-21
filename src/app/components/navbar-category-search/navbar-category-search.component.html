@@ -6,7 +6,7 @@
                     <p class="nav-link">Shop By Categories</p>
                     <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
                     <div class="dropdown-content">
-                        <a *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
+                        <a *ngFor="let category of categories; let i = index;" (click)="goToCategory(category)">
                             {{ category }}
                         </a>
                     </div>

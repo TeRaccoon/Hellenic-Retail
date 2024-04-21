@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
+import { FormService } from 'src/app/services/form.service';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -11,7 +13,7 @@ export class NavbarCategorySearchComponent {
   faBars = faBars;
   categories: string[] = [];
 
-  constructor(private dataService: DataService) { }
+  constructor(private router: Router, private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
     this.loadCategories();
@@ -21,5 +23,10 @@ export class NavbarCategorySearchComponent {
     this.dataService.collectData("categories").subscribe((data: any) => {
       this.categories = data;
     });
+  }
+
+  goToCategory(category: string) {
+    this.dataService.setShopFilter(null);
+    this.router.navigate(["/shop/" + category]);
   }
 }

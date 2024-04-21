@@ -73,7 +73,7 @@ export class DataService {
     return this.uploadURL;
   }
 
-  setShopFilter(filter: string) {
+  setShopFilter(filter: any) {
     this.shopFilter.next(filter);
   }
 
