@@ -93,9 +93,13 @@ $hellenicblue: rgb(0, 140, 255);
                 background-color: $hellenicblue;
                 border: 0;
                 padding: 8px 18px;
+                min-width: 90px;
                 transition: background-color 0.4s ease;
                 &:hover {
                     background-color: #0075f3;
+                }
+                fa-icon {
+                    font-size: 18px;
                 }
             }
         }

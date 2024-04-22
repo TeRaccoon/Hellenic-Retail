@@ -60,8 +60,12 @@
                         </div>
                         <div class="row">
                             <div>
-                                <label>Expiry date*</label>
-                                <input type="text" required formControlName="Expiry Date">
+                                <label>Expiry month*</label>
+                                <input type="text" required formControlName="Expiry Month">
+                            </div>
+                            <div>
+                                <label>Expiry year*</label>
+                                <input type="text" required formControlName="Expiry Year">
                             </div>
                             <div>
                                 <label>CVC*</label>
@@ -79,7 +83,14 @@
             <div class="checkout-summary-container">
                 <app-checkout-order-summary></app-checkout-order-summary>
                 <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a>privacy policy</a>.</p>
-                <button type="submit" [disabled]="billingForm.invalid">Place order</button>
+                <button type="submit" [disabled]="billingForm.invalid">
+                    <ng-container *ngIf="!processing else paymentProcessing">
+                        Place order
+                    </ng-container>
+                    <ng-template #paymentProcessing>
+                        <fa-icon class="loading-icon" [icon]="faCircleNotch" spinPulse [spin]="true" />
+                    </ng-template>
+                </button>
             </div>
         </div>
     </form>
