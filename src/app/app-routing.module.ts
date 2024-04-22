@@ -9,6 +9,8 @@ import { AccountComponent } from './components/account/account.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { CreateAccountFormComponent } from './components/create-account-form/create-account-form.component';
+import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
+import { AuthGuard } from './services/authguard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -17,10 +19,11 @@ const routes: Routes = [
   { path: 'shop/:category', component: ShopComponent },
   { path: 'shop', component: ShopComponent },
   { path: 'view/:productName', component: ViewComponent },
-  { path: 'account', component: AccountComponent },
+  { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'checkout', component: CheckoutComponent },
-  { path: 'wishlist', component: WishlistComponent },
-  { path: 'create-account', component: CreateAccountFormComponent }
+  { path: 'wishlist', component: WishlistComponent, canActivate: [AuthGuard] },
+  { path: 'create-account', component: CreateAccountFormComponent },
+  { path: 'order-complete', component: OrderCompleteComponent }
 ];
 
 @NgModule({
