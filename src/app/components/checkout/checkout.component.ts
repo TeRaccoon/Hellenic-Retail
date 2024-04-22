@@ -23,6 +23,7 @@ export class CheckoutComponent {
   processing = false;
 
   customerId: string | null = null;
+  orderReference: string | null = null;
 
   constructor(private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService) {
     this.billingForm = this.fb.group({
@@ -101,6 +102,10 @@ export class CheckoutComponent {
     if (response.status_code >= 200 && response.status_code <= 299) {
       this.formService.setPopupMessage("Payment Successful!");
       this.formService.showPopup();
+      this.formService.setOrderDetails({
+        reference: this.orderReference,
+        total: this.invoiceValue,
+      });
       setTimeout(() => {
         this.router.navigate(['/order-complete']);
       }, 3000);
@@ -111,10 +116,10 @@ export class CheckoutComponent {
   }
 
   craftPayload(formData: any) {
-    let code = this.customerId !== null ? formData['Last Name'] + '_' + this.customerId : formData['Last Name'] + '_' + Date.now();
+    this.orderReference = this.customerId !== null ? formData['Last Name'] + '_' + this.customerId : formData['Last Name'] + '_' + Date.now();
     const paymentData = {
       clientReferenceInformation: {
-        code: code
+        code: this.orderReference
       },
       processingInformation: {
         capture: true,
