@@ -8,6 +8,7 @@ export const apiUrlBase = "http://localhost/API/";
 })
 export class DataService {
   shopFilter = new BehaviorSubject<string | null>(null);
+  queryType = 'Retail';
 
   constructor(private http: HttpClient) {}
   uploadURL = `http://localhost/uploads/`;
@@ -24,6 +25,7 @@ export class DataService {
   collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {
     let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
     if (filter != null) {
+      filter['queryType'] = this.queryType;
       const queryParams = Object.entries(filter).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
       url += `&${queryParams}`;
     }
@@ -79,5 +81,9 @@ export class DataService {
 
   getShopFilter() {
     return this.shopFilter.asObservable();
+  }
+
+  setQueryType(queryType: string) {
+    this.queryType = queryType;
   }
 }

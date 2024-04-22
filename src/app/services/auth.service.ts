@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, lastValueFrom, map } from 'rxjs';
-import { apiUrlBase } from './data.service';
+import { DataService, apiUrlBase } from './data.service';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class AuthService {
     private isAuthenticated = new BehaviorSubject<boolean>(false);
     private userID: string | null = null
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private dataService: DataService) {
         this.checkLogin();
     }
 
@@ -22,7 +22,9 @@ export class AuthService {
             .pipe(
             map((response: any) => {
                 if (response.data != null) {
-                    this.userID = response.data;
+                    this.userID = response.data.id;
+                    this.dataService.setQueryType(response.data.customer_type);
+                    this.isAuthenticated.next(true);
                 }
                 return response;
             })
