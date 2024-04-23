@@ -37,6 +37,8 @@ import { PopupComponent } from './components/popup/popup.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
+import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { FooterComponent } from './components/footer/footer.component';
     WishlistComponent,
     PopupComponent,
     ImageViewerComponent,
-    FooterComponent
+    FooterComponent,
+    DocumentViewerComponent,
+    OrderCompleteComponent
   ],
   imports: [
     BrowserModule,
