@@ -15,6 +15,9 @@ export class CreateAccountFormComponent {
   submitted = false;
   error = "";
 
+  subscribe = false;
+  agreedToTerms = false;
+
   constructor(private router: Router, private dataService: DataService, private formService: FormService, private formBuilder: FormBuilder) {
     this.registrationForm = this.formBuilder.group({
       forename: ['', Validators.required],
@@ -60,22 +63,45 @@ export class CreateAccountFormComponent {
   }
 
   async submitForm() {
-    const formData = { ...this.registrationForm.value };
-    delete formData.passwordRepeat;
-
-    let passed = await this.preSubmissionChecks();
-    if (passed) {
-      let response = await lastValueFrom(this.dataService.submitFormData(formData));
-      if (response.success) {
-        this.formService.setPopupMessage("Account Created Successfully!");
-        this.formService.showPopup();
-        setTimeout(() => {
-          this.router.navigate(['/account']);
-        }, 3000);
+    if (this.registrationForm.valid) {
+      if (this.agreedToTerms) {
+        const formData = { ...this.registrationForm.value };
+        delete formData.passwordRepeat;
+    
+        let passed = await this.preSubmissionChecks();
+        if (passed) {
+          let response = await lastValueFrom(this.dataService.submitFormData(formData));
+          if (response.success) {
+            this.formService.setPopupMessage("Account Created Successfully!");
+            if (this.subscribe) {
+              response = await this.subscribeToNewsletter();
+              if (!response.success) {
+                this.formService.setPopupMessage("There was an issue subscribing you to the newsletter!");
+              }
+            }
+            this.formService.showPopup();
+            setTimeout(() => {
+              this.router.navigate(['/account']);
+            }, 3000);
+    
+          } else {
+            this.error = "There was an issue creating your account. Please double check your details!";
+          }
+        }
       } else {
-        this.error = "There was an issue creating your account. Please double check your details!";
+        this.error = "Please agree to the terms and conditions!";
       }
     }
+  }
+
+  async subscribeToNewsletter() {
+    const formData = {
+      email: this.registrationForm.get('email')!.value,
+      action: 'add',
+      table_name: 'mailing_list',
+    };
+    let response = await lastValueFrom(this.dataService.submitFormData(formData));
+    return response;
   }
 
   async preSubmissionChecks() {
@@ -90,5 +116,13 @@ export class CreateAccountFormComponent {
 
   inputHasError(field: string) {
     return this.registrationForm.get(field)?.invalid && this.submitted;
+  }
+
+  onPromoCheckboxChange(event: any) {
+    this.subscribe = event.target.checked;
+  }
+
+  onTermsCheckboxChange(event: any) {
+    this.agreedToTerms = event.target.checked;
   }
 }
