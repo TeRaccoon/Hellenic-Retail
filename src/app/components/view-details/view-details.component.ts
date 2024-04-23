@@ -77,11 +77,6 @@ export class ViewDetailsComponent {
     if (this.product.discount && this.product.discount != null) {
       this.oldPrice = this.product.price * ((100 - this.product.discount) / 100);
     }
-
-    if (this.authService.isLoggedIn()) {
-      let customerID = this.authService.getUserID();
-      this.inWishlist = await lastValueFrom(this.dataService.collectDataComplex("is-product-in-wishlist", {id: customerID, product_id: this.product.id}));
-    }
   }
 
   addToCart(productID: number, quantity: number) {
