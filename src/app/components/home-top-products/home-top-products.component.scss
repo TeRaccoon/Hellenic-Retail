@@ -72,6 +72,14 @@ $hellenicblue: rgb(0, 140, 255);
                     text-decoration: line-through;
                     color: #333333;
                 }
+                .wholesale-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    font-size: 12px;
+                    .bold {
+                        font-weight: bold;
+                    }
+                }
             }
             .product-options {
                 display: flex;
