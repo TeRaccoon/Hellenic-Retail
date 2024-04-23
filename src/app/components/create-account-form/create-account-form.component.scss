@@ -26,6 +26,12 @@ $hellenicblue: rgb(0, 140, 255);
                 display: flex;
                 flex-direction: column;
             }
+            .checkbox-container {
+                display: flex;
+                label {
+                    padding: 10px 10px 10px 0;
+                }
+            }
             div {
                 input {
                     font-size: 17px;
