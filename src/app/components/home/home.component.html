@@ -1,8 +1,10 @@
-<app-slideshow></app-slideshow>
-<app-home-category-row></app-home-category-row>
-<app-home-top-products></app-home-top-products>
-<app-home-card-section-a></app-home-card-section-a>
-<app-home-featured></app-home-featured>
-<app-home-newsletter-signup></app-home-newsletter-signup>
-<app-image-viewer></app-image-viewer>
-<app-footer />
+<ng-container *ngIf="loginChecked">
+    <app-slideshow></app-slideshow>
+    <app-home-category-row></app-home-category-row>
+    <app-home-top-products></app-home-top-products>
+    <app-home-card-section-a></app-home-card-section-a>
+    <app-home-featured></app-home-featured>
+    <app-home-newsletter-signup></app-home-newsletter-signup>
+    <app-image-viewer></app-image-viewer>
+    <app-footer />
+</ng-container>

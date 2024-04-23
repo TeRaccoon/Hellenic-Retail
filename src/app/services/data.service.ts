@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export const apiUrlBase = "http://localhost/API/";
 @Injectable({
@@ -8,9 +9,8 @@ export const apiUrlBase = "http://localhost/API/";
 })
 export class DataService {
   shopFilter = new BehaviorSubject<string | null>(null);
-  queryType = 'Retail';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
   uploadURL = `http://localhost/uploads/`;
   
 
@@ -25,7 +25,7 @@ export class DataService {
   collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {
     let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
     if (filter != null) {
-      filter['queryType'] = this.queryType;
+      filter['queryType'] = this.authService.getUserType();
       const queryParams = Object.entries(filter).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
       url += `&${queryParams}`;
     }
@@ -81,9 +81,5 @@ export class DataService {
 
   getShopFilter() {
     return this.shopFilter.asObservable();
-  }
-
-  setQueryType(queryType: string) {
-    this.queryType = queryType;
   }
 }

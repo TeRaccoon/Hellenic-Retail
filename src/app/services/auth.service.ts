@@ -9,8 +9,9 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
     private isAuthenticated = new BehaviorSubject<boolean>(false);
     private userID: string | null = null
+    private userType: string = "Retail";
 
-    constructor(private http: HttpClient, private dataService: DataService) {
+    constructor(private http: HttpClient) {
         this.checkLogin();
     }
 
@@ -23,7 +24,7 @@ export class AuthService {
             map((response: any) => {
                 if (response.data != null) {
                     this.userID = response.data.id;
-                    this.dataService.setQueryType(response.data.customer_type);
+                    this.userType = response.data.customer_type;
                     this.isAuthenticated.next(true);
                 }
                 return response;
@@ -65,5 +66,9 @@ export class AuthService {
 
     getUserID() {
         return this.userID
+    }
+
+    getUserType() {
+        return this.userType;
     }
 }
