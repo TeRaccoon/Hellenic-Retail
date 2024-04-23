@@ -6,8 +6,6 @@
     flex: 1;
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid #add8e6;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
     margin: 10px;
     padding: 20px;
     display: flex;
@@ -28,7 +26,6 @@
 }
 
 .map-container iframe {
-    border-radius: 10px;
     border: 1px solid #ddd;
     transition: border-color 0.3s;
 }
@@ -49,9 +46,6 @@
     flex: 2;
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid #add8e6;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    /* width: 40%; */
     margin-left: auto;
     margin-right: auto;
     margin: 10px;
@@ -68,7 +62,6 @@
     font-size: 16px;
     margin: 10px auto 10px auto;
     border: 1px solid #ccc;
-    border-radius: 5px;
     /* width: 100%; */
     padding: 10px;
     max-width: 100%;
@@ -76,7 +69,6 @@
 }
 
 .form-container button {
-    border-radius: 5px;
     background-color: #007bff;
     color: white;
     border: none;
