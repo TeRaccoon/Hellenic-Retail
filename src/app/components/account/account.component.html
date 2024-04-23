@@ -51,5 +51,30 @@
             </form>
         </ng-container>
     </div>
+    <div class="order-history">
+        <h1>Order history</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Reference</th>
+                    <th>Status</th>
+                    <th>Payment Status</th>
+                    <th>Net Value</th>
+                    <th>VAT</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of orderHistory">
+                    <td>{{ order.title }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</td>
+                    <td>£{{ order.net_value | number: '1.2-2' }}</td>
+                    <td>£{{ order.VAT | number: '1.2-2' }}</td>
+                    <td>£{{ order.total | number: '1.2-2' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <app-footer />

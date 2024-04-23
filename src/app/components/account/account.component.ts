@@ -15,6 +15,7 @@ export class AccountComponent {
   changeAccountDetails: FormGroup;
   loggedIn: boolean | null = null;
   userData: any = null;
+  orderHistory: any[] = [];
   edit = false;
 
   constructor(private router: Router, private dataService: DataService, private formService: FormService, private authService: AuthService, private fb: FormBuilder) {
@@ -32,20 +33,16 @@ export class AccountComponent {
   }
 
   async checkLogin() {
-    let loginResponse = await lastValueFrom(this.authService.checkLogin());
-    if (loginResponse.success) {
-      this.loggedIn = true;
-      this.loadAccountDetails();
-    } else {
-      this.formService.showLoginForm();
-    }   
+    let id = this.authService.getUserID();
+    this.loggedIn = true;
+    this.loadAccountDetails(id);
+    this.loadOrderHistory(id); 
   }
 
-  async loadAccountDetails() {
-    let id = this.authService.getUserID();
+  async loadAccountDetails(id: string | null) {
 
     if (id != null) {
-      this.dataService.collectData('user-details-from-id', id.toString()).subscribe((userData: any) => {
+      this.dataService.collectData('user-details-from-id', id).subscribe((userData: any) => {
         this.userData = userData;
         this.changeAccountDetails.patchValue({
           forename: this.userData.forename,
@@ -55,6 +52,12 @@ export class AccountComponent {
           secondaryPhone: this.userData.phone_number_secondary
         });
       });
+    }
+  }
+
+  async loadOrderHistory(id: string | null) {
+    if (id != null) {
+      this.orderHistory = await lastValueFrom(this.dataService.collectData('order-history', id));      
     }
   }
 
