@@ -58,7 +58,7 @@
                 </div>
                 <div class="checkbox-container">
                     <label>You agree to the <a>terms and conditions</a></label>
-                    <input type="checkbox">
+                    <input (change)="onTermsCheckboxChange($event)" type="checkbox">
                 </div>
                 <button type="submit">Submit</button>
             </form>
