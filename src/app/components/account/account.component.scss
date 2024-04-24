@@ -15,36 +15,48 @@ $hellenicblue: rgb(0, 140, 255);
         border: 1px solid #ccc;
         width: 40%;
         padding: 20px;
-        form>div {
+        form {
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #cccccc;
-            font-size: 18px;
-            label {
-                font-weight: bold;
-                width: 100%;
+            flex-grow: 1;
+            .inputs {
+                .detail {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #cccccc;
+                    font-size: 18px;
+                    label {
+                        font-weight: bold;
+                        width: 100%;
+                    }
+                    input {
+                        font-size: 18px;
+                        border: none;
+                        background-color: #ffffff;
+                        color: #cccccc;
+                        width: 100%;
+                        padding: 5px;
+                        margin: 3px;
+                    }
+                    .enabled {
+                        color: #000000;
+                    }
+                }
             }
-            input {
-                font-size: 18px;
-                border: none;
-                background-color: #ffffff;
-                color: #cccccc;
-                width: 100%;
-                padding: 5px;
-                margin: 3px;
-            }
-            .enabled {
-                color: #000000;
-            }
-            button {
-                cursor: pointer;
-                font-family: 'Poppins', sans-serif;
-                color: white;
-                font-size: 16px;
-                background-color: $hellenicblue;
-                border: 0;
-                padding: 4px 18px;
+            .buttons {
+                display: flex;
+                justify-content: space-between;
+                button {
+                    cursor: pointer;
+                    font-family: 'Poppins', sans-serif;
+                    color: white;
+                    font-size: 16px;
+                    background-color: $hellenicblue;
+                    border: 0;
+                    padding: 4px 18px;
+                }
             }
         }
     }
