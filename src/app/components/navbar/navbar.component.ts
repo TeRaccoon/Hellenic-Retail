@@ -172,6 +172,15 @@ export class NavbarComponent {
     }
   }
 
+  async showWishlist() {
+    let isLoggedIn = this.authService.isLoggedIn();
+    if (isLoggedIn) {
+      this.router.navigate(['/wishlist']);
+    } else {
+      this.toggleLogin();
+    }
+  }
+
   toggleLogin() {
     this.loginVisible == 'hidden' && this.formService.showLoginForm(); 
   }
