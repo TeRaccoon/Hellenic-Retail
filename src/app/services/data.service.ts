@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
+import { NavigationStart, Router } from '@angular/router';
 
 export const apiUrlBase = "http://localhost/API/";
 @Injectable({
@@ -10,7 +11,13 @@ export const apiUrlBase = "http://localhost/API/";
 export class DataService {
   shopFilter = new BehaviorSubject<string | null>(null);
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.authService.checkLogin();
+      }
+    });
+  }
   uploadURL = `http://localhost/uploads/`;
   
 
@@ -24,11 +31,16 @@ export class DataService {
 
   collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {
     let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
-    if (filter != null) {
-      filter['queryType'] = this.authService.getUserType();
-      const queryParams = Object.entries(filter).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-      url += `&${queryParams}`;
+    let userType = this.authService.getUserType();
+    let paramFilter = filter === undefined ? {} : filter;
+
+    if (userType == null) {
+      this.authService.checkLogin();
     }
+    
+    paramFilter['queryType'] = this.authService.getUserType();
+    const queryParams = Object.entries(paramFilter).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
+    url += `&${queryParams}`;
     return this.http.get<any>(url);
   }
 
