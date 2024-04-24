@@ -71,12 +71,24 @@ export class ViewDetailsComponent {
   }
 
   async loadProduct(productName: string) {
-    let productDetails = await lastValueFrom(this.dataService.collectData("product-view-details", productName));
-    this.product = productDetails;
-    this.outOfStock = this.product.quantity < 1 ? true : false;
-    if (this.product.discount && this.product.discount != null) {
-      this.oldPrice = this.product.price * ((100 - this.product.discount) / 100);
+    let product = await lastValueFrom(this.dataService.collectDataComplex("product-view-details", { productName: productName }));
+    
+    if (product.discount && product.discount != null) {
+      product.discounted_price = product.price * ((100 - product.discount) / 100);
+      if (product.box_price != null) {
+        product.discounted_box_price = product.box_price * ((100 - product.discount) / 100);
+        product.discounted_pallet_price = product.pallet_price * ((100 - product.discount) / 100);
+      }
     }
+
+    this.product = product;
+    console.log("🚀 ~ ViewDetailsComponent ~ loadProduct ~ product:", product)
+
+    // this.product = productDetails;
+    // this.outOfStock = this.product.quantity < 1 ? true : false;
+    // if (this.product.discount && this.product.discount != null) {
+    //   this.oldPrice = this.product.price * ((100 - this.product.discount) / 100);
+    // }
   }
 
   addToCart(productID: number, quantity: number) {

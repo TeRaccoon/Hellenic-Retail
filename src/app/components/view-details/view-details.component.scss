@@ -17,6 +17,19 @@ $hellenicblue: #008cff;
             color: #888888;
             font-size: 20px;
         }
+        .wholesale-container {
+            font-size: 18px;
+            p {
+                display: flex;
+                gap: 10px;
+                .bold {
+                    font-weight: bold;
+                }
+                .strike {
+                    text-decoration: line-through;
+                }
+            }
+        }
     }
     .description {
         width: 90%;

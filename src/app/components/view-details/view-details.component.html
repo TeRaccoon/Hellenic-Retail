@@ -2,17 +2,31 @@
     <p>{{ fullPath }}</p>
     <ng-container *ngIf="product">
         <h1>{{ product.name }}</h1>
-        <ng-container *ngIf="oldPrice != null else elseBlock">
-            <div class="price-container">
-                <p class="price">£{{ oldPrice | number: '1.2-2' }}</p>
-                <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
-            </div>
-        </ng-container>
-        <ng-template #elseBlock>
-            <div class="price-container">
-                <p class="price">£{{ product.price | number: '1.2-2' }}</p>
-            </div>
-        </ng-template>
+        <div class="price-container">
+            <ng-container *ngIf="product.pallet_price == undefined else wholesale">
+                <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price | number: '1.2-2' }}</p>
+                <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number: '1.2-2' }}</p>
+            </ng-container>
+            <ng-template #wholesale>
+                <div class="wholesale-container">
+                    <p>
+                        <span>Unit: </span>
+                        <span *ngIf="product.discounted_price" class="bold">£{{ product.discounted_price | number: '1.2-2' }}</span>
+                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.price | number: '1.2-2' }}</span>
+                    </p>
+                    <p *ngIf="product.box_price">
+                        <span>{{ 'Box (' + product.box_size + '): '}}</span>
+                        <span *ngIf="product.discounted_box_price" class="bold">£{{ product.discounted_box_price | number: '1.2-2' }}</span>
+                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.box_price | number: '1.2-2' }}</span>
+                    </p>
+                    <p *ngIf="product.pallet_price">
+                        <span>{{ 'Pallet (' + product.pallet_size + '): '}}</span>
+                        <span *ngIf="product.discounted_pallet_price" class="bold">£{{ product.discounted_pallet_price | number: '1.2-2' }}</span>
+                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.pallet_price | number: '1.2-2' }}</span>
+                    </p>
+                </div>
+            </ng-template>
+        </div>
         <ng-container *ngIf="product.quantity < 10 && product.quantity > 1">
             <p class="quantity-message">Hurry! Only {{ product.quantity }} left!</p>
         </ng-container>
