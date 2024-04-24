@@ -19,7 +19,9 @@ export class CheckoutComponent {
   faCircleExclamation = faCircleExclamation;
   faCircleNotch = faCircleNotch;
 
-  invoiceValue = 0;
+  netTotal = 0;
+  vat = 0;
+  invoiceTotal = 0;
   processing = false;
 
   customerId: string | null = null;
@@ -47,7 +49,13 @@ export class CheckoutComponent {
   }
 
   ngOnInit() {
+    this.load();
+  }
+
+  async load() {
+    await lastValueFrom(this.authService.checkLogin());
     this.customerId = this.authService.getUserID();
+    console.log("🚀 ~ CheckoutComponent ~ load ~ this.customerId:", this.customerId)
     this.calculateTotal();
   }
 
@@ -82,7 +90,9 @@ export class CheckoutComponent {
       subtotal += 7.50;
     }
 
-    this.invoiceValue = subtotal;
+    this.netTotal = subtotal;
+    this.vat = subtotal * 0.2;
+    this.invoiceTotal = this.netTotal + this.vat;
   }
 
   async formSubmit() {
@@ -93,9 +103,45 @@ export class CheckoutComponent {
 
       let response = await lastValueFrom(this.dataService.processTransaction(paymentData));
 
-      this.validateResponse(response);
+      let success = this.validateResponse(response);
+      if (success) {
+        let invoiceFormData = this.createInvoice(formData);
+        response = await this.processInvoice(invoiceFormData);
+        //Process response
+      }
       this.processing = false;
     }
+  }
+
+  async processInvoice(invoiceFormData: any) {
+    let response = await lastValueFrom(this.dataService.submitFormData(invoiceFormData));
+    return response;
+  }
+
+  createInvoice(formData: any) {
+    const invoiceFormData = {
+      title: this.orderReference,
+      customer_id: this.customerId,
+      status: 'Pending',
+      delivery_date: null,
+      printed: 'No',
+      net_value: this.netTotal,
+      vat: this.vat,
+      total: this.invoiceTotal,
+      delivery_type: formData['Delivery Type'],
+      payment_status: 'Yes',
+      warehouse_id: null,
+      notes: formData['orderNotes'],
+      address_line_1: formData['Street Address'],
+      address_line_2: formData['Street Address 2'],
+      address_line_3: null,
+      postcode: formData['Postcode'],
+      address_id: null,
+      table_name: 'invoices',
+      action: 'add'
+    };
+
+    return invoiceFormData;
   }
 
   validateResponse(response: any) {
@@ -104,14 +150,16 @@ export class CheckoutComponent {
       this.formService.showPopup();
       this.formService.setOrderDetails({
         reference: this.orderReference,
-        total: this.invoiceValue,
+        total: this.invoiceTotal,
       });
       setTimeout(() => {
         this.router.navigate(['/order-complete']);
       }, 3000);
+      return true;
     } else {
       this.formService.setPopupMessage("There was an error processing your payment!");
       this.formService.showPopup();
+      return false;
     }
   }
 
@@ -134,7 +182,7 @@ export class CheckoutComponent {
       },
       orderInformation: {
         amountDetails: {
-          totalAmount: this.invoiceValue,
+          totalAmount: this.invoiceTotal,
           currency: "GBP"
         },
         billTo: {
