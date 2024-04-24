@@ -27,7 +27,7 @@ export class AuthService {
                     this.userType = response.data.customer_type;
                     this.isAuthenticated.next(true);
                 } else {
-                    this.isAuthenticated.next(true);
+                    this.isAuthenticated.next(false);
                     this.userType = "Retail";
                     this.userID = null;
                 }
