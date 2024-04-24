@@ -18,7 +18,7 @@ export class HomeComponent {
   }
 
   async checkLogin() {
-    await lastValueFrom(this.authService.checkLogin());
+    await this.authService.checkLogin()
     this.loginChecked = true;
   }
 }

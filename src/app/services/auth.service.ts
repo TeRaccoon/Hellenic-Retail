@@ -9,27 +9,29 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
     private isAuthenticated = new BehaviorSubject<boolean>(false);
     private userID: string | null = null
-    private userType: string = "Retail";
+    private userType: string | null = null;
 
     constructor(private http: HttpClient) {
         this.checkLogin();
     }
 
-    checkLogin() {
+    async checkLogin(): Promise<void> {
         const url = apiUrlBase + 'manage_data.php';
     
-        return this.http
+        await this.http
             .post(url, { action: 'check-login-customer' }, { withCredentials: true })
-            .pipe(
-            map((response: any) => {
+            .toPromise()
+            .then((response: any) => {
                 if (response.data != null) {
                     this.userID = response.data.id;
                     this.userType = response.data.customer_type;
                     this.isAuthenticated.next(true);
+                } else {
+                    this.isAuthenticated.next(true);
+                    this.userType = "Retail";
+                    this.userID = null;
                 }
-                return response;
-            })
-        );
+            });
     }
 
     login(userID: string) {

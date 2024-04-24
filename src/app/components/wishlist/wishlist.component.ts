@@ -26,20 +26,23 @@ export class WishlistComponent {
   }
 
   async checkLogin() {
-    let loginResponse = await lastValueFrom(this.authService.checkLogin());
-    if (loginResponse.success) {
+    let isLoggedIn = this.authService.isLoggedIn();
+    if (isLoggedIn) {
       this.loggedIn = true;
-      this.loadWishlist(loginResponse.data);
+      this.loadWishlist();
     } else {
       this.formService.showLoginForm();
     }   
   }
 
-  async loadWishlist(userID: string) {
-    let wishlistProducts = await lastValueFrom(this.dataService.collectData("wishlist-from-id", userID));
-    wishlistProducts = Array.isArray(wishlistProducts) ? wishlistProducts : [wishlistProducts];
-
-    this.wishlistProducts = wishlistProducts;
+  async loadWishlist() {
+    let userID = this.authService.getUserID();
+    if (userID != null) {
+      let wishlistProducts = await lastValueFrom(this.dataService.collectData("wishlist-from-id", userID));
+      wishlistProducts = Array.isArray(wishlistProducts) ? wishlistProducts : [wishlistProducts];
+  
+      this.wishlistProducts = wishlistProducts;
+    }
   }
 
   async removeFromWishlist(wishlistID: number) {

@@ -53,7 +53,7 @@ export class CheckoutComponent {
   }
 
   async load() {
-    await lastValueFrom(this.authService.checkLogin());
+    await this.authService.checkLogin()
     this.customerId = this.authService.getUserID();
     console.log("🚀 ~ CheckoutComponent ~ load ~ this.customerId:", this.customerId)
     this.calculateTotal();

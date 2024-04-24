@@ -102,8 +102,8 @@ export class CartService {
   }
 
   async addToWishlist(productID: number) {
-    let loginResponse = await lastValueFrom(this.authService.checkLogin());
-    if (loginResponse.success) {
+    let isLoggedIn = this.authService.isLoggedIn();
+    if (isLoggedIn) {
       let customerID = this.authService.getUserID();
       if (customerID != null) {      
         let form = {
@@ -130,8 +130,8 @@ export class CartService {
   }
 
   async removeFromWishlist(wishlistID: number) {
-    let loginResponse = await lastValueFrom(this.authService.checkLogin());
-    if (loginResponse.success) {
+    let isLoggedIn = this.authService.isLoggedIn();
+    if (isLoggedIn) {
       let customerID = this.authService.getUserID();
       if (customerID != null) {      
         let form = {
