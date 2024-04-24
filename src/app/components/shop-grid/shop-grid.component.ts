@@ -69,10 +69,11 @@ export class ShopGridComponent {
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
     if (category !== undefined && this.category !== undefined) {
-      products = await lastValueFrom(this.dataService.collectData("products-from-category", category));
+      products = await lastValueFrom(this.dataService.collectDataComplex("products-from-category", { category: category }));
     } else {
-      products = await lastValueFrom(this.dataService.collectData("products"));
+      products = await lastValueFrom(this.dataService.collectDataComplex("products"));
     }
+
     products = Array.isArray(products) ? products : [products];
     if (filter != null) {
       products = this.filterByString(filter, products);
@@ -81,11 +82,9 @@ export class ShopGridComponent {
     this.resultsAmount = products.length === undefined ? 1 : products.length;
     this.totalPages = Math.round(this.resultsAmount / this.itemsPerPage + 1);
 
-    this.oldPrices = this.products.map((product: any) => {
+    products.forEach((product) => {
       if (product.discount && product.discount != null) {
-        return product.price * ((100 - product.discount) / 100);
-      } else {
-        return null;
+        product.discounted_price = product.price * ((100 - product.discount) / 100);
       }
     });
 

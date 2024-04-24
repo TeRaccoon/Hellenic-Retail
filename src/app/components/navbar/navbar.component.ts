@@ -93,7 +93,7 @@ export class NavbarComponent {
       this.subcategories = subcategories;
     }
 
-    let products = await lastValueFrom(this.dataService.collectData("products"));
+    let products = await lastValueFrom(this.dataService.collectDataComplex("products"));
     if (products != null) {
       products = this.replaceNullImages(products);
       products = this.calculatePrices(products);
@@ -164,8 +164,8 @@ export class NavbarComponent {
   }
 
   async showAccount() {
-    let loginResponse = await lastValueFrom(this.authService.checkLogin());
-    if (loginResponse.success) {
+    let isLoggedIn = this.authService.isLoggedIn();
+    if (isLoggedIn) {
       this.router.navigate(['/account']);
     } else {
       this.toggleLogin();
