@@ -22,6 +22,12 @@
         .price-container {
             display: flex;
             gap: 10px;
+            .discounted-price {
+                font-weight: bold;
+            }
+            .original-price {
+                text-decoration: line-through;
+            }
         }
         th {
             background-color: #ffffff;

@@ -13,10 +13,10 @@
             <tr *ngFor="let product of wishlistProducts">
                 <td>{{ product.name }}</td>
                 <td class="price-container">
-                    <ng-container *ngIf="product.discount != null && product.discount != 0">
+                    <ng-container *ngIf="product.discount > 0">
                         <p class="discounted-price">£{{ product.discounted_price | number: '1.2-2' }}</p>
                     </ng-container>
-                    <p [class]="product.discount != null && product.discount != 0 ? 'original-price' : 'discounted-price'">£{{ product.price | number: '1.2-2' }}</p>
+                    <p [class]="product.discount > 0 ? 'original-price' : 'discounted-price'">£{{ product.price | number: '1.2-2' }}</p>
                 </td>
                 <td [ngClass]="{
                     'out-of-stock': product.total_quantity === null,

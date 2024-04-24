@@ -26,13 +26,8 @@ export class WishlistComponent {
   }
 
   async checkLogin() {
-    let isLoggedIn = this.authService.isLoggedIn();
-    if (isLoggedIn) {
-      this.loggedIn = true;
-      this.loadWishlist();
-    } else {
-      this.formService.showLoginForm();
-    }   
+    this.loggedIn = true;
+    this.loadWishlist();
   }
 
   async loadWishlist() {
@@ -41,6 +36,12 @@ export class WishlistComponent {
       let wishlistProducts = await lastValueFrom(this.dataService.collectData("wishlist-from-id", userID));
       wishlistProducts = Array.isArray(wishlistProducts) ? wishlistProducts : [wishlistProducts];
   
+      wishlistProducts.forEach((product) => {
+        if (product.discount && product.discount != null) {
+          product.discounted_price = product.price * ((100 - product.discount) / 100);
+        }
+      });
+
       this.wishlistProducts = wishlistProducts;
     }
   }
