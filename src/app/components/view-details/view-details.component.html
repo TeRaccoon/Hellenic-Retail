@@ -27,17 +27,22 @@
                 </div>
             </ng-template>
         </div>
-        <ng-container *ngIf="product.quantity < 10 && product.quantity > 1">
-            <p class="quantity-message">Hurry! Only {{ product.quantity }} left!</p>
+        <ng-container *ngIf="stock < 10 && stock > 1">
+            <p class="quantity-message">Hurry! Only {{ stock }} left!</p>
         </ng-container>
-        <ng-container *ngIf="product.quantity < 1">
+        <ng-container *ngIf="stock < 1">
             <p class="quantity-message">Out of stock!</p>
         </ng-container>
         <p class="description">{{ product.description }}</p>
         <div class="purchasing-options">
             <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
-            <button (click)="addToCart(product.id, this.quantity)" [disabled]="outOfStock" class="cart">Add To Cart</button>
-            <button (click)="buyNow(product.id, this.quantity)" [disabled]="outOfStock" class="purchase">Buy Now</button>
+            <button (click)="addToCart(product.id, quantity)" [disabled]="outOfStock" class="cart">Add To Cart</button>
+            <button (click)="buyNow(product.id, quantity)" [disabled]="outOfStock" class="purchase">Buy Now</button>
+            <select *ngIf="userType == 'Wholesale'" (change)="changePackageType($event)">
+                <option value="unit">Unit</option>
+                <option value="box">Box</option>
+                <option value="pallet">Pallet</option>
+            </select>
         </div>
         <div class="other-options">
             <p (click)="addToWishlist(product.id)">

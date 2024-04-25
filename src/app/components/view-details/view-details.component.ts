@@ -40,9 +40,13 @@ export class ViewDetailsComponent {
   product: any;
   outOfStock: boolean = true;
   fullPath: string = '';
-  oldPrice: (number | null) = null;
-  quantity = 1;
+  stock = 1;
   inWishlist = false;
+
+  quantity = 1;
+  quantityMultiplier = 1;
+
+  userType: string | null = 'Retail';
 
   clipboardState: string = 'inactive';
 
@@ -71,6 +75,9 @@ export class ViewDetailsComponent {
   }
 
   async loadProduct(productName: string) {
+    await this.authService.checkLogin();
+    this.userType = this.authService.getUserType();
+
     let product = await lastValueFrom(this.dataService.collectDataComplex("product-view-details", { productName: productName }));
     
     if (product.discount && product.discount != null) {
@@ -82,17 +89,16 @@ export class ViewDetailsComponent {
     }
 
     this.product = product;
-    console.log("🚀 ~ ViewDetailsComponent ~ loadProduct ~ product:", product)
 
-    // this.product = productDetails;
-    // this.outOfStock = this.product.quantity < 1 ? true : false;
-    // if (this.product.discount && this.product.discount != null) {
-    //   this.oldPrice = this.product.price * ((100 - this.product.discount) / 100);
-    // }
+    let stock = await lastValueFrom<any>(this.dataService.collectData("total-stock-by-id", product.id));
+    this.stock = stock.total_quantity;
+    this.outOfStock = stock < 1 ? true : false;
   }
 
   addToCart(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity);
+    this.cartService.addToCart(productID, quantity * this.quantityMultiplier);
+    this.formService.setPopupMessage("Product added to cart!");
+    this.formService.showPopup();
   }
   
   addToWishlist(productID: number) {
@@ -101,7 +107,24 @@ export class ViewDetailsComponent {
 
   buyNow(productID: number, quantity: number) {
     this.cartService.addToCart(productID, 1);
-    this.cartService.changeQuantity(productID, quantity);
+    this.cartService.changeQuantity(productID, quantity * this.quantityMultiplier);
     this.router.navigate(['/checkout']);
+  }
+
+  changePackageType(event: any) {
+    let packageFormat = event.target.value;
+    switch (packageFormat) {
+      case "unit":
+        this.quantityMultiplier = 1;
+        break;
+
+      case "box":
+        this.quantityMultiplier = this.product.box_size;
+        break;
+
+      case "pallet":
+        this.quantityMultiplier = this.product.pallet_size;
+        break;
+    }
   }
 }
