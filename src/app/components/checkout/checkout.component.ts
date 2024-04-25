@@ -24,6 +24,9 @@ export class CheckoutComponent {
   invoiceTotal = 0;
   processing = false;
 
+  products: any[] = [];
+  cart: any[] = [];
+
   customerId: string | null = null;
   orderReference: string | null = null;
 
@@ -38,7 +41,7 @@ export class CheckoutComponent {
       "County": [''],
       "Postcode": ['', Validators.required],
       "Phone": ['', [Validators.required, Validators.minLength(7), Validators.maxLength(14)]],
-      "Email address": ['', [Validators.required, Validators.email]],
+      "Email Address": ['', [Validators.required, Validators.email]],
       "Card Number": ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
       "Expiry Month": ['', [Validators.required]],
       "Expiry Year": ['', [Validators.required, Validators.minLength(2), Validators.maxLength(4)]],
@@ -61,7 +64,7 @@ export class CheckoutComponent {
 
   async calculateTotal() {
     let cartIDs = this.cartService.getIDs();
-    let cart = this.cartService.getCartItems();
+    this.cart = this.cartService.getCartItems();
 
     let cartProducts: any[] = [];
     let subtotal = 0;
@@ -72,27 +75,30 @@ export class CheckoutComponent {
     }));
 
     cartProducts.forEach((product, index) => {
-      if (cart[index] && product != null) {
+      if (this.cart[index] && product != null) {
         let individualPrice = product.retail_price;
         let discountedPrice = individualPrice;
         if (product.discount != null || product.discount != 0) {
           discountedPrice = individualPrice * ((100 - product.discount) / 100);
         }
 
-        product.total = individualPrice * cart[index].quantity;
-        product.discounted_total = discountedPrice * cart[index].quantity;
+        product.total = individualPrice * this.cart[index].quantity;
+        product.discounted_total = discountedPrice * this.cart[index].quantity;
 
         subtotal += product.discounted_total;
       }
     });
 
+    this.products = cartProducts;
+    console.log("🚀 ~ CheckoutComponent ~ calculateTotal ~ cartProducts:", cartProducts)
+
     if (subtotal < 30) {
       subtotal += 7.50;
     }
 
-    this.netTotal = subtotal;
-    this.vat = subtotal * 0.2;
-    this.invoiceTotal = this.netTotal + this.vat;
+    this.netTotal = Number(Number(subtotal).toFixed(2));
+    this.vat = Number(Number(subtotal * 0.2).toFixed(2));
+    this.invoiceTotal = Number(Number(this.netTotal + this.vat).toFixed(2));
   }
 
   async formSubmit() {
@@ -107,10 +113,41 @@ export class CheckoutComponent {
       if (success) {
         let invoiceFormData = this.createInvoice(formData);
         response = await this.processInvoice(invoiceFormData);
-        //Process response
+        if (response.success) {
+          this.sendEmailConfirmation(invoiceFormData);
+        }
       }
       this.processing = false;
     }
+  }
+
+  async sendEmailConfirmation(invoiceFormData: any) {
+    let products = this.products.map((product: any, index) => {
+      return {
+        name: product.name,
+        quantity: this.cart[index].quantity,
+        price: '&pound;' + Number(product.discounted_total).toFixed(2),
+      };
+    });
+
+    const emailInformation = {
+      reference: this.orderReference,
+      products: products,
+      net_total: '&pound;' + this.netTotal,
+      vat: '&pound;' + this.vat,
+      total: '&pound;' + this.invoiceTotal
+    };
+
+    const emailHTML = this.dataService.generateOrderConfirmationEmail(emailInformation);
+
+    const emailData = {
+      action: 'mail',
+      mail_type: 'order',
+      subject: 'Thank you for your order!',
+      email_HTML: emailHTML
+    };
+
+    return await lastValueFrom(this.dataService.sendEmail(emailData));
   }
 
   async processInvoice(invoiceFormData: any) {
@@ -193,7 +230,7 @@ export class CheckoutComponent {
           administrativeArea: formData['County'],
           postalCode: formData['Postcode'],
           country: "GB",
-          email: formData['Email address'],
+          email: formData['Email Address'],
           phoneNumber: formData['Phone']
         }
       }
