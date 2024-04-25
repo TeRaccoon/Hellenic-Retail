@@ -11,6 +11,7 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { CreateAccountFormComponent } from './components/create-account-form/create-account-form.component';
 import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
 import { AuthGuard } from './services/authguard.service';
+import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'wishlist', component: WishlistComponent, canActivate: [AuthGuard] },
   { path: 'create-account', component: CreateAccountFormComponent },
-  { path: 'order-complete', component: OrderCompleteComponent }
+  { path: 'order-complete', component: OrderCompleteComponent },
+  { path: 'documents/:documentName', component: DocumentViewerComponent }
 ];
 
 @NgModule({
