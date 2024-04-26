@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, lastValueFrom, map, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { NavigationStart, Router } from '@angular/router';
 
@@ -11,12 +11,16 @@ export const apiUrlBase = "http://localhost/API/";
 export class DataService {
   shopFilter = new BehaviorSubject<string | null>(null);
 
+  visibleCategoryNames: any[] = [];
+  visibleCategoryLocations: any[] = [];
+
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.authService.checkLogin();
       }
     });
+    this.loadStandardData();
   }
   uploadURL = `http://localhost/uploads/`;
   
@@ -215,5 +219,24 @@ export class DataService {
 
     return email;
   }
+  
+  async loadStandardData() {
+    await this.loadVisibleCategories();
+  }
 
+  async loadVisibleCategories() {
+    let categories = await lastValueFrom(this.collectData("visible-categories"));
+    for (const category of categories) {
+      this.visibleCategoryNames.push(category.name);
+      this.visibleCategoryLocations.push(category.location);
+    }
+  }
+
+  getVisibleCategoryNames() {
+    return this.visibleCategoryNames;
+  }
+
+  getVisibleCategoryLocations() {
+    return this.visibleCategoryLocations;
+  }
 }
