@@ -28,8 +28,15 @@
                         <p> {{ product.name }} </p>
                     </div>
                     <div class="price-container">
-                        <p [class]="product.discount === null ? 'price' : 'old-price'">£{{ product.price | number: '1.2-2' }}</p>
-                        <p *ngIf="product.discount !== null" class="price">£{{ product.discounted_price | number: '1.2-2' }}</p>
+                        <ng-container *ngIf="product.pallet_price == undefined else wholesale">
+                            <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price | number: '1.2-2' }}</p>
+                            <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number: '1.2-2' }}</p>
+                        </ng-container>
+                        <ng-template #wholesale>
+                            <div class="wholesale-container">
+                                <p><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
+                            </div>
+                        </ng-template>
                     </div>
                 </a>
             </div>

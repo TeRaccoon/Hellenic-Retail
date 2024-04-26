@@ -91,6 +91,8 @@ export class NavbarComponent {
     }
 
     let products = await lastValueFrom(this.dataService.collectDataComplex("products"));
+    products = Array.isArray(products) ? products : [products];
+    
     if (products != null) {
       products = this.replaceNullImages(products);
       products = this.calculatePrices(products);
