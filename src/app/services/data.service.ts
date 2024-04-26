@@ -26,7 +26,7 @@ export class DataService {
   
 
   collectData(query: string, filter?: string): Observable<any[]> {
-    let url = `http://localhost/API/retail_query_handler.php?query=${query}`;
+    let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
     if (filter != null) {
       url += `&filter=${encodeURIComponent(filter)}`;
     }
