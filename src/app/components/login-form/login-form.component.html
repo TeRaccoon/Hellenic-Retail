@@ -8,7 +8,7 @@
             <a (click)="createAccount()">Create Account</a>
         </div>
         <div class="input-section">
-            <span (click)="toggleLogin()" class="close">&times;</span>
+            <span (click)="hideLogin()" class="close">&times;</span>
             <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
                 <p class="error">{{ loginError }}</p>
                 <div *ngFor="let error of errorMessages.email">

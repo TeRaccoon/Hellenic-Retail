@@ -77,6 +77,11 @@ export class LoginFormComponent {
     }
   }
 
+  hideLogin() {
+    this.loginVisible = 'hidden';
+    this.formService.hideLoginForm();
+  }
+
   inputHasError(field: string) {
     return this.loginForm.get(field)?.invalid && this.submitted;
   }
