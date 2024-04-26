@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { FormService } from 'src/app/services/form.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -16,13 +17,7 @@ export class NavbarCategorySearchComponent {
   constructor(private router: Router, private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
-    this.loadCategories();
-  }
-
-  async loadCategories() {
-    this.dataService.collectData("categories").subscribe((data: any) => {
-      this.categories = data;
-    });
+    this.categories = this.dataService.getVisibleCategoryNames();
   }
 
   goToCategory(category: string) {
