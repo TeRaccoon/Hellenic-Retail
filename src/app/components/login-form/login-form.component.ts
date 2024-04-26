@@ -55,7 +55,7 @@ export class LoginFormComponent {
   ngOnInit() {
     this.formService.getLoginFormVisibility().subscribe((visible: any) => {
       this.loginVisible = visible ? 'visible' : 'hidden';
-      if (visible == 'visible') {
+      if (visible) {
         this.showLogin();
       } else {
         this.loginVisible = 'hidden';
