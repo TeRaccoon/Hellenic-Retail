@@ -53,9 +53,21 @@ export class LoginFormComponent {
   }
 
   ngOnInit() {
-    this.formService.getLoginFormVisibility().subscribe((visible) => {
+    this.formService.getLoginFormVisibility().subscribe((visible: any) => {
       this.loginVisible = visible ? 'visible' : 'hidden';
+      if (visible == 'visible') {
+        this.showLogin();
+      } else {
+        this.loginVisible = 'hidden';
+      }
     });
+  }
+
+  async showLogin() {
+    await this.authService.checkLogin();
+    if (!this.authService.isLoggedIn()) {
+      this.loginVisible = 'visible';
+    }
   }
 
   toggleLogin() {
