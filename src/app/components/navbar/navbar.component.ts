@@ -83,10 +83,7 @@ export class NavbarComponent {
   }
 
   async loadNavBar() {
-    let categories = await lastValueFrom(this.dataService.collectData("categories"));
-    if (categories != null) {
-      this.categories = categories;
-    }
+    this.categories = this.dataService.getVisibleCategoryNames();
 
     let subcategories = await lastValueFrom(this.dataService.collectData("subcategories"));
     if (subcategories != null) {
@@ -117,8 +114,8 @@ export class NavbarComponent {
 
   changeCategory(event: Event) {
     const option = event.target as HTMLInputElement;
-    const value = option.value.toLowerCase();
-    this.categoryFilter = value === 'all' ? null : value;
+    const value = option.value;
+    this.categoryFilter = value === 'All' ? null : value;
     this.applyFilters();
   }
   
@@ -157,6 +154,8 @@ export class NavbarComponent {
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
+    } else if (this.categoryFilter != 'all') {
+      this.router.navigate(['/shop/' + this.categoryFilter]);
     } else {
       this.dataService.setShopFilter(this.searchStringFilter);
       this.router.navigate(['/shop']);
