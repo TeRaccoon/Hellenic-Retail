@@ -64,7 +64,6 @@ export class LoginFormComponent {
   }
 
   async showLogin() {
-    await this.authService.checkLogin();
     if (!this.authService.isLoggedIn()) {
       this.loginVisible = 'visible';
     }
