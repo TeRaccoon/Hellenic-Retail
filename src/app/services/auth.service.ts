@@ -7,7 +7,8 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class AuthService {
-    private isAuthenticated = new BehaviorSubject<boolean>(false);
+    private isAuthenticatedObservable = new BehaviorSubject<boolean>(false);
+    private isAuthenticated = false;
     private userID: string | null = null
     private userType: string | null = null;
 
@@ -25,9 +26,11 @@ export class AuthService {
                 if (response.data != null) {
                     this.userID = response.data.id;
                     this.userType = response.data.customer_type;
-                    this.isAuthenticated.next(true);
+                    this.isAuthenticatedObservable.next(true);
+                    this.isAuthenticated = true;
                 } else {
-                    this.isAuthenticated.next(false);
+                    this.isAuthenticatedObservable.next(false);
+                    this.isAuthenticated = false;
                     this.userType = "Retail";
                     this.userID = null;
                 }
@@ -36,13 +39,15 @@ export class AuthService {
 
     login(userID: string) {
         this.userID = userID;
-        this.isAuthenticated.next(true);
+        this.isAuthenticatedObservable.next(true);
+        this.isAuthenticated = true;
     }
 
     async logout() {
         const url = apiUrlBase + 'manage_data.php';
     
-        this.isAuthenticated.next(false);
+        this.isAuthenticatedObservable.next(false);
+        this.isAuthenticated = false;
     
         const logoutResponse = await lastValueFrom(
           this.http.post<{ success: boolean; message: string }>(
@@ -59,11 +64,11 @@ export class AuthService {
       }
 
     isLoggedInObservable(): Observable<boolean> {
-        return this.isAuthenticated.asObservable();
+        return this.isAuthenticatedObservable.asObservable();
     }
 
     isLoggedIn() {
-        return this.isAuthenticated.getValue();
+        return this.isAuthenticated;
     }
 
     getUserID() {
