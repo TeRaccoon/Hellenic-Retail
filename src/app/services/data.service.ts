@@ -15,13 +15,14 @@ export class DataService {
   visibleCategoryLocations: any[] = [];
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        this.authService.checkLogin();
-      }
-    });
+    // this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationStart) {
+    //     // this.authService.checkLogin();
+    //   }
+    // });
     this.loadStandardData();
   }
+
   uploadURL = `http://localhost/uploads/`;
   
 
