@@ -58,7 +58,6 @@ export class CheckoutComponent {
   async load() {
     await this.authService.checkLogin()
     this.customerId = this.authService.getUserID();
-    console.log("🚀 ~ CheckoutComponent ~ load ~ this.customerId:", this.customerId)
     this.calculateTotal();
   }
 
@@ -90,7 +89,6 @@ export class CheckoutComponent {
     });
 
     this.products = cartProducts;
-    console.log("🚀 ~ CheckoutComponent ~ calculateTotal ~ cartProducts:", cartProducts)
 
     if (subtotal < 30) {
       subtotal += 7.50;
