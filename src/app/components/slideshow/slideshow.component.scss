@@ -2,15 +2,15 @@
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
-    width: auto;
-    height: 600px;
-    max-height: 600px;
+    width: 100vh;
+    height: 40vh;
+    max-height: 40vh;
 }
 
 .slide {
     display: none;
-    height: 600px;
-    max-height: 600px;
+    height: 40vh;
+    max-height: 40vh;
 }
 
 .slide img {
