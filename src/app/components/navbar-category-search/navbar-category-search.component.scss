@@ -71,3 +71,7 @@ $hellenicblue: rgb(0, 140, 255);
         }
     }
 }
+@media screen and (min-width: 1080px){
+    .slideshow-container{width: 100%;}
+    .category-bar{width: 100%;}
+}
