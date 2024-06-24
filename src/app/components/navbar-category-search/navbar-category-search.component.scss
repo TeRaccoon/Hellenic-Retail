@@ -2,86 +2,72 @@ $hellenicblue: rgb(0, 140, 255);
 
 .container {
     width: 100vh;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin: 0px;
-    padding: 0px;
-}
-
-.category-bar {
-    margin: auto;
-    width: 68%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.dropdown {
-    position: relative;
-    color: #FFFFFF;
-    padding: 5px 10px;
-}
-
-.hamburger {
-    background-color: rgb(0, 119, 255);
-}
-
-.hellenic-blue {
     background-color: $hellenicblue;
-}
-
-.nav-link {
-    font-size: 18px;
-    color: #ffffff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    display: inline-block;
-    margin: 10px 0 10px 0;
-}
-
-.dropdown-content {
-    position: absolute;
-    background-color: #FFFFFF;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 235px;
-    z-index: 2;
-    opacity: 0;
-    visibility: hidden;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    transform-origin: top center;
-    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
-    a {
-        border-bottom: 1px solid #b9b9b9;
-        display: block;
-        padding: 10px 15px;
-        color: #333333;
-        text-decoration: none;
-        transition: background-color 0.5s ease, color 0.5s ease;
+    .category-bar {
+        margin: auto;
+        width: 68%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin: 0px;
+            padding: 0px;
+            .dropdown {
+                position: relative;
+                color: #FFFFFF;
+                padding: 5px 10px;
+                .nav-link {
+                    font-size: 18px;
+                    color: #ffffff;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                    display: inline-block;
+                    margin: 10px 0 10px 0;
+                }
+                .text-icon {
+                    padding: 0 15px;
+                }
+                .dropdown-content {
+                    position: absolute;
+                    background-color: #FFFFFF;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    width: 235px;
+                    z-index: 2;
+                    opacity: 0;
+                    visibility: hidden;
+                    top: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    transform-origin: top center;
+                    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+                    a {
+                        border-bottom: 1px solid #b9b9b9;
+                        display: block;
+                        padding: 10px 15px;
+                        color: #333333;
+                        text-decoration: none;
+                        transition: background-color 0.5s ease, color 0.5s ease;
+                    }
+                    a:hover {
+                        color: $hellenicblue;
+                        background-color: #eeeeee;
+                    }
+                }
+            }
+            .dropdown:hover .dropdown-content {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(-50%);
+                transition-delay: 0s, 0s, 0s;
+            }
+            .hamburger {
+                background-color: rgb(0, 119, 255);
+            }            
+        }
     }
-    a:hover {
-        color: $hellenicblue;
-        background-color: #eeeeee;
-    }
-}
-
-.dropdown:hover .dropdown-content {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%);
-    transition-delay: 0s, 0s, 0s;
-}
-
-.category-bar {
-    font-weight: bold;
-}
-
-.text-icon {
-    padding: 0 15px;
 }
