@@ -15,14 +15,13 @@ $hellenicblue: rgb(0, 140, 255);
 }
 
 .navbar {
-    padding: 10px 0 10px 0;
     .nav-logo {
         font-size: 24px;
         font-weight: bold;
         color: #FFFFFF;
         text-decoration: none;
         img {
-            width: 70px;
+            width: 100px;
             height: auto;
         }
     }
@@ -171,13 +170,19 @@ $hellenicblue: rgb(0, 140, 255);
 @media screen and (max-width: 1079px) {
     .navbar {
         margin-left: 0;
-        width: 214%;
+        width: 215vw;
     }
     .intro-bar {
         margin: 0;
-        width: 217%;
+        width: 221vw;
     }
     .search-options {
-        width: 120%!important;
+        width: 124vw!important;
+    }
+    .search-container {
+        margin-left: 86px;
+    }
+    .account-section {
+        padding: 10px;
     }
 }
