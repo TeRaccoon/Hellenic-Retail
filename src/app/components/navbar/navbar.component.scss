@@ -167,3 +167,17 @@ $hellenicblue: rgb(0, 140, 255);
         color: $hellenicblue !important;
     }
 }
+
+@media screen and (max-width: 1079px) {
+    .navbar {
+        margin-left: 0;
+        width: 214%;
+    }
+    .intro-bar {
+        margin: 0;
+        width: 217%;
+    }
+    .search-options {
+        width: 120%!important;
+    }
+}

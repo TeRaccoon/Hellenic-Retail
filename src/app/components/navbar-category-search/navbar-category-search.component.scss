@@ -83,4 +83,17 @@ $hellenicblue: rgb(0, 140, 255);
     .nav-links {
         margin-left: 0%!important;
     }
+    .nav-link {
+        display: none!important;
+    }
+    .hamburger {
+        display: flex; align-items: center;
+    }
+    .ng-fa-icon {
+        margin: 12px 0;
+    }    
+    .dropdown-content {
+        margin-left: 86px;
+    }
 }
+    
