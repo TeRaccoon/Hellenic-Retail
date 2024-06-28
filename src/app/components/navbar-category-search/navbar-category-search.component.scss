@@ -71,7 +71,9 @@ $hellenicblue: rgb(0, 140, 255);
 
 @media screen and (max-width: 1079px) {
     .container {
-        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 1;
     }
     .category-bar {
         width: 100%;
