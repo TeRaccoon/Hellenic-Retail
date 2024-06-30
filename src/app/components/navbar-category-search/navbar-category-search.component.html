@@ -6,9 +6,37 @@
                     <p class="nav-link">Shop By Categories</p>
                     <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
                     <div class="dropdown-content" [class]="categoriesShown ? 'visible' : ''">
-                        <a *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
-                            {{ category }}
-                        </a>
+                        <div class="categories">
+                            <a *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
+                                {{ category }}
+                            </a>
+                        </div>
+                        <div class="account-section">
+                            <a (click)="showAccount()">
+                                <div class="icon-container">
+                                    <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
+                                </div>
+                                <p>
+                                    Account
+                                </p>
+                            </a>
+                            <a [routerLink]="'/wishlist'">
+                                <div class="icon-container">
+                                    <fa-icon class="interact-icon" [icon]="faHeart"></fa-icon>
+                                </div>
+                                <p>
+                                    Wishlist
+                                </p>
+                            </a>
+                            <a (click)="toggleCart()">
+                                <div class="icon-container">
+                                    <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
+                                </div>
+                                <p>
+                                    Cart
+                                </p>
+                            </a>
+                        </div>
                     </div>
                 </li>
             </ng-container>

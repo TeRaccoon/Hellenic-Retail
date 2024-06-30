@@ -167,7 +167,11 @@ $hellenicblue: rgb(0, 140, 255);
     }
 }
 
-@media screen and (max-width: 1079px) {
+@media screen and (min-width: 1080px) { //Desktop
+
+}
+
+@media screen and (max-width: 1079px) { //mobile
     .navbar {
         margin-left: 0;
         width: 100%;
@@ -184,5 +188,6 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .account-section {
         padding: 10px;
+        display: none; 
     }
 }

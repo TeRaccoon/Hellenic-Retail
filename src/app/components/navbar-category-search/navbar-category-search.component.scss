@@ -34,17 +34,19 @@ $hellenicblue: rgb(0, 140, 255);
                     padding: 0 15px;
                 }
                 .dropdown-content {
-                    a {
-                        border-bottom: 1px solid #b9b9b9;
-                        display: block;
-                        padding: 10px 15px;
-                        color: #333333;
-                        text-decoration: none;
-                        transition: background-color 0.5s ease, color 0.5s ease;
-                    }
-                    a:hover {
-                        color: $hellenicblue;
-                        background-color: #eeeeee;
+                    .categories {
+                        a {
+                            border-bottom: 1px solid #b9b9b9;
+                            display: block;
+                            padding: 10px 15px;
+                            color: #333333;
+                            text-decoration: none;
+                            transition: background-color 0.5s ease, color 0.5s ease;
+                        }
+                        a:hover {
+                            color: $hellenicblue;
+                            background-color: #eeeeee;
+                        }
                     }
                 }
             }
@@ -55,7 +57,7 @@ $hellenicblue: rgb(0, 140, 255);
     }
 }
 
-@media screen and (max-width: 1079px) {
+@media screen and (max-width: 1079px) { //Mobile
     .container {
         position: sticky;
         top: 0;
@@ -90,11 +92,31 @@ $hellenicblue: rgb(0, 140, 255);
         background-color: #ffffff;
         overflow-x: hidden;
         transition: 0.5s;
-        padding-top: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .account-section {
+        margin-left: 10px;
+        a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: black!important;
+            p {
+                margin: 0;
+            }
+            .icon-container {
+                height: 16px;
+                width: 18px;
+                display: flex;
+                align-items: center
+            }
+        }
     }
 }
 
-@media screen and (min-width: 1080px) {
+@media screen and (min-width: 1080px) { //Desktop
     .dropdown:hover .dropdown-content {
         opacity: 1;
         visibility: visible;
@@ -114,6 +136,9 @@ $hellenicblue: rgb(0, 140, 255);
         transform: translateX(-50%);
         transform-origin: top center;
         transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+        .account-section {
+            display: none; 
+        }
     }
 }
     
