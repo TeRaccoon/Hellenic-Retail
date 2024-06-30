@@ -14,20 +14,26 @@
                             <p>{{ product.discount }}% OFF</p>
                         </div>
                     </ng-container>
-                    <img [routerLink]="'/view/' + product.item_name" [src]="product.image_file_name == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_file_name" />
-                    <a [routerLink]="'/view/' + product.item_name" class="product-name">{{ product.item_name }}</a>
+                    <img [routerLink]="'/view/' + product.name" [src]="product.image_location == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_location" />
+                    <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
                     <div class="price-container">
-                        <ng-container *ngIf="oldPrices[i] != null else elseBlock">
-                            <p class="price">£{{ oldPrices[i] | number: '1.2-2' }}</p>
-                            <p class="old-price">£{{ product.price | number: '1.2-2' }}</p>
+                        <ng-container *ngIf="product.pallet_price == undefined else wholesale">
+                            <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price | number: '1.2-2' }}</p>
+                            <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number: '1.2-2' }}</p>
                         </ng-container>
-                        <ng-template #elseBlock>
-                            <p class="product-price">£{{ product.price | number: '1.2-2' }}</p>
+                        <ng-template #wholesale>
+                            <div class="wholesale-container">
+                                <p><span>Unit: </span><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
+                                <p *ngIf="product.box_price">
+                                    <span>Box: </span><span class="bold">£{{ product.box_price | number: '1.2-2' }}</span></p>
+                                <p *ngIf="product.pallet_price">
+                                    <span>Pallet: </span><span class="bold">£{{ product.pallet_price | number: '1.2-2' }}</span></p>
+                            </div>
                         </ng-template>
                     </div>
                     <div class="product-options">
                         <button (click)="addToCart(product.id, 1)">Add to cart</button>
-                        <p>
+                        <p (click)="addToWishlist(product.id)">
                             <fa-icon [icon]="faHeart"></fa-icon>
                         </p>
                         <p (click)="openImage(product.image_location)">

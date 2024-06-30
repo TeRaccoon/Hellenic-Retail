@@ -8,8 +8,8 @@ import { FilterService } from 'src/app/services/filter.service';
 })
 export class ShopSidebarComponent {
   prices = ["£0.01-£5.00", "£5.00-£10.00", "£10.00-£15.00", "£15.00+"];
-  maxPrices = [1.50, 5, 10, 999];
-  minPrices = [0.01, 1.50, 25, 25]
+  maxPrices = [5, 10, 15, 999];
+  minPrices = [0.01, 5, 10, 15]
   priceFilterIndex : number = -1;
 
   constructor(private filterService: FilterService) { }

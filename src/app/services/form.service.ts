@@ -8,8 +8,11 @@ export class FormService {
   private isLoginVisible = new BehaviorSubject<boolean>(false);
   private isCartVisible = new BehaviorSubject<boolean>(false);
   private isPopupVisible = new BehaviorSubject<boolean>(false);
+  private isImageViewerVisible = new BehaviorSubject<boolean>(false);
   private popupMessage = "";
   private bannerMessage = new BehaviorSubject<string>("");
+  private imageViewerUrl = "";
+  private orderDetails = {};
 
   constructor() {}
 
@@ -61,5 +64,33 @@ export class FormService {
 
   getBannerMessage(): Observable<string>  {
     return this.bannerMessage.asObservable();
+  }
+
+  showImageViewer() {
+    this.isImageViewerVisible.next(true);
+  }
+
+  hideImageViewer() {
+    this.isImageViewerVisible.next(false);
+  }
+
+  getImageViewerVisibility(): Observable<boolean> {
+    return this.isImageViewerVisible.asObservable();
+  }
+
+  setImageViewerUrl(url: string) {
+    this.imageViewerUrl = url;
+  }
+
+  getImageViewerUrl() {
+    return this.imageViewerUrl;
+  }
+
+  setOrderDetails(orderDetails: any) {
+    this.orderDetails = orderDetails;
+  }
+
+  getOrderDetails() {
+    return this.orderDetails;
   }
 }

@@ -29,9 +29,13 @@ export class ShopGridComponent {
 
   imageUrl = '';
 
+  category: any = undefined;
+  filter: any = null;
+
   constructor(private filterService: FilterService, private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private formService: FormService) { }
   
   ngOnInit() {
+    this.products = [];
     this.imageUrl = this.dataService.getUploadURL();
     this.formService.setBannerMessage('Showing results')
     this.getShopFilter();
@@ -40,16 +44,18 @@ export class ShopGridComponent {
   getShopFilter() {
     this.route.params.subscribe(params => {
       const category = params['category'];
+      this.category = category;
       if (category !== undefined) {
         this.formService.setBannerMessage(`Showing results for: ${category}`);
       }
       this.loadProducts(category, null);
     });
     this.dataService.getShopFilter().subscribe(filter => {
-      if (filter !== null) {
+      this.filter = filter;
+      if (filter !== null && filter != "") {
         this.formService.setBannerMessage(`Showing results for: ${filter}`);
+        this.loadProducts(undefined, filter);
       }
-      this.loadProducts(undefined, filter)
     });
     this.filterService.getFilterUpdated().subscribe(updated => {
       if (updated) {
@@ -62,11 +68,12 @@ export class ShopGridComponent {
 
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
-    if (category !== undefined) {
-      products = await lastValueFrom(this.dataService.collectData("products-from-category", category));
+    if (category !== undefined && this.category !== undefined) {
+      products = await lastValueFrom(this.dataService.collectDataComplex("products-from-category", { category: category }));
     } else {
-      products = await lastValueFrom(this.dataService.collectData("products"));
+      products = await lastValueFrom(this.dataService.collectDataComplex("products"));
     }
+
     products = Array.isArray(products) ? products : [products];
     if (filter != null) {
       products = this.filterByString(filter, products);
@@ -75,11 +82,9 @@ export class ShopGridComponent {
     this.resultsAmount = products.length === undefined ? 1 : products.length;
     this.totalPages = Math.round(this.resultsAmount / this.itemsPerPage + 1);
 
-    this.oldPrices = this.products.map((product: any) => {
+    products.forEach((product) => {
       if (product.discount && product.discount != null) {
-        return product.price * ((100 - product.discount) / 100);
-      } else {
-        return null;
+        product.discounted_price = product.price * ((100 - product.discount) / 100);
       }
     });
 
@@ -119,7 +124,8 @@ export class ShopGridComponent {
   }
 
   openImage(imageLocation: string) {
-    window.open(this.imageUrl + imageLocation, '_blank');
+    this.formService.setImageViewerUrl(this.imageUrl + imageLocation);
+    this.formService.showImageViewer();
   }
 
   async addToCart(productID: number, quantity: number) {
@@ -128,14 +134,7 @@ export class ShopGridComponent {
   }
 
   async addToWishlist(productID: number) {
-    this.cartService.addToWishlist(productID);    
-    let customerID = await lastValueFrom(this.dataService.collectData("user-id-from-email"));
-    let form = {
-      action: "add",
-      retail_item_id: productID,
-      customer_id: customerID
-    };
-    this.dataService.submitFormData(form);
+    this.cartService.addToWishlist(productID);
   }
 
   changeItemsPerPage(event: any) {

@@ -35,6 +35,10 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { PopupComponent } from './components/popup/popup.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
+import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +69,11 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     CheckoutOrderSummaryComponent,
     CheckoutComponent,
     WishlistComponent,
-    PopupComponent
+    PopupComponent,
+    ImageViewerComponent,
+    FooterComponent,
+    DocumentViewerComponent,
+    OrderCompleteComponent
   ],
   imports: [
     BrowserModule,

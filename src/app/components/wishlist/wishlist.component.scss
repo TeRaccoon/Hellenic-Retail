@@ -1,0 +1,94 @@
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 68%;
+    min-height: 60vh;
+    table {
+        width: 100%;
+        margin: 20px;
+        border-collapse: collapse;
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            fa-icon {
+                transition: color 0.3s ease;
+                &:hover {
+                    color: red;
+                }
+            }
+        }
+        .price-container {
+            display: flex;
+            gap: 10px;
+            .discounted-price {
+                font-weight: bold;
+            }
+            .original-price {
+                text-decoration: line-through;
+            }
+        }
+        th {
+            background-color: #ffffff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even):hover {
+            background-color: #ececec;
+        }
+        tr:nth-child(odd):hover {
+            background-color: #f8f8f8;
+        }
+        .out-of-stock {
+            color: red;
+        }
+        .low-stock {
+            color: orange;
+        }
+        .in-stock {
+            color: green;
+        }
+        td:nth-child(3) {
+            font-weight: bold;
+        }
+        td:nth-child(4) {
+            text-align: center;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #ddd;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            &:hover {
+                background-color: #bbb;
+            }
+        }
+    }
+    .empty-container {
+        display: flex;
+        gap: 10px;
+        padding: 20px 0;
+        align-items: center;
+        justify-content: center;
+        h1 {
+            font-size: 20px;
+        }
+        button {
+            height: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            background-color: #008cff;
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            transition: background-color 0.6s ease;
+            &:hover {
+                background-color: #006ee4;
+            }
+        }
+    }
+}

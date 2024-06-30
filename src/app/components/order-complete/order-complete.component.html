@@ -1,0 +1,10 @@
+<div class="container">
+    <h1>Your Order is Complete!</h1>
+    <p>Thank you for your purchase. Your order has been successfully processed.</p>
+    <div class="order-details">
+        <h2>Order Details</h2>
+        <p><strong>Order Reference:</strong> {{ orderDetails.reference }}</p>
+        <p><strong>Total Amount:</strong> £{{ orderDetails.total | number: '1.2-2' }}</p>
+    </div>
+    <p>For any inquiries regarding your order, please contact our customer support: support@hellenicgrocery.co.uk</p>
+</div>

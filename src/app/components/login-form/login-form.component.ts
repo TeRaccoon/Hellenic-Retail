@@ -53,9 +53,20 @@ export class LoginFormComponent {
   }
 
   ngOnInit() {
-    this.formService.getLoginFormVisibility().subscribe((visible) => {
+    this.formService.getLoginFormVisibility().subscribe((visible: any) => {
       this.loginVisible = visible ? 'visible' : 'hidden';
+      if (visible) {
+        this.showLogin();
+      } else {
+        this.loginVisible = 'hidden';
+      }
     });
+  }
+
+  async showLogin() {
+    if (!this.authService.isLoggedIn()) {
+      this.loginVisible = 'visible';
+    }
   }
 
   toggleLogin() {
@@ -63,6 +74,11 @@ export class LoginFormComponent {
     if (state == 'hidden') {
       this.formService.hideLoginForm();
     }
+  }
+
+  hideLogin() {
+    this.loginVisible = 'hidden';
+    this.formService.hideLoginForm();
   }
 
   inputHasError(field: string) {
@@ -74,8 +90,7 @@ export class LoginFormComponent {
     if (this.loginForm.valid) {
       let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
       if (loginResponse.success) {
-        this.authService.login(this.loginForm.get('email')?.value);
-        this.router.navigate(['/account']);
+        this.authService.checkLogin();
         this.loginVisible = 'hidden';
       } else {
         this.loginError = loginResponse.message;

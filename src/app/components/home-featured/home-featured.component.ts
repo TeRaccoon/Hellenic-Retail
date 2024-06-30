@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faEye, faBox, faPallet } from '@fortawesome/free-solid-svg-icons';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { lastValueFrom } from 'rxjs';
@@ -13,9 +13,10 @@ import { lastValueFrom } from 'rxjs';
 export class HomeFeaturedComponent {
   faHeart = faHeart;
   faEye = faEye;
+  faBox = faBox;
+  faPallet = faPallet;
 
   featuredProducts: any[] = [];
-  oldPrices: (number | null)[] = [];
   featuredData: any;
 
   imageUrl = '';
@@ -23,19 +24,17 @@ export class HomeFeaturedComponent {
   constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) { }
 
   ngOnInit() {
-    this.loadOffers();
+    this.loadProducts();
     this.imageUrl = this.dataService.getUploadURL();
   }
 
-  async loadOffers() {
-    let featuredProducts = await lastValueFrom(this.dataService.collectData('featured', '3'));
+  async loadProducts() {
+    let featuredProducts = await lastValueFrom(this.dataService.collectDataComplex('featured', { limit: "3" }));
     this.featuredProducts = Array.isArray(featuredProducts) ? featuredProducts : [featuredProducts];
-
-    this.oldPrices = this.featuredProducts.map((product: any) => {
+    
+    this.featuredProducts.forEach((product) => {
       if (product.discount && product.discount != null) {
-        return product.price * ((100 - product.discount) / 100);
-      } else {
-        return null;
+        product.discounted_price = product.price * ((100 - product.discount) / 100);
       }
     });
 
@@ -43,11 +42,16 @@ export class HomeFeaturedComponent {
   }
 
   openImage(imageLocation: string) {
-    window.open(this.imageUrl + imageLocation, '_blank');
+    this.formService.setImageViewerUrl(this.imageUrl + imageLocation);
+    this.formService.showImageViewer();
   }
 
   async addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
     this.formService.showCartForm();
+  }
+
+  async addToWishlist(productID: number) {
+    this.cartService.addToWishlist(productID);
   }
 }

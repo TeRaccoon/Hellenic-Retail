@@ -7,7 +7,7 @@
                     <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
                     <div class="dropdown-content" [class]="categoriesShown ? 'visible' : ''">
                         <div class="categories">
-                            <a *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
+                            <a *ngFor="let category of categories; let i = index;" (click)="goToCategory(category)">
                                 {{ category }}
                             </a>
                         </div>

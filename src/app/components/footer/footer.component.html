@@ -1,0 +1,69 @@
+<footer class="footer">
+    <div class="container">
+        <div class="column left-most">
+            <img [src]="imageUrl + 'static/logo2.jpg'" />
+            <div>
+                <fa-icon [icon]="faHouse" />
+                <p>Unit 15, Hilsea Industrial Estate, Limberline Spur, Portsmouth, PO3 5JW</p>
+            </div>
+            <div>
+                <fa-icon [icon]="faPhone" />
+                <p>02392502120</p>
+            </div>
+            <div>
+                <fa-icon [icon]="faEnvelope" />
+                <p>support@hellenicgrocery.co.uk</p>
+            </div>
+            <div>
+                <fa-icon [icon]="faFileInvoice" />
+                <p>VAT No.: GB171817403</p>
+            </div>
+            <div>
+                <fa-icon [icon]="faHashtag" />
+                <p>Company No.: 8603006</p>
+            </div>
+        </div>
+        <div class="column">
+            <h1>Shop</h1>
+            <span *ngFor="let category of categories" class="link">
+                <a [routerLink]="'/shop/' + category.name">{{ category.name }}</a>
+            </span>
+        </div>
+        <div class="column">
+            <h1>Quick Links</h1>
+            <span class="link">
+                <a [routerLink]="'/account'">My Account</a>
+            </span>
+            <span class="link">
+                <a [routerLink]="'/wishlist'">Wishlist</a>
+            </span>
+            <span class="link">
+                <a [routerLink]="'/contact'">Contact Us</a>
+            </span>
+        </div>
+        <div class="column">
+            <h1>About Us</h1>
+            <span class="link">
+                <a [routerLink]="'/documents/terms-and-conditions'">Terms and Conditions</a>
+            </span>
+            <span class="link">
+                <a [routerLink]="'/documents/about-us'">About Us</a>
+            </span>
+            <span class="link">
+                <a [routerLink]="'/contact'">Contact Us</a>
+            </span>
+        </div>
+        <div class="column">
+            <h1>Customer Care</h1>
+            <span class="link">
+                <a [routerLink]="'/documents/privacy-policy'">Privacy Policy</a>
+            </span>
+            <span class="link">
+                <a [routerLink]="'/documents/refund-policy'">Refund Policy</a>
+            </span>
+            <span class="link">
+                <a [routerLink]="'/documents/shipping-policy'">Shipping Policy</a>
+            </span>
+        </div>
+    </div>
+</footer>

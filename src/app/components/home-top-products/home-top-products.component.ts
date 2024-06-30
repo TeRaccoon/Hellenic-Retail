@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
-import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faEye, faBox, faPallet } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -13,6 +13,8 @@ import { lastValueFrom } from 'rxjs';
 export class HomeTopProductsComponent {
   faHeart = faHeart;
   faEye = faEye;
+  faBox = faBox;
+  faPallet = faPallet;
 
   topProducts: any[] = [];
   oldPrices: (number | null)[] = [];
@@ -27,24 +29,27 @@ export class HomeTopProductsComponent {
   }
 
   async loadProducts() {
-    let topProducts = await lastValueFrom(this.dataService.collectData('top-products', '10'));
+    let topProducts = await lastValueFrom(this.dataService.collectDataComplex('top-products', { limit: "10" }));
     this.topProducts = Array.isArray(topProducts) ? topProducts : [topProducts];
     
-    this.oldPrices = this.topProducts.map((product: any) => {
+    this.topProducts.forEach((product) => {
       if (product.discount && product.discount != null) {
-        return product.price * ((100 - product.discount) / 100);
-      } else {
-        return null;
+        product.discounted_price = product.price * ((100 - product.discount) / 100);
       }
     });
   }
 
   openImage(imageLocation: string) {
-    window.open(this.imageUrl + imageLocation, '_blank');
+    this.formService.setImageViewerUrl(this.imageUrl + imageLocation);
+    this.formService.showImageViewer();
   }
 
   async addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
     this.formService.showCartForm();
+  }
+
+  addToWishlist(productID: number) {
+    this.cartService.addToWishlist(productID);
   }
 }

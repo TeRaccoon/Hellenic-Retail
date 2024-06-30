@@ -1,0 +1,33 @@
+.container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    .image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        background-color: rgb(255, 255, 255);
+        overflow: auto;
+        min-width: 30vw;
+        min-height: 58vh;
+        img {
+            margin: 0px auto 20px auto;
+            flex: 1
+        }
+        fa-icon {
+            margin: 5px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            &:hover {
+                color: red;
+            }
+        }
+    }
+}

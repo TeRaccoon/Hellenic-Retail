@@ -104,7 +104,7 @@ export class CartPopupComponent {
       if (this.cart[index] && product != null) {
         let individualPrice = product.retail_price;
         let discountedPrice = individualPrice;
-        if (product.discount != null) {
+        if (product.discount != null || product.discount != 0) {
           discountedPrice = individualPrice * ((100 - product.discount) / 100);
         }
 

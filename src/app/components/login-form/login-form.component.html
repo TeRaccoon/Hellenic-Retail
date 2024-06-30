@@ -8,7 +8,7 @@
             <a (click)="createAccount()">Create Account</a>
         </div>
         <div class="input-section">
-            <span (click)="toggleLogin()" class="close">&times;</span>
+            <span (click)="hideLogin()" class="close">&times;</span>
             <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
                 <p class="error">{{ loginError }}</p>
                 <div *ngFor="let error of errorMessages.email">
@@ -24,10 +24,10 @@
                 </div>
                 <input [class]="inputHasError('password') ? 'error-input' : ''" type="password" required formControlName="password" placeholder="Enter password">
                 <div class="login-options">
-                    <div>
+                    <!-- <div>
                         <label for="remember-me">Remember me</label>
                         <input type="checkbox" id="remember-me" name="remember-me" value="remember-me">
-                    </div>
+                    </div> -->
                     <a>Forgot your password?</a>
                 </div>
                 <button type="submit">Login</button>

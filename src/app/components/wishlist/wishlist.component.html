@@ -1,12 +1,44 @@
 <app-page-banner></app-page-banner>
-<div class="container">
-    <div class="row header">
-        <p>Product name</p>
-        <p>Unit Price</p>
-        <p>Stock Status</p>
-    </div>
-    <div class="row">
-        <fa-icon [icon]="faX" />
-
-    </div>
+<div *ngIf="loggedIn" class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>In stock</th>
+                <th></th>
+            </tr>
+        </thead>
+        <ng-container *ngIf="wishlistProducts.length > 0">
+            <tr *ngFor="let product of wishlistProducts">
+                <td>{{ product.name }}</td>
+                <td class="price-container">
+                    <ng-container *ngIf="product.discount > 0">
+                        <p class="discounted-price">£{{ product.discounted_price | number: '1.2-2' }}</p>
+                    </ng-container>
+                    <p [class]="product.discount > 0 ? 'original-price' : 'discounted-price'">£{{ product.price | number: '1.2-2' }}</p>
+                </td>
+                <td [ngClass]="{
+                    'out-of-stock': product.total_quantity === null,
+                    'low-stock': product.total_quantity !== null && product.total_quantity <= 10,
+                    'in-stock': product.total_quantity !== null && product.total_quantity > 10
+                }">
+                    <span *ngIf="product.total_quantity === null">Out of stock</span>
+                    <span *ngIf="product.total_quantity !== null && product.total_quantity <= 10">Low on stock</span>
+                    <span *ngIf="product.total_quantity !== null && product.total_quantity > 10">In stock</span>
+                </td>
+                <td (click)="removeFromWishlist(product.id)">
+                    <fa-icon [icon]="faX" />
+                </td>
+            </tr>
+        </ng-container>
+    </table>
+    <ng-container *ngIf="wishlistProducts.length < 1">
+        <div class="empty-container">
+            <h1>Your wishlist is empty!</h1>
+            <button [routerLink]="'/shop'">Add products</button>
+        </div>
+    </ng-container>
 </div>
+<app-login-form />
+<app-footer />

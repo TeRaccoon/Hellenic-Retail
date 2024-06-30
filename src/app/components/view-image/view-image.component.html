@@ -11,7 +11,7 @@
                     <p>{{ product.discount }}% OFF</p>
                 </div>
             </ng-container>
-            <img (click)="openImage()" [src]="imageUrl + primaryImage" [style.transform]="'scale(' + zoomFactor + ') translate(' + zoomX + '%, ' + zoomY + '%)'">
+            <img (click)="openImage(primaryImage)" [src]="imageUrl + primaryImage" [style.transform]="'scale(' + zoomFactor + ') translate(' + zoomX + '%, ' + zoomY + '%)'">
         </div>
     </ng-container>
 </div>

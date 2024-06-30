@@ -5,6 +5,9 @@ import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
 import { Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { FormService } from 'src/app/services/form.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -27,13 +30,12 @@ export class NavbarCategorySearchComponent {
   constructor(private dataService: DataService, private authService: AuthService, private formService: FormService, private router: Router) { }
 
   ngOnInit() {
-    this.loadCategories();
+    this.categories = this.dataService.getVisibleCategoryNames();
   }
 
-  async loadCategories() {
-    this.dataService.collectData("categories").subscribe((data: any) => {
-      this.categories = data;
-    });
+  goToCategory(category: string) {
+    this.dataService.setShopFilter(null);
+    this.router.navigate(["/shop/" + category]);
   }
 
   toggleCategory() {
