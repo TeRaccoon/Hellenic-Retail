@@ -10,6 +10,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 export class NavbarCategorySearchComponent {
   faBars = faBars;
   categories: string[] = [];
+  categoriesShown = false;
 
   constructor(private dataService: DataService) { }
 
@@ -21,5 +22,9 @@ export class NavbarCategorySearchComponent {
     this.dataService.collectData("categories").subscribe((data: any) => {
       this.categories = data;
     });
+  }
+
+  toggleCategory() {
+    this.categoriesShown = !this.categoriesShown;
   }
 }

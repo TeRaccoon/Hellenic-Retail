@@ -2,10 +2,10 @@
     <nav class="category-bar">
         <ul class="nav-links">
             <ng-container *ngIf="categories">
-                <li class="dropdown hamburger">
+                <li class="dropdown hamburger" (click)="toggleCategory()">
                     <p class="nav-link">Shop By Categories</p>
                     <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
-                    <div class="dropdown-content">
+                    <div class="dropdown-content" [class]="categoriesShown ? 'visible' : ''">
                         <a *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category">
                             {{ category }}
                         </a>

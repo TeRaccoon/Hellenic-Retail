@@ -34,16 +34,6 @@ $hellenicblue: rgb(0, 140, 255);
                     padding: 0 15px;
                 }
                 .dropdown-content {
-                    height: 100%;
-                    width: 0;
-                    position: fixed;
-                    z-index: 1;
-                    top: 0;
-                    left: 0;
-                    background-color: #ffffff;
-                    overflow-x: hidden;
-                    transition: 0.5s;
-                    padding-top: 60px;
                     a {
                         border-bottom: 1px solid #b9b9b9;
                         display: block;
@@ -57,10 +47,6 @@ $hellenicblue: rgb(0, 140, 255);
                         background-color: #eeeeee;
                     }
                 }
-            }
-            .dropdown:hover .dropdown-content {
-                width: 30%;
-                visibility: visible;
             }
             .hamburger {
                 background-color: rgb(0, 119, 255);
@@ -89,6 +75,45 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .ng-fa-icon {
         margin: 12px 0;
+    }
+    .visible {
+        width: 30%!important;
+        visibility: visible!important;
+    }
+    .dropdown-content {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #ffffff;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+}
+
+@media screen and (min-width: 1080px) {
+    .dropdown:hover .dropdown-content {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%);
+        transition-delay: 0s, 0s, 0s;
+    }
+    .dropdown-content {
+        position: absolute;
+        background-color: #FFFFFF;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 235px;
+        z-index: 2;
+        opacity: 0;
+        visibility: hidden;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        transform-origin: top center;
+        transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
     }
 }
     
