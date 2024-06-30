@@ -1,6 +1,6 @@
 $hellenicblue: rgb(0, 140, 255);
 .container {
-    width: 100vw;
+    width: 100%;
     background-color: $hellenicblue;
     margin-left: auto;
     margin-right: auto;
@@ -136,9 +136,37 @@ $hellenicblue: rgb(0, 140, 255);
         transform: translateX(-50%);
         transform-origin: top center;
         transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+        }
         .account-section {
             display: none; 
         }
+    .nav-logo { 
+        display: none;
+    }
+    .search-container {
+        visibility: hidden;
     }
 }
-    
+
+
+
+@media screen and (max-width: 1079px) { //mobile
+    .nav-logo { 
+        visibility: visible;
+        display: flex;
+        height: 80px;
+        border: 5px;
+        
+    }
+    .category-bar {
+        width: 100%!important;
+    }
+    .search-container {
+        display: flex;
+        margin-left: 45%;
+    }
+    .search-options {
+        display: flex;
+        height: 40px;
+    }
+}

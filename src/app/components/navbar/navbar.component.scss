@@ -171,6 +171,7 @@ $hellenicblue: rgb(0, 140, 255);
     .navbar {
         margin-left: 0;
         width: 100%;
+        display: none;
     }
     .intro-bar {
         margin: 0;
@@ -187,4 +188,8 @@ $hellenicblue: rgb(0, 140, 255);
         padding: 10px;
         display: none; 
     }
+    .container {
+        display: none;
+    }
+    
 }
