@@ -7,10 +7,6 @@ $hellenicblue: rgb(0, 140, 255);
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.intro-bar,
-.navbar {
     background-color: rgb(255, 255, 255);
 }
 
@@ -179,6 +175,7 @@ $hellenicblue: rgb(0, 140, 255);
     .intro-bar {
         margin: 0;
         width: 100%;
+        display: none;
     }
     .search-options {
         width: 100%
