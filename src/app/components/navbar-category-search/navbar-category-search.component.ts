@@ -4,6 +4,7 @@ import { faBars, faCartShopping, faHeart, faSearch, faUser } from '@fortawesome/
 import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -36,7 +37,56 @@ export class NavbarCategorySearchComponent {
   }
 
   ngOnInit() {
+    this.loadNavBar();
     this.categories = this.dataService.getVisibleCategoryNames();
+  }
+
+  async loadNavBar() {
+    this.categories = this.dataService.getVisibleCategoryNames();
+
+    let subcategories = await lastValueFrom(
+      this.dataService.collectData('subcategories')
+    );
+    if (subcategories != null) {
+      this.subcategories = subcategories;
+    }
+
+    let products = await lastValueFrom(
+      this.dataService.collectDataComplex('products')
+    );
+    products = Array.isArray(products) ? products : [products];
+
+    if (products != null) {
+      products = this.replaceNullImages(products);
+      products = this.calculatePrices(products);
+
+      this.products = products;
+      this.searchResults = products;
+    }
+  }
+
+  calculatePrices(products: any[]) {
+    return products.map((product) => {
+      return {
+        ...product,
+        discounted_price:
+          product.discount === null
+            ? null
+            : product.price * ((100 - product.discount) / 100),
+      };
+    });
+  }
+
+  replaceNullImages(products: any[]) {
+    return products.map((product) => {
+      return {
+        ...product,
+        image_location:
+          product['image_location'] == null
+            ? this.imageUrl + 'placeholder.jpg'
+            : this.imageUrl + product['image_location'],
+      };
+    });
   }
 
   goToCategory(category: string) {
@@ -80,6 +130,8 @@ export class NavbarCategorySearchComponent {
       (this.categoryFilter === null || product.category?.toLowerCase() === this.categoryFilter) &&
       (!this.searchStringFilter || product.name.toLowerCase().includes(this.searchStringFilter))
     );
+
+    console.log(this.searchResults);
   }
 
   onInputFocus() {

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { RenderService } from 'src/app/services/render.service';
+import { HostListener } from "@angular/core";
 import {
   faCaretDown,
   faEnvelope,
@@ -45,6 +47,8 @@ import { CartService } from 'src/app/services/cart.service';
   ],
 })
 export class NavbarComponent {
+  screenSize: any = {};
+
   faCaretDown = faCaretDown;
   faEnvelope = faEnvelope;
   faSearch = faSearch;
@@ -71,7 +75,8 @@ export class NavbarComponent {
     private authService: AuthService,
     private dataService: DataService,
     private formService: FormService,
-    private cartService: CartService
+    private cartService: CartService,
+    private renderService: RenderService
   ) {
     this.imageUrl = this.dataService.getUploadURL();
   }
@@ -79,6 +84,9 @@ export class NavbarComponent {
   ngOnInit() {
     this.getLoginVisibility();
     this.getCartUpdates();
+    this.renderService.getScreenSize().subscribe(size => {
+      this.screenSize = size;
+    });
 
     this.loadNavBar();
   }
