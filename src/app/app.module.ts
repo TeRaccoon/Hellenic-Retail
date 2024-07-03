@@ -39,6 +39,11 @@ import { ImageViewerComponent } from './components/image-viewer/image-viewer.com
 import { FooterComponent } from './components/footer/footer.component';
 import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
 import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
+import { AuthService } from './services/auth.service';
+
+export function initializeApp(authService: AuthService): () => Promise<void> {
+  return () => authService.checkLogin();
+}
 
 @NgModule({
   declarations: [
