@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, lastValueFrom, map } from 'rxjs';
-import { DataService, apiUrlBase } from './data.service';
+import { apiUrlBase } from './data.service';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -18,23 +18,19 @@ export class AuthService {
 
     async checkLogin(): Promise<void> {
         const url = apiUrlBase + 'manage_data.php';
-    
-        await this.http
-            .post(url, { action: 'check-login-customer' }, { withCredentials: true })
-            .toPromise()
-            .then((response: any) => {
-                if (response.data != null) {
-                    this.userID = response.data.id;
-                    this.userType = response.data.customer_type;
-                    this.isAuthenticatedObservable.next(true);
-                    this.isAuthenticated = true;
-                } else {
-                    this.isAuthenticatedObservable.next(false);
-                    this.isAuthenticated = false;
-                    this.userType = "Retail";
-                    this.userID = null;
-                }
-            });
+
+        let response = await lastValueFrom<any>(this.http.post(url, { action: 'check-login-customer' }, { withCredentials: true }));
+        if (response.data != null) {
+            this.userID = response.data.id;
+            this.userType = response.data.customer_type;
+            this.isAuthenticatedObservable.next(true);
+            this.isAuthenticated = true;
+        } else {
+            this.isAuthenticatedObservable.next(false);
+            this.isAuthenticated = false;
+            this.userType = "Retail";
+            this.userID = null;
+        }
     }
 
     login(userID: string) {

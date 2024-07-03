@@ -46,7 +46,6 @@ export class HomeTopProductsComponent {
 
   async addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
-    this.formService.showCartForm();
   }
 
   addToWishlist(productID: number) {

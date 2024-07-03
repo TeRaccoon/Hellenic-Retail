@@ -50,8 +50,9 @@ export class FormService {
     return this.isPopupVisible.asObservable();
   }
 
-  setPopupMessage(popupMessage: string) {
+  setPopupMessage(popupMessage: string, show = false) {
     this.popupMessage = popupMessage;
+    show && this.showPopup();
   }
 
   getPopupMessage() {

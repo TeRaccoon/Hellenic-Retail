@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { Router } from '@angular/router';
 import { faCircleExclamation, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
+import { CartItem } from 'src/app/common/types/cart';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
@@ -62,16 +63,10 @@ export class CheckoutComponent {
   }
 
   async calculateTotal() {
-    let cartIDs = this.cartService.getIDs();
-    this.cart = this.cartService.getCartItems();
+    let cartIDs = this.cartService.getCart().map((item: CartItem) => item.item_id);
 
-    let cartProducts: any[] = [];
+    let cartProducts: any[] = await this.cartService.getCartItems();
     let subtotal = 0;
-    await Promise.all(cartIDs.map(async(id) => {
-      if (id !== null) {
-        cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
-      }
-    }));
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {

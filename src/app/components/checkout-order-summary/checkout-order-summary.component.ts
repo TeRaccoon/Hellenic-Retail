@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
+import { CartItem } from 'src/app/common/types/cart';
 
 @Component({
   selector: 'app-checkout-order-summary',
@@ -24,19 +25,13 @@ export class CheckoutOrderSummaryComponent {
   }
 
   async loadData() {
-    this.cart = this.cartService.getCartItems();
-    this.cartIDs = this.cartService.getIDs();
+    this.cartIDs = this.cartService.getCart().map((item: CartItem) => item.item_id);
     this.loadCartData();
   }
 
   async loadCartData() {
-    let cartProducts: any[] = [];
+    let cartProducts: any[] = await this.cartService.getCartItems();
     this.total = 0;
-    await Promise.all(this.cartIDs.map(async(id) => {
-      if (id !== null) {
-        cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
-      }
-    }));
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {

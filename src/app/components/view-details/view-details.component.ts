@@ -97,8 +97,6 @@ export class ViewDetailsComponent {
 
   addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity * this.quantityMultiplier);
-    this.formService.setPopupMessage("Product added to cart!");
-    this.formService.showPopup();
   }
   
   addToWishlist(productID: number) {
@@ -106,8 +104,7 @@ export class ViewDetailsComponent {
   }
 
   buyNow(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, 1);
-    this.cartService.changeQuantity(productID, quantity * this.quantityMultiplier);
+    this.cartService.addToCart(productID, quantity * this.quantityMultiplier);
     this.router.navigate(['/checkout']);
   }
 

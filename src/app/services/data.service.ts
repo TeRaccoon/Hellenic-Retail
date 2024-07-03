@@ -34,6 +34,11 @@ export class DataService {
     return this.http.get<any[]>(url);
   }
 
+  collectDataPost(query: string, body: Record<string, any>) {
+    const url = 'http://localhost/API/retail_query_handler.php';
+    return this.http.post(url, {query, body});
+  }
+
   collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {
     let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
     let userType = this.authService.getUserType();

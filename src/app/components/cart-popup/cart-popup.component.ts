@@ -5,6 +5,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import { CartItem } from 'src/app/common/types/cart';
 
 @Component({
   selector: 'app-cart-popup',
@@ -28,7 +29,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 
 export class CartPopupComponent {
   cartVisible = 'visible';
-  cart: { productID: number, quantity: number }[] = [];
+  cart: CartItem[] = [];
   cartProducts: any[] = [];
   displayProducts: any[] = [];
   cartIDs: number[] = [];
@@ -57,8 +58,8 @@ export class CartPopupComponent {
   }
 
   async getCartData() {
-    this.cartIDs = this.cartService.getIDs();
-    this.cart = this.cartService.getCartItems();
+    this.cart = this.cartService.getCart();
+    this.cartIDs = this.cart.map((item: CartItem) => item.item_id);
     this.loadCartData();
   }
 
@@ -70,13 +71,13 @@ export class CartPopupComponent {
   }
 
   async removeFromCart(productId: number) {
-    this.cartService.removeFromCart(productId);
+    await this.cartService.removeFromCart(productId);
     this.getCartData();
   }
 
   changeQuantity(event: any, productID: number) {
     const quantity = parseInt(event.target.value);
-    this.cartService.changeQuantity(productID, quantity);
+    this.cartService.addToCart(productID, quantity);
     this.getCartData();
   }
 
@@ -85,20 +86,15 @@ export class CartPopupComponent {
   }
 
 
-  clearCart() {
-    this.cartService.clearCart();
+  async clearCart() {
+    await this.cartService.clearCart();
     this.confirmationPopupVisible = false;
     this.getCartData();
   }
 
   async loadCartData() {
-    let cartProducts: any[] = [];
+    let cartProducts: any[] = await this.cartService.getCartItems();
     this.subtotal = 0;
-    await Promise.all(this.cartIDs.map(async(id) => {
-      if (id !== null) {
-        cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
-      }
-    }));
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {

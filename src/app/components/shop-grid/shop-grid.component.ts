@@ -130,7 +130,6 @@ export class ShopGridComponent {
 
   async addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
-    this.formService.showCartForm();
   }
 
   async addToWishlist(productID: number) {
