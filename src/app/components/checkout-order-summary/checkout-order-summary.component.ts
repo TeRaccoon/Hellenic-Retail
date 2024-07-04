@@ -11,9 +11,8 @@ import { CartItem } from 'src/app/common/types/cart';
   styleUrls: ['./checkout-order-summary.component.scss']
 })
 export class CheckoutOrderSummaryComponent {
-  cart: { productID: number, quantity: number }[] = [];
+  cart: CartItem[] = [];
   cartProducts: any[] = [];
-  cartIDs: number[] = [];
   total = 0;
   imageUrl = '';
 
@@ -21,11 +20,11 @@ export class CheckoutOrderSummaryComponent {
 
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
-    this.loadData();
+    this.getCartData();
   }
 
-  async loadData() {
-    this.cartIDs = this.cartService.getCart().map((item: CartItem) => item.item_id);
+  async getCartData() {
+    this.cart = this.cartService.getCart();
     this.loadCartData();
   }
 

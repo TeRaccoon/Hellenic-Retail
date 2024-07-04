@@ -153,8 +153,23 @@ $hellenicblue: rgb(0, 140, 255);
         margin: 10px;
         text-decoration: none;
         .icon-container {
+            display: flex;
+            flex-direction: column;
             text-align: center;
             font-size: 20px;
+            justify-content: center;
+            p {
+                position: absolute;
+                border-radius: 15px;
+                padding: 3px;
+                background-color: $hellenicblue;
+                color: white;
+                text-align: center;
+                width: 18px;
+                height: 18px;
+                font-size: 12px;
+                margin: 0 0 20px 20px;
+            }
         }
     }
 }

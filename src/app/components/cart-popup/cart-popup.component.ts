@@ -32,7 +32,6 @@ export class CartPopupComponent {
   cart: CartItem[] = [];
   cartProducts: any[] = [];
   displayProducts: any[] = [];
-  cartIDs: number[] = [];
   subtotal = 0;
   loaded = false;
   imageUrl = '';
@@ -59,7 +58,6 @@ export class CartPopupComponent {
 
   async getCartData() {
     this.cart = this.cartService.getCart();
-    this.cartIDs = this.cart.map((item: CartItem) => item.item_id);
     this.loadCartData();
   }
 

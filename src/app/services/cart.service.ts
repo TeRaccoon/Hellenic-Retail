@@ -23,6 +23,7 @@ export class CartService {
         if (userId !== null) {
           this.cart = await lastValueFrom<any>(this.dataService.collectDataPost('cart', {'action': 'cart', 'customer_id': userId}));
         }
+        this.requestUpdate();
       }
     });
   }

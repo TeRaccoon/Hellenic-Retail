@@ -50,6 +50,8 @@ export class NavbarComponent {
   cartVisible = 'hidden';
   cartState: string = 'inactive';
 
+  cartCount = 0;
+
   imageUrl = '';
 
   constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private cartService: CartService) { }
@@ -60,7 +62,14 @@ export class NavbarComponent {
     this.getLoginVisibility();
     this.getCartUpdates();
 
+    this.loadCart();
+
     this.loadNavBar();
+  }
+
+  async loadCart() {
+    await this.cartService.refreshCart();
+    console.log(this.cartService.getCart());
   }
 
   async getLoginVisibility() {
@@ -74,6 +83,8 @@ export class NavbarComponent {
       if (updateRequested) {
         this.cartService.performUpdate();
         this.cartState = 'active';
+
+        this.cartCount = this.cartService.getCart().length;
         
         setTimeout(() => {
           this.cartState = 'inactive';

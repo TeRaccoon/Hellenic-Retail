@@ -58,6 +58,7 @@
         <a (click)="toggleCart()">
             <div class="icon-container">
                 <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
+                <p>{{ cartCount }}</p>
             </div>
             Cart
         </a>
