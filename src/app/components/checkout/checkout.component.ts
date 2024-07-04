@@ -60,6 +60,11 @@ export class CheckoutComponent {
     await this.authService.checkLogin()
     this.customerId = this.authService.getUserID();
     this.calculateTotal();
+    this.tracing();
+  }
+
+  async tracing() {
+    await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'checkout', 'customer_id': this.customerId}));
   }
 
   async calculateTotal() {
