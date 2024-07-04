@@ -14,17 +14,11 @@ export class DataService {
   visibleCategoryNames: any[] = [];
   visibleCategoryLocations: any[] = [];
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
-    // this.router.events.subscribe((event) => {
-    //   if (event instanceof NavigationStart) {
-    //     // this.authService.checkLogin();
-    //   }
-    // });
-    this.loadStandardData();
-  }
-
   uploadURL = `http://localhost/uploads/`;
-  
+
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
+    this.loadStandardData();
+  }  
 
   collectData(query: string, filter?: string): Observable<any[]> {
     let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
@@ -34,9 +28,9 @@ export class DataService {
     return this.http.get<any[]>(url);
   }
 
-  collectDataPost(query: string, body: Record<string, any>) {
+  processPost(body: Record<string, any>) {
     const url = 'http://localhost/API/retail_query_handler.php';
-    return this.http.post(url, {query, body});
+    return this.http.post(url, {body});
   }
 
   collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {

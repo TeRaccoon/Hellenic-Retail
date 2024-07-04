@@ -21,7 +21,7 @@ export class CartService {
       if (loggedIn) {
         let userId = this.authService.getUserID();
         if (userId !== null) {
-          this.cart = await lastValueFrom<any>(this.dataService.collectDataPost('cart', {'action': 'cart', 'customer_id': userId}));
+          this.cart = await lastValueFrom<any>(this.dataService.processPost({'action': 'cart', 'customer_id': userId}));
         }
         this.requestUpdate();
       }
@@ -31,22 +31,22 @@ export class CartService {
   async refreshCart() {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      this.cart = await lastValueFrom<any>(this.dataService.collectDataPost('cart', {'action': 'cart', 'customer_id': userId}));
+      this.cart = await lastValueFrom<any>(this.dataService.processPost({'action': 'cart', 'customer_id': userId}));
     }
   }
 
   async addToCart(productId: number, quantity: number) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      let cart = await lastValueFrom<any>(this.dataService.collectDataPost('cart', {'action': 'cart', 'customer_id': userId}));      
+      let cart = await lastValueFrom<any>(this.dataService.processPost({'action': 'cart', 'customer_id': userId}));      
       const rowIndex = cart.findIndex((item: any) => item.item_id === productId);
 
       let response: any = null;
       if (rowIndex !== -1) {
         quantity += cart[rowIndex].quantity;
-        response = await lastValueFrom(this.dataService.collectDataPost('cart', {'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity}));
+        response = await lastValueFrom(this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity}));
       } else {
-        response = await lastValueFrom(this.dataService.collectDataPost('cart', {'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity}));
+        response = await lastValueFrom(this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity}));
       }
 
       if (response) {
@@ -64,7 +64,7 @@ export class CartService {
   async removeFromCart(productId: number) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      if (await lastValueFrom(this.dataService.collectDataPost('cart', {'action': 'remove-cart', 'customer_id': userId, 'product_id': productId}))) {
+      if (await lastValueFrom(this.dataService.processPost({'action': 'remove-cart', 'customer_id': userId, 'product_id': productId}))) {
         this.formService.setPopupMessage("Item removed successfully!", true);
         await this.refreshCart();
         this.requestUpdate();
@@ -77,7 +77,7 @@ export class CartService {
   async clearCart() {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      if (await lastValueFrom(this.dataService.collectDataPost('cart', {'action': 'clear-cart', 'customer_id': userId}))) {
+      if (await lastValueFrom(this.dataService.processPost({'action': 'clear-cart', 'customer_id': userId}))) {
         this.formService.setPopupMessage("Cart cleared successfully!", true);
         await this.refreshCart();
         this.requestUpdate();
