@@ -2,15 +2,24 @@ import { Component } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
-import { faHeart, faEye, faBox, faPallet } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHeart,
+  faEye,
+  faBox,
+  faPallet,
+} from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
+import { RenderService } from 'src/app/services/render.service';
 
 @Component({
   selector: 'app-home-top-products',
   templateUrl: './home-top-products.component.html',
-  styleUrls: ['./home-top-products.component.scss']
+  styleUrls: ['./home-top-products.component.scss'],
 })
 export class HomeTopProductsComponent {
+  screenSize: any = {};
+  limit = 10;
+
   faHeart = faHeart;
   faEye = faEye;
   faBox = faBox;
@@ -21,20 +30,32 @@ export class HomeTopProductsComponent {
 
   imageUrl = '';
 
-  constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) { }
+  constructor(
+    private cartService: CartService,
+    private dataService: DataService,
+    private formService: FormService,
+    private renderService: RenderService
+  ) {}
 
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
     this.loadProducts();
+    this.renderService.getScreenSize().subscribe(size => {
+      this.screenSize = size;
+      this.limit = this.screenSize.width < 1080 ? 6 : 10;
+    });
   }
 
   async loadProducts() {
-    let topProducts = await lastValueFrom(this.dataService.collectDataComplex('top-products', { limit: "10" }));
+    let topProducts = await lastValueFrom(
+      this.dataService.collectDataComplex('top-products', { limit: this.limit })
+    );
     this.topProducts = Array.isArray(topProducts) ? topProducts : [topProducts];
-    
+
     this.topProducts.forEach((product) => {
       if (product.discount && product.discount != null) {
-        product.discounted_price = product.price * ((100 - product.discount) / 100);
+        product.discounted_price =
+          product.price * ((100 - product.discount) / 100);
       }
     });
   }
