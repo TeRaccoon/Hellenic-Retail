@@ -2,9 +2,6 @@
     <div class="shop-grid-header">
         <div>
             <h3>Shop</h3>
-            <p>(Showing {{ resultsAmount }} products)</p>
-        </div>
-        <div>
             <label>Show:</label>
             <select (change)="changeItemsPerPage($event)">
                 <option>10</option>
@@ -12,10 +9,13 @@
                 <option>20</option>
                 <option>30</option>
             </select>
-            <select (change)="changeSorting($event)">
+            <select (change)="changeSorting($event)" class="sorting-select">
                 <option value="default">Default Sorting</option>
                 <option value="high-low">Sort by price: High to Low</option>
                 <option value="low-high">Sort by price: Low to High</option>
+                <ng-container *ngIf="screenSize.width < 1080">
+                    <option *ngFor="let filter of priceFilters; let index = index" [value]="filter" [class]="index == 0 ? 'top-border' : ''">{{ filter.price }}</option>
+                </ng-container>
             </select>
         </div>
     </div>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FilterService } from 'src/app/services/filter.service';
+import { RenderService } from 'src/app/services/render.service';
 
 @Component({
   selector: 'app-shop-sidebar',
@@ -11,8 +12,15 @@ export class ShopSidebarComponent {
   maxPrices = [5, 10, 15, 999];
   minPrices = [0.01, 5, 10, 15]
   priceFilterIndex : number = -1;
+  screenSize : any = {}
 
-  constructor(private filterService: FilterService) { }
+  constructor(private filterService: FilterService, private renderService: RenderService ) { }
+
+  ngOnInit() {
+    this.renderService.getScreenSize().subscribe(size => {
+      this.screenSize = size;
+    });
+  }
 
   selectFilter(index: number) {
     this.priceFilterIndex = index;

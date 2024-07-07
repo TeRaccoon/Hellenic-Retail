@@ -1,5 +1,5 @@
 <div class="sidebar-container">
-    <div class="sidebar">
+    <div *ngIf="screenSize.width>1080" class="sidebar">
         <h2>Filter By Price</h2>
         <ul>
             <ng-container *ngIf="prices">
