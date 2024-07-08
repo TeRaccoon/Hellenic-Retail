@@ -84,22 +84,32 @@ $hellenicblue: rgb(0, 140, 255);
                     cursor: pointer;
                 }
             }
-            button {
-                cursor: pointer;
-                font-family: 'Poppins', sans-serif;
-                font-weight: bold;
-                color: white;
-                font-size: 16px;
-                background-color: $hellenicblue;
-                border: 0;
-                padding: 8px 18px;
-                min-width: 90px;
-                transition: background-color 0.4s ease;
-                &:hover {
-                    background-color: #0075f3;
+            .payment-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                button {
+                    cursor: pointer;
+                    font-family: 'Poppins', sans-serif;
+                    font-weight: bold;
+                    color: white;
+                    font-size: 16px;
+                    background-color: $hellenicblue;
+                    border: 0;
+                    padding: 8px 18px;
+                    min-width: 90px;
+                    flex-shrink: 0;
+                    transition: background-color 0.4s ease;
+                    &:hover {
+                        background-color: #0075f3;
+                    }
+                    fa-icon {
+                        font-size: 18px;
+                    }
                 }
-                fa-icon {
-                    font-size: 18px;
+                .error {
+                    color: red;
                 }
             }
         }
