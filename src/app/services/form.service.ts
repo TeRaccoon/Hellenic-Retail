@@ -8,6 +8,7 @@ export class FormService {
   private isLoginVisible = new BehaviorSubject<boolean>(false);
   private isCartVisible = new BehaviorSubject<boolean>(false);
   private isPopupVisible = new BehaviorSubject<boolean>(false);
+  private popupTime = 2500;
   private isImageViewerVisible = new BehaviorSubject<boolean>(false);
   private popupMessage = "";
   private bannerMessage = new BehaviorSubject<string>("");
@@ -50,13 +51,18 @@ export class FormService {
     return this.isPopupVisible.asObservable();
   }
 
-  setPopupMessage(popupMessage: string, show = false) {
+  setPopupMessage(popupMessage: string, show = false, popupTime = 2500) {
+    this.popupTime = popupTime;
     this.popupMessage = popupMessage;
     show && this.showPopup();
   }
 
   getPopupMessage() {
     return this.popupMessage;
+  }
+
+  getPopupTime() {
+    return this.popupTime;
   }
 
   setBannerMessage(message: string) {
