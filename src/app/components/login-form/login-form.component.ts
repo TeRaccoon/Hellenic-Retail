@@ -90,12 +90,18 @@ export class LoginFormComponent {
     if (this.loginForm.valid) {
       let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
       if (loginResponse.success) {
-        this.authService.checkLogin();
+        await this.authService.checkLogin();
         this.loginVisible = 'hidden';
+        await this.tracing();
       } else {
         this.loginError = loginResponse.message;
       }
     }
+  }
+
+  async tracing() {
+    let customerId = this.authService.getUserID();
+    await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'login', 'customer_id': customerId}));
   }
 
   createAccount() {
