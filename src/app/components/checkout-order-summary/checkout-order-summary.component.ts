@@ -25,10 +25,15 @@ export class CheckoutOrderSummaryComponent {
 
   async getCartData() {
     this.cart = this.cartService.getCart();
-    this.loadCartData();
+    this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
+      if (updateRequested) {
+        this.loadCartData();
+      }
+    })
   }
 
   async loadCartData() {
+    this.cart = this.cartService.getCart();
     let cartProducts: any[] = await this.cartService.getCartItems();
     this.total = 0;
 
