@@ -63,13 +63,11 @@ export class NavbarComponent {
     this.getCartUpdates();
 
     this.loadCart();
-
     this.loadNavBar();
   }
 
   async loadCart() {
     await this.cartService.refreshCart();
-    console.log(this.cartService.getCart());
   }
 
   async getLoginVisibility() {
