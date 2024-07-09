@@ -3,7 +3,7 @@ $hellenicblue: rgb(0, 140, 255);
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 78%;
+    width: 81%;
     margin-left: 18vw;
     margin-bottom: 10px;
     justify-content: center;
@@ -39,23 +39,22 @@ $hellenicblue: rgb(0, 140, 255);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 105%;
+        width: 100%;
         background-color: rgb(0, 140, 255);
-        div {
+        border-radius: 7px;
+        h3 {
             display: inline-flex;
             align-items: center;
             gap: 15px;
-            h3 {
-                margin: 5px;
-                width: 7vw;
-                height: 4vw;
-                display: flex;
-                justify-content: space-around;
-                align-content: center;
-                flex-wrap: wrap;
-                font-size: 32px
-
-            }
+            margin: 0 0 0 1.5vw;
+            color: white;
+            font-size: 32px
+        }
+        div {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-right: 2vw;
             p {
                 margin: 5px;
                 font-size: 12px;
@@ -67,6 +66,7 @@ $hellenicblue: rgb(0, 140, 255);
                 font-size: 100%;
                 padding: 12px;
                 margin: 15px 0;
+                border-radius: 12px;
                 cursor: pointer;
             }
         }
@@ -188,6 +188,6 @@ $hellenicblue: rgb(0, 140, 255);
     .shop-grid-container {
         margin: auto;
         margin-top: 35px;
-        width: 85%;
+        width: 90%;
     }
 }
