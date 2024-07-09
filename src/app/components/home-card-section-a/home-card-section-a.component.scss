@@ -40,3 +40,8 @@ $hellenicblue: rgb(0, 140, 255);
         background-size: 110%;
     }
 }
+@media screen and (max-width: 1079px) { //mobile
+    .ng-star-inserted {
+        font-size: small;
+    }
+}
