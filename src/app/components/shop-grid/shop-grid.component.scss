@@ -9,8 +9,8 @@ $hellenicblue: rgb(0, 140, 255);
     justify-content: center;
     gap: 8px;
     .footer {
+        margin: 10px 0;
         .page-options {
-            margin-top: 10px;
             .active-page {
                 background-color: #008cff;
                 color: white;
@@ -39,13 +39,22 @@ $hellenicblue: rgb(0, 140, 255);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
+        width: 105%;
+        background-color: rgb(0, 140, 255);
         div {
             display: inline-flex;
             align-items: center;
             gap: 15px;
             h3 {
                 margin: 5px;
+                width: 7vw;
+                height: 4vw;
+                display: flex;
+                justify-content: space-around;
+                align-content: center;
+                flex-wrap: wrap;
+                font-size: 32px
+
             }
             p {
                 margin: 5px;
