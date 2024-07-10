@@ -22,13 +22,6 @@ $hellenicblue: rgb(0, 140, 255);
             display: flex;
             flex-direction: column;
             width: 20vw;
-            div {
-                display: flex;
-                align-items: flex-start;
-                margin: 5px;
-                fa-icon {
-                    margin-right: 10px;
-                }
                 p {
                     margin: 0px;
                 }
@@ -55,5 +48,30 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .left-most {
         margin-right: 60px;
+    }
+    .right-most {
+        display: flex;
+        align-items: flex-start;
+        margin: 5px;
+        fa-icon {
+            margin-right: 10px;
+        }
+}
+
+@media screen and (max-width: 1079px) { //mobile
+    .left-most {
+        width: 60vw!important;
+        margin-right: 0!important;
+    }
+    .right-most {
+        display: flex!important;
+        flex-direction: row!important;
+        flex-wrap: wrap!important;
+    }
+    .container {
+        flex-direction: column;
+    }
+    .column {
+        width: 32vw!important;
     }
 }
