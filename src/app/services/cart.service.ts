@@ -112,7 +112,7 @@ export class CartService {
   }
 
   performUpdate() {
-    this.updated.next(false);
+    // this.updated.next();
   }
 
   async addToWishlist(productID: number) {
