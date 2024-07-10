@@ -3,13 +3,14 @@ $hellenicblue: rgb(0, 140, 255);
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 81%;
+    margin-left: 18vw;
+    margin-bottom: 10px;
     justify-content: center;
+    gap: 8px;
     .footer {
+        margin: 10px 0;
         .page-options {
-            margin-top: 10px;
             .active-page {
                 background-color: #008cff;
                 color: white;
@@ -39,13 +40,21 @@ $hellenicblue: rgb(0, 140, 255);
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        div {
+        background-color: rgb(0, 140, 255);
+        border-radius: 7px;
+        h3 {
             display: inline-flex;
             align-items: center;
             gap: 15px;
-            h3 {
-                margin: 5px;
-            }
+            margin: 0 0 0 1.5vw;
+            color: white;
+            font-size: 32px
+        }
+        div {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-right: 2vw;
             p {
                 margin: 5px;
                 font-size: 12px;
@@ -57,13 +66,14 @@ $hellenicblue: rgb(0, 140, 255);
                 font-size: 100%;
                 padding: 12px;
                 margin: 15px 0;
+                border-radius: 12px;
                 cursor: pointer;
             }
         }
     }
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 6px;
         flex: 1;
         .product-container {
@@ -166,5 +176,18 @@ $hellenicblue: rgb(0, 140, 255);
                 }
             }
         }
+    }
+}
+@media screen and (max-width: 1079px) { //mobile
+    .grid-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr))!important;
+    }
+    .sorting-select {
+        width: 150px;
+    }
+    .shop-grid-container {
+        margin: auto;
+        margin-top: 35px;
+        width: 90%;
     }
 }

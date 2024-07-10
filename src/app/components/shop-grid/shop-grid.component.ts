@@ -6,23 +6,28 @@ import { FormService } from 'src/app/services/form.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
+import { RenderService } from 'src/app/services/render.service';
 
 @Component({
   selector: 'app-shop-grid',
   templateUrl: './shop-grid.component.html',
-  styleUrls: ['./shop-grid.component.scss']
+  styleUrls: ['./shop-grid.component.scss'],
 })
 export class ShopGridComponent {
+  screenSize: any = {};
+  
   faHeart = faHeart;
   faEye = faEye;
-  
+
   resultsAmount = 0;
   products: any[] = [];
   oldPrices: (number | null)[] = [];
   messageSet = false;
+
+  priceFilters: any = {};
   maxPrice: number | null = null;
   minPrice: number | null = null;
-  
+
   itemsPerPage = 10;
   currentPage = 1;
   totalPages = 1;
@@ -32,17 +37,28 @@ export class ShopGridComponent {
   category: any = undefined;
   filter: any = null;
 
-  constructor(private filterService: FilterService, private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private formService: FormService) { }
-  
+  constructor(
+    private filterService: FilterService,
+    private cartService: CartService,
+    private dataService: DataService,
+    private route: ActivatedRoute,
+    private formService: FormService,
+    private renderService: RenderService
+  ) {}
+
   ngOnInit() {
     this.products = [];
     this.imageUrl = this.dataService.getUploadURL();
-    this.formService.setBannerMessage('Showing results')
+    this.formService.setBannerMessage('Showing results');
+    this.priceFilters = this.filterService.getShopPriceFilter();
+    this.renderService.getScreenSize().subscribe(size => {
+      this.screenSize = size;
+    });
     this.getShopFilter();
   }
 
   getShopFilter() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       const category = params['category'];
       this.category = category;
       if (category !== undefined) {
@@ -50,14 +66,14 @@ export class ShopGridComponent {
       }
       this.loadProducts(category, null);
     });
-    this.dataService.getShopFilter().subscribe(filter => {
+    this.dataService.getShopFilter().subscribe((filter) => {
       this.filter = filter;
-      if (filter !== null && filter != "") {
+      if (filter !== null && filter != '') {
         this.formService.setBannerMessage(`Showing results for: ${filter}`);
         this.loadProducts(undefined, filter);
       }
     });
-    this.filterService.getFilterUpdated().subscribe(updated => {
+    this.filterService.getFilterUpdated().subscribe((updated) => {
       if (updated) {
         this.maxPrice = this.filterService.getMaxPrice();
         this.minPrice = this.filterService.getMinPrice();
@@ -69,9 +85,15 @@ export class ShopGridComponent {
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
     if (category !== undefined && this.category !== undefined) {
-      products = await lastValueFrom(this.dataService.collectDataComplex("products-from-category", { category: category }));
+      products = await lastValueFrom(
+        this.dataService.collectDataComplex('products-from-category', {
+          category: category,
+        })
+      );
     } else {
-      products = await lastValueFrom(this.dataService.collectDataComplex("products"));
+      products = await lastValueFrom(
+        this.dataService.collectDataComplex('products')
+      );
     }
 
     products = Array.isArray(products) ? products : [products];
@@ -84,7 +106,8 @@ export class ShopGridComponent {
 
     products.forEach((product) => {
       if (product.discount && product.discount != null) {
-        product.discounted_price = product.price * ((100 - product.discount) / 100);
+        product.discounted_price =
+          product.price * ((100 - product.discount) / 100);
       }
     });
 
@@ -92,17 +115,19 @@ export class ShopGridComponent {
   }
 
   filterByString(filter: string, products: any[]) {
-    return products.filter((product) => product.name.toLowerCase().includes(filter.toLowerCase()));
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(filter.toLowerCase())
+    );
   }
-  
+
   changeSorting(event: any) {
     const selectedOption = event.target.value;
     switch (selectedOption) {
-      case "default":
+      case 'default':
         this.products.sort((a, b) => {
           const nameA = a.name.toLowerCase();
           const nameB = b.name.toLowerCase();
-        
+
           if (nameA < nameB) {
             return -1;
           }
@@ -112,15 +137,29 @@ export class ShopGridComponent {
           return 0;
         });
         break;
-        
-      case "high-low":
+
+      case 'high-low':
         this.products.sort((a, b) => b.price - a.price);
         break;
 
-      case "low-high":
+      case 'low-high':
         this.products.sort((a, b) => a.price - b.price);
         break;
+
+      default:
+        this.filterService.setMaxPrice(selectedOption.maxPrice);
+        this.filterService.setMinPrice(selectedOption.minPrice);
+        console.log("HERE");
+        this.filterService.filterUpdateRequested();
+        break;
     }
+  }
+
+  setPriceFilter(filter: any) {
+    this.filterService.setMaxPrice(filter.maxPrice);
+    this.filterService.setMinPrice(filter.minPrice);
+    console.log("HERE");
+    this.filterService.filterUpdateRequested();
   }
 
   openImage(imageLocation: string) {
@@ -144,17 +183,20 @@ export class ShopGridComponent {
   getPageRange(): number[] {
     const range = [];
     var start = this.currentPage;
-    
-    if (this.currentPage > this.totalPages -2 && this.totalPages -2 > 0) {
+
+    if (this.currentPage > this.totalPages - 2 && this.totalPages - 2 > 0) {
       start = this.totalPages - 2;
     }
     if (start == 1 && this.totalPages > 1) {
       start += 2;
-    }
-    else if (start == 2 && this.totalPages > 1) {
+    } else if (start == 2 && this.totalPages > 1) {
       start += 1;
     }
-    for (let i = start - 1; i < start + 2 && i < this.totalPages && this.totalPages > 1; i++) {
+    for (
+      let i = start - 1;
+      i < start + 2 && i < this.totalPages && this.totalPages > 1;
+      i++
+    ) {
       range.push(i);
     }
 

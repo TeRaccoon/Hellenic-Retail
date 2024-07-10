@@ -149,3 +149,16 @@ $hellenicblue: rgb(0, 140, 255);
         border-bottom: 3px solid $hellenicblue;
     }
 }
+
+
+@media screen and (max-width: 1079px) { //mobile
+    .background-card {
+        width: 100%!important;
+    }
+    .featured-container {
+        flex-direction: column;
+    }
+    .product-container {
+        max-height: 326px!important;
+    }
+}

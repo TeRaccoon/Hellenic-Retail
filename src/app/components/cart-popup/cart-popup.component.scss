@@ -189,3 +189,9 @@ $hellenicblue: rgb(0, 140, 255);
         }
     }
 }
+
+@media screen and (max-width: 1079px) { //mobile
+    .cart-form {
+        width: 50vw;
+    }
+}

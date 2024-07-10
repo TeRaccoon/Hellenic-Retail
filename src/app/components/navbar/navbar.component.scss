@@ -7,22 +7,17 @@ $hellenicblue: rgb(0, 140, 255);
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.intro-bar,
-.navbar {
     background-color: rgb(255, 255, 255);
 }
 
 .navbar {
-    padding: 10px 0 10px 0;
     .nav-logo {
         font-size: 24px;
         font-weight: bold;
         color: #FFFFFF;
         text-decoration: none;
         img {
-            width: 70px;
+            width: 100px;
             height: auto;
         }
     }
@@ -181,4 +176,35 @@ $hellenicblue: rgb(0, 140, 255);
     &:hover {
         color: $hellenicblue !important;
     }
+}
+
+@media screen and (min-width: 1080px) { //Desktop
+
+}
+
+@media screen and (max-width: 1079px) { //mobile
+    .navbar {
+        margin-left: 0;
+        width: 100%;
+        display: none;
+    }
+    .intro-bar {
+        margin: 0;
+        width: 100%;
+        display: none;
+    }
+    .search-options {
+        width: 100%
+    }
+    .search-container {
+        margin-left: 86px;
+    }
+    .account-section {
+        padding: 10px;
+        display: none; 
+    }
+    .container {
+        display: none;
+    }
+    
 }
