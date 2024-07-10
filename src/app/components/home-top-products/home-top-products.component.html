@@ -7,7 +7,7 @@
                     <p>{{ product.discount }}% OFF</p>
                 </div>
             </ng-container>
-            <img [routerLink]="'/view/' + product.name" [src]="imageUrl + product.image_location" />
+            <img [routerLink]="'/view/' + product.name" [src]="imageUrl + product.image_location" (error)="onImageError($event)" />
             <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
             <div class="price-container">
                 <ng-container *ngIf="product.pallet_price == undefined else wholesale">

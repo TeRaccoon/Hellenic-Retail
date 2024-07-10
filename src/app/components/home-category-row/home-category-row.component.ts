@@ -24,4 +24,9 @@ export class HomeCategoryRowComponent {
       this.categories = categories;
     }
   }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
+  }
 }

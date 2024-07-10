@@ -53,4 +53,9 @@ export class HomeFeaturedComponent {
   async addToWishlist(productID: number) {
     this.cartService.addToWishlist(productID);
   }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
+  }
 }
