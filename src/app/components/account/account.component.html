@@ -71,7 +71,7 @@
                     <td>{{ order.title }}</td>
                     <td>{{ order.status }}</td>
                     <td>{{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</td>
-                    <td>£{{ order.net_value | number: '1.2-2' }}</td>
+                    <td>£{{ order.gross_value | number: '1.2-2' }}</td>
                     <td>£{{ order.VAT | number: '1.2-2' }}</td>
                     <td>£{{ order.total | number: '1.2-2' }}</td>
                 </tr>
