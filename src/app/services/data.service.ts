@@ -203,6 +203,10 @@ export class DataService {
                     <td>${emailData.vat}</td>
                 </tr>
                 <tr class="total-row">
+                    <td colspan="2">Delivery</td>
+                    <td>${emailData.delivery}</td>
+                </tr>
+                <tr class="total-row">
                     <td colspan="2">Total</td>
                     <td>${emailData.total}</td>
                 </tr>

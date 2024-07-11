@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faCircleExclamation, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, timestamp } from 'rxjs';
 import { CartItem } from 'src/app/common/types/cart';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
@@ -22,6 +22,7 @@ export class CheckoutComponent {
 
   netTotal = 0;
   vat = 0;
+  delivery = 0;
   invoiceTotal = 0;
   processing = false;
 
@@ -59,7 +60,12 @@ export class CheckoutComponent {
   }
 
   async load() {
-    this.customerId = this.authService.getUserID();
+    this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
+      if (loggedIn) {
+        this.customerId = this.authService.getUserID();
+      }
+    })
+
     this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
       if (updateRequested) {
         this.calculateTotal();
@@ -95,43 +101,74 @@ export class CheckoutComponent {
     this.products = cartProducts;
 
     if (subtotal < 30) {
-      subtotal += 7.50;
+      this.delivery = 7.50;
     }
 
     this.netTotal = Number(Number(subtotal).toFixed(2));
-    this.vat = Number(Number(subtotal * 0.2).toFixed(2));
-    this.invoiceTotal = Number(Number(this.netTotal + this.vat).toFixed(2));
+    this.vat = Number(Number((subtotal + this.delivery) * 0.2).toFixed(2));
+    this.invoiceTotal = Number(Number(this.netTotal + this.vat + this.delivery).toFixed(2));
   }
 
   async formSubmit() {
     if (this.billingForm.valid) {
       this.processing = true;
       const formData = this.billingForm.value;
+
+      let success = await this.processInvoice(formData);
       
-      let invoiceFormData = await this.createInvoice(formData);
-      console.log("🚀 ~ CheckoutComponent ~ formSubmit ~ invoiceFormData:", invoiceFormData)
-      let invoiceResponse = await this.processInvoice(invoiceFormData);
-      
-      if (invoiceResponse.success) {
-        console.log("Invoice processed successfully");
-  
-        const paymentData = this.craftPayload(formData);
-        let paymentResponse = await lastValueFrom(this.dataService.processTransaction(paymentData));
-  
-        let success = this.validateResponse(paymentResponse);
-        if (success) {
-          this.sendEmailConfirmation();
-          await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId}));
-        } else {
-          this.orderError = 'There was an error processing your payment details!';
-          this.formService.setPopupMessage('There was an error processing your payment details!', true, 10000);
-        }
-      } else {
-        this.orderError = 'There was an error processing this order! You have not been charged.';
-        this.formService.setPopupMessage('There was an error processing this order!', true, 10000);
+      if (success) {
+        await this.processPayment(formData);
       }
       
       this.processing = false;
+    }
+  }
+
+  async processInvoice(formData: any) {
+    let invoiceFormData = await this.createInvoice(formData);
+    let response = await lastValueFrom(this.dataService.submitFormData(invoiceFormData));
+    if (response.success) {
+      return await this.processInvoicedItems(response.id + 1);
+    } else {
+      this.orderError = 'There was an error processing this order! You have not been charged.';
+      this.formService.setPopupMessage('There was an error processing this order!', true, 10000);
+      return false;
+    }
+  }
+
+  async processInvoicedItems(invoice_id: string) {
+    for (const item of this.cart) {
+      let invoicedItemForm = {
+        invoice_id: invoice_id,
+        item_id: item.item_id,
+        quantity: item.quantity,
+        discount: 0,
+        table_name: 'invoiced_items',
+        action: 'add'
+      };
+
+      let response = await lastValueFrom(this.dataService.submitFormData(invoicedItemForm));
+
+      if (!response.success) {
+        this.orderError = 'There was an error processing this order! You have not been charged.';
+        this.formService.setPopupMessage('There was an error processing this order!', true, 10000);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async processPayment(formData: any) {
+    const paymentData = this.craftPayload(formData);
+    let paymentResponse = await lastValueFrom(this.dataService.processTransaction(paymentData));
+
+    let success = this.validateResponse(paymentResponse);
+    if (success) {
+      this.sendEmailConfirmation();
+      await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId}));
+    } else {
+      this.orderError = 'There was an error processing your payment details!';
+      this.formService.setPopupMessage('There was an error processing your payment details!', true, 10000);
     }
   }
 
@@ -147,9 +184,10 @@ export class CheckoutComponent {
     const emailInformation = {
       reference: this.orderReference,
       products: products,
-      net_total: '&pound;' + this.netTotal,
-      vat: '&pound;' + this.vat,
-      total: '&pound;' + this.invoiceTotal
+      net_total: '&pound;' + this.netTotal.toFixed(2),
+      vat: '&pound;' + this.vat.toFixed(2),
+      delivery: '&pound' + this.delivery.toFixed(2),
+      total: '&pound;' + this.invoiceTotal.toFixed(2)
     };
 
     const emailHTML = this.dataService.generateOrderConfirmationEmail(emailInformation);
@@ -164,13 +202,8 @@ export class CheckoutComponent {
     return await lastValueFrom(this.dataService.sendEmail(emailData));
   }
 
-  async processInvoice(invoiceFormData: any) {
-    let response = await lastValueFrom(this.dataService.submitFormData(invoiceFormData));
-    return response;
-  }
-
   async createInvoice(formData: any) {
-    this.orderReference = this.customerId !== null ? formData['Last Name'] + '_' + this.customerId : formData['Last Name'] + '_' + Date.now();
+    this.orderReference = this.customerId !== null ? formData['Last Name'] + '_' + this.customerId + Date.now().toString() : formData['Last Name'] + '_' + Date.now().toString();
 
     let address_id = await this.checkAddresses(formData);
 
@@ -180,7 +213,7 @@ export class CheckoutComponent {
       status: 'Pending',
       delivery_date: null,
       printed: 'No',
-      gross_value: this.netTotal,
+      gross_value: this.netTotal + this.delivery,
       VAT: this.vat,
       total: this.invoiceTotal,
       outstanding_balance: 0,
