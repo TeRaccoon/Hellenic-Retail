@@ -42,22 +42,20 @@ export class CartService {
       const rowIndex = cart.findIndex((item: any) => item.item_id === productId);
 
       let response: any = null;
-      if (rowIndex !== -1) {
-        if (await this.checkStock(quantity, productId)) {
+      if (await this.checkStock(quantity, productId)) {
+        if (rowIndex !== -1) {
           response = await lastValueFrom(this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity}));
-        }
-      } else {
-        if (await this.checkStock(quantity, productId)) {
+        } else {
           response = await lastValueFrom(this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity}));
         }
-      }
-
-      if (response) {
-        await this.refreshCart();
-        this.formService.setPopupMessage("Item added to cart!", true);
-        this.requestUpdate();
-      } else {
-        this.formService.setPopupMessage("There was an issue adding this item!", true);
+  
+        if (response) {
+          await this.refreshCart();
+          this.formService.setPopupMessage("Item added to cart!", true);
+          this.requestUpdate();
+        } else {
+          this.formService.setPopupMessage("There was an issue adding this item!", true);
+        }
       }
     } else {
       this.formService.setPopupMessage("Please sign in to use your cart!", true);
@@ -112,6 +110,9 @@ export class CartService {
   }
 
   getCart() {
+    if (this.cart.length > 0 && this.cart[0].id == undefined) {
+      this.cart = [];
+    }
     return this.cart;
   }
 
