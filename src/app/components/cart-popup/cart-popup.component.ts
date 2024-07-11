@@ -73,9 +73,9 @@ export class CartPopupComponent {
     this.getCartData();
   }
 
-  changeQuantity(event: any, productID: number) {
+  async changeQuantity(event: any, productID: number) {
     const quantity = parseInt(event.target.value);
-    this.cartService.addToCart(productID, quantity);
+    await this.cartService.addToCart(productID, quantity);
     this.getCartData();
   }
 

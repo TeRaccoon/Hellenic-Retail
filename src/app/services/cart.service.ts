@@ -43,10 +43,13 @@ export class CartService {
 
       let response: any = null;
       if (rowIndex !== -1) {
-        quantity += cart[rowIndex].quantity;
-        response = await lastValueFrom(this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity}));
+        if (await this.checkStock(quantity, productId)) {
+          response = await lastValueFrom(this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity}));
+        }
       } else {
-        response = await lastValueFrom(this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity}));
+        if (await this.checkStock(quantity, productId)) {
+          response = await lastValueFrom(this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity}));
+        }
       }
 
       if (response) {
@@ -59,6 +62,15 @@ export class CartService {
     } else {
       this.formService.setPopupMessage("Please sign in to use your cart!", true);
     }
+  }
+
+  async checkStock(quantity: number, productId: number) {
+    let response: any = await lastValueFrom(this.dataService.processPost({'action': 'check-stock', 'id': productId}));
+    if (response.quantity < quantity) {
+      this.formService.setPopupMessage("There is no more stock of this item!", true);
+      return false;
+    }
+    return true
   }
 
   async removeFromCart(productId: number) {
