@@ -130,8 +130,6 @@ export class NavbarCategorySearchComponent {
       (this.categoryFilter === null || product.category?.toLowerCase() === this.categoryFilter) &&
       (!this.searchStringFilter || product.name.toLowerCase().includes(this.searchStringFilter))
     );
-
-    console.log(this.searchResults);
   }
 
   onInputFocus() {

@@ -149,7 +149,6 @@ export class ShopGridComponent {
       default:
         this.filterService.setMaxPrice(selectedOption.maxPrice);
         this.filterService.setMinPrice(selectedOption.minPrice);
-        console.log("HERE");
         this.filterService.filterUpdateRequested();
         break;
     }
@@ -158,7 +157,6 @@ export class ShopGridComponent {
   setPriceFilter(filter: any) {
     this.filterService.setMaxPrice(filter.maxPrice);
     this.filterService.setMinPrice(filter.minPrice);
-    console.log("HERE");
     this.filterService.filterUpdateRequested();
   }
 

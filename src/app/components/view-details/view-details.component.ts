@@ -92,7 +92,7 @@ export class ViewDetailsComponent {
 
     let stock = await lastValueFrom<any>(this.dataService.collectData("total-stock-by-id", product.id));
     this.stock = stock.total_quantity;
-    this.outOfStock = stock < 1 ? true : false;
+    this.outOfStock = stock.total_quantity < 1;
   }
 
   addToCart(productID: number, quantity: number) {

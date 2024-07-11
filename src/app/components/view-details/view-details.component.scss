@@ -61,6 +61,9 @@ $hellenicblue: #008cff;
             font-weight: bold;
             font-size: 16px;
             transition: background-color 0.2s ease;
+            &:disabled {
+                cursor: default;
+            }
         }
         .cart {
             background-color: #36b329;

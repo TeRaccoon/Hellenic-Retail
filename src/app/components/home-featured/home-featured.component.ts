@@ -36,6 +36,12 @@ export class HomeFeaturedComponent {
       if (product.discount && product.discount != null) {
         product.discounted_price = product.price * ((100 - product.discount) / 100);
       }
+      if (product.quantity === null || product.quantity === 0 || product.quantity === undefined) {
+        product.quantity = 0;
+        product.banner = 'Out of stock!';
+      } else if (product.quantity < 10) {
+        product.banner = 'Low on stock!';
+      }
     });
 
     this.featuredData = await lastValueFrom(this.dataService.collectData('section-data', 'home-featured'));
