@@ -9,7 +9,7 @@
                 <ng-container *ngIf="loaded">
                     <ng-container *ngIf="cartProducts.length > 0 else cartEmpty">
                         <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
-                            <img [src]="imageUrl + product.image_location">
+                            <img [src]="imageUrl + product.image_location" (error)="onImageError($event)">
                             <div class="cart-row-details">
                                 <p class="product-name">{{ product.name }}</p>
                                 <div class="cart-price-options">
