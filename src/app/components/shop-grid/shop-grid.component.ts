@@ -214,4 +214,9 @@ export class ShopGridComponent {
     }
     return true;
   }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
+  }
 }

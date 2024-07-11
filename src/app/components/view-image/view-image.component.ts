@@ -83,4 +83,9 @@ export class ViewImageComponent {
     this.zoomX = 0;
     this.zoomY = 0;
   }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
+  }
 }

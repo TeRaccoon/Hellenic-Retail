@@ -57,7 +57,6 @@ export class NavbarCategorySearchComponent {
     products = Array.isArray(products) ? products : [products];
 
     if (products != null) {
-      products = this.replaceNullImages(products);
       products = this.calculatePrices(products);
 
       this.products = products;
@@ -73,18 +72,6 @@ export class NavbarCategorySearchComponent {
           product.discount === null
             ? null
             : product.price * ((100 - product.discount) / 100),
-      };
-    });
-  }
-
-  replaceNullImages(products: any[]) {
-    return products.map((product) => {
-      return {
-        ...product,
-        image_location:
-          product['image_location'] == null
-            ? this.imageUrl + 'placeholder.jpg'
-            : this.imageUrl + product['image_location'],
       };
     });
   }
@@ -162,5 +149,10 @@ export class NavbarCategorySearchComponent {
       this.dataService.setShopFilter(this.searchStringFilter);
       this.router.navigate(['/shop']);
     }
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
   }
 }

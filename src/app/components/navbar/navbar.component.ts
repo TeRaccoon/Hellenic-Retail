@@ -244,4 +244,9 @@ export class NavbarComponent {
   toggleCart() {
     this.cartVisible == 'hidden' && this.formService.showCartForm();
   }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
+  }
 }
