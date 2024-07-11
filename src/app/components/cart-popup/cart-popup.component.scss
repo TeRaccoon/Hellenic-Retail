@@ -87,9 +87,8 @@ $hellenicblue: rgb(0, 140, 255);
                             justify-content: center;
                             .price-container {
                                 display: flex;
-                                p {
-                                    margin: 5px;
-                                }
+                                flex-direction: column-reverse;
+                                align-items: flex-start;
                                 .original-price {
                                     color: red;
                                     text-decoration: line-through;
@@ -190,7 +189,8 @@ $hellenicblue: rgb(0, 140, 255);
     }
 }
 
-@media screen and (max-width: 1079px) { //mobile
+@media screen and (max-width: 1079px) {
+    //mobile
     .cart-form {
         width: 50vw;
     }
