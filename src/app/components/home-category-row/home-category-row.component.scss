@@ -44,5 +44,11 @@ $hellenicblue: rgb(0, 140, 255);
 @media screen and (max-width: 1079px) { //mobile
     .category-row {
         width: 90%;
+        gap: 2vw;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .category {
+        width: 44vw;
     }
 }

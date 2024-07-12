@@ -48,6 +48,11 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .left-most {
         margin-right: 60px;
+        div {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
     }
     .right-most {
         display: flex;

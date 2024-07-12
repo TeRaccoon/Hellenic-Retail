@@ -161,18 +161,29 @@ $hellenicblue: rgb(0, 140, 255);
 
 @media screen and (max-width: 1079px) { //Mobile
     .container {
-        position: sticky;
+        position: absolute;
         top: 0;
         z-index: 1;
     }
     .category-bar {
-        width: 100%;
+        width: 100%!important;
     }
     .nav-links {
         margin-left: 0%!important;
     }
     .nav-link {
         display: none!important;
+    }
+    .nav-logo { 
+        visibility: visible;
+        display: flex;
+        height: 30vw;
+        padding: 3px;
+        justify-content: center;
+        img {
+            height: 30vw;
+            margin-bottom: 2vw;
+        }
     }
     .hamburger {
         display: flex; align-items: center;
@@ -181,8 +192,11 @@ $hellenicblue: rgb(0, 140, 255);
         margin: 12px 0;
     }
     .visible {
-        width: 30%!important;
+        width: 35%!important;
         visibility: visible!important;
+    }
+    .dropdown {
+        padding: 18px 13px!important;
     }
     .dropdown-content {
         height: 100%;
@@ -214,6 +228,20 @@ $hellenicblue: rgb(0, 140, 255);
                 display: flex;
                 align-items: center
             }
+        }
+    }
+    .search-container {
+        display: flex;
+        padding: 8px 10px!important;  
+    }
+    .search-options {
+        display: flex;
+        height: 40px;
+        button {
+            border: 3px outset white!important;
+        }
+        select {
+            display: none;
         }
     }
 }
@@ -252,31 +280,4 @@ $hellenicblue: rgb(0, 140, 255);
 
 
 
-@media screen and (max-width: 1079px) { //mobile
-    .nav-logo { 
-        visibility: visible;
-        display: flex;
-        height: 80px;
-        padding: 3px;
-    }
-    .category-bar {
-        width: 100%!important;
-    }
-    .search-container {
-        display: flex;
-        padding: 8px 10px!important;  
-    }
-    .search-options {
-        display: flex;
-        height: 40px;
-        
-    }
-    .dropdown {
-        padding: 18px 13px!important;
-    }
-    .search-options {
-        button {
-            border: 3px outset white!important;
-        }
-    }
-}
+

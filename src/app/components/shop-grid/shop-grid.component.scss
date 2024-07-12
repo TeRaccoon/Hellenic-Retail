@@ -190,4 +190,12 @@ $hellenicblue: rgb(0, 140, 255);
         margin-top: 35px;
         width: 90%;
     }
+    .shop-grid-header {
+        flex-wrap: wrap;
+        div {
+            lable {
+                color: white;
+            }
+        }
+    }
 }
