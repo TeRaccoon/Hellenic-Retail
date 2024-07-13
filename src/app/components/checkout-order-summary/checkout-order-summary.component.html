@@ -22,7 +22,7 @@
                 <p class="title">Subtotal</p>
             </td>
             <td>
-                <p class="row-price">£{{ total | number: '1.2-2' }}</p>
+                <p class="row-price">£{{ subtotal | number: '1.2-2' }}</p>
             </td>
         </tr>
         <tr>
@@ -36,6 +36,14 @@
                 <ng-template #elseBlock>
                     <p class="row-price">--</p>
                 </ng-template>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="title">Total</p>
+            </td>
+            <td>
+                <p class="row-price">£{{ total | number: '1.2-2' }}</p>
             </td>
         </tr>
     </ng-container>

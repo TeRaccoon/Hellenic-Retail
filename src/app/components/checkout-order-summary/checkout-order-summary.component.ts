@@ -13,6 +13,7 @@ import { CartItem } from 'src/app/common/types/cart';
 export class CheckoutOrderSummaryComponent {
   cart: CartItem[] = [];
   cartProducts: any[] = [];
+  subtotal = 0;
   total = 0;
   imageUrl = '';
 
@@ -35,7 +36,7 @@ export class CheckoutOrderSummaryComponent {
   async loadCartData() {
     this.cart = this.cartService.getCart();
     let cartProducts: any[] = await this.cartService.getCartItems();
-    this.total = 0;
+    this.subtotal = 0;
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {
@@ -48,7 +49,8 @@ export class CheckoutOrderSummaryComponent {
         product.total = individualPrice * this.cart[index].quantity;
         product.discounted_total = discountedPrice * this.cart[index].quantity;
 
-        this.total += product.discounted_total;
+        this.subtotal += product.discounted_total;
+        this.total = this.subtotal + (this.subtotal > 30 ? 0 : 7.50);
 
         if (product.image_location === null) {
           product.image_location = 'placeholder.jpg';
