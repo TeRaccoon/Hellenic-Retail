@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faCircleExclamation, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom, timestamp } from 'rxjs';
+import { concat, lastValueFrom, timestamp } from 'rxjs';
 import { CartItem } from 'src/app/common/types/cart';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
@@ -164,7 +164,14 @@ export class CheckoutComponent {
 
     let success = this.validateResponse(paymentResponse);
     if (success) {
-      this.sendEmailConfirmation();
+      let response = await this.sendEmailConfirmation();
+      if (!response.success) {
+        this.orderError = 'There was an error sending your email confirmation!';
+      } else {
+        setTimeout(() => {
+          this.router.navigate(['/order-complete']);
+        }, 3000);
+      }
       await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId}));
     } else {
       this.orderError = 'There was an error processing your payment details!';
@@ -181,6 +188,8 @@ export class CheckoutComponent {
       };
     });
 
+    const formData = this.billingForm.value;
+
     const emailInformation = {
       reference: this.orderReference,
       products: products,
@@ -196,7 +205,9 @@ export class CheckoutComponent {
       action: 'mail',
       mail_type: 'order',
       subject: 'Thank you for your order!',
-      email_HTML: emailHTML
+      email_HTML: emailHTML,
+      address: formData['Email Address'],
+      name: `${formData['First Name']} -  ${formData['Last Name']}`,
     };
 
     return await lastValueFrom(this.dataService.sendEmail(emailData));
@@ -264,9 +275,6 @@ export class CheckoutComponent {
         reference: this.orderReference,
         total: this.invoiceTotal,
       });
-      setTimeout(() => {
-        this.router.navigate(['/order-complete']);
-      }, 3000);
       return true;
     } else {
       this.formService.setPopupMessage("There was an error processing your payment!");
