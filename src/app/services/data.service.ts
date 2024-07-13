@@ -33,20 +33,26 @@ export class DataService {
     return this.http.post(url, {body});
   }
 
-  collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {
-    let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
-    let userType = this.authService.getUserType();
-    let paramFilter = filter === undefined ? {} : filter;
+async collectDataComplex(query: string, filter: Record<string, any> = {}): Promise<any> {
+  await this.authService.checkLogin();
+  let userType = this.authService.getUserType();
 
-    if (userType == null) {
-      this.authService.checkLogin();
-    }
-    
-    paramFilter['queryType'] = this.authService.getUserType();
-    const queryParams = Object.entries(paramFilter).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-    url += `&${queryParams}`;
-    return this.http.get<any>(url);
+  const url = new URL(apiUrlBase + 'retail_query_handler.php');
+  url.searchParams.append('query', query);
+
+  const queryParams = { ...filter, queryType: userType };
+  for (const [key, value] of Object.entries(queryParams)) {
+    url.searchParams.append(key, value ?? '');
   }
+
+  try {
+    return await lastValueFrom(this.http.get<any>(url.toString()));
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
 
   submitFormDataQuery(query:string, data: any) {
     const url = 'http://localhost/API/retail_query_handler.php';

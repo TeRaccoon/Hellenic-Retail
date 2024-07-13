@@ -78,7 +78,7 @@ export class ViewDetailsComponent {
     await this.authService.checkLogin();
     this.userType = this.authService.getUserType();
 
-    let product = await lastValueFrom(this.dataService.collectDataComplex("product-view-details", { productName: productName }));
+    let product: any = await lastValueFrom(await this.dataService.collectDataComplex("product-view-details", { productName: productName }));
     
     if (product.discount && product.discount != null) {
       product.discounted_price = product.price * ((100 - product.discount) / 100);

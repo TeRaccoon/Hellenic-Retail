@@ -47,9 +47,7 @@ export class HomeTopProductsComponent {
   }
 
   async loadProducts() {
-    let topProducts = await lastValueFrom(
-      this.dataService.collectDataComplex('top-products', { limit: this.limit })
-    );
+    let topProducts = await this.dataService.collectDataComplex('top-products', { limit: this.limit });
     this.topProducts = Array.isArray(topProducts) ? topProducts : [topProducts];
 
     this.topProducts.forEach((product) => {

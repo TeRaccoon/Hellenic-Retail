@@ -29,7 +29,7 @@ export class HomeFeaturedComponent {
   }
 
   async loadProducts() {
-    let featuredProducts = await lastValueFrom(this.dataService.collectDataComplex('featured', { limit: "3" }));
+    let featuredProducts = await this.dataService.collectDataComplex('featured', { limit: "3" });
     this.featuredProducts = Array.isArray(featuredProducts) ? featuredProducts : [featuredProducts];
     
     this.featuredProducts.forEach((product) => {

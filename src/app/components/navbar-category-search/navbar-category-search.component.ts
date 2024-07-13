@@ -51,9 +51,7 @@ export class NavbarCategorySearchComponent {
       this.subcategories = subcategories;
     }
 
-    let products = await lastValueFrom(
-      this.dataService.collectDataComplex('products')
-    );
+    let products: any = await this.dataService.collectDataComplex('products');
     products = Array.isArray(products) ? products : [products];
 
     if (products != null) {

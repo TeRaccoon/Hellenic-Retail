@@ -129,9 +129,7 @@ export class NavbarComponent {
       this.subcategories = subcategories;
     }
 
-    let products = await lastValueFrom(
-      this.dataService.collectDataComplex('products')
-    );
+    let products: any = await this.dataService.collectDataComplex('products');
     products = Array.isArray(products) ? products : [products];
 
     if (products != null) {
@@ -212,11 +210,10 @@ export class NavbarComponent {
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
-    } else if (this.categoryFilter != 'all') {
-      this.router.navigate(['/shop/' + this.categoryFilter]);
+    } else if (this.categoryFilter == null || this.categoryFilter == 'all') {
+      this.router.navigate(['/shop/']);
     } else {
-      this.dataService.setShopFilter(this.searchStringFilter);
-      this.router.navigate(['/shop']);
+      this.router.navigate(['/shop/' + this.categoryFilter]);
     }
   }
 
