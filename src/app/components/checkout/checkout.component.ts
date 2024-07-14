@@ -332,7 +332,11 @@ export class CheckoutComponent {
   }
 
   toggleAddressBook() {
-    this.addressBookVisible = !this.addressBookVisible;
+    if (this.addressBook.length === 0) {
+      this.formService.setPopupMessage('You have no addresses in your address book!', true, 3000);
+    } else {
+      this.addressBookVisible = !this.addressBookVisible;
+    }
   }
 
   selectAddress(address: any) {

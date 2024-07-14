@@ -87,7 +87,7 @@ $hellenicblue: rgb(0, 140, 255);
                         max-height: 300px;
                         overflow-y: scroll;
                         width: initial;
-                        height: 300px;
+                        height: auto;
                         transition: height 1.6s ease, margin 1.6s ease;
                     }
                 }
@@ -116,6 +116,8 @@ $hellenicblue: rgb(0, 140, 255);
             border: 1px solid #ccc;
             padding: 18px;
             height: 100%;
+            position: sticky;
+            top: 10px;
             p {
                 font-size: 15px;
                 a {
