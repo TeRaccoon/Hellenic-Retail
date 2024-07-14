@@ -109,8 +109,8 @@ $hellenicblue: #008cff;
     }
     .other-options {
         display: flex;
-        justify-content: space-between;
-        width: 43%;
+        gap: 20px;
+        justify-content: flex-start;
         p {
             transition: color 0.4s ease;
             cursor: pointer;
