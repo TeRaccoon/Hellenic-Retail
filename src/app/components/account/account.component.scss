@@ -3,80 +3,106 @@ $hellenicblue: rgb(0, 140, 255);
     width: 68%;
     margin: 15px auto;
     min-height: 60vh;
+    max-height: 675px;
     display: flex;
+    flex-direction: column;
     gap: 15px;
     h1 {
         font-size: 24px;
         margin-bottom: 20px;
+        margin-top: 0px;
     }
     .account-details {
         display: flex;
-        flex-direction: column;
-        border: 1px solid #ccc;
-        width: 40%;
-        padding: 20px;
-        form {
+        gap: 15px;
+        max-height: 400px;
+        .details {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
-            .inputs {
-                .detail {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    border-bottom: 1px solid #cccccc;
-                    font-size: 18px;
-                    label {
-                        font-weight: bold;
-                        width: 100%;
-                    }
-                    input {
+            border: 1px solid #ccc;
+            padding: 20px;
+            form {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                flex-grow: 1;
+                .inputs {
+                    .detail {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid #cccccc;
                         font-size: 18px;
-                        border: none;
-                        background-color: #ffffff;
-                        color: #cccccc;
-                        width: 100%;
-                        padding: 5px;
-                        margin: 3px;
-                    }
-                    .enabled {
-                        color: #000000;
+                        label {
+                            font-weight: bold;
+                            width: 100%;
+                        }
+                        input {
+                            font-size: 18px;
+                            border: none;
+                            background-color: #ffffff;
+                            color: #cccccc;
+                            width: 100%;
+                            padding: 5px;
+                            margin: 3px;
+                        }
+                        .enabled {
+                            color: #000000;
+                        }
                     }
                 }
             }
-            .buttons {
-                display: flex;
-                justify-content: space-between;
-                button {
-                    cursor: pointer;
-                    font-family: 'Poppins', sans-serif;
-                    color: white;
-                    font-size: 16px;
-                    background-color: $hellenicblue;
-                    border: 0;
-                    padding: 4px 18px;
-                }
+        }
+        .address-book {
+            border: 1px solid #ccc;
+            padding: 20px;
+            flex: 1;
+            overflow-y: scroll;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            button {
+                cursor: pointer;
+                font-family: 'Poppins', sans-serif;
+                color: white;
+                font-size: 16px;
+                background-color: $hellenicblue;
+                border: 0;
+                padding: 4px 18px;
             }
         }
     }
     .order-history {
         padding: 20px;
         border: 1px solid #ccc;
-        max-height: 600px;
         overflow-y: scroll;
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            th,
-            td {
-                padding: 10px;
-                text-align: left;
-                border-bottom: 1px solid #ccc;
-                th {
-                    background-color: #f2f2f2;
-                    font-weight: bold;
-                }
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: white;
+        }
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            input {
+                font-size: 18px;
+                border: 2px solid black;
+                background-color: #ffffff;
+                width: 100%;
+                padding: 5px;
+                margin: 3px;
             }
         }
     }

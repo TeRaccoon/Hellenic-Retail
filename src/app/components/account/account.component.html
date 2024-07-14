@@ -1,57 +1,115 @@
-<app-page-banner></app-page-banner>
 <div class="account-container">
     <div *ngIf="loggedIn == null">
         <h1>Loading...</h1>
     </div>
     <div class="account-details" *ngIf="loggedIn">
-        <h1>Account Details</h1>
-        <ng-container *ngIf="userData != null">
-            <form [formGroup]="changeAccountDetails" (ngSubmit)="submitChanges()">
-                <div class="inputs">
-                    <div class="detail">
-                        <label for="forename">Forename</label>
-                        <input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="forename" id="forename">
-                        <div *ngIf="changeAccountDetails.get('forename')?.hasError('required') && changeAccountDetails.get('forename')?.touched">
-                            Forename is required.
+        <div class="details">
+            <h1>Account Details</h1>
+            <ng-container *ngIf="userData != null">
+                <form [formGroup]="changeAccountDetails" (ngSubmit)="submitChanges()">
+                    <div class="inputs">
+                        <div class="detail">
+                            <label for="forename">Forename</label>
+                            <input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="forename" id="forename">
+                            <div *ngIf="changeAccountDetails.get('forename')?.hasError('required') && changeAccountDetails.get('forename')?.touched">
+                                Forename is required.
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <label for="surname">Surname</label>
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="surname" id="surname">
+                            <div *ngIf="changeAccountDetails.get('surname')?.hasError('required') && changeAccountDetails.get('surname')?.touched">
+                                Surname is required.
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <label for="email">Email</label>
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="email" id="email">
+                            <div *ngIf="changeAccountDetails.get('email')?.hasError('required') && changeAccountDetails.get('email')?.touched">
+                                Email is empty or invalid.
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <label for="primary-phone">Phone number (primary)</label>
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="primaryPhone" id="primary-phone">
+                            <div *ngIf="changeAccountDetails.get('primary-phone')?.hasError('required') && changeAccountDetails.get('primary-phone')?.touched">
+                                Primary phone is empty or invalid.
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <label for="secondary-phone">Phone number (secondary)</label>
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="secondaryPhone" id="secondary-phone">
+                            <div *ngIf="changeAccountDetails.get('secondary-phone')?.hasError('required') && changeAccountDetails.get('secondary-phone')?.touched">
+                                Secondary phone is empty or invalid.
+                            </div>
                         </div>
                     </div>
-                    <div class="detail">
-                        <label for="surname">Surname</label>
-                        <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="surname" id="surname">
-                        <div *ngIf="changeAccountDetails.get('surname')?.hasError('required') && changeAccountDetails.get('surname')?.touched">
-                            Surname is required.
-                        </div>
+                    <div class="buttons">
+                        <button type="button" (click)="toggleEdit()">Edit</button>
+                        <button type="submit" [disabled]="changeAccountDetails.invalid">Save</button>
+                        <button type="button" (click)="cancelEdit()">Cancel</button>
+                        <button type="button" (click)="logout()">Logout</button>
                     </div>
-                    <div class="detail">
-                        <label for="email">Email</label>
-                        <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="email" id="email">
-                        <div *ngIf="changeAccountDetails.get('email')?.hasError('required') && changeAccountDetails.get('email')?.touched">
-                            Email is empty or invalid.
-                        </div>
-                    </div>
-                    <div class="detail">
-                        <label for="primary-phone">Phone number (primary)</label>
-                        <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="primaryPhone" id="primary-phone">
-                        <div *ngIf="changeAccountDetails.get('primary-phone')?.hasError('required') && changeAccountDetails.get('primary-phone')?.touched">
-                            Primary phone is empty or invalid.
-                        </div>
-                    </div>
-                    <div class="detail">
-                        <label for="secondary-phone">Phone number (secondary)</label>
-                        <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="secondaryPhone" id="secondary-phone">
-                        <div *ngIf="changeAccountDetails.get('secondary-phone')?.hasError('required') && changeAccountDetails.get('secondary-phone')?.touched">
-                            Secondary phone is empty or invalid.
-                        </div>
-                    </div>
-                </div>
+                </form>
+            </ng-container>
+        </div>
+        <div class="address-book">
+            <h1>Address Book</h1>
+            <form [formGroup]="addAddressForm" (ngSubmit)="addAddress()">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Line 1</th>
+                            <th>Line 2</th>
+                            <th>Line 3</th>
+                            <th>Postcode</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let address of addressBook">
+                            <td>{{ address.delivery_address_one }}</td>
+                            <td>{{ address.delivery_address_two }}</td>
+                            <td>{{ address.delivery_address_three }}</td>
+                            <td>{{ address.delivery_postcode }}</td>
+                            <td>
+                                <fa-icon [icon]="pencil" />
+                            </td>
+                            <ng-container *ngIf="pendingDeleteId != address.id else pendingDelete">
+                                <td (click)="setDeleteId(address.id)">
+                                    <fa-icon [icon]="bin" />
+                                </td>
+                            </ng-container>
+                            <ng-template #pendingDelete>
+                                <td (click)="removeAddress()">
+                                    <fa-icon [icon]="tick" />
+                                </td>
+                            </ng-template>
+                        </tr>
+                        <tr *ngIf="this.showAddNew">
+                            <td>
+                                <input type="text" formControlName="delivery_address_one">
+                            </td>
+                            <td>
+                                <input type="text" formControlName="delivery_address_two">
+                            </td>
+                            <td>
+                                <input type="text" formControlName="delivery_address_three">
+                            </td>
+                            <td>
+                                <input type="text" formControlName="delivery_postcode">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="buttons">
-                    <button type="button" (click)="toggleEdit()">Edit</button>
-                    <button type="submit" [disabled]="changeAccountDetails.invalid">Save</button>
-                    <button type="button" (click)="cancelEdit()">Cancel</button>
-                    <button type="button" (click)="logout()">Logout</button>
+                    <button type="button" (click)="toggleAddNew()">Add New</button>
+                    <button type="submit">Save</button>
+                    <button type="button" (click)="cancelAddAddress()">Cancel</button>
                 </div>
             </form>
-        </ng-container>
+        </div>
     </div>
     <div class="order-history">
         <h1>Order history</h1>
