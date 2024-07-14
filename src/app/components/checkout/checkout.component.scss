@@ -23,7 +23,7 @@ $hellenicblue: rgb(0, 140, 255);
                     .row {
                         display: flex;
                         margin: 15px 0;
-                        div {
+                        .stack {
                             display: flex;
                             flex-direction: column;
                             width: 100%;
@@ -51,6 +51,44 @@ $hellenicblue: rgb(0, 140, 255);
                                 z-index: 999;
                             }
                         }
+                        .address-block {
+                            font-size: 17px;
+                            font-family: 'Poppins', sans-serif;
+                            padding: 5px;
+                            outline: none;
+                            border: 1px solid #888888;
+                            outline: 1px solid #fff;
+                            transition: border 0.4s ease, outline 0.3s ease;
+                            &:focus,
+                            &:hover {
+                                cursor: pointer;
+                                outline: none;
+                                border: 1px solid $hellenicblue;
+                                outline: 1px solid $hellenicblue;
+                                z-index: 999;
+                            }
+                        }
+                    }
+                    .column {
+                        display: flex;
+                        flex-direction: row!important;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                    .addresses {
+                        height: 0px;
+                        overflow: hidden;
+                        overflow-y: scroll;
+                        margin: 0px;
+                        transition: height 1.6s ease, margin 1.6s ease;
+                    }
+                    .shown {
+                        margin: 15px 0px;
+                        max-height: 300px;
+                        overflow-y: scroll;
+                        width: initial;
+                        height: 300px;
+                        transition: height 1.6s ease, margin 1.6s ease;
                     }
                 }
                 .error-container {

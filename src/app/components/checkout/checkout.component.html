@@ -16,11 +16,11 @@
                     </div>
                     <div class="billing-form">
                         <div class="row">
-                            <div>
+                            <div class="stack">
                                 <label>First name*</label>
                                 <input type="text" required formControlName="First Name">
                             </div>
-                            <div>
+                            <div class="stack">
                                 <label>Last name*</label>
                                 <input type="text" required formControlName="Last Name">
                             </div>
@@ -30,7 +30,18 @@
                             <input type="text" formControlName="Company Name">
                         </div>
                         <div class="row single">
-                            <label>Street address*</label>
+                            <div class="column">
+                                <label>Street address*</label>
+                                <fa-icon (click)="toggleAddressBook()" [icon]="book" />
+                            </div>
+                            <div class="row single addresses" [ngClass]="{'shown': addressBookVisible}">
+                                <div *ngFor="let address of addressBook" (click)="selectAddress(address)" class="column address-block">
+                                    <p>{{ address.delivery_address_one }}</p>
+                                    <p>{{ address.delivery_address_two }}</p>
+                                    <p>{{ address.delivery_address_three }}</p>
+                                    <p>{{ address.delivery_postcode }}</p>
+                                </div>
+                            </div>
                             <input type="text" required formControlName="Street Address" placeholder="House number and street name">
                             <input type="text" formControlName="Street Address 2" placeholder="Apartment, suite, unit etc. (optional)">
                         </div>
@@ -59,15 +70,15 @@
                             <input type="text" required formControlName="Card Number">
                         </div>
                         <div class="row">
-                            <div>
+                            <div class="stack">
                                 <label>Expiry month*</label>
                                 <input type="text" required formControlName="Expiry Month">
                             </div>
-                            <div>
+                            <div class="stack">
                                 <label>Expiry year*</label>
                                 <input type="text" required formControlName="Expiry Year">
                             </div>
-                            <div>
+                            <div class="stack">
                                 <label>CVC*</label>
                                 <input type="text" required formControlName="CVC">
                             </div>

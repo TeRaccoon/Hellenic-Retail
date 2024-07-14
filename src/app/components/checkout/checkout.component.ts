@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faCircleExclamation, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import { concat, lastValueFrom, timestamp } from 'rxjs';
-import { CartItem } from 'src/app/common/types/cart';
+import { faCircleExclamation, faCircleNotch, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
@@ -19,6 +18,7 @@ export class CheckoutComponent {
 
   faCircleExclamation = faCircleExclamation;
   faCircleNotch = faCircleNotch;
+  book = faAddressBook;
 
   netTotal = 0;
   vat = 0;
@@ -33,6 +33,9 @@ export class CheckoutComponent {
   orderReference: string | null = null;
 
   orderError: string | null = null;
+
+  addressBookVisible = false;
+  addressBook: any[] = [];
 
   constructor(private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService) {
     this.billingForm = this.fb.group({
@@ -63,6 +66,7 @@ export class CheckoutComponent {
     this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
       if (loggedIn) {
         this.customerId = this.authService.getUserID();
+        this.loadAddressBook();
       }
     })
 
@@ -72,6 +76,10 @@ export class CheckoutComponent {
       }
     })
     this.tracing();
+  }
+
+  async loadAddressBook() {
+    this.addressBook = await lastValueFrom<any>(this.dataService.processPost({'action': 'address-book', 'customer_id': this.customerId?.toString()}));
   }
 
   async tracing() {
@@ -321,5 +329,17 @@ export class CheckoutComponent {
     const paymentDataString = JSON.stringify(paymentData, null, 2);
   
     return paymentDataString;
+  }
+
+  toggleAddressBook() {
+    this.addressBookVisible = !this.addressBookVisible;
+  }
+
+  selectAddress(address: any) {
+    this.billingForm.get('Street Address')?.setValue(address.delivery_address_one);
+    this.billingForm.get('Street Address 2')?.setValue(address.delivery_address_two);
+    this.billingForm.get('Town / City')?.setValue(address.delivery_address_three);
+    this.billingForm.get('Postcode')?.setValue(address.delivery_postcode);
+    this.addressBookVisible = false;
   }
 }
