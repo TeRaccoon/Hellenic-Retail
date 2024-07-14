@@ -39,7 +39,6 @@ export class ViewDetailsComponent {
   
   product: any;
   outOfStock: boolean = true;
-  fullPath: string = '';
   stock = 1;
   inWishlist = false;
 
@@ -55,7 +54,6 @@ export class ViewDetailsComponent {
   ngOnInit() {
     this.route.params.subscribe(params => {
       const productName = params['productName'];
-      this.fullPath = decodeURI(this.router.url);
       this.loadProduct(productName);
     });
   }
