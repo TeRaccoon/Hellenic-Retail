@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { RenderService } from 'src/app/services/render.service';
-import { HostListener } from "@angular/core";
 import {
   faCaretDown,
   faEnvelope,
