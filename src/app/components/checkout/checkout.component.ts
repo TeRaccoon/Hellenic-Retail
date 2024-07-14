@@ -7,6 +7,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import {
+  IPayPalConfig,
+  ICreateOrderRequest 
+} from 'ngx-paypal';
 
 @Component({
   selector: 'app-checkout',
@@ -14,6 +18,8 @@ import { FormService } from 'src/app/services/form.service';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent {
+  public paypalConfig ? : IPayPalConfig;
+
   billingForm: FormGroup;
 
   faCircleExclamation = faCircleExclamation;
@@ -36,6 +42,8 @@ export class CheckoutComponent {
 
   addressBookVisible = false;
   addressBook: any[] = [];
+
+  payerDetails: any = {};
 
   constructor(private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService) {
     this.billingForm = this.fb.group({
@@ -60,6 +68,76 @@ export class CheckoutComponent {
 
   ngOnInit() {
     this.load();
+    this.initConfig();
+  }
+  private initConfig(): void {
+    this.paypalConfig = {
+      currency: 'GBP',
+      clientId: 'sb',
+      createOrderOnClient: (data) => this.createOrder(),
+      advanced: {
+        commit: 'true'
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical'
+      },
+      onApprove: (data, actions) => {
+        actions.order.get().then((details: any) => {
+          this.payerDetails = details;
+        });
+      },
+      onClientAuthorization: (data) => {
+        
+      },
+      onCancel: (data, actions) => {
+        console.log('OnCancel', data, actions);
+      },
+      onError: err => {
+        console.log('OnError', err);
+      },
+      onClick: (data, actions) => {
+        console.log('onClick', data, actions);
+      }
+    };
+  }
+
+  private createOrder(): ICreateOrderRequest {
+    const formData = this.billingForm.value;
+    
+    return {
+      intent: 'CAPTURE',
+      purchase_units: [{
+        amount: {
+          currency_code: 'GBP',
+          value: this.invoiceTotal.toString(),
+          breakdown: {
+            item_total: {
+              currency_code: 'GBP',
+              value: this.invoiceTotal.toString(),
+            }
+          }
+        },
+        shipping: {
+          address: {
+            address_line_1: formData['Street Address'],
+            address_line_2: formData['Street Address 2'],
+            admin_area_2: formData['Town / City'],
+            postal_code: formData['Postcode'],
+            country_code: 'GB'
+          }
+        },
+        items: [{
+          name: 'Total Amount',
+          quantity: '1',
+          category: 'DIGITAL_GOODS',
+          unit_amount: {
+            currency_code: 'GBP',
+            value: this.invoiceTotal.toString()
+          }
+        }]
+      }]
+    };
   }
 
   async load() {
@@ -131,6 +209,10 @@ export class CheckoutComponent {
       this.processing = false;
     }
   }
+  
+  async paypalSubmit() {
+    (window as any).paypal.Buttons(this.paypalConfig).render('#paypal-button-container');
+  }
 
   async processInvoice(formData: any) {
     let invoiceFormData = await this.createInvoice(formData);
@@ -166,11 +248,15 @@ export class CheckoutComponent {
     return true;
   }
 
-  async processPayment(formData: any) {
-    const paymentData = this.craftPayload(formData);
-    let paymentResponse = await lastValueFrom(this.dataService.processTransaction(paymentData));
+  async processPayment(formData: any, withTransaction = true) {
+    let success = true;
+    if (withTransaction) {
+      const paymentData = this.craftPayload(formData);
+      let paymentResponse = await lastValueFrom(this.dataService.processTransaction(paymentData));
+  
+      success = this.validateResponse(paymentResponse);
+    }
 
-    let success = this.validateResponse(paymentResponse);
     if (success) {
       let response = await this.sendEmailConfirmation();
       if (!response.success) {

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -87,7 +88,8 @@ export function initializeApp(authService: AuthService): () => Promise<void> {
     FontAwesomeModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxPayPalModule,
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy}

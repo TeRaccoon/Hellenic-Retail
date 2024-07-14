@@ -95,6 +95,7 @@
                 <app-checkout-order-summary></app-checkout-order-summary>
                 <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a [routerLink]="'/documents/privacy-policy'">privacy policy</a>.</p>
                 <div class="payment-container">
+                    <ngx-paypal [config]="paypalConfig"></ngx-paypal>
                     <button type="submit" [disabled]="billingForm.invalid">
                         <ng-container *ngIf="!processing else paymentProcessing">
                             Place order
