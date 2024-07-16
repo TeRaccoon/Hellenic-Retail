@@ -35,6 +35,8 @@ export class CheckoutComponent {
   products: any[] = [];
   cart: any[] = [];
 
+  userType: string | null = null;
+
   customerId: string | null = null;
   orderReference: string | null = null;
 
@@ -144,6 +146,7 @@ export class CheckoutComponent {
     this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
       if (loggedIn) {
         this.customerId = this.authService.getUserID();
+        this.userType = this.authService.getUserType();
         this.loadAddressBook();
       }
     })
