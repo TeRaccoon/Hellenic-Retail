@@ -136,7 +136,7 @@ async collectDataComplex(query: string, filter: Record<string, any> = {}): Promi
             padding: 0;
         }
         .container {
-            width: 80%;
+            width: 30%;
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
