@@ -1,0 +1,17 @@
+.main {
+    bottom: 0;
+    position: fixed;
+    background-color: white;
+    width: 100%;
+}
+.account-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    a {
+        width: 25vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

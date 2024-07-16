@@ -39,6 +39,7 @@ import { ImageViewerComponent } from './components/image-viewer/image-viewer.com
 import { FooterComponent } from './components/footer/footer.component';
 import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
 import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
+import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { OrderCompleteComponent } from './components/order-complete/order-comple
     ImageViewerComponent,
     FooterComponent,
     DocumentViewerComponent,
-    OrderCompleteComponent
+    OrderCompleteComponent,
+    MobileNavbarComponent
   ],
   imports: [
     BrowserModule,
