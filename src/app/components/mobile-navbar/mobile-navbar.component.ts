@@ -32,6 +32,8 @@ export class MobileNavbarComponent {
   cartVisible = 'hidden';
   cartState: string = 'inactive';
 
+  cartCount = 0;
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -60,6 +62,8 @@ export class MobileNavbarComponent {
         if (updateRequested) {
           this.cartService.performUpdate();
           this.cartState = 'active';
+
+          this.cartCount = this.cartService.getCart().length;
 
           setTimeout(() => {
             this.cartState = 'inactive';
