@@ -123,6 +123,7 @@ export class LoginFormComponent {
           };
           let response = await lastValueFrom(this.dataService.sendEmail(emailData));
           if (response.success) {
+            this.changePassword();
             this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);
           } else {
             this.loginError = 'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
@@ -131,6 +132,10 @@ export class LoginFormComponent {
         }
       }
     }
+  }
+
+  async changePassword() {
+    let response = await lastValueFrom(this.dataService.processPost({'action': 'change-password', 'email': this.loginForm.get('email')?.value}))
   }
 
   async checkCustomerEmail() {
