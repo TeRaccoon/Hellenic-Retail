@@ -47,11 +47,9 @@
 @media screen and (max-width: 1079px) { //mobile
     .slide {
         width: 100%;
+        height: 45vw!important;
     }
     .slideshow-container {
-        height: 80vw;
-    }
-    .slide {
-        height: 80vw!important;
+        height: 45vw;
     }
 }

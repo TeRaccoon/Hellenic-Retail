@@ -1,7 +1,6 @@
 $hellenicblue: rgb(0, 140, 255);
 .container {
     width: 100%;
-    background-color: $hellenicblue;
     margin-left: auto;
     margin-right: auto;
     .category-bar {
@@ -160,11 +159,6 @@ $hellenicblue: rgb(0, 140, 255);
 
 
 @media screen and (max-width: 1079px) { //Mobile
-    .container {
-        position: absolute;
-        top: 0;
-        z-index: 1;
-    }
     .category-bar {
         width: 100%!important;
     }
@@ -196,7 +190,7 @@ $hellenicblue: rgb(0, 140, 255);
         visibility: visible!important;
     }
     .dropdown {
-        padding: 18px 13px!important;
+        padding: 5px 5px!important;
     }
     .dropdown-content {
         height: 100%;
@@ -237,12 +231,24 @@ $hellenicblue: rgb(0, 140, 255);
     .search-options {
         display: flex;
         height: 40px;
-        button {
-            border: 3px outset white!important;
-        }
+        justify-content: flex-end;
         select {
             display: none;
         }
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .search-options {
+        input {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: 425px) { //small mobile
+    .search-container {
+        flex: 0 1 75%;
     }
 }
 

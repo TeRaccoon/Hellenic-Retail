@@ -48,6 +48,9 @@
                 </li>
             </ng-container>
         </ul>
+        <div>
+            <img [src]='imageUrl + "/static/logo-wide.png"' alt="Logo">
+        </div>
         <div class="search-container">
             <div class="search-options">
                 <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" (keydown.enter)="search()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
