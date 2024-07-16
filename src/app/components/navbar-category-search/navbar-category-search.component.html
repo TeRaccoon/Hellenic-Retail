@@ -16,39 +16,11 @@
                             </a>
                             </div>
                         </div>
-                        <div>
-                            <div class="account-section">
-                                <a (click)="showAccount()">
-                                    <div class="icon-container">
-                                        <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
-                                    </div>
-                                    <p>
-                                        Account
-                                    </p>
-                                </a>
-                                <a [routerLink]="'/wishlist'">
-                                    <div class="icon-container">
-                                        <fa-icon class="interact-icon" [icon]="faHeart"></fa-icon>
-                                    </div>
-                                    <p>
-                                        Wishlist
-                                    </p>
-                                </a>
-                                <a (click)="toggleCart()">
-                                    <div class="icon-container">
-                                        <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
-                                    </div>
-                                    <p>
-                                        Cart
-                                    </p>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </li>
             </ng-container>
         </ul>
-        <div>
+        <div class="logo-container">
             <img [src]='imageUrl + "/static/logo-wide.png"' alt="Logo">
         </div>
         <div class="search-container">

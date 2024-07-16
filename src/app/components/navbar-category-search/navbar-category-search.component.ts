@@ -13,9 +13,6 @@ import { lastValueFrom } from 'rxjs';
 })
 export class NavbarCategorySearchComponent {
   faBars = faBars;
-  faUser = faUser;
-  faHeart = faHeart;
-  faCartShopping = faCartShopping;
   faSearch = faSearch;
 
   loginVisible = 'hidden';
@@ -83,22 +80,6 @@ export class NavbarCategorySearchComponent {
     this.categoriesShown = !this.categoriesShown;
   }
   
-  async showAccount() {
-    let isLoggedIn = this.authService.isLoggedIn();
-    if (isLoggedIn) {
-      this.router.navigate(['/account']);
-    } else {
-      this.toggleLogin();
-    }
-  }
-
-  toggleLogin() {
-    this.loginVisible == 'hidden' && this.formService.showLoginForm(); 
-  }
-  toggleCart() {
-    this.cartVisible == 'hidden' && this.formService.showCartForm();
-  }
-
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();

@@ -3,6 +3,7 @@ $hellenicblue: rgb(0, 140, 255);
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    background-color: $hellenicblue;
     .category-bar {
         width: 68vw;
         display: flex;
@@ -13,6 +14,7 @@ $hellenicblue: rgb(0, 140, 255);
             list-style: none;
             display: flex;
             align-items: center;
+            white-space: nowrap;
             cursor: pointer;
             margin-left: 15.8vw;
             margin-block: 0px;
@@ -35,6 +37,7 @@ $hellenicblue: rgb(0, 140, 255);
                 .dropdown-content {
                     .categories {
                         a {
+                            text-wrap: pretty;
                             border-bottom: 1px solid #b9b9b9;
                             display: block;
                             padding: 10px 15px;
@@ -159,6 +162,9 @@ $hellenicblue: rgb(0, 140, 255);
 
 
 @media screen and (max-width: 1079px) { //Mobile
+    .container {
+        background-color: white;
+    }
     .category-bar {
         width: 100%!important;
     }
@@ -186,7 +192,7 @@ $hellenicblue: rgb(0, 140, 255);
         margin: 12px 0;
     }
     .visible {
-        width: 35%!important;
+        width: 50%!important;
         visibility: visible!important;
     }
     .dropdown {
@@ -205,24 +211,6 @@ $hellenicblue: rgb(0, 140, 255);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-    }
-    .account-section {
-        margin-left: 10px;
-        a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: black!important;
-            p {
-                margin: 0;
-            }
-            .icon-container {
-                height: 16px;
-                width: 18px;
-                display: flex;
-                align-items: center
-            }
-        }
     }
     .search-container {
         display: flex;
@@ -282,7 +270,11 @@ $hellenicblue: rgb(0, 140, 255);
     .search-container {
         visibility: hidden;
     }
+    .logo-container {
+        display: none;
+    }
 }
+
 
 
 
