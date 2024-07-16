@@ -1,0 +1,23 @@
+<div class="main">
+    <div class="account-section">
+        <a (click)="showAccount()">
+            <div class="icon-container">
+                <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
+            </div>
+            Account
+        </a>
+        <a (click)="showWishlist()">
+            <div class="icon-container">
+                <fa-icon class="interact-icon" [icon]="faHeart"></fa-icon>
+            </div>
+            Wishlist
+        </a>
+        <a (click)="toggleCart()">
+            <div class="icon-container">
+                <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
+                <p>{{ cartCount }}</p>
+            </div>
+            Cart
+        </a>
+    </div>
+</div>

@@ -1,9 +1,9 @@
 $hellenicblue: rgb(0, 140, 255);
 .container {
     width: 100%;
-    background-color: $hellenicblue;
     margin-left: auto;
     margin-right: auto;
+    background-color: $hellenicblue;
     .category-bar {
         width: 68vw;
         display: flex;
@@ -14,6 +14,7 @@ $hellenicblue: rgb(0, 140, 255);
             list-style: none;
             display: flex;
             align-items: center;
+            white-space: nowrap;
             cursor: pointer;
             margin-left: 15.8vw;
             margin-block: 0px;
@@ -36,6 +37,7 @@ $hellenicblue: rgb(0, 140, 255);
                 .dropdown-content {
                     .categories {
                         a {
+                            text-wrap: pretty;
                             border-bottom: 1px solid #b9b9b9;
                             display: block;
                             padding: 10px 15px;
@@ -161,9 +163,7 @@ $hellenicblue: rgb(0, 140, 255);
 
 @media screen and (max-width: 1079px) { //Mobile
     .container {
-        position: absolute;
-        top: 0;
-        z-index: 1;
+        background-color: white;
     }
     .category-bar {
         width: 100%!important;
@@ -192,11 +192,11 @@ $hellenicblue: rgb(0, 140, 255);
         margin: 12px 0;
     }
     .visible {
-        width: 35%!important;
+        width: 50%!important;
         visibility: visible!important;
     }
     .dropdown {
-        padding: 18px 13px!important;
+        padding: 5px 5px!important;
     }
     .dropdown-content {
         height: 100%;
@@ -212,24 +212,6 @@ $hellenicblue: rgb(0, 140, 255);
         flex-direction: column;
         justify-content: space-between;
     }
-    .account-section {
-        margin-left: 10px;
-        a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: black!important;
-            p {
-                margin: 0;
-            }
-            .icon-container {
-                height: 16px;
-                width: 18px;
-                display: flex;
-                align-items: center
-            }
-        }
-    }
     .search-container {
         display: flex;
         padding: 8px 10px!important;  
@@ -237,12 +219,24 @@ $hellenicblue: rgb(0, 140, 255);
     .search-options {
         display: flex;
         height: 40px;
-        button {
-            border: 3px outset white!important;
-        }
+        justify-content: flex-end;
         select {
             display: none;
         }
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .search-options {
+        input {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: 425px) { //small mobile
+    .search-container {
+        flex: 0 1 75%;
     }
 }
 
@@ -276,7 +270,11 @@ $hellenicblue: rgb(0, 140, 255);
     .search-container {
         visibility: hidden;
     }
+    .logo-container {
+        display: none;
+    }
 }
+
 
 
 

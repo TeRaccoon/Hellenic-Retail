@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from './services/data.service';
+import { RenderService } from './services/render.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,14 @@ import { DataService } from './services/data.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'HellenicRetail';
+  title = 'Hellenic Grocery';
+  screenSize: any = {};
 
-  constructor(private dataService: DataService) {}
+  constructor(private renderService: RenderService) {}
+
+  ngOnInit() {
+    this.renderService.getScreenSize().subscribe(size => {
+      this.screenSize = size;
+    });
+  }
 }
