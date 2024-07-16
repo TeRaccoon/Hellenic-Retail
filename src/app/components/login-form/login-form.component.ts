@@ -31,6 +31,8 @@ export class LoginFormComponent {
   loginVisible = 'visible';
   loginError: string = '';
 
+  forgotPasswordState = false;
+
   submitted = false;
 
   errorMessages = {
@@ -66,6 +68,7 @@ export class LoginFormComponent {
   async showLogin() {
     if (!this.authService.isLoggedIn()) {
       this.loginVisible = 'visible';
+      this.forgotPasswordState = false;
     }
   }
 
@@ -87,16 +90,59 @@ export class LoginFormComponent {
 
   async formSubmit() {
     this.submitted = true;
-    if (this.loginForm.valid) {
-      let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
-      if (loginResponse.success) {
-        await this.authService.checkLogin();
-        this.loginVisible = 'hidden';
-        await this.tracing();
-      } else {
-        this.loginError = loginResponse.message;
+    if (!this.forgotPasswordState) {
+      if (this.loginForm.valid) {
+        let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
+        if (loginResponse.success) {
+          await this.authService.checkLogin();
+          this.loginVisible = 'hidden';
+          await this.tracing();
+        } else {
+          this.loginError = loginResponse.message;
+        }
+      }
+    } else {
+      if (this.loginForm.valid) {
+        if (await this.checkCustomerEmail()) {
+          let password = this.generatePassword();
+          const emailHTML = this.dataService.generateForgotPasswordEmail(password);
+          const emailData = {
+            action: 'mail',
+            mail_type: 'forgot_password',
+            subject: 'Forgot Password Request',
+            email_HTML: emailHTML,
+            address: this.loginForm.get('Email Address')?.value,
+            name: 'Customer',
+          };
+          let response = await lastValueFrom(this.dataService.sendEmail(emailData));
+          console.log(response);
+        }
       }
     }
+  }
+
+  async checkCustomerEmail() {
+    let email = this.loginForm.get('email')?.value;
+    let response = await lastValueFrom(this.dataService.collectData('user-id-from-email', email));
+    if (response.length == 0) {
+      this.loginError = "A user doesn't exist with this email";
+      return false;
+    }
+    return true;
+  }
+
+  async sendForgotPasswordEmail() {
+    let emailHTML = this.dataService.generateForgotPasswordEmail(this.loginForm.get('email')?.value);
+  }
+
+  generatePassword() {
+    let length = 10;
+    let charset = 'abcdefghijklmnopqrstuvwxyz1234567890!,.#';
+    let password = '';
+    for (let i = 0, n = charset.length; i < length; i++) {
+      password  += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return password;
   }
 
   async tracing() {
@@ -107,5 +153,10 @@ export class LoginFormComponent {
   createAccount() {
     this.router.navigate(['/create-account']);
     this.formService.hideLoginForm();
+  }
+
+  forgotPassword() {
+    this.forgotPasswordState = true;
+    this.loginForm.get('password')?.removeValidators(Validators.required);
   }
 }
