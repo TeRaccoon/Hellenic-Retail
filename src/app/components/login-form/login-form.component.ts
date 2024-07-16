@@ -6,6 +6,7 @@ import { trigger, state, style, animate, transition, keyframes } from '@angular/
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-login-form',
@@ -27,11 +28,14 @@ import { lastValueFrom } from 'rxjs';
   ]
 })
 export class LoginFormComponent {
+  spinner = faCircleNotch;
+
   loginForm: FormGroup;
   loginVisible = 'visible';
   loginError: string = '';
 
   forgotPasswordState = false;
+  loading = false;
 
   submitted = false;
 
@@ -92,6 +96,7 @@ export class LoginFormComponent {
     this.submitted = true;
     if (!this.forgotPasswordState) {
       if (this.loginForm.valid) {
+        this.loading = true;
         let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
         if (loginResponse.success) {
           await this.authService.checkLogin();
@@ -100,10 +105,12 @@ export class LoginFormComponent {
         } else {
           this.loginError = loginResponse.message;
         }
+        this.loading = false;
       }
     } else {
       if (this.loginForm.valid) {
         if (await this.checkCustomerEmail()) {
+          this.loading = true;
           let password = this.generatePassword();
           const emailHTML = this.dataService.generateForgotPasswordEmail(password);
           const emailData = {
@@ -111,11 +118,16 @@ export class LoginFormComponent {
             mail_type: 'forgot_password',
             subject: 'Forgot Password Request',
             email_HTML: emailHTML,
-            address: this.loginForm.get('Email Address')?.value,
+            address: this.loginForm.get('email')?.value,
             name: 'Customer',
           };
           let response = await lastValueFrom(this.dataService.sendEmail(emailData));
-          console.log(response);
+          if (response.success) {
+            this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);
+          } else {
+            this.loginError = 'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
+          }
+          this.loading = false;
         }
       }
     }
@@ -156,7 +168,12 @@ export class LoginFormComponent {
   }
 
   forgotPassword() {
-    this.forgotPasswordState = true;
-    this.loginForm.get('password')?.removeValidators(Validators.required);
+    if (this.forgotPasswordState) {
+      this.loginForm.get('password')?.addValidators(Validators.required);
+    } else {
+      this.loginForm.get('password')?.removeValidators(Validators.required);
+    }
+    this.forgotPasswordState = !this.forgotPasswordState;
+    console.log(this.loginForm);
   }
 }

@@ -30,7 +30,9 @@
                     </div> -->
                     <a (click)="forgotPassword()">Forgot your password?</a>
                 </div>
-                <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}</button>
+                <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}
+                    <fa-icon *ngIf="loading" class="loading-icon" [icon]="spinner" spinPulse [spin]="true" />
+                </button>
             </form>
         </div>
     </div>
