@@ -45,16 +45,13 @@ $hellenicblue: rgb(0, 140, 255);
     .category-row {
         width: 90%;
         gap: 2vw;
-        justify-content: center;
+        overflow-x: scroll;
     }
     .category {
         width: 44vw;
-        a {
-            font-size: small;
-        }
     }
     .image-container {
-        height: 15vw!important;
-        width: auto!important;
+        height: 30vw!important;
+        width: 30vw!important;
     }
 }
