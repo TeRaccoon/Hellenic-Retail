@@ -44,8 +44,14 @@
     }
 }
 
-@media screen and (max-width: 1079px) {
+@media screen and (max-width: 1079px) { //mobile
     .slide {
         width: 100%;
+    }
+    .slideshow-container {
+        height: 80vw;
+    }
+    .slide {
+        height: 80vw!important;
     }
 }

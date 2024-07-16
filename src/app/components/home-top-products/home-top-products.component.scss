@@ -139,11 +139,28 @@ $hellenicblue: rgb(0, 140, 255);
 }
 
 @media screen and (max-width: 1079px) {
+    //mobile main
+    .grid-wrapper {
+        width: 85%;
+    }
+}
+
+@media screen and (max-width: 1079px) and (min-width: 501px) {
     //mobile
     .grid-container {
         grid-template-columns: repeat(3, minmax(0, 1fr))!important;
     }
-    .grid-wrapper {
-        width: 80%;
+    .product-container {
+        height: 42vw;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    // Small mobile
+    .grid-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr))!important;
+    }
+    .product-container {
+        height: 66vw;
     }
 }
