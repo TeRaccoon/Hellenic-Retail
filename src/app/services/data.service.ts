@@ -14,17 +14,11 @@ export class DataService {
   visibleCategoryNames: any[] = [];
   visibleCategoryLocations: any[] = [];
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
-    // this.router.events.subscribe((event) => {
-    //   if (event instanceof NavigationStart) {
-    //     // this.authService.checkLogin();
-    //   }
-    // });
-    this.loadStandardData();
-  }
-
   uploadURL = `http://localhost/uploads/`;
-  
+
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
+    this.loadStandardData();
+  }  
 
   collectData(query: string, filter?: string): Observable<any[]> {
     let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
@@ -34,20 +28,31 @@ export class DataService {
     return this.http.get<any[]>(url);
   }
 
-  collectDataComplex(query: string, filter?: Record<string, any>): Observable<any> {
-    let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
-    let userType = this.authService.getUserType();
-    let paramFilter = filter === undefined ? {} : filter;
-
-    if (userType == null) {
-      this.authService.checkLogin();
-    }
-    
-    paramFilter['queryType'] = this.authService.getUserType();
-    const queryParams = Object.entries(paramFilter).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-    url += `&${queryParams}`;
-    return this.http.get<any>(url);
+  processPost(body: Record<string, any>) {
+    const url = 'http://localhost/API/retail_query_handler.php';
+    return this.http.post(url, {body});
   }
+
+async collectDataComplex(query: string, filter: Record<string, any> = {}): Promise<any> {
+  await this.authService.checkLogin();
+  let userType = this.authService.getUserType();
+
+  const url = new URL(apiUrlBase + 'retail_query_handler.php');
+  url.searchParams.append('query', query);
+
+  const queryParams = { ...filter, queryType: userType };
+  for (const [key, value] of Object.entries(queryParams)) {
+    url.searchParams.append(key, value ?? '');
+  }
+
+  try {
+    return await lastValueFrom(this.http.get<any>(url.toString()));
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+
 
   submitFormDataQuery(query:string, data: any) {
     const url = 'http://localhost/API/retail_query_handler.php';
@@ -115,6 +120,89 @@ export class DataService {
 
   getShopFilter() {
     return this.shopFilter.asObservable();
+  }
+
+  generateForgotPasswordEmail(password: string) {
+    let email = `
+    <html>
+    <head>
+        <title>Forgotten Password</title>
+        <meta charset="UTF-8">
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .total-row {
+            font-weight: bold;
+        }
+        .total-row td {
+            text-align: right;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Password reset</h1>
+            <p>Dear Customer,</p>
+            <p>A request has been made to reset your password. Below is your temporary password: </p>
+            <table>
+                <tr>
+                    <th>Password</th>
+                </tr>
+                <tr>
+                    <td>${password}</td>
+                </tr>
+
+            </table>
+            <p>If this wasn't you, please send an email to support@hellenicgrocery.co.uk</p>
+            <p>Thank you for choosing our service!</p>
+            <div class="footer">
+                <p>Best regards,</p>
+                <p>Hellenic Grocery</p>
+            </div>
+        </div>
+    </body>
+    </html>`;
+
+    return email;
   }
 
   generateOrderConfirmationEmail(emailData: any) {
@@ -202,6 +290,10 @@ export class DataService {
                 <tr class="total-row">
                     <td colspan="2">VAT</td>
                     <td>${emailData.vat}</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="2">Delivery</td>
+                    <td>${emailData.delivery}</td>
                 </tr>
                 <tr class="total-row">
                     <td colspan="2">Total</td>

@@ -17,6 +17,8 @@ export class AuthGuard {
       if (!loggedIn) {
         this.router.navigate([this.router.url]);
         this.formService.showLoginForm();
+      } else {
+        this.formService.hideLoginForm();
       }
     });
   }

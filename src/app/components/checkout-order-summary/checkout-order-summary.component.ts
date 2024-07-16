@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
+import { CartItem } from 'src/app/common/types/cart';
 
 @Component({
   selector: 'app-checkout-order-summary',
@@ -10,9 +11,9 @@ import { DataService } from 'src/app/services/data.service';
   styleUrls: ['./checkout-order-summary.component.scss']
 })
 export class CheckoutOrderSummaryComponent {
-  cart: { productID: number, quantity: number }[] = [];
+  cart: CartItem[] = [];
   cartProducts: any[] = [];
-  cartIDs: number[] = [];
+  subtotal = 0;
   total = 0;
   imageUrl = '';
 
@@ -20,23 +21,22 @@ export class CheckoutOrderSummaryComponent {
 
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
-    this.loadData();
+    this.getCartData();
   }
 
-  async loadData() {
-    this.cart = this.cartService.getCartItems();
-    this.cartIDs = this.cartService.getIDs();
-    this.loadCartData();
+  async getCartData() {
+    this.cart = this.cartService.getCart();
+    this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
+      if (updateRequested) {
+        this.loadCartData();
+      }
+    })
   }
 
   async loadCartData() {
-    let cartProducts: any[] = [];
-    this.total = 0;
-    await Promise.all(this.cartIDs.map(async(id) => {
-      if (id !== null) {
-        cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
-      }
-    }));
+    this.cart = this.cartService.getCart();
+    let cartProducts: any[] = await this.cartService.getCartItems();
+    this.subtotal = 0;
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {
@@ -49,7 +49,8 @@ export class CheckoutOrderSummaryComponent {
         product.total = individualPrice * this.cart[index].quantity;
         product.discounted_total = discountedPrice * this.cart[index].quantity;
 
-        this.total += product.discounted_total;
+        this.subtotal += product.discounted_total;
+        this.total = this.subtotal + (this.subtotal > 30 ? 0 : 7.50);
 
         if (product.image_location === null) {
           product.image_location = 'placeholder.jpg';
@@ -58,5 +59,10 @@ export class CheckoutOrderSummaryComponent {
     });
 
     this.cartProducts = cartProducts;
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
   }
 }

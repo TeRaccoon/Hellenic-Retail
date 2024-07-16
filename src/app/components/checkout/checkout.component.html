@@ -16,11 +16,11 @@
                     </div>
                     <div class="billing-form">
                         <div class="row">
-                            <div>
+                            <div class="stack">
                                 <label>First name*</label>
                                 <input type="text" required formControlName="First Name">
                             </div>
-                            <div>
+                            <div class="stack">
                                 <label>Last name*</label>
                                 <input type="text" required formControlName="Last Name">
                             </div>
@@ -30,7 +30,18 @@
                             <input type="text" formControlName="Company Name">
                         </div>
                         <div class="row single">
-                            <label>Street address*</label>
+                            <div class="column">
+                                <label>Street address*</label>
+                                <fa-icon (click)="toggleAddressBook()" [icon]="book" />
+                            </div>
+                            <div class="row single addresses" [ngClass]="{'shown': addressBookVisible}">
+                                <div *ngFor="let address of addressBook" (click)="selectAddress(address)" class="column address-block">
+                                    <p>{{ address.delivery_address_one }}</p>
+                                    <p>{{ address.delivery_address_two }}</p>
+                                    <p>{{ address.delivery_address_three }}</p>
+                                    <p>{{ address.delivery_postcode }}</p>
+                                </div>
+                            </div>
                             <input type="text" required formControlName="Street Address" placeholder="House number and street name">
                             <input type="text" formControlName="Street Address 2" placeholder="Apartment, suite, unit etc. (optional)">
                         </div>
@@ -59,15 +70,15 @@
                             <input type="text" required formControlName="Card Number">
                         </div>
                         <div class="row">
-                            <div>
+                            <div class="stack">
                                 <label>Expiry month*</label>
                                 <input type="text" required formControlName="Expiry Month">
                             </div>
-                            <div>
+                            <div class="stack">
                                 <label>Expiry year*</label>
                                 <input type="text" required formControlName="Expiry Year">
                             </div>
-                            <div>
+                            <div class="stack">
                                 <label>CVC*</label>
                                 <input type="text" required formControlName="CVC">
                             </div>
@@ -82,15 +93,19 @@
             </div>
             <div class="checkout-summary-container">
                 <app-checkout-order-summary></app-checkout-order-summary>
-                <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a>privacy policy</a>.</p>
-                <button type="submit" [disabled]="billingForm.invalid">
-                    <ng-container *ngIf="!processing else paymentProcessing">
-                        Place order
-                    </ng-container>
-                    <ng-template #paymentProcessing>
-                        <fa-icon class="loading-icon" [icon]="faCircleNotch" spinPulse [spin]="true" />
-                    </ng-template>
-                </button>
+                <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a [routerLink]="'/documents/privacy-policy'">privacy policy</a>.</p>
+                <div class="payment-container">
+                    <ngx-paypal [config]="paypalConfig"></ngx-paypal>
+                    <button type="submit" [disabled]="billingForm.invalid">
+                        <ng-container *ngIf="!processing else paymentProcessing">
+                            Place order
+                        </ng-container>
+                        <ng-template #paymentProcessing>
+                            Place order <fa-icon class="loading-icon" [icon]="faCircleNotch" spinPulse [spin]="true" />
+                        </ng-template>
+                    </button>
+                    <p *ngIf="orderError" class="error">{{ orderError }} Please try again or contact support: <a href="mailto:support@hellenicgrocery.co.uk">support@hellenicgrocery.co.uk</a></p>
+                </div>
             </div>
         </div>
     </form>

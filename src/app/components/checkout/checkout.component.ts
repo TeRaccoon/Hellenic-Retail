@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faCircleExclamation, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faCircleNotch, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import {
+  IPayPalConfig,
+  ICreateOrderRequest 
+} from 'ngx-paypal';
 
 @Component({
   selector: 'app-checkout',
@@ -14,13 +18,17 @@ import { FormService } from 'src/app/services/form.service';
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent {
+  public paypalConfig ? : IPayPalConfig;
+
   billingForm: FormGroup;
 
   faCircleExclamation = faCircleExclamation;
   faCircleNotch = faCircleNotch;
+  book = faAddressBook;
 
   netTotal = 0;
   vat = 0;
+  delivery = 0;
   invoiceTotal = 0;
   processing = false;
 
@@ -29,6 +37,13 @@ export class CheckoutComponent {
 
   customerId: string | null = null;
   orderReference: string | null = null;
+
+  orderError: string | null = null;
+
+  addressBookVisible = false;
+  addressBook: any[] = [];
+
+  payerDetails: any = {};
 
   constructor(private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService) {
     this.billingForm = this.fb.group({
@@ -53,25 +68,106 @@ export class CheckoutComponent {
 
   ngOnInit() {
     this.load();
+    this.initConfig();
+  }
+  private initConfig(): void {
+    this.paypalConfig = {
+      currency: 'GBP',
+      clientId: 'sb',
+      createOrderOnClient: (data) => this.createOrder(),
+      advanced: {
+        commit: 'true'
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical'
+      },
+      onApprove: (data, actions) => {
+        actions.order.get().then((details: any) => {
+          this.payerDetails = details;
+        });
+      },
+      onClientAuthorization: (data) => {
+        
+      },
+      onCancel: (data, actions) => {
+        console.log('OnCancel', data, actions);
+      },
+      onError: err => {
+        console.log('OnError', err);
+      },
+      onClick: (data, actions) => {
+        console.log('onClick', data, actions);
+      }
+    };
+  }
+
+  private createOrder(): ICreateOrderRequest {
+    const formData = this.billingForm.value;
+    
+    return {
+      intent: 'CAPTURE',
+      purchase_units: [{
+        amount: {
+          currency_code: 'GBP',
+          value: this.invoiceTotal.toString(),
+          breakdown: {
+            item_total: {
+              currency_code: 'GBP',
+              value: this.invoiceTotal.toString(),
+            }
+          }
+        },
+        shipping: {
+          address: {
+            address_line_1: formData['Street Address'],
+            address_line_2: formData['Street Address 2'],
+            admin_area_2: formData['Town / City'],
+            postal_code: formData['Postcode'],
+            country_code: 'GB'
+          }
+        },
+        items: [{
+          name: 'Total Amount',
+          quantity: '1',
+          category: 'DIGITAL_GOODS',
+          unit_amount: {
+            currency_code: 'GBP',
+            value: this.invoiceTotal.toString()
+          }
+        }]
+      }]
+    };
   }
 
   async load() {
-    await this.authService.checkLogin()
-    this.customerId = this.authService.getUserID();
-    this.calculateTotal();
+    this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
+      if (loggedIn) {
+        this.customerId = this.authService.getUserID();
+        this.loadAddressBook();
+      }
+    })
+
+    this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
+      if (updateRequested) {
+        this.calculateTotal();
+      }
+    })
+    this.tracing();
+  }
+
+  async loadAddressBook() {
+    this.addressBook = await lastValueFrom<any>(this.dataService.processPost({'action': 'address-book', 'customer_id': this.customerId?.toString()}));
+  }
+
+  async tracing() {
+    await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'checkout', 'customer_id': this.customerId}));
   }
 
   async calculateTotal() {
-    let cartIDs = this.cartService.getIDs();
-    this.cart = this.cartService.getCartItems();
-
-    let cartProducts: any[] = [];
+    this.cart = this.cartService.getCart();
+    let cartProducts: any[] = await this.cartService.getCartItems();
     let subtotal = 0;
-    await Promise.all(cartIDs.map(async(id) => {
-      if (id !== null) {
-        cartProducts.push(await lastValueFrom(this.dataService.collectData('product-from-id', id.toString())));
-      }
-    }));
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {
@@ -91,35 +187,93 @@ export class CheckoutComponent {
     this.products = cartProducts;
 
     if (subtotal < 30) {
-      subtotal += 7.50;
+      this.delivery = 7.50;
     }
 
     this.netTotal = Number(Number(subtotal).toFixed(2));
-    this.vat = Number(Number(subtotal * 0.2).toFixed(2));
-    this.invoiceTotal = Number(Number(this.netTotal + this.vat).toFixed(2));
+    this.vat = Number(Number((subtotal + this.delivery) * 0.2).toFixed(2));
+    this.invoiceTotal = Number(Number(this.netTotal + this.vat + this.delivery).toFixed(2));
   }
 
   async formSubmit() {
     if (this.billingForm.valid) {
       this.processing = true;
       const formData = this.billingForm.value;
-      const paymentData = this.craftPayload(formData);
 
-      let response = await lastValueFrom(this.dataService.processTransaction(paymentData));
-
-      let success = this.validateResponse(response);
+      let success = await this.processInvoice(formData);
+      
       if (success) {
-        let invoiceFormData = this.createInvoice(formData);
-        response = await this.processInvoice(invoiceFormData);
-        if (response.success) {
-          this.sendEmailConfirmation(invoiceFormData);
-        }
+        await this.processPayment(formData);
       }
+      
       this.processing = false;
     }
   }
+  
+  async paypalSubmit() {
+    (window as any).paypal.Buttons(this.paypalConfig).render('#paypal-button-container');
+  }
 
-  async sendEmailConfirmation(invoiceFormData: any) {
+  async processInvoice(formData: any) {
+    let invoiceFormData = await this.createInvoice(formData);
+    let response = await lastValueFrom(this.dataService.submitFormData(invoiceFormData));
+    if (response.success) {
+      return await this.processInvoicedItems(response.id + 1);
+    } else {
+      this.orderError = 'There was an error processing this order! You have not been charged.';
+      this.formService.setPopupMessage('There was an error processing this order!', true, 10000);
+      return false;
+    }
+  }
+
+  async processInvoicedItems(invoice_id: string) {
+    for (const item of this.cart) {
+      let invoicedItemForm = {
+        invoice_id: invoice_id,
+        item_id: item.item_id,
+        quantity: item.quantity,
+        discount: 0,
+        table_name: 'invoiced_items',
+        action: 'add'
+      };
+
+      let response = await lastValueFrom(this.dataService.submitFormData(invoicedItemForm));
+
+      if (!response.success) {
+        this.orderError = 'There was an error processing this order! You have not been charged.';
+        this.formService.setPopupMessage('There was an error processing this order!', true, 10000);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async processPayment(formData: any, withTransaction = true) {
+    let success = true;
+    if (withTransaction) {
+      const paymentData = this.craftPayload(formData);
+      let paymentResponse = await lastValueFrom(this.dataService.processTransaction(paymentData));
+  
+      success = this.validateResponse(paymentResponse);
+    }
+
+    if (success) {
+      let response = await this.sendEmailConfirmation();
+      if (!response.success) {
+        this.orderError = 'There was an error sending your email confirmation!';
+      } else {
+        setTimeout(() => {
+          this.router.navigate(['/order-complete']);
+        }, 3000);
+      }
+      await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId}));
+    } else {
+      this.orderError = 'There was an error processing your payment details!';
+      this.formService.setPopupMessage('There was an error processing your payment details!', true, 10000);
+    }
+  }
+
+  async sendEmailConfirmation() {
     let products = this.products.map((product: any, index) => {
       return {
         name: product.name,
@@ -128,12 +282,15 @@ export class CheckoutComponent {
       };
     });
 
+    const formData = this.billingForm.value;
+
     const emailInformation = {
       reference: this.orderReference,
       products: products,
-      net_total: '&pound;' + this.netTotal,
-      vat: '&pound;' + this.vat,
-      total: '&pound;' + this.invoiceTotal
+      net_total: '&pound;' + this.netTotal.toFixed(2),
+      vat: '&pound;' + this.vat.toFixed(2),
+      delivery: '&pound' + this.delivery.toFixed(2),
+      total: '&pound;' + this.invoiceTotal.toFixed(2)
     };
 
     const emailHTML = this.dataService.generateOrderConfirmationEmail(emailInformation);
@@ -142,41 +299,66 @@ export class CheckoutComponent {
       action: 'mail',
       mail_type: 'order',
       subject: 'Thank you for your order!',
-      email_HTML: emailHTML
+      email_HTML: emailHTML,
+      address: formData['Email Address'],
+      name: `${formData['First Name']} -  ${formData['Last Name']}`,
     };
 
     return await lastValueFrom(this.dataService.sendEmail(emailData));
   }
 
-  async processInvoice(invoiceFormData: any) {
-    let response = await lastValueFrom(this.dataService.submitFormData(invoiceFormData));
-    return response;
-  }
+  async createInvoice(formData: any) {
+    this.orderReference = this.customerId !== null ? formData['Last Name'] + '_' + this.customerId + Date.now().toString() : formData['Last Name'] + '_' + Date.now().toString();
 
-  createInvoice(formData: any) {
+    let address_id = await this.checkAddresses(formData);
+
     const invoiceFormData = {
       title: this.orderReference,
       customer_id: this.customerId,
       status: 'Pending',
       delivery_date: null,
       printed: 'No',
-      net_value: this.netTotal,
-      vat: this.vat,
+      gross_value: this.netTotal + this.delivery,
+      VAT: this.vat,
       total: this.invoiceTotal,
+      outstanding_balance: 0,
       delivery_type: formData['Delivery Type'],
       payment_status: 'Yes',
       warehouse_id: null,
       notes: formData['orderNotes'],
-      address_line_1: formData['Street Address'],
-      address_line_2: formData['Street Address 2'],
-      address_line_3: null,
+      address_id: address_id,
+      billing_address_id: address_id,
       postcode: formData['Postcode'],
-      address_id: null,
       table_name: 'invoices',
       action: 'add'
     };
 
     return invoiceFormData;
+  }
+
+  async checkAddresses(formData: any) {
+    // TODO
+    if (true) { //If the customers address doesn't exist in the database, add it
+      const addressFormData = {
+        customer_id: this.customerId,
+        delivery_address_one: formData['Street Address'],
+        delivery_address_two: formData['Street Address 2'],
+        delivery_postcode: formData['Postcode'],
+        table_name: 'customer_address',
+        action: 'add'
+      };
+
+      let address_response = await lastValueFrom(this.dataService.submitFormData(addressFormData));
+      if (address_response.success) {
+        return address_response.id;
+      } else {
+        this.formService.setPopupMessage('There was an error adding your address!', true, 10000);
+        this.orderError = 'There was an error adding your address to the address book!'
+        return false;
+      }
+    } else {
+      return true;
+    }
   }
 
   validateResponse(response: any) {
@@ -187,9 +369,6 @@ export class CheckoutComponent {
         reference: this.orderReference,
         total: this.invoiceTotal,
       });
-      setTimeout(() => {
-        this.router.navigate(['/order-complete']);
-      }, 3000);
       return true;
     } else {
       this.formService.setPopupMessage("There was an error processing your payment!");
@@ -199,7 +378,6 @@ export class CheckoutComponent {
   }
 
   craftPayload(formData: any) {
-    this.orderReference = this.customerId !== null ? formData['Last Name'] + '_' + this.customerId : formData['Last Name'] + '_' + Date.now();
     const paymentData = {
       clientReferenceInformation: {
         code: this.orderReference
@@ -237,5 +415,21 @@ export class CheckoutComponent {
     const paymentDataString = JSON.stringify(paymentData, null, 2);
   
     return paymentDataString;
+  }
+
+  toggleAddressBook() {
+    if (this.addressBook.length === 0) {
+      this.formService.setPopupMessage('You have no addresses in your address book!', true, 3000);
+    } else {
+      this.addressBookVisible = !this.addressBookVisible;
+    }
+  }
+
+  selectAddress(address: any) {
+    this.billingForm.get('Street Address')?.setValue(address.delivery_address_one);
+    this.billingForm.get('Street Address 2')?.setValue(address.delivery_address_two);
+    this.billingForm.get('Town / City')?.setValue(address.delivery_address_three);
+    this.billingForm.get('Postcode')?.setValue(address.delivery_postcode);
+    this.addressBookVisible = false;
   }
 }

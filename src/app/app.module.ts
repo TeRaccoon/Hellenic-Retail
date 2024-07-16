@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,7 +40,12 @@ import { ImageViewerComponent } from './components/image-viewer/image-viewer.com
 import { FooterComponent } from './components/footer/footer.component';
 import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
 import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
+import { AuthService } from './services/auth.service';
 import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.component';
+
+export function initializeApp(authService: AuthService): () => Promise<void> {
+  return () => authService.checkLogin();
+}
 
 @NgModule({
   declarations: [
@@ -84,7 +90,8 @@ import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.
     FontAwesomeModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxPayPalModule,
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy}

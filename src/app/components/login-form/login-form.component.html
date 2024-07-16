@@ -22,15 +22,15 @@
                         {{ error.message }}
                     </div>
                 </div>
-                <input [class]="inputHasError('password') ? 'error-input' : ''" type="password" required formControlName="password" placeholder="Enter password">
+                <input *ngIf="!forgotPasswordState" [class]="inputHasError('password') ? 'error-input' : ''" type="password" required formControlName="password" placeholder="Enter password">
                 <div class="login-options">
                     <!-- <div>
                         <label for="remember-me">Remember me</label>
                         <input type="checkbox" id="remember-me" name="remember-me" value="remember-me">
                     </div> -->
-                    <a>Forgot your password?</a>
+                    <a (click)="forgotPassword()">Forgot your password?</a>
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}</button>
             </form>
         </div>
     </div>

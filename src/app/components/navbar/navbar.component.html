@@ -24,7 +24,7 @@
             <div class="search-dropdown-items">
                 <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;" [routerLink]="'/view/' + product.name">
                     <div>
-                        <img [src]="product.image_location">
+                        <img [src]="product.image_location" (error)="onImageError($event)">
                         <p> {{ product.name }} </p>
                     </div>
                     <div class="price-container">
@@ -58,6 +58,7 @@
         <a (click)="toggleCart()">
             <div class="icon-container">
                 <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
+                <p>{{ cartCount }}</p>
             </div>
             Cart
         </a>

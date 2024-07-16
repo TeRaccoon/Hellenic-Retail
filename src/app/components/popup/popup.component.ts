@@ -33,12 +33,13 @@ export class PopupComponent {
 
   checkVisibility() {
     this.formService.getPopupVisibility().subscribe((visible: boolean) => {
+      let popupTime = this.formService.getPopupTime();
       this.visible = visible;
       if (visible) {
         this.message = this.formService.getPopupMessage();
         setTimeout(() => {
           this.formService.hidePopup();
-        }, 2500);
+        }, popupTime);
       }
     });
   }

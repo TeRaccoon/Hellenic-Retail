@@ -19,7 +19,6 @@ export class PaymentService {
 	async processPayment(formData: any) {
 		this.payload = this.craftPayload(formData);
 
-    console.log(this.payload);
 		return this.processPost();
 	}
 
@@ -43,7 +42,6 @@ export class PaymentService {
 
 		try {
 			const response = await lastValueFrom(this.http.post(url, this.payload, options));
-      console.log(response);
 			return this.handleResponse(response);
 		} catch (error) {
 			console.error(error);

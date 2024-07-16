@@ -9,12 +9,15 @@
             </div>
             <div class="grid-container">
                 <div class="product-container" *ngFor="let product of featuredProducts; let i = index;">
-                    <ng-container *ngIf="product.discount && product.discount != null">
-                        <div class="discount-banner">
-                            <p>{{ product.discount }}% OFF</p>
-                        </div>
-                    </ng-container>
-                    <img [routerLink]="'/view/' + product.name" [src]="product.image_location == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_location" />
+                    <div class="discount-banner">
+                        <p *ngIf="product.discount && product.discount != null">{{ product.discount }}% OFF</p>
+                        <p *ngIf="product.banner" [class]="product.discount && product.discount != null ? 'secondary' : ''" [ngClass]="{
+                            'secondary': product.discount && product.discount != null,
+                            'red': product.quantity == 0,
+                            'yellow': product.quantity != 0 && product.quantity != null
+                        }">{{ product.banner }}</p>
+                    </div>
+                    <img [routerLink]="'/view/' + product.name" [src]="product.image_location == null ? imageUrl + 'placeholder.jpg' : imageUrl + product.image_location" (error)="onImageError($event)" />
                     <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
                     <div class="price-container">
                         <ng-container *ngIf="product.pallet_price == undefined else wholesale">
@@ -32,7 +35,7 @@
                         </ng-template>
                     </div>
                     <div class="product-options">
-                        <button (click)="addToCart(product.id, 1)">Add to cart</button>
+                        <button [disabled]="product.quantity == 0" (click)="addToCart(product.id, 1)">Add to cart</button>
                         <p (click)="addToWishlist(product.id)">
                             <fa-icon [icon]="faHeart"></fa-icon>
                         </p>

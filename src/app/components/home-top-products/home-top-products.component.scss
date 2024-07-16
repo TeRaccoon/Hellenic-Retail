@@ -24,6 +24,8 @@ $hellenicblue: rgb(0, 140, 255);
             transition: box-shadow 0.6s ease;
             .discount-banner {
                 width: 100%;
+                height: auto;
+                position: relative;
                 p {
                     position: absolute;
                     background-color: $hellenicblue;
@@ -32,6 +34,16 @@ $hellenicblue: rgb(0, 140, 255);
                     margin: 10px 0;
                     padding: 5px 15px;
                     border-radius: 0 10px 10px 0;
+                }
+                .secondary {
+                    top: 3rem;
+                }
+                .red {
+                    background-color: rgb(255, 61, 61);
+                }
+                .yellow {
+                    background-color: rgb(255, 255, 59);
+                    color: black;
                 }
             }
             .product-name {
@@ -96,6 +108,9 @@ $hellenicblue: rgb(0, 140, 255);
                     border: none;
                     color: #ffffff;
                     cursor: pointer;
+                    &:disabled {
+                        cursor: default;
+                    }
                 }
                 p {
                     margin: auto 0;
@@ -122,13 +137,16 @@ $hellenicblue: rgb(0, 140, 255);
         }
     }
 }
-@media screen and (max-width: 1079px) { //mobile main
+
+@media screen and (max-width: 1079px) {
+    //mobile main
     .grid-wrapper {
         width: 85%;
     }
 }
 
-@media screen and (max-width: 1079px) and (min-width: 501px) { //mobile
+@media screen and (max-width: 1079px) and (min-width: 501px) {
+    //mobile
     .grid-container {
         grid-template-columns: repeat(3, minmax(0, 1fr))!important;
     }
@@ -136,7 +154,9 @@ $hellenicblue: rgb(0, 140, 255);
         height: 42vw;
     }
 }
-@media screen and (max-width: 500px) { // Small mobile
+
+@media screen and (max-width: 500px) {
+    // Small mobile
     .grid-container {
         grid-template-columns: repeat(2, minmax(0, 1fr))!important;
     }

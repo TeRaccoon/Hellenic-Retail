@@ -47,15 +47,19 @@ export class HomeTopProductsComponent {
   }
 
   async loadProducts() {
-    let topProducts = await lastValueFrom(
-      this.dataService.collectDataComplex('top-products', { limit: this.limit })
-    );
+    let topProducts = await this.dataService.collectDataComplex('top-products', { limit: this.limit });
     this.topProducts = Array.isArray(topProducts) ? topProducts : [topProducts];
 
     this.topProducts.forEach((product) => {
       if (product.discount && product.discount != null) {
         product.discounted_price =
           product.price * ((100 - product.discount) / 100);
+      }
+      if (product.quantity === null || product.quantity === 0 || product.quantity === undefined) {
+        product.quantity = 0;
+        product.banner = 'Out of stock!';
+      } else if (product.quantity < 10) {
+        product.banner = 'Low on stock!';
       }
     });
   }
@@ -67,10 +71,14 @@ export class HomeTopProductsComponent {
 
   async addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
-    this.formService.showCartForm();
   }
 
   addToWishlist(productID: number) {
     this.cartService.addToWishlist(productID);
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
   }
 }

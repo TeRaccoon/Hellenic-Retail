@@ -25,7 +25,8 @@ const routes: Routes = [
   { path: 'wishlist', component: WishlistComponent, canActivate: [AuthGuard] },
   { path: 'create-account', component: CreateAccountFormComponent },
   { path: 'order-complete', component: OrderCompleteComponent },
-  { path: 'documents/:documentName', component: DocumentViewerComponent }
+  { path: 'documents/:documentName', component: DocumentViewerComponent },
+  { path: '**', redirectTo: '/home'},
 ];
 
 @NgModule({

@@ -7,6 +7,7 @@ import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
 import { RenderService } from 'src/app/services/render.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-shop-grid',
@@ -43,7 +44,8 @@ export class ShopGridComponent {
     private dataService: DataService,
     private route: ActivatedRoute,
     private formService: FormService,
-    private renderService: RenderService
+    private renderService: RenderService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -55,6 +57,7 @@ export class ShopGridComponent {
       this.screenSize = size;
     });
     this.getShopFilter();
+    this.authService.isLoggedInObservable
   }
 
   getShopFilter() {
@@ -84,16 +87,10 @@ export class ShopGridComponent {
 
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
-    if (category !== undefined && this.category !== undefined) {
-      products = await lastValueFrom(
-        this.dataService.collectDataComplex('products-from-category', {
-          category: category,
-        })
-      );
+    if (category !== undefined && this.category !== undefined || category == 'All') {
+      products = await this.dataService.collectDataComplex('products-from-category', {category: category});
     } else {
-      products = await lastValueFrom(
-        this.dataService.collectDataComplex('products')
-      );
+      products = await this.dataService.collectDataComplex('products')
     }
 
     products = Array.isArray(products) ? products : [products];
@@ -149,7 +146,6 @@ export class ShopGridComponent {
       default:
         this.filterService.setMaxPrice(selectedOption.maxPrice);
         this.filterService.setMinPrice(selectedOption.minPrice);
-        console.log("HERE");
         this.filterService.filterUpdateRequested();
         break;
     }
@@ -158,7 +154,6 @@ export class ShopGridComponent {
   setPriceFilter(filter: any) {
     this.filterService.setMaxPrice(filter.maxPrice);
     this.filterService.setMinPrice(filter.minPrice);
-    console.log("HERE");
     this.filterService.filterUpdateRequested();
   }
 
@@ -169,7 +164,6 @@ export class ShopGridComponent {
 
   async addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity);
-    this.formService.showCartForm();
   }
 
   async addToWishlist(productID: number) {
@@ -216,5 +210,10 @@ export class ShopGridComponent {
       return false;
     }
     return true;
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
   }
 }

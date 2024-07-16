@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { RenderService } from 'src/app/services/render.service';
-import { HostListener } from "@angular/core";
 import {
   faCaretDown,
   faEnvelope,
@@ -68,6 +67,8 @@ export class NavbarComponent {
   cartVisible = 'hidden';
   cartState: string = 'inactive';
 
+  cartCount = 0;
+
   imageUrl: string;
 
   constructor(
@@ -88,7 +89,12 @@ export class NavbarComponent {
       this.screenSize = size;
     });
 
+    this.loadCart();
     this.loadNavBar();
+  }
+
+  async loadCart() {
+    await this.cartService.refreshCart();
   }
 
   async getLoginVisibility() {
@@ -98,18 +104,18 @@ export class NavbarComponent {
   }
 
   async getCartUpdates() {
-    this.cartService
-      .getUpdateRequest()
-      .subscribe((updateRequested: boolean) => {
-        if (updateRequested) {
-          this.cartService.performUpdate();
-          this.cartState = 'active';
+    this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
+      if (updateRequested) {
+        this.cartService.performUpdate();
+        this.cartState = 'active';
 
-          setTimeout(() => {
-            this.cartState = 'inactive';
-          }, 500);
-        }
-      });
+        this.cartCount = this.cartService.getCart().length;
+        
+        setTimeout(() => {
+          this.cartState = 'inactive';
+        }, 500);
+      }
+    });
   }
 
   async loadNavBar() {
@@ -122,9 +128,7 @@ export class NavbarComponent {
       this.subcategories = subcategories;
     }
 
-    let products = await lastValueFrom(
-      this.dataService.collectDataComplex('products')
-    );
+    let products: any = await this.dataService.collectDataComplex('products');
     products = Array.isArray(products) ? products : [products];
 
     if (products != null) {
@@ -205,11 +209,10 @@ export class NavbarComponent {
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
-    } else if (this.categoryFilter != 'all') {
-      this.router.navigate(['/shop/' + this.categoryFilter]);
+    } else if (this.categoryFilter == null || this.categoryFilter == 'all') {
+      this.router.navigate(['/shop/']);
     } else {
-      this.dataService.setShopFilter(this.searchStringFilter);
-      this.router.navigate(['/shop']);
+      this.router.navigate(['/shop/' + this.categoryFilter]);
     }
   }
 
@@ -236,5 +239,10 @@ export class NavbarComponent {
   }
   toggleCart() {
     this.cartVisible == 'hidden' && this.formService.showCartForm();
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
   }
 }

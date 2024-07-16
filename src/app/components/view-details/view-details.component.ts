@@ -39,7 +39,6 @@ export class ViewDetailsComponent {
   
   product: any;
   outOfStock: boolean = true;
-  fullPath: string = '';
   stock = 1;
   inWishlist = false;
 
@@ -55,7 +54,6 @@ export class ViewDetailsComponent {
   ngOnInit() {
     this.route.params.subscribe(params => {
       const productName = params['productName'];
-      this.fullPath = decodeURI(this.router.url);
       this.loadProduct(productName);
     });
   }
@@ -78,7 +76,7 @@ export class ViewDetailsComponent {
     await this.authService.checkLogin();
     this.userType = this.authService.getUserType();
 
-    let product = await lastValueFrom(this.dataService.collectDataComplex("product-view-details", { productName: productName }));
+    let product: any = await this.dataService.collectDataComplex("product-view-details", { productName: productName });
     
     if (product.discount && product.discount != null) {
       product.discounted_price = product.price * ((100 - product.discount) / 100);
@@ -92,13 +90,11 @@ export class ViewDetailsComponent {
 
     let stock = await lastValueFrom<any>(this.dataService.collectData("total-stock-by-id", product.id));
     this.stock = stock.total_quantity;
-    this.outOfStock = stock < 1 ? true : false;
+    this.outOfStock = stock.total_quantity < 1;
   }
 
   addToCart(productID: number, quantity: number) {
     this.cartService.addToCart(productID, quantity * this.quantityMultiplier);
-    this.formService.setPopupMessage("Product added to cart!");
-    this.formService.showPopup();
   }
   
   addToWishlist(productID: number) {
@@ -106,8 +102,7 @@ export class ViewDetailsComponent {
   }
 
   buyNow(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, 1);
-    this.cartService.changeQuantity(productID, quantity * this.quantityMultiplier);
+    this.cartService.addToCart(productID, quantity * this.quantityMultiplier);
     this.router.navigate(['/checkout']);
   }
 

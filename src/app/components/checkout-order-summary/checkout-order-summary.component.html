@@ -8,7 +8,7 @@
         <tr *ngFor="let product of cartProducts; let i = index">
             <td class="row-details">
                 <div>
-                    <img [alt]="product.name" [src]="imageUrl + product.image_location">
+                    <img [alt]="product.name" [src]="imageUrl + product.image_location" (error)="onImageError($event)">
                     <p>{{ cart[i].quantity }}</p>
                 </div>
                 <p>{{ product.name }}</p>
@@ -22,20 +22,28 @@
                 <p class="title">Subtotal</p>
             </td>
             <td>
-                <p class="row-price">£{{ total | number: '1.2-2' }}</p>
+                <p class="row-price">£{{ subtotal | number: '1.2-2' }}</p>
             </td>
         </tr>
         <tr>
             <td>
                 <p class="title">Delivery</p>
             </td>
-            <td *ngIf="total < 60; else elseBlock">
+            <td *ngIf="total < 30; else elseBlock">
                 <p class="row-price">£7.50</p>
             </td>
             <td>
                 <ng-template #elseBlock>
                     <p class="row-price">--</p>
                 </ng-template>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="title">Total</p>
+            </td>
+            <td>
+                <p class="row-price">£{{ total | number: '1.2-2' }}</p>
             </td>
         </tr>
     </ng-container>
