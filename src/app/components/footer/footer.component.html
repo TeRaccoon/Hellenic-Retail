@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer" [class]="screenSize.width <= 1080 ? 'mobile-footer' : ''">
     <div class="container">
         <div class="left-most">
             <img [src]="imageUrl + 'static/logo2.jpg'" />
