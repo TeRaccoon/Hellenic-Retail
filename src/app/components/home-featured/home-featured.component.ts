@@ -4,6 +4,7 @@ import { faHeart, faEye, faBox, faPallet } from '@fortawesome/free-solid-svg-ico
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { lastValueFrom } from 'rxjs';
+import { RenderService } from 'src/app/services/render.service';
 
 @Component({
   selector: 'app-home-featured',
@@ -21,15 +22,32 @@ export class HomeFeaturedComponent {
 
   imageUrl = '';
 
-  constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) { }
+  screenSize: any = {};
+  limit = 3;
+
+  constructor(private cartService: CartService, private dataService: DataService, private formService: FormService, private renderService: RenderService) { }
 
   ngOnInit() {
     this.loadProducts();
     this.imageUrl = this.dataService.getUploadURL();
+    this.loadRenderService();
+  }
+
+  loadRenderService() {
+    this.renderService.getScreenSize().subscribe(size => {
+      this.screenSize = size;
+      if (size.width < 500 && this.limit != 4) {
+        this.limit = 4;
+        this.loadProducts();
+      } else if (size.width >= 500 && this.limit != 3) {
+        this.limit = 3;
+        this.loadProducts();
+      }
+    });
   }
 
   async loadProducts() {
-    let featuredProducts = await this.dataService.collectDataComplex('featured', { limit: "3" });
+    let featuredProducts = await this.dataService.collectDataComplex('featured', { limit: this.limit });
     this.featuredProducts = Array.isArray(featuredProducts) ? featuredProducts : [featuredProducts];
     
     this.featuredProducts.forEach((product) => {
