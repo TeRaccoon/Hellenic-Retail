@@ -8,11 +8,10 @@ $hellenicblue: rgb(0, 140, 255);
     .container {
         display: flex;
         align-items: flex-start;
-        justify-content: space-between;
+        justify-content: flex-start;
         width: 68%;
         margin: 0 auto;
         padding: 0 20px;
-        gap: 20px;
         img {
             max-height: 60px;
             max-width: 200px;
@@ -21,49 +20,52 @@ $hellenicblue: rgb(0, 140, 255);
         .column {
             display: flex;
             flex-direction: column;
-            width: 20vw;
-                p {
-                    margin: 0px;
-                }
-            }
-            h1 {
-                font-size: 16px;
-            }
-            .link {
-                display: flex;
-                a {
-                    transition: border-color 0.5s ease;
-                    border-bottom: 1px solid transparent;
-                    text-decoration: none;
-                    color: #000000;
-                    &:active {
-                        color: #000000;
-                    }
-                    &:hover {
-                        border-color: $hellenicblue;
-                    }
-                }
+            p {
+                margin: 0px;
             }
         }
-    }
-    .left-most {
-        margin-right: 60px;
-        div {
+        h1 {
+            font-size: 16px;
+        }
+        .link {
             display: flex;
-            align-items: baseline;
-            gap: 10px;
+            a {
+                transition: border-color 0.5s ease;
+                border-bottom: 1px solid transparent;
+                text-decoration: none;
+                color: #000000;
+                &:active {
+                    color: #000000;
+                }
+                &:hover {
+                    border-color: $hellenicblue;
+                }
+            }
         }
     }
-    .right-most {
-        display: flex;
-        align-items: flex-start;
-        margin: 5px;
-        fa-icon {
-            margin-right: 10px;
-        }
 }
 
-@media screen and (max-width: 1079px) { //mobile
+.left-most {
+    div {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        max-width: 22vw;
+    }
+}
+
+.right-most {
+    display: flex;
+    align-items: flex-start;
+    margin: 5px;
+    gap: 20px;
+    fa-icon {
+        margin-right: 10px;
+    }
+}
+
+@media screen and (max-width: 1079px) {
+    //mobile
     .left-most {
         width: 60vw!important;
         margin-right: 0!important;
