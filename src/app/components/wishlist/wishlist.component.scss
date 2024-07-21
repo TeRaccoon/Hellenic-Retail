@@ -92,3 +92,13 @@
         }
     }
 }
+@media screen and (max-width: 1079px) {
+    .container {
+        table {
+            margin: 0;
+            thead {
+                white-space: nowrap!important;
+            }
+        }
+    }
+}

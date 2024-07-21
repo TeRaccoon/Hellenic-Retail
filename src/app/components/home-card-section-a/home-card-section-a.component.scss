@@ -40,9 +40,22 @@ $hellenicblue: rgb(0, 140, 255);
         background-size: 110%;
     }
 }
+@media screen and (max-width: 500px) {
+    .card-container {
+        flex-direction: column  ;
+    }
+}
 @media screen and (max-width: 1079px) { //mobile
     .ng-star-inserted {
-        font-size: small;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        div {
+            p {
+                white-space: nowrap;
+                margin-top: 3px;
+            }
+        }
     }
     .card-container {
         width: 80%;
