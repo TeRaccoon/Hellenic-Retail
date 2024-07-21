@@ -54,3 +54,12 @@ $hellenicblue: #008cff;
         }
     }
 }
+
+@media screen and (max-width: 1079px) {
+    .view-image-container {
+        flex-direction: column-reverse!important;
+    }
+    .image-sidebar {
+        flex-direction: row!important;
+    }
+}
