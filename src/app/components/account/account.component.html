@@ -103,38 +103,50 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="buttons">
+                <div *ngIf="addressBook != null && addressBook.length != 0 else noAddresses" class="buttons">
                     <button type="button" (click)="toggleAddNew()">Add New</button>
                     <button type="submit">Save</button>
                     <button type="button" (click)="cancelAddAddress()">Cancel</button>
                 </div>
+                <ng-template #noAddresses>
+                    <div class="no-addresses">
+                        <h2>Your address book is empty.</h2>
+                        <button type="button" (click)="toggleAddNew()">Add New</button>
+                        <button *ngIf="this.showAddNew" type="submit">Save</button>
+                    </div>
+                </ng-template>
             </form>
         </div>
     </div>
     <div class="order-history">
         <h1>Order history</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Reference</th>
-                    <th>Status</th>
-                    <th>Payment Status</th>
-                    <th>Net Value</th>
-                    <th>VAT</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let order of orderHistory">
-                    <td>{{ order.title }}</td>
-                    <td>{{ order.status }}</td>
-                    <td>{{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</td>
-                    <td>£{{ order.gross_value | number: '1.2-2' }}</td>
-                    <td>£{{ order.VAT | number: '1.2-2' }}</td>
-                    <td>£{{ order.total | number: '1.2-2' }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <ng-container *ngIf="orderHistory != null && orderHistory.length != 0 else noOrders">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Status</th>
+                        <th>Payment Status</th>
+                        <th>Net Value</th>
+                        <th>VAT</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let order of orderHistory">
+                        <td>{{ order.title }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</td>
+                        <td>£{{ order.gross_value | number: '1.2-2' }}</td>
+                        <td>£{{ order.VAT | number: '1.2-2' }}</td>
+                        <td>£{{ order.total | number: '1.2-2' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+        <ng-template #noOrders>
+            <h2 class="no-orders">Nothing to show here!</h2>
+        </ng-template>
     </div>
 </div>
 <app-footer />

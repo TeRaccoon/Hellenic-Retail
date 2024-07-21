@@ -81,11 +81,13 @@ export class AccountComponent {
   }
 
   async loadAddressBook() {
-    this.addressBook = await lastValueFrom<any>(this.dataService.processPost({'action': 'address-book', 'customer_id': this.userId?.toString()}));
+    let addressBook = await lastValueFrom<any>(this.dataService.processPost({'action': 'address-book', 'customer_id': this.userId?.toString()}));
+    this.addressBook = Array.isArray(addressBook) ? addressBook : [addressBook];
   }
 
   async loadOrderHistory() {
-    this.orderHistory = await lastValueFrom<any>(this.dataService.processPost({'action': 'order-history', 'customer_id': this.userId?.toString()})); 
+    let orderHistory = await lastValueFrom<any>(this.dataService.processPost({'action': 'order-history', 'customer_id': this.userId?.toString()}));
+    this.orderHistory =  Array.isArray(orderHistory) ? orderHistory : [orderHistory];
   }
 
   toggleEdit() {

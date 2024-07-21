@@ -58,6 +58,23 @@ $hellenicblue: rgb(0, 140, 255);
             padding: 20px;
             flex: 1;
             overflow-y: scroll;
+            h2 {
+                font-size: 16px;
+            }
+            .no-addresses {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                button {
+                    cursor: pointer;
+                    font-family: 'Poppins', sans-serif;
+                    color: white;
+                    font-size: 16px;
+                    background-color: $hellenicblue;
+                    border: 0;
+                    padding: 4px 18px;
+                }
+            }
         }
         .buttons {
             display: flex;
@@ -78,6 +95,10 @@ $hellenicblue: rgb(0, 140, 255);
         padding: 20px;
         border: 1px solid #ccc;
         overflow-y: scroll;
+        .no-orders {
+            margin: 0px;
+            font-size: 18px;
+        }
     }
     table {
         width: 100%;
