@@ -139,7 +139,7 @@ export class CartService {
           customer_id: customerID,
           table_name: "wishlist"
         };
-        let inWishlist: any = await lastValueFrom(await this.dataService.collectDataComplex("is-product-in-wishlist", {id: customerID, product_id: productID}));
+        let inWishlist: any = await this.dataService.collectDataComplex("is-product-in-wishlist", {id: customerID, product_id: productID});
 
         let popupMessage = "Product already in wishlist!";
         
