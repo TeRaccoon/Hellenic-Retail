@@ -1,4 +1,3 @@
-import { forkJoin, lastValueFrom } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
