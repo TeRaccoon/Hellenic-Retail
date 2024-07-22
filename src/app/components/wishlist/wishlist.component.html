@@ -3,6 +3,7 @@
     <table>
         <thead>
             <tr>
+                <th></th>
                 <th>Product</th>
                 <th>Price</th>
                 <th>In stock</th>
@@ -11,7 +12,8 @@
         </thead>
         <ng-container *ngIf="wishlistProducts.length > 0">
             <tr *ngFor="let product of wishlistProducts">
-                <td>{{ product.name }}</td>
+                <td><img [src]="imageUrl + product.image" (error)="onImageError($event)" /></td>
+                <td [routerLink]="'/view/' + product.name">{{ product.name }}</td>
                 <td class="price-container">
                     <ng-container *ngIf="product.discount > 0">
                         <p class="discounted-price">£{{ product.discounted_price | number: '1.2-2' }}</p>

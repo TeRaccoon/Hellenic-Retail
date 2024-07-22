@@ -18,7 +18,11 @@ export class WishlistComponent {
 
   wishlistProducts: any[] = [];
 
-  constructor(private cartService: CartService, private dataService: DataService, private authService: AuthService, private formService: FormService) {}
+  imageUrl;
+
+  constructor(private cartService: CartService, private dataService: DataService, private authService: AuthService, private formService: FormService) {
+    this.imageUrl = this.dataService.getUploadURL();
+  }
 
   ngOnInit() {
     this.formService.setBannerMessage("Wishlist");
@@ -40,6 +44,10 @@ export class WishlistComponent {
         if (product.discount && product.discount != null) {
           product.discounted_price = product.price * ((100 - product.discount) / 100);
         }
+
+        if (!product.image && product.image == null) {
+          product.image = 'placeholder.jpg';
+        }
       });
 
       this.wishlistProducts = wishlistProducts;
@@ -49,5 +57,10 @@ export class WishlistComponent {
   async removeFromWishlist(wishlistID: number) {
     await this.cartService.removeFromWishlist(wishlistID);
     this.checkLogin();
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = this.imageUrl + 'placeholder.jpg';
   }
 }
