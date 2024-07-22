@@ -78,11 +78,15 @@ $hellenicblue: rgb(0, 140, 255);
     .left-most {
         width: 60vw!important;
         margin-right: 0!important;
+        div {
+            max-width: 100%!important;
+        }
     }
     .right-most {
         display: flex!important;
         flex-direction: row!important;
         flex-wrap: wrap!important;
+        gap: 0!important;
     }
     .container {
         flex-direction: column;
