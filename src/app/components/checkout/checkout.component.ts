@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import { CheckoutService } from 'src/app/services/checkout.service';
+import { CheckoutSummary } from '../../common/types/checkout';
 import {
   IPayPalConfig,
   ICreateOrderRequest 
@@ -26,11 +28,9 @@ export class CheckoutComponent {
   faCircleNotch = faCircleNotch;
   book = faAddressBook;
 
-  netTotal = 0;
-  vat = 0;
-  delivery = 0;
-  invoiceTotal = 0;
   processing = false;
+
+  checkoutSummary: CheckoutSummary;
 
   products: any[] = [];
   cart: any[] = [];
@@ -47,7 +47,7 @@ export class CheckoutComponent {
 
   payerDetails: any = {};
 
-  constructor(private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService) {
+  constructor(private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService, private checkoutService: CheckoutService) {
     this.billingForm = this.fb.group({
       "First Name": ['', Validators.required],
       "Last Name": ['', Validators.required],
@@ -66,6 +66,8 @@ export class CheckoutComponent {
       "orderNotes": [''],
       "action": ['process']
     });
+
+    this.checkoutSummary = this.checkoutService.getCheckoutSummary();
   }
 
   ngOnInit() {
@@ -87,6 +89,7 @@ export class CheckoutComponent {
       onApprove: (data, actions) => {
         actions.order.get().then((details: any) => {
           this.payerDetails = details;
+          console.log("🚀 ~ CheckoutComponent ~ actions.order.get ~ details:", details)
         });
       },
       onClientAuthorization: (data) => {
@@ -112,11 +115,11 @@ export class CheckoutComponent {
       purchase_units: [{
         amount: {
           currency_code: 'GBP',
-          value: this.invoiceTotal.toString(),
+          value: this.checkoutSummary.total.toString(),
           breakdown: {
             item_total: {
               currency_code: 'GBP',
-              value: this.invoiceTotal.toString(),
+              value: this.checkoutSummary.total.toString(),
             }
           }
         },
@@ -135,7 +138,7 @@ export class CheckoutComponent {
           category: 'DIGITAL_GOODS',
           unit_amount: {
             currency_code: 'GBP',
-            value: this.invoiceTotal.toString()
+            value: this.checkoutSummary.total.toString()
           }
         }]
       }]
@@ -171,6 +174,8 @@ export class CheckoutComponent {
     this.cart = this.cartService.getCart();
     let cartProducts: any[] = await this.cartService.getCartItems();
     let subtotal = 0;
+    let delivery = 0;
+    let vat = 0;
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {
@@ -190,12 +195,15 @@ export class CheckoutComponent {
     this.products = cartProducts;
 
     if (subtotal < 30) {
-      this.delivery = 7.50;
+      delivery = 7.50;
     }
+    vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2));
 
-    this.netTotal = Number(Number(subtotal).toFixed(2));
-    this.vat = Number(Number((subtotal + this.delivery) * 0.2).toFixed(2));
-    this.invoiceTotal = Number(Number(this.netTotal + this.vat + this.delivery).toFixed(2));
+    this.checkoutService.updateCheckoutSummary({ delivery: Number(delivery)});
+    this.checkoutService.updateCheckoutSummary({ subtotal: Number(Number(subtotal).toFixed(2))});
+    this.checkoutService.updateCheckoutSummary({ vat: Number(Number((subtotal + delivery) * 0.2).toFixed(2))});
+    this.checkoutService.updateCheckoutSummary({ total: Number(Number(subtotal + vat + delivery).toFixed(2))});
+    this.checkoutSummary = this.checkoutService.getCheckoutSummary();
   }
 
   async formSubmit() {
@@ -290,10 +298,10 @@ export class CheckoutComponent {
     const emailInformation = {
       reference: this.orderReference,
       products: products,
-      net_total: '&pound;' + this.netTotal.toFixed(2),
-      vat: '&pound;' + this.vat.toFixed(2),
-      delivery: '&pound' + this.delivery.toFixed(2),
-      total: '&pound;' + this.invoiceTotal.toFixed(2)
+      net_total: '&pound;' + this.checkoutSummary.subtotal.toFixed(2),
+      vat: '&pound;' + this.checkoutSummary.vat.toFixed(2),
+      delivery: '&pound' + this.checkoutSummary.delivery.toFixed(2),
+      total: '&pound;' + this.checkoutSummary.total.toFixed(2)
     };
 
     const emailHTML = this.dataService.generateOrderConfirmationEmail(emailInformation);
@@ -321,9 +329,9 @@ export class CheckoutComponent {
       status: 'Pending',
       delivery_date: null,
       printed: 'No',
-      gross_value: this.netTotal + this.delivery,
-      VAT: this.vat,
-      total: this.invoiceTotal,
+      gross_value: this.checkoutSummary.subtotal + this.checkoutSummary.delivery,
+      VAT: this.checkoutSummary.vat,
+      total: this.checkoutSummary.total,
       outstanding_balance: 0,
       delivery_type: formData['Delivery Type'],
       payment_status: 'Yes',
@@ -370,7 +378,7 @@ export class CheckoutComponent {
       this.formService.showPopup();
       this.formService.setOrderDetails({
         reference: this.orderReference,
-        total: this.invoiceTotal,
+        total: this.checkoutSummary.total,
       });
       return true;
     } else {
@@ -398,7 +406,7 @@ export class CheckoutComponent {
       },
       orderInformation: {
         amountDetails: {
-          totalAmount: this.invoiceTotal,
+          totalAmount: this.checkoutSummary.total,
           currency: "GBP"
         },
         billTo: {

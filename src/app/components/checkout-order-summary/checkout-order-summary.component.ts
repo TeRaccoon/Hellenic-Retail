@@ -4,6 +4,8 @@ import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { CartItem } from 'src/app/common/types/cart';
+import { CheckoutSummary } from 'src/app/common/types/checkout';
+import { CheckoutService } from 'src/app/services/checkout.service';
 
 @Component({
   selector: 'app-checkout-order-summary',
@@ -13,15 +15,17 @@ import { CartItem } from 'src/app/common/types/cart';
 export class CheckoutOrderSummaryComponent {
   cart: CartItem[] = [];
   cartProducts: any[] = [];
-  subtotal = 0;
-  total = 0;
+  checkoutSummary: CheckoutSummary;
   imageUrl = '';
 
-  constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) {}
+  constructor(private cartService: CartService, private dataService: DataService, private checkoutService: CheckoutService) {
+    this.checkoutSummary = checkoutService.getCheckoutSummary();
+  }
 
   ngOnInit() {
     this.imageUrl = this.dataService.getUploadURL();
     this.getCartData();
+    this.getCheckoutSummary();
   }
 
   async getCartData() {
@@ -33,10 +37,15 @@ export class CheckoutOrderSummaryComponent {
     })
   }
 
+  async getCheckoutSummary() {
+    this.checkoutService.getCheckoutSummaryObservable().subscribe((checkoutSummary: CheckoutSummary) => {
+      this.checkoutSummary = checkoutSummary;
+    });
+  }
+
   async loadCartData() {
     this.cart = this.cartService.getCart();
     let cartProducts: any[] = await this.cartService.getCartItems();
-    this.subtotal = 0;
 
     cartProducts.forEach((product, index) => {
       if (this.cart[index] && product != null) {
@@ -48,9 +57,6 @@ export class CheckoutOrderSummaryComponent {
 
         product.total = individualPrice * this.cart[index].quantity;
         product.discounted_total = discountedPrice * this.cart[index].quantity;
-
-        this.subtotal += product.discounted_total;
-        this.total = this.subtotal + (this.subtotal > 30 ? 0 : 7.50);
 
         if (product.image_location === null) {
           product.image_location = 'placeholder.jpg';
