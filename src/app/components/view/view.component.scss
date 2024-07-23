@@ -12,3 +12,13 @@
         flex: 1;
     }
 }
+
+@media screen and (max-width: 1079px) {
+    app-view-image {
+        flex: 0;
+    }
+    .product-view-container {
+        flex-direction: column!important;
+
+    }
+}

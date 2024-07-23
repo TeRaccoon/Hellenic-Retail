@@ -211,6 +211,7 @@ $hellenicblue: rgb(0, 140, 255);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        max-width: fit-content;
     }
     .search-container {
         display: flex;

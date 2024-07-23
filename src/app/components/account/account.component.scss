@@ -106,7 +106,7 @@ $hellenicblue: rgb(0, 140, 255);
         border-collapse: collapse;
         thead {
             position: sticky;
-            top: 0;
+            top: -20px;
             background-color: white;
         }
         th,
@@ -127,18 +127,42 @@ $hellenicblue: rgb(0, 140, 255);
                 margin: 3px;
             }
         }
+        .edit-icon {
+            text-align: center;
+        }
+        .delete-icon {
+            text-align: center;
+        }
+        .delete {
+            text-align: center;
+        }
+        .edit {
+            text-align: center;
+        }
     }
 }
+
 @media screen and (max-width: 1079px) {
-    .account-details {
-        max-height: 100%!important;
-        flex-direction: column
-    }
     .account-container {
         width: 85%!important;
+        max-height: 100%;
+        gap: 30px!important;
         h1 {
             font-size: 18px!important;
         }
+        table {
+            td {
+                padding: 2px!important;
+            }
+        }
+        .account-details {
+            max-height: 100%!important;
+            flex-direction: column
+            //gap: 30px!important; idk why but this doesn't work, saying colon should be a semi-colon which is wrong
+        }
+    }
+    .details {
+        padding: 15px!important;
     }
     .detail {
         font-size: 12px!important;
@@ -149,10 +173,46 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .buttons {
         display: flex;
-            flex-wrap: wrap;
-            width: 70vw!important;
+            width: 75vw!important;
+            overflow: hidden;
         button {
             font-size: 10px!important;
+            padding: 4px 14px!important;
+        }
+    }
+    .column-titles {
+        font-size: 10px!important;
+        th {
+            white-space: nowrap;
+            padding: 8px 2px 4px !important;
+        }
+    }
+    .address-book{
+        padding: 15px!important;
+        max-height: 100vw;
+    }
+    .address-book-table {
+        font-size: 10px!important;
+    }
+    .address-1{
+        max-width: 6vw;
+    }
+    .address-2 {
+        max-width: 8vw;
+    }
+    .order-history {
+        padding: 15px!important;
+        max-height: 100vw;
+        thead {
+            top: -15px;
+            tr {
+                th {
+                    padding: 8px 2px 4px !important;
+                }
+            }
+        }
+        .order-history-table {
+            font-size: 9px;
         }
     }
 }

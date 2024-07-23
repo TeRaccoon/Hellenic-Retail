@@ -58,26 +58,26 @@
             <form [formGroup]="addAddressForm" (ngSubmit)="addAddress()">
                 <table>
                     <thead>
-                        <tr>
+                        <tr class="column-titles">
                             <th>Line 1</th>
                             <th>Line 2</th>
                             <th>Line 3</th>
                             <th>Postcode</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <th class="edit">Edit</th>
+                            <th class="delete">Delete</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="address-book-table">
                         <tr *ngFor="let address of addressBook">
-                            <td>{{ address.delivery_address_one }}</td>
-                            <td>{{ address.delivery_address_two }}</td>
+                            <td class="address-1">{{ address.delivery_address_one }}</td>
+                            <td class="address-2">{{ address.delivery_address_two }}</td>
                             <td>{{ address.delivery_address_three }}</td>
                             <td>{{ address.delivery_postcode }}</td>
-                            <td>
+                            <td class="edit-icon">
                                 <fa-icon [icon]="pencil" />
                             </td>
                             <ng-container *ngIf="pendingDeleteId != address.id else pendingDelete">
-                                <td (click)="setDeleteId(address.id)">
+                                <td class="delete-icon" (click)="setDeleteId(address.id)">
                                     <fa-icon [icon]="bin" />
                                 </td>
                             </ng-container>
@@ -121,7 +121,7 @@
     <div class="order-history">
         <h1>Order history</h1>
         <ng-container *ngIf="orderHistory != null && orderHistory.length != 0 else noOrders">
-            <table>
+            <table class="order-history-table">
                 <thead>
                     <tr>
                         <th>Reference</th>
