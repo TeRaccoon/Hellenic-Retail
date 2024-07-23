@@ -40,21 +40,17 @@ $hellenicblue: rgb(0, 140, 255);
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        background-color: rgb(0, 140, 255);
-        border-radius: 7px;
         h3 {
             display: inline-flex;
             align-items: center;
             gap: 15px;
             margin: 0 0 0 1.5vw;
-            color: white;
             font-size: 32px
         }
         div {
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            margin-right: 2vw;
             p {
                 margin: 5px;
                 font-size: 12px;
@@ -64,11 +60,13 @@ $hellenicblue: rgb(0, 140, 255);
                 border-radius: 0px;
                 background-color: #FFFFFF;
                 font-size: 100%;
-                padding: 12px;
-                margin: 15px 0;
-                border-radius: 12px;
+                padding: 10px;
+                margin: 10px 0;
                 cursor: pointer;
             }
+        }
+        label {
+            color: white;
         }
     }
     .grid-container {

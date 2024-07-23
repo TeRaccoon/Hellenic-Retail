@@ -37,6 +37,7 @@ export class ShopGridComponent {
 
   category: any = undefined;
   filter: any = null;
+  filterHeader = 'Showing all results';
 
   constructor(
     private filterService: FilterService,
@@ -61,18 +62,21 @@ export class ShopGridComponent {
   }
 
   getShopFilter() {
+    let messageBase = 'Showing results for: ';
     this.route.params.subscribe((params) => {
       const category = params['category'];
       this.category = category;
       if (category !== undefined) {
-        this.formService.setBannerMessage(`Showing results for: ${category}`);
+        this.formService.setBannerMessage(`${messageBase}${category}`);
+        this.filterHeader = `${messageBase}${category}`
       }
       this.loadProducts(category, null);
     });
     this.dataService.getShopFilter().subscribe((filter) => {
       this.filter = filter;
       if (filter !== null && filter != '') {
-        this.formService.setBannerMessage(`Showing results for: ${filter}`);
+        this.formService.setBannerMessage(`${messageBase}${filter}`);
+        this.filterHeader = `${messageBase}${filter}`
         this.loadProducts(undefined, filter);
       }
     });
