@@ -129,17 +129,28 @@ $hellenicblue: rgb(0, 140, 255);
         }
     }
 }
+
 @media screen and (max-width: 1079px) {
-    .account-details {
-        max-height: 100%!important;
-        flex-direction: column
-    }
     .account-container {
         width: 85%!important;
         max-height: 100%;
+        gap: 30px!important;
         h1 {
             font-size: 18px!important;
         }
+        table {
+            td {
+                padding: 2px!important;
+            }
+        }
+        .account-details {
+            max-height: 100%!important;
+            flex-direction: column
+            //gap: 30px!important; idk why but this doesn't work, saying colon should be a semi-colon which is wrong
+        }
+    }
+    .details {
+        padding: 15px!important;
     }
     .detail {
         font-size: 12px!important;
@@ -154,6 +165,40 @@ $hellenicblue: rgb(0, 140, 255);
             width: 70vw!important;
         button {
             font-size: 10px!important;
+        }
+    }
+    .column-titles {
+        font-size: 10px!important;
+        th {
+            white-space: nowrap;
+            padding: 2px!important;
+        }
+    }
+    .address-book{
+        padding: 15px!important;
+        max-height: 65vw;
+    }
+    .address-book-table {
+        font-size: 10px!important;
+    }
+    .address-1{
+        max-width: 6vw;
+    }
+    .address-2 {
+        max-width: 8vw;
+    }
+    .order-history {
+        padding: 15px!important;
+        max-height: 65vw;
+        thead {
+            tr {
+                th {
+                    padding: 2px!important;
+                }
+            }
+        }
+        .order-history-table {
+            font-size: 9px;
         }
     }
 }

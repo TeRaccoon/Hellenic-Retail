@@ -58,7 +58,7 @@
             <form [formGroup]="addAddressForm" (ngSubmit)="addAddress()">
                 <table>
                     <thead>
-                        <tr>
+                        <tr class="column-titles">
                             <th>Line 1</th>
                             <th>Line 2</th>
                             <th>Line 3</th>
@@ -67,10 +67,10 @@
                             <th>Delete</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="address-book-table">
                         <tr *ngFor="let address of addressBook">
-                            <td>{{ address.delivery_address_one }}</td>
-                            <td>{{ address.delivery_address_two }}</td>
+                            <td class="address-1">{{ address.delivery_address_one }}</td>
+                            <td class="address-2">{{ address.delivery_address_two }}</td>
                             <td>{{ address.delivery_address_three }}</td>
                             <td>{{ address.delivery_postcode }}</td>
                             <td>
@@ -121,7 +121,7 @@
     <div class="order-history">
         <h1>Order history</h1>
         <ng-container *ngIf="orderHistory != null && orderHistory.length != 0 else noOrders">
-            <table>
+            <table class="order-history-table">
                 <thead>
                     <tr>
                         <th>Reference</th>
