@@ -63,8 +63,8 @@
                             <th>Line 2</th>
                             <th>Line 3</th>
                             <th>Postcode</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <th class="edit">Edit</th>
+                            <th class="delete">Delete</th>
                         </tr>
                     </thead>
                     <tbody class="address-book-table">
@@ -73,11 +73,11 @@
                             <td class="address-2">{{ address.delivery_address_two }}</td>
                             <td>{{ address.delivery_address_three }}</td>
                             <td>{{ address.delivery_postcode }}</td>
-                            <td>
+                            <td class="edit-icon">
                                 <fa-icon [icon]="pencil" />
                             </td>
                             <ng-container *ngIf="pendingDeleteId != address.id else pendingDelete">
-                                <td (click)="setDeleteId(address.id)">
+                                <td class="delete-icon" (click)="setDeleteId(address.id)">
                                     <fa-icon [icon]="bin" />
                                 </td>
                             </ng-container>
