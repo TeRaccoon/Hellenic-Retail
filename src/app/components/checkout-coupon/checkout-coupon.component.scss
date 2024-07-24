@@ -60,3 +60,17 @@ $hellenicblue: rgb(0, 140, 255);
         transition: padding 1.6s ease, height 1.6s ease, border 0s ease 0s;
     }
 }
+
+@media screen and (max-width: 1079px) {
+    .options {
+        flex-wrap: wrap;    
+        gap: 3px;
+    }
+    .shown {
+        height: auto!important;
+        padding: 10px!important;
+    }
+    .coupon-form {
+        width: 75%!important;
+    }
+}
