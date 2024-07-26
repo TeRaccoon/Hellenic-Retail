@@ -136,3 +136,11 @@ $hellenicblue: #008cff;
         }
     }
 }
+
+@media screen and (max-width: 1079px) {
+    .purchasing-options {
+        button {
+            font-size: 15px!important;
+        }
+    }
+}
