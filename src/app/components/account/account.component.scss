@@ -157,8 +157,8 @@ $hellenicblue: rgb(0, 140, 255);
         }
         .account-details {
             max-height: 100%!important;
-            flex-direction: column
-            //gap: 30px!important; idk why but this doesn't work, saying colon should be a semi-colon which is wrong
+            flex-direction: column;
+            gap: 30px!important;
         }
     }
     .details {
