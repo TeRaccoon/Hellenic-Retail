@@ -163,12 +163,13 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .details-container {
         flex-direction: column-reverse;
+        gap: 30px;
     }
     .payment-container {
         flex-wrap: wrap;
     }
     .checkout-view-container {
-        width: 85%;
+        width: 90%;
     }
     .checkout-summary-container {
         width: 85%!important;
@@ -184,5 +185,9 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .options {
         gap: 3px
+    }
+    .form-container {
+        border: 1px solid gray;
+        padding: 10px;
     }
 }
