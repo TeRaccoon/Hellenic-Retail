@@ -138,9 +138,7 @@ export class AccountComponent {
   }
 
   async addAddress() {
-    console.log("🚀 ~ AccountComponent ~ addAddress ~ this.addAddressForm:", this.addAddressForm)
     this.addAddressForm.patchValue({ customer_id: this.userId });
-    console.log("🚀 ~ AccountComponent ~ addAddress ~ this.addAddressForm:", this.addAddressForm)
     
     let response = await lastValueFrom(this.dataService.submitFormData(this.addAddressForm.value));
     if (!response.success) {
