@@ -10,6 +10,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
+import { CartUnit } from 'src/app/common/types/cart';
 
 @Component({
   selector: 'app-view-details',
@@ -43,7 +44,7 @@ export class ViewDetailsComponent {
   inWishlist = false;
 
   quantity = 1;
-  quantityMultiplier = 1;
+  unit: CartUnit = CartUnit.Unit;
 
   userType: string | null = 'Retail';
 
@@ -94,7 +95,7 @@ export class ViewDetailsComponent {
   }
 
   addToCart(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity * this.quantityMultiplier);
+    this.cartService.addToCart(productID, quantity, this.unit);
   }
   
   addToWishlist(productID: number) {
@@ -102,24 +103,11 @@ export class ViewDetailsComponent {
   }
 
   buyNow(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity * this.quantityMultiplier);
+    this.cartService.addToCart(productID, quantity, this.unit);
     this.router.navigate(['/checkout']);
   }
 
   changePackageType(event: any) {
-    let packageFormat = event.target.value;
-    switch (packageFormat) {
-      case "unit":
-        this.quantityMultiplier = 1;
-        break;
-
-      case "box":
-        this.quantityMultiplier = this.product.box_size;
-        break;
-
-      case "pallet":
-        this.quantityMultiplier = this.product.pallet_size;
-        break;
-    }
+    this.unit = event.target.value;
   }
 }

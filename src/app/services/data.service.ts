@@ -20,12 +20,12 @@ export class DataService {
     this.loadStandardData();
   }  
 
-  collectData(query: string, filter?: string): Observable<any[]> {
+  collectData(query: string, filter?: string): Observable<any> {
     let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
     if (filter != null) {
       url += `&filter=${encodeURIComponent(filter)}`;
     }
-    return this.http.get<any[]>(url);
+    return this.http.get(url);
   }
 
   processPost(body: Record<string, any>) {

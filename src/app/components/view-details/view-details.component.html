@@ -38,9 +38,9 @@
             <button (click)="addToCart(product.id, quantity)" [disabled]="outOfStock" class="cart">Add To Cart</button>
             <button (click)="buyNow(product.id, quantity)" [disabled]="outOfStock" class="purchase">Buy Now</button>
             <select *ngIf="userType == 'Wholesale'" (change)="changePackageType($event)">
-                <option value="unit">Unit</option>
-                <option value="box">Box</option>
-                <option value="pallet">Pallet</option>
+                <option>Unit</option>
+                <option>Box</option>
+                <option>Pallet</option>
             </select>
         </div>
         <div class="other-options">

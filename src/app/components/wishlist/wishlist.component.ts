@@ -40,7 +40,7 @@ export class WishlistComponent {
       let wishlistProducts = await lastValueFrom(this.dataService.collectData("wishlist-from-id", userID));
       wishlistProducts = Array.isArray(wishlistProducts) ? wishlistProducts : [wishlistProducts];
   
-      wishlistProducts.forEach((product) => {
+      wishlistProducts.forEach((product: any) => {
         if (product.discount && product.discount != null) {
           product.discounted_price = product.price * ((100 - product.discount) / 100);
         }
