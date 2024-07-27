@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
-import { CartItem } from 'src/app/common/types/cart';
+import { CartItem, CartProduct } from 'src/app/common/types/cart';
 import { CheckoutSummary } from 'src/app/common/types/checkout';
 import { CheckoutService } from 'src/app/services/checkout.service';
 
@@ -14,7 +14,7 @@ import { CheckoutService } from 'src/app/services/checkout.service';
 })
 export class CheckoutOrderSummaryComponent {
   cart: CartItem[] = [];
-  cartProducts: any[] = [];
+  cartProducts: CartProduct[] = [];
   checkoutSummary: CheckoutSummary;
   imageUrl = '';
 
@@ -45,26 +45,7 @@ export class CheckoutOrderSummaryComponent {
 
   async loadCartData() {
     this.cart = this.cartService.getCart();
-    let cartProducts: any[] = await this.cartService.getCartItems();
-
-    cartProducts.forEach((product, index) => {
-      if (this.cart[index] && product != null) {
-        let individualPrice = product.retail_price;
-        let discountedPrice = individualPrice;
-        if (product.discount != null) {
-          discountedPrice = individualPrice * ((100 - product.discount) / 100);
-        }
-
-        product.total = individualPrice * this.cart[index].quantity;
-        product.discounted_total = discountedPrice * this.cart[index].quantity;
-
-        if (product.image_location === null) {
-          product.image_location = 'placeholder.jpg';
-        }
-      }
-    });
-
-    this.cartProducts = cartProducts;
+    this.cartProducts = await this.cartService.getCartItems();
   }
 
   onImageError(event: Event) {

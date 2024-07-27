@@ -13,6 +13,7 @@ import {
   IPayPalConfig,
   ICreateOrderRequest 
 } from 'ngx-paypal';
+import { CartItem, CartProduct } from 'src/app/common/types/cart';
 
 @Component({
   selector: 'app-checkout',
@@ -32,8 +33,8 @@ export class CheckoutComponent {
 
   checkoutSummary: CheckoutSummary;
 
-  products: any[] = [];
-  cart: any[] = [];
+  cartProducts: CartProduct[] = [];
+  cart: CartItem[] = [];
 
   userType: string | null = null;
 
@@ -89,7 +90,6 @@ export class CheckoutComponent {
       onApprove: (data, actions) => {
         actions.order.get().then((details: any) => {
           this.payerDetails = details;
-          console.log("🚀 ~ CheckoutComponent ~ actions.order.get ~ details:", details)
         });
       },
       onClientAuthorization: (data) => {
@@ -172,37 +172,20 @@ export class CheckoutComponent {
 
   async calculateTotal() {
     this.cart = this.cartService.getCart();
-    let cartProducts: any[] = await this.cartService.getCartItems();
-    let subtotal = 0;
-    let delivery = 0;
-    let vat = 0;
+    this.cartProducts = await this.cartService.getCartItems();
+    let subtotal = this.cartService.getCartTotal();
 
-    cartProducts.forEach((product, index) => {
-      if (this.cart[index] && product != null) {
-        let individualPrice = product.retail_price;
-        let discountedPrice = individualPrice;
-        if (product.discount != null || product.discount != 0) {
-          discountedPrice = individualPrice * ((100 - product.discount) / 100);
-        }
+    let delivery = subtotal < 30 ? 7.50 : 0;
+    let vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2));
 
-        product.total = individualPrice * this.cart[index].quantity;
-        product.discounted_total = discountedPrice * this.cart[index].quantity;
-
-        subtotal += product.discounted_total;
-      }
-    });
-
-    this.products = cartProducts;
-
-    if (subtotal < 30) {
-      delivery = 7.50;
-    }
-    vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2));
-
-    this.checkoutService.updateCheckoutSummary({ delivery: Number(delivery)});
-    this.checkoutService.updateCheckoutSummary({ subtotal: Number(Number(subtotal).toFixed(2))});
-    this.checkoutService.updateCheckoutSummary({ vat: Number(Number((subtotal + delivery) * 0.2).toFixed(2))});
-    this.checkoutService.updateCheckoutSummary({ total: Number(Number(subtotal + vat + delivery).toFixed(2))});
+    const updatedSummary = {
+      delivery: delivery,
+      subtotal: subtotal,
+      vat: vat,
+      total: Number(Number(subtotal + vat + delivery).toFixed(2))
+    };
+    this.checkoutService.updateCheckoutSummary(updatedSummary);
+    
     this.checkoutSummary = this.checkoutService.getCheckoutSummary();
   }
 
@@ -285,7 +268,7 @@ export class CheckoutComponent {
   }
 
   async sendEmailConfirmation() {
-    let products = this.products.map((product: any, index) => {
+    let products = this.cartProducts.map((product: any, index) => {
       return {
         name: product.name,
         quantity: this.cart[index].quantity,

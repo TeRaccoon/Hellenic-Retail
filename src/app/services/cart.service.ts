@@ -141,15 +141,19 @@ export class CartService {
   }
 
   async getCartItems(): Promise<CartProduct[]> {
-    this.total = 0;
     let cartProducts: CartProduct[] = [];
     if (this.cart.length > 0 && this.cart[0].id) {
+      let total = 0;
       for (const item of this.cart) {
         let product: Product = await lastValueFrom(this.dataService.collectData('product-from-id', item.item_id.toString()));
-  
         let formattedProduct = this.formatProduct(product, item);
+
+        total += formattedProduct.discounted_price;
+
         cartProducts.push(formattedProduct);
       }
+        
+      this.total = total;
     }
 
     return cartProducts;
