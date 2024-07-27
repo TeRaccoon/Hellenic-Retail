@@ -3,14 +3,17 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 import { AuthService } from './auth.service';
 import { DataService } from './data.service';
 import { FormService } from './form.service';
-import { CartItem, CartUnit } from '../common/types/cart';
+import { CartItem, CartProduct, CartUnit } from '../common/types/cart';
 import { Product } from '../common/types/shop';
+import { Response } from '../common/types/data-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
   private cart: CartItem[] = [];
+  private total = 0;
+  
   private updated = new BehaviorSubject<boolean>(false);
 
   constructor(private authService: AuthService, private dataService: DataService, private formService: FormService) {
@@ -22,32 +25,67 @@ export class CartService {
       if (loggedIn) {
         let userId = this.authService.getUserID();
         if (userId !== null) {
-          this.cart = await lastValueFrom<any>(this.dataService.processPost({'action': 'cart', 'customer_id': userId}));
+          this.cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});
         }
         this.requestUpdate();
       }
     });
   }
 
+  formatProduct(product: Product, cartItem: CartItem): CartProduct {
+    let price = this.getProductPrice(product, cartItem.unit);
+    let discountedPrice = product.discount !== 0 ? price * ((100 - product.discount) / 100) : price;
+
+    let name = `${product.name} ${cartItem.unit === CartUnit.Unit ? '' : '(' + cartItem.unit + ')'}`;
+
+    let total = price * cartItem.quantity;
+    let discountedTotal = discountedPrice * cartItem.quantity;
+
+    this.total += discountedTotal;
+
+    let imageLocation = product.image_location === null ? 'placeholder.jpg' : product.image_location;
+
+    return {
+      name: name,
+      price: total,
+      discounted_price: discountedTotal,
+      discount: product.discount,
+      image_location: imageLocation
+    };
+  }
+
+  getProductPrice(product: Product, unit: CartUnit) {
+    let customerType = this.authService.getUserType();
+    switch(unit) {
+      case 'Unit':
+        return customerType == 'Retail' ? product.retail_price : product.wholesale_price;
+      case 'Box':
+        return product.box_price;
+      case 'Pallet':
+        return product.pallet_price;
+    }
+    return 0;
+  }
+
   async refreshCart() {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      this.cart = await lastValueFrom<any>(this.dataService.processPost({'action': 'cart', 'customer_id': userId}));
+      this.cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});
     }
   }
 
   async addToCart(productId: number, quantity: number, unit: CartUnit = CartUnit.Unit) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      let cart = await lastValueFrom<any>(this.dataService.processPost({'action': 'cart', 'customer_id': userId}));      
+      let cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});      
       const rowIndex = cart.findIndex((item: any) => item.item_id === productId && item.unit === unit);
 
       let response: any = null;
       if (await this.checkStock(quantity, productId)) {
         if (rowIndex !== -1) {
-          response = await lastValueFrom(this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity}));
+          response = this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
         } else {
-          response = await lastValueFrom(this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit}));
+          response = this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit});
         }
   
         if (response) {
@@ -64,7 +102,7 @@ export class CartService {
   }
 
   async checkStock(quantity: number, productId: number) {
-    let response: any = await lastValueFrom(this.dataService.processPost({'action': 'check-stock', 'id': productId}));
+    let response = await this.dataService.processPost({'action': 'check-stock', 'id': productId});
     if (response.quantity < quantity) {
       this.formService.setPopupMessage("There is no more stock of this item!", true);
       return false;
@@ -75,7 +113,9 @@ export class CartService {
   async removeFromCart(productId: number) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      if (await lastValueFrom(this.dataService.processPost({'action': 'remove-cart', 'customer_id': userId, 'product_id': productId}))) {
+      let response: Response = await this.dataService.processPost({'action': 'remove-cart', 'customer_id': userId, 'product_id': productId})
+
+      if (response.success) {
         this.formService.setPopupMessage("Item removed successfully!", true);
         await this.refreshCart();
         this.requestUpdate();
@@ -88,7 +128,9 @@ export class CartService {
   async clearCart() {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      if (await lastValueFrom(this.dataService.processPost({'action': 'clear-cart', 'customer_id': userId}))) {
+      let response: Response = await this.dataService.processPost({'action': 'clear-cart', 'customer_id': userId});
+
+      if (response.success) {
         this.formService.setPopupMessage("Cart cleared successfully!", true);
         await this.refreshCart();
         this.requestUpdate();
@@ -98,17 +140,23 @@ export class CartService {
     }
   }
 
-  async getCartItems(): Promise<Product[]> {
-    let cartItems: Product[] = [];
-    console.log(this.cart);
+  async getCartItems(): Promise<CartProduct[]> {
+    this.total = 0;
+    let cartProducts: CartProduct[] = [];
     if (this.cart.length > 0 && this.cart[0].id) {
-      for (let item of this.cart) {
-        let cartRow: Product = await lastValueFrom(this.dataService.collectData('product-from-id', item.item_id.toString()));
-        cartItems.push(cartRow);
+      for (const item of this.cart) {
+        let product: Product = await lastValueFrom(this.dataService.collectData('product-from-id', item.item_id.toString()));
+  
+        let formattedProduct = this.formatProduct(product, item);
+        cartProducts.push(formattedProduct);
       }
     }
 
-    return cartItems;
+    return cartProducts;
+  }
+
+  getCartTotal() {
+    return this.total;
   }
 
   getCart() {
