@@ -3,7 +3,8 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 import { AuthService } from './auth.service';
 import { DataService } from './data.service';
 import { FormService } from './form.service';
-import { CartItem } from '../common/types/cart';
+import { CartItem, CartUnit } from '../common/types/cart';
+import { Product } from '../common/types/shop';
 
 @Injectable({
   providedIn: 'root'
@@ -35,18 +36,18 @@ export class CartService {
     }
   }
 
-  async addToCart(productId: number, quantity: number) {
+  async addToCart(productId: number, quantity: number, unit: CartUnit = CartUnit.Unit) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
       let cart = await lastValueFrom<any>(this.dataService.processPost({'action': 'cart', 'customer_id': userId}));      
-      const rowIndex = cart.findIndex((item: any) => item.item_id === productId);
+      const rowIndex = cart.findIndex((item: any) => item.item_id === productId && item.unit === unit);
 
       let response: any = null;
       if (await this.checkStock(quantity, productId)) {
         if (rowIndex !== -1) {
           response = await lastValueFrom(this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity}));
         } else {
-          response = await lastValueFrom(this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity}));
+          response = await lastValueFrom(this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit}));
         }
   
         if (response) {
@@ -97,15 +98,16 @@ export class CartService {
     }
   }
 
-  async getCartItems(): Promise<any[]> {
-    let cartItems: any[] = [];
+  async getCartItems(): Promise<Product[]> {
+    let cartItems: Product[] = [];
+    console.log(this.cart);
     if (this.cart.length > 0 && this.cart[0].id) {
       for (let item of this.cart) {
-        let cartRow = await lastValueFrom(this.dataService.collectData('product-from-id', item.item_id.toString()));
+        let cartRow: Product = await lastValueFrom(this.dataService.collectData('product-from-id', item.item_id.toString()));
         cartItems.push(cartRow);
       }
     }
-  
+
     return cartItems;
   }
 
