@@ -40,7 +40,9 @@ $hellenicblue: #008cff;
     .purchasing-options {
         display: flex;
         align-items: center;
-        gap: 15px;
+        div {
+            gap: 6px;
+        }
         input[type="number"] {
             max-width: 50px;
             padding: 10px;
@@ -53,31 +55,6 @@ $hellenicblue: #008cff;
         input[type="number"]:focus {
             outline: none;
             border-color: #007bff;
-        }
-        button {
-            padding: 12px 20px;
-            color: #ffffff;
-            border: none;
-            font-weight: bold;
-            font-size: 16px;
-            transition: background-color 0.2s ease;
-            &:disabled {
-                cursor: default;
-            }
-        }
-        .cart {
-            background-color: #36b329;
-            cursor: pointer;
-        }
-        .purchase {
-            background-color: $hellenicblue;
-            cursor: pointer;
-        }
-        .cart:hover {
-            background-color: #24a12f;
-        }
-        .purchase:hover {
-            background-color: #0077ff;
         }
         select {
             appearance: none;
@@ -105,6 +82,36 @@ $hellenicblue: #008cff;
         }
         option:checked {
             background-color: #ccc;
+        }
+    }
+    .purchase-buttons {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        button {
+            padding: 12px 20px;
+            color: #ffffff;
+            border: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+            &:disabled {
+                cursor: default;
+            }
+        }
+        .cart {
+            background-color: #36b329;
+            cursor: pointer;
+        }
+        .purchase {
+            background-color: $hellenicblue;
+            cursor: pointer;
+        }
+        .cart:hover {
+            background-color: #24a12f;
+        }
+        .purchase:hover {
+            background-color: #0077ff;
         }
     }
     .other-options {
@@ -142,5 +149,11 @@ $hellenicblue: #008cff;
         button {
             font-size: 15px!important;
         }
+    }
+    .purchase-buttons {
+        margin-top: 7px;
+    }
+    .other-options {
+        white-space: nowrap;
     }
 }

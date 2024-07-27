@@ -34,14 +34,18 @@
         </ng-container>
         <p class="description">{{ product.description }}</p>
         <div class="purchasing-options">
-            <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
+            <div>
+                <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
+                <select *ngIf="userType == 'Wholesale'" (change)="changePackageType($event)">
+                    <option value="unit">Unit</option>
+                    <option value="box">Box</option>
+                    <option value="pallet">Pallet</option>
+                </select>
+            </div>
+        </div>
+        <div class="purchase-buttons">
             <button (click)="addToCart(product.id, quantity)" [disabled]="outOfStock" class="cart">Add To Cart</button>
             <button (click)="buyNow(product.id, quantity)" [disabled]="outOfStock" class="purchase">Buy Now</button>
-            <select *ngIf="userType == 'Wholesale'" (change)="changePackageType($event)">
-                <option value="unit">Unit</option>
-                <option value="box">Box</option>
-                <option value="pallet">Pallet</option>
-            </select>
         </div>
         <div class="other-options">
             <p (click)="addToWishlist(product.id)">
