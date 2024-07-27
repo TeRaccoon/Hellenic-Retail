@@ -141,7 +141,7 @@ export class LoginFormComponent {
   }
 
   async changePassword(password: string) {
-    let response = await lastValueFrom<any>(this.dataService.processPost({'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password}));
+    let response = await this.dataService.processPost({'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password});
     if (response.success) {
       console.log('Password changed successfully');
     } else {
@@ -175,7 +175,7 @@ export class LoginFormComponent {
 
   async tracing() {
     let customerId = this.authService.getUserID();
-    await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'login', 'customer_id': customerId}));
+    await this.dataService.processPost({'action': 'tracing', 'page': 'login', 'customer_id': customerId});
   }
 
   createAccount() {

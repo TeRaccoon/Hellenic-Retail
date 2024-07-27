@@ -28,9 +28,9 @@ export class DataService {
     return this.http.get(url);
   }
 
-  processPost(body: Record<string, any>) {
+  async processPost(body: Record<string, any>): Promise<any> {
     const url = 'http://localhost/API/retail_query_handler.php';
-    return this.http.post(url, {body});
+    return await lastValueFrom(this.http.post(url, {body}));
   }
 
 async collectDataComplex(query: string, filter: Record<string, any> = {}): Promise<any> {

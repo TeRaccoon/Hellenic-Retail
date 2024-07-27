@@ -163,11 +163,11 @@ export class CheckoutComponent {
   }
 
   async loadAddressBook() {
-    this.addressBook = await lastValueFrom<any>(this.dataService.processPost({'action': 'address-book', 'customer_id': this.customerId?.toString()}));
+    this.addressBook = await this.dataService.processPost({'action': 'address-book', 'customer_id': this.customerId?.toString()});
   }
 
   async tracing() {
-    await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'checkout', 'customer_id': this.customerId}));
+    await this.dataService.processPost({'action': 'tracing', 'page': 'checkout', 'customer_id': this.customerId});
   }
 
   async calculateTotal() {
@@ -277,7 +277,7 @@ export class CheckoutComponent {
           this.router.navigate(['/order-complete']);
         }, 3000);
       }
-      await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId}));
+      await this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId});
     } else {
       this.orderError = 'There was an error processing your payment details!';
       this.formService.setPopupMessage('There was an error processing your payment details!', true, 10000);
