@@ -10,4 +10,11 @@ export enum CartUnit {
     Unit = 'Unit',
     Box = 'Box',
     Pallet = 'Pallet'
-}
+};
+export interface CartProduct {
+    name: string,
+    price: number,
+    discounted_price: number,
+    discount: number,
+    image_location: string,
+};
