@@ -37,7 +37,7 @@
             <div class="search-dropdown">
                 <div class="search-dropdown-items">
                     <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;" [routerLink]="'/view/' + product.name">
-                        <div>
+                        <div class="search-results-title">
                             <img [src]="imageUrl + product.image_location" (error)="onImageError($event)">
                             <p> {{ product.name }} </p>
                         </div>

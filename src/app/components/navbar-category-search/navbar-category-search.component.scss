@@ -225,6 +225,25 @@ $hellenicblue: rgb(0, 140, 255);
             display: none;
         }
     }
+    .search-dropdown-items {
+        div {
+            p {
+                line-height: 12px!important;
+                max-height: 36px!important;
+                white-space: normal!important;
+            }
+        }
+    }
+    .search-results {
+        font-size: 12px!important;
+        gap: 3px!important;
+    }
+    .search-results-title {
+        width: 75%!important;
+    }
+    .price-container {
+        width: 30%!important;
+    }
 }
 
 @media screen and (max-width: 330px) {
@@ -242,7 +261,27 @@ $hellenicblue: rgb(0, 140, 255);
     .search-container {
         flex: 0 1 75%;
     }
+    .search-dropdown-items {
+        div {
+            p {
+                line-height: 9px!important;
+                max-height: 27px!important;
+                white-space: normal!important;
+            }
+        }
+    }
+    .search-results {
+        font-size: 9px!important;
+        gap: 3px!important;
+    }
+    .search-results-title {
+        width: 75%!important;
+    }
+    .price-container {
+        width: 32%!important;
+    }
 }
+
 
 @media screen and (min-width: 1080px) { //Desktop
     .dropdown:hover .dropdown-content {
