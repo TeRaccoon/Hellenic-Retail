@@ -237,6 +237,9 @@ $hellenicblue: rgb(0, 140, 255);
     .search-results {
         font-size: 12px!important;
         gap: 3px!important;
+        p {
+            text-overflow: clip!important;
+        }
     }
     .search-results-title {
         width: 75%!important;
