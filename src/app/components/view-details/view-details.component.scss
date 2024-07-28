@@ -41,6 +41,7 @@ $hellenicblue: #008cff;
         display: flex;
         align-items: center;
         div {
+            display: flex;
             gap: 6px;
         }
         input[type="number"] {
@@ -88,6 +89,7 @@ $hellenicblue: #008cff;
         display: flex;
         align-items: center;
         gap: 6px;
+        margin-top: 7px;
         button {
             padding: 12px 20px;
             color: #ffffff;
@@ -149,9 +151,6 @@ $hellenicblue: #008cff;
         button {
             font-size: 15px!important;
         }
-    }
-    .purchase-buttons {
-        margin-top: 7px;
     }
     .other-options {
         white-space: nowrap;
