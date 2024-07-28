@@ -57,7 +57,7 @@ export class CartPopupComponent {
   }
 
   async getCartData() {
-    this.cart = this.cartService.getCart();
+    this.cart = await this.cartService.getCart();
     this.loadCartData();
   }
 

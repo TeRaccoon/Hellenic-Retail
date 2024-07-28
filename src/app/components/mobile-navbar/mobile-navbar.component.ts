@@ -58,12 +58,12 @@ export class MobileNavbarComponent {
   async getCartUpdates() {
     this.cartService
       .getUpdateRequest()
-      .subscribe((updateRequested: boolean) => {
+      .subscribe(async (updateRequested: boolean) => {
         if (updateRequested) {
           this.cartService.performUpdate();
           this.cartState = 'active';
 
-          this.cartCount = this.cartService.getCart().length;
+          this.cartCount = (await this.cartService.getCart()).length;
 
           setTimeout(() => {
             this.cartState = 'inactive';

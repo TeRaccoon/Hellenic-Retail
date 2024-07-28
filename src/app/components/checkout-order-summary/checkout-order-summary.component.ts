@@ -29,7 +29,7 @@ export class CheckoutOrderSummaryComponent {
   }
 
   async getCartData() {
-    this.cart = this.cartService.getCart();
+    this.cart = await this.cartService.getCart();
     this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
       if (updateRequested) {
         this.loadCartData();
@@ -44,7 +44,7 @@ export class CheckoutOrderSummaryComponent {
   }
 
   async loadCartData() {
-    this.cart = this.cartService.getCart();
+    this.cart = await this.cartService.getCart();
     this.cartProducts = await this.cartService.getCartItems();
   }
 

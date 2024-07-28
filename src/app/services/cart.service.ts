@@ -26,7 +26,8 @@ export class CartService {
         let userId = this.authService.getUserID();
         if (userId !== null) {
           this.cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});
-        }
+        this.cart = await this.checkCartStock();
+      }
         this.requestUpdate();
       }
     });
@@ -71,6 +72,7 @@ export class CartService {
     let userId = this.authService.getUserID();
     if (userId !== null) {
       this.cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});
+      this.cart = await this.checkCartStock();
     }
   }
 
@@ -81,7 +83,7 @@ export class CartService {
       const rowIndex = cart.findIndex((item: any) => item.item_id === productId && item.unit === unit);
 
       let response: any = null;
-      if (await this.checkStock(quantity, productId)) {
+      if (await this.checkStock(quantity, productId, true)) {
         if (rowIndex !== -1) {
           response = this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
         } else {
@@ -101,10 +103,10 @@ export class CartService {
     }
   }
 
-  async checkStock(quantity: number, productId: number) {
+  async checkStock(quantity: number, productId: number, showPopup = false) {
     let response = await this.dataService.processPost({'action': 'check-stock', 'id': productId});
-    if (response.quantity < quantity) {
-      this.formService.setPopupMessage("There is no more stock of this item!", true);
+    if (response.quantity == null || response.quantity < quantity) {
+      showPopup && this.formService.setPopupMessage("There is no more stock of this item!", true);
       return false;
     }
     return true
@@ -163,11 +165,24 @@ export class CartService {
     return this.total;
   }
 
-  getCart() {
+  async getCart(checkStock = false) {
     if (this.cart.length > 0 && this.cart[0].id == undefined) {
       this.cart = [];
     }
+    checkStock && (this.cart = await this.checkCartStock());
+
     return this.cart;
+  }
+
+  async checkCartStock() {
+    let cart: CartItem[] = [];
+    for (let item of this.cart) {
+      if (await this.checkStock(item.quantity, item.item_id)) {
+        cart.push(item);
+      }
+    }
+
+    return cart;
   }
 
   getUpdateRequest(): Observable<boolean> {

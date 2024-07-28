@@ -104,12 +104,12 @@ export class NavbarComponent {
   }
 
   async getCartUpdates() {
-    this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
+    this.cartService.getUpdateRequest().subscribe(async (updateRequested: boolean) => {
       if (updateRequested) {
         this.cartService.performUpdate();
         this.cartState = 'active';
 
-        this.cartCount = this.cartService.getCart().length;
+        this.cartCount = (await this.cartService.getCart()).length;
         
         setTimeout(() => {
           this.cartState = 'inactive';

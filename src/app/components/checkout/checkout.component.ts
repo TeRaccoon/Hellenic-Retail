@@ -171,7 +171,7 @@ export class CheckoutComponent {
   }
 
   async calculateTotal() {
-    this.cart = this.cartService.getCart();
+    this.cart = await this.cartService.getCart(true);
     this.cartProducts = await this.cartService.getCartItems();
     let subtotal = this.cartService.getCartTotal();
 
