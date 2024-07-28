@@ -70,13 +70,13 @@ export class CartPopupComponent {
 
   async removeFromCart(productId: number) {
     await this.cartService.removeFromCart(productId);
-    this.getCartData();
+    await this.getCartData();
   }
 
   async changeQuantity(event: any, productID: number) {
     const quantity = parseInt(event.target.value);
     await this.cartService.addToCart(productID, quantity);
-    this.getCartData();
+    await this.getCartData();
   }
 
   changeConfirmationPopupState(visible: boolean) {
@@ -87,7 +87,7 @@ export class CartPopupComponent {
   async clearCart() {
     await this.cartService.clearCart();
     this.confirmationPopupVisible = false;
-    this.getCartData();
+    await this.getCartData();
   }
 
   async loadCartData() {
