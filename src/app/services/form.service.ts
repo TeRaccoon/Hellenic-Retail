@@ -13,7 +13,7 @@ export class FormService {
   private popupMessage = "";
   private bannerMessage = new BehaviorSubject<string>("");
   private imageViewerUrl = "";
-  private orderDetails = {};
+  private orderDetails = null;
 
   constructor() {}
 
