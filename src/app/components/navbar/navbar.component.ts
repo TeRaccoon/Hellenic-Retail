@@ -21,6 +21,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { CartService } from 'src/app/services/cart.service';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-navbar',
@@ -60,7 +61,7 @@ export class NavbarComponent {
   products: any[] = [];
 
   searchResults: any[] = [];
-  categoryFilter: string | null = null;
+  categoryFilter: string = 'all';
   searchStringFilter = '';
 
   loginVisible = 'hidden';
@@ -76,6 +77,7 @@ export class NavbarComponent {
     private authService: AuthService,
     private dataService: DataService,
     private formService: FormService,
+    private filterService: FilterService,
     private cartService: CartService,
     private renderService: RenderService
   ) {
@@ -165,31 +167,14 @@ export class NavbarComponent {
   }
 
   changeCategory(event: Event) {
-    const option = event.target as HTMLInputElement;
-    const value = option.value;
-    this.categoryFilter = value === 'All' ? null : value;
-    this.applyFilters();
+    this.categoryFilter = (event.target as HTMLInputElement).value;
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
-  }
-
-  applyFilters() {
-    if (this.categoryFilter === null && !this.searchStringFilter) {
-      this.searchResults = this.products;
-      return;
-    }
-
-    this.searchResults = this.products.filter(
-      (product) =>
-        (this.categoryFilter === null ||
-          product.category?.toLowerCase() === this.categoryFilter) &&
-        (!this.searchStringFilter ||
-          product.name.toLowerCase().includes(this.searchStringFilter))
-    );
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   onInputFocus() {

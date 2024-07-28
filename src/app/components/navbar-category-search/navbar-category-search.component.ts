@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -25,11 +26,11 @@ export class NavbarCategorySearchComponent {
   products: any[] = [];
 
   searchResults: any[] = [];
-  categoryFilter: string | null = null;
+  categoryFilter: string = 'all';
   searchStringFilter = "";
   imageUrl: string;
 
-  constructor(private dataService: DataService, private authService: AuthService, private formService: FormService, private router: Router) {
+  constructor(private dataService: DataService, private filterService: FilterService, private router: Router) {
     this.imageUrl = this.dataService.getUploadURL();
   }
 
@@ -83,19 +84,7 @@ export class NavbarCategorySearchComponent {
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
-  }
-    
-  applyFilters() {
-    if (this.categoryFilter === null && !this.searchStringFilter) {
-      this.searchResults = this.products;
-      return;
-    }
-  
-    this.searchResults = this.products.filter(product =>
-      (this.categoryFilter === null || product.category?.toLowerCase() === this.categoryFilter) &&
-      (!this.searchStringFilter || product.name.toLowerCase().includes(this.searchStringFilter))
-    );
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   onInputFocus() {
@@ -113,10 +102,8 @@ export class NavbarCategorySearchComponent {
   }
 
   changeCategory(event: Event) {
-    const option = event.target as HTMLInputElement;
-    const value = option.value;
-    this.categoryFilter = value === 'All' ? null : value;
-    this.applyFilters();
+    this.categoryFilter = (event.target as HTMLInputElement).value;
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   search() {
