@@ -49,7 +49,7 @@
                 <p>Subtotal:</p>
                 <p class="subtotal-value">£{{ subtotal | number: '1.2-2' }}</p>
             </div>
-            <button (click)="toggleCart()" [routerLink]="'/checkout'">Checkout</button>
+            <button *ngIf="cart.length > 0" (click)="toggleCart()" [routerLink]="'/checkout'">Checkout</button>
             <button (click)="changeConfirmationPopupState(true)" class="red">Clear cart</button>
         </div>
     </div>
