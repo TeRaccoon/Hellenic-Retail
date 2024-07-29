@@ -24,13 +24,9 @@ export class CreateAccountFormComponent {
       surname: ['', Validators.required],
       phone_number_primary: ['', [Validators.required, Validators.pattern(/^\+?\d{1,3}[- ]?\d{3,}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      address_line_1: ['', Validators.required],
-      address_line_2: [''],
-      address_line_3: [''],
-      postcode: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
       passwordRepeat: ['', Validators.required],
-      action: ['add'],
+      action: ['create-account'],
       table_name: ['customers']
     });
   }
