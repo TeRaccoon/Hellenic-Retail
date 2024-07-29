@@ -44,9 +44,9 @@
             </select>
         </div>
         <div class="other-options">
-            <p (click)="addToWishlist(product.id)">
+            <p (click)="addToWishlist()">
                 <fa-icon [class]="inWishlist ? 'red' : ''" [icon]="faHeart"></fa-icon> {{ inWishlist ? 'Remove from wishlist' : 'Add to wishlist' }}</p>
-            <p>
+            <p (click)="viewSimilar()">
                 <fa-icon [icon]="faEye"></fa-icon> View similar</p>
         </div>
         <div class="share-options">

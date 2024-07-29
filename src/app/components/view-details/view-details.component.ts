@@ -88,6 +88,7 @@ export class ViewDetailsComponent {
     }
 
     this.product = product;
+    console.log("🚀 ~ ViewDetailsComponent ~ loadProduct ~ product:", product)
 
     let stock = await lastValueFrom<any>(this.dataService.collectData("total-stock-by-id", product.id));
     this.stock = stock.total_quantity;
@@ -98,8 +99,12 @@ export class ViewDetailsComponent {
     this.cartService.addToCart(productID, quantity, this.unit);
   }
   
-  addToWishlist(productID: number) {
-    this.cartService.addToWishlist(productID);
+  addToWishlist() {
+    this.cartService.addToWishlist(this.product.id);
+  }
+
+  viewSimilar() {
+    this.router.navigate(["/shop/" + this.product.category]);
   }
 
   buyNow(productID: number, quantity: number) {
