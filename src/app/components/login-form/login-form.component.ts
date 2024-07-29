@@ -108,6 +108,7 @@ export class LoginFormComponent {
           await this.authService.checkLogin();
           this.loginVisible = 'hidden';
           await this.tracing();
+          window.location.reload();
         } else {
           this.loginError = loginResponse.message;
         }
