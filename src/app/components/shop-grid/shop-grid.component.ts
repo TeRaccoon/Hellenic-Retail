@@ -4,7 +4,6 @@ import { DataService } from '../../services/data.service';
 import { CartService } from 'src/app/services/cart.service';
 import { FormService } from 'src/app/services/form.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
 import { RenderService } from 'src/app/services/render.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -208,10 +207,7 @@ export class ShopGridComponent {
 
   isInPriceRange(product: any) {
     if (this.maxPrice != null && this.minPrice != null) {
-      if (product.price >= this.minPrice && product.price <= this.maxPrice) {
-        return true;
-      }
-      return false;
+      return (product.price >= this.minPrice && product.price <= this.maxPrice);
     }
     return true;
   }
