@@ -98,6 +98,13 @@ export class LoginFormComponent {
     return this.loginForm.get(field)?.invalid && this.submitted;
   }
 
+  async loginSuccessful() {
+    await this.authService.checkLogin();
+    this.loginVisible = 'hidden';
+    await this.tracing();
+    window.location.reload();
+  }
+
   async formSubmit() {
     this.submitted = true;
     if (!this.forgotPasswordState) {
@@ -105,10 +112,7 @@ export class LoginFormComponent {
         this.loading = true;
         let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
         if (loginResponse.success) {
-          await this.authService.checkLogin();
-          this.loginVisible = 'hidden';
-          await this.tracing();
-          window.location.reload();
+          this.loginSuccessful();
         } else {
           this.loginError = loginResponse.message;
         }
@@ -116,37 +120,42 @@ export class LoginFormComponent {
       }
     } else {
       if (this.loginForm.valid) {
-        if (await this.checkCustomerEmail()) {
-          this.loading = true;
-          let password = this.generatePassword();
-          const emailHTML = this.dataService.generateForgotPasswordEmail(password);
-          const emailData = {
-            action: 'mail',
-            mail_type: 'forgot_password',
-            subject: 'Forgot Password Request',
-            email_HTML: emailHTML,
-            address: this.loginForm.get('email')?.value,
-            name: 'Customer',
-          };
-          let response = await lastValueFrom(this.dataService.sendEmail(emailData));
-          if (response.success) {
-            this.changePassword(password);
-            this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);
-          } else {
-            this.loginError = 'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
-          }
-          this.loading = false;
-        }
+        this.sendForgotPasswordEmail();
       }
+    }
+  }
+
+  async sendForgotPasswordEmail() {
+    if (await this.checkCustomerEmail()) {
+      this.loading = true;
+      let password = this.generatePassword();
+      const emailHTML = this.dataService.generateForgotPasswordEmail(password);
+      const emailData = {
+        action: 'mail',
+        mail_type: 'forgot_password',
+        subject: 'Forgot Password Request',
+        email_HTML: emailHTML,
+        address: this.loginForm.get('email')?.value,
+        name: 'Customer',
+      };
+      let response = await lastValueFrom(this.dataService.sendEmail(emailData));
+      if (response.success) {
+        this.changePassword(password);
+        this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);
+        this.forgotPassword();
+      } else {
+        this.loginError = 'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
+      }
+      this.loading = false;
     }
   }
 
   async changePassword(password: string) {
     let response = await this.dataService.processPost({'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password});
     if (response.success) {
-      console.log('Password changed successfully');
-    } else {
       this.formService.setPopupMessage('Password has been updated successfully', true, 10000);
+    } else {
+      this.formService.setPopupMessage('There was an issue changing your password! Please try again or contact support for help: support@hellenicgrocery.co.uk', true, 10000);
     }
   }
 
@@ -160,12 +169,8 @@ export class LoginFormComponent {
     return true;
   }
 
-  async sendForgotPasswordEmail() {
-    let emailHTML = this.dataService.generateForgotPasswordEmail(this.loginForm.get('email')?.value);
-  }
-
   generatePassword() {
-    let length = 10;
+    let length = 12;
     let charset = 'abcdefghijklmnopqrstuvwxyz1234567890!,.#';
     let password = '';
     for (let i = 0, n = charset.length; i < length; i++) {
