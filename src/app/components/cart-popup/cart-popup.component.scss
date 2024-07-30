@@ -60,6 +60,7 @@ $hellenicblue: rgb(0, 140, 255);
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
+                        align-items: center;
                         gap: 10px;
                         flex: 1;
                         input[type="number"] {
@@ -192,9 +193,20 @@ $hellenicblue: rgb(0, 140, 255);
 @media screen and (max-width: 1079px) {
     //mobile
     .cart-form {
-        width: 50vw!important;
+        width: 82vw!important;
     }
     .form-container {
         height: calc(100% - 77px);
+    }
+    .cart-row{
+        gap: 3px!important;
+        .cart-row-details{
+            gap: 0px!important;
+            .cart-row-options {
+                button {
+                    margin: 0 0 0 5px!important;
+                }
+            }
+        }
     }
 }

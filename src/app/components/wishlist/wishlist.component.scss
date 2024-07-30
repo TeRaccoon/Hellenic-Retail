@@ -96,8 +96,10 @@
 
 @media screen and (max-width: 1079px) {
     .container {
+        width: 100%;
         table {
             margin: 0;
+            font-size: 12px;
             thead {
                 white-space: nowrap!important;
             }

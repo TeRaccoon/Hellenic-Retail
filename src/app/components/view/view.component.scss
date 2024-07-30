@@ -19,6 +19,9 @@
     }
     .product-view-container {
         flex-direction: column!important;
-
+        width: 85%!important;
+    }
+    app-view-details {
+        width: 100%!important;
     }
 }

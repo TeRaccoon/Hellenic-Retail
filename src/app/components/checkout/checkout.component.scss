@@ -156,3 +156,38 @@ $hellenicblue: rgb(0, 140, 255);
         }
     }
 }
+
+@media screen and (max-width: 1079px) {
+    .checkout-summary-container {
+        position: static!important;
+    }
+    .details-container {
+        flex-direction: column-reverse;
+        gap: 30px;
+    }
+    .payment-container {
+        flex-wrap: wrap;
+    }
+    .checkout-view-container {
+        width: 90%;
+    }
+    .checkout-summary-container {
+        width: 85%!important;
+    }
+    .checkout-billing-container {
+        width: 100%!important;
+    }
+    .row {
+        flex-wrap: wrap;
+    }
+    .shown {
+        height: auto;
+    }
+    .options {
+        gap: 3px
+    }
+    .form-container {
+        border: 1px solid gray;
+        padding: 10px;
+    }
+}

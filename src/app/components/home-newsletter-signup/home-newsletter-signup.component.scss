@@ -79,7 +79,16 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .background-image {
         div {
-            width: 90%!important;
+            width: 60vw !important;
+        }
+    }
+}
+
+
+@media screen and (max-width: 500px) {
+    .background-image {
+        div {
+            width: 95% !important;
         }
     }
 }
