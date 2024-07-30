@@ -2,12 +2,12 @@ $hellenicblue: rgb(0, 140, 255);
 .sidebar-container {
     display: flex;
     justify-content: flex-start;
-    width: 25%;
+    width: 18%;
     position: absolute;
     .sidebar {
         margin: 122px 30px;
         padding: 15px;
-        width: 50%;
+        width: 80%;
         background-color: #FFFFFF;
         border: 1px solid #cccccc;
     }
@@ -52,5 +52,5 @@ $hellenicblue: rgb(0, 140, 255);
 }
 
 @media screen and (max-width: 1079px) {
-    
+
 }
