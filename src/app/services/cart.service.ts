@@ -26,8 +26,11 @@ export class CartService {
         let userId = this.authService.getUserID();
         if (userId !== null) {
           this.cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});
-        this.cart = await this.checkCartStock();
-      }
+          if (this.cart.length > 0 && this.cart[0].id == undefined) {
+            this.cart = [];
+          }
+          this.cart = await this.checkCartStock();
+        }
         this.requestUpdate();
       }
     });
@@ -85,12 +88,12 @@ export class CartService {
       let response: any = null;
       if (await this.checkStock(quantity, productId, true)) {
         if (rowIndex !== -1) {
-          response = this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
+          response = await this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
         } else {
-          response = this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit});
+          response = await this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit});
         }
   
-        if (response) {
+        if (response.success) {
           await this.refreshCart();
           this.formService.setPopupMessage("Item added to cart!", true);
           this.requestUpdate();
@@ -176,6 +179,9 @@ export class CartService {
 
   async checkCartStock() {
     let cart: CartItem[] = [];
+    if (this.cart.length > 0 && this.cart[0].id == undefined) {
+      this.cart = [];
+    }
     for (let item of this.cart) {
       if (await this.checkStock(item.quantity, item.item_id)) {
         cart.push(item);
