@@ -1,8 +1,6 @@
-import { lastValueFrom } from 'rxjs';
 import { Component } from '@angular/core';
-import { FormService } from 'src/app/services/form.service';
+import { UrlService } from 'src/app/services/url.service'
 import { CartService } from 'src/app/services/cart.service';
-import { DataService } from 'src/app/services/data.service';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
 import { CheckoutSummary } from 'src/app/common/types/checkout';
 import { CheckoutService } from 'src/app/services/checkout.service';
@@ -18,12 +16,12 @@ export class CheckoutOrderSummaryComponent {
   checkoutSummary: CheckoutSummary;
   imageUrl = '';
 
-  constructor(private cartService: CartService, private dataService: DataService, private checkoutService: CheckoutService) {
+  constructor(private urlService: UrlService, private cartService: CartService, private checkoutService: CheckoutService) {
     this.checkoutSummary = checkoutService.getCheckoutSummary();
   }
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.getCartData();
     this.getCheckoutSummary();
   }

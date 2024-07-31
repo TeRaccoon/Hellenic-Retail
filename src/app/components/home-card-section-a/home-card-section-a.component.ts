@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-home-card-section-a',
@@ -13,11 +14,11 @@ export class HomeCardSectionAComponent {
 
   imageUrl = '';
 
-  constructor(private dataService: DataService) {}
+  constructor(private urlService: UrlService, private dataService: DataService) {}
 
   ngOnInit() {
     this.loadSections();
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   async loadSections() {

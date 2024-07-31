@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { RenderService } from 'src/app/services/render.service';
+import { UrlService } from 'src/app/services/url.service'
 import {
   faCaretDown,
   faEnvelope,
@@ -73,6 +74,7 @@ export class NavbarComponent {
   imageUrl: string;
 
   constructor(
+    private urlService: UrlService, 
     private router: Router,
     private authService: AuthService,
     private dataService: DataService,
@@ -81,7 +83,7 @@ export class NavbarComponent {
     private cartService: CartService,
     private renderService: RenderService
   ) {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   ngOnInit() {

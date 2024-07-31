@@ -5,6 +5,7 @@ import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { lastValueFrom } from 'rxjs';
 import { RenderService } from 'src/app/services/render.service';
+import { UrlService } from 'src/app/services/url.service';
 
 @Component({
   selector: 'app-home-featured',
@@ -25,11 +26,11 @@ export class HomeFeaturedComponent {
   screenSize: any = {};
   limit = 3;
 
-  constructor(private cartService: CartService, private dataService: DataService, private formService: FormService, private renderService: RenderService) { }
+  constructor(private urlService: UrlService, private cartService: CartService, private dataService: DataService, private formService: FormService, private renderService: RenderService) { }
 
   ngOnInit() {
     this.loadProducts();
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.loadRenderService();
   }
 

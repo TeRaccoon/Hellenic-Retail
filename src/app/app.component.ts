@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DataService } from './services/data.service';
 import { RenderService } from './services/render.service';
 
 @Component({

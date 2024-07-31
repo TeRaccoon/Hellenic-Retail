@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { faBars, faCartShopping, faHeart, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
-import { AuthService } from 'src/app/services/auth.service';
-import { FormService } from 'src/app/services/form.service';
+import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
+import { UrlService } from 'src/app/services/url.service';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -30,8 +29,8 @@ export class NavbarCategorySearchComponent {
   searchStringFilter = "";
   imageUrl: string;
 
-  constructor(private dataService: DataService, private filterService: FilterService, private router: Router) {
-    this.imageUrl = this.dataService.getUploadURL();
+  constructor(private urlService: UrlService, private dataService: DataService, private filterService: FilterService, private router: Router) {
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   ngOnInit() {

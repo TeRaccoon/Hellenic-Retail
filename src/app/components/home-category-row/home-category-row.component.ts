@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { UrlService } from 'src/app/services/url.service'
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -11,10 +12,10 @@ export class HomeCategoryRowComponent {
   categories: any[] = [];
   imageUrl = '';
 
-  constructor(private dataService: DataService) { }
+  constructor(private urlService: UrlService, private dataService: DataService) { }
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.getCategories();
   }
 

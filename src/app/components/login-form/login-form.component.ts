@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
+import { MailService } from '../../services/mail.service';
 import { AuthService } from '../../services/auth.service';
+import { UrlService } from '../../services/url.service'
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -50,7 +52,7 @@ export class LoginFormComponent {
     ]
   };
 
-  constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder) { 
+  constructor(private urlService: UrlService, private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder, private mailService: MailService) { 
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -129,7 +131,7 @@ export class LoginFormComponent {
     if (await this.checkCustomerEmail()) {
       this.loading = true;
       let password = this.generatePassword();
-      const emailHTML = this.dataService.generateForgotPasswordEmail(password);
+      const emailHTML = this.mailService.generateForgotPasswordEmail(password);
       const emailData = {
         action: 'mail',
         mail_type: 'forgot_password',
@@ -138,7 +140,8 @@ export class LoginFormComponent {
         address: this.loginForm.get('email')?.value,
         name: 'Customer',
       };
-      let response = await lastValueFrom(this.dataService.sendEmail(emailData));
+      
+      let response = await this.mailService.sendEmail(emailData);
       if (response.success) {
         this.changePassword(password);
         this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);

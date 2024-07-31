@@ -7,6 +7,7 @@ import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FilterService } from 'src/app/services/filter.service';
 import { RenderService } from 'src/app/services/render.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-shop-grid',
@@ -39,6 +40,7 @@ export class ShopGridComponent {
   filterHeader = 'Showing all results';
 
   constructor(
+    private urlService: UrlService, 
     private filterService: FilterService,
     private cartService: CartService,
     private dataService: DataService,
@@ -50,7 +52,7 @@ export class ShopGridComponent {
 
   ngOnInit() {
     this.products = [];
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.formService.setBannerMessage('Showing results');
     this.priceFilters = this.filterService.getShopPriceFilter();
     this.renderService.getScreenSize().subscribe(size => {

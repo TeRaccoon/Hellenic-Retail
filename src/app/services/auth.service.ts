@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, lastValueFrom, map } from 'rxjs';
-import { apiUrlBase } from './data.service';
+import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { UrlService } from './url.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +12,16 @@ export class AuthService {
   private userID: string | null = null;
   private userType: string | null = null;
 
-  constructor(private http: HttpClient) {
+  url;
+
+  constructor(private http: HttpClient, private urlService: UrlService) {
+    this.url = this.urlService.getUrl('data');
+
     this.checkLogin();
   }
 
   async checkLogin(): Promise<void> {
-    const url = apiUrlBase + 'manage_data.php';
+    const url = this.url;
 
     let response = await lastValueFrom<any>(
       this.http.post(
@@ -46,7 +50,7 @@ export class AuthService {
   }
 
   async logout() {
-    const url = apiUrlBase + 'manage_data.php';
+    const url = this.url;
 
     this.isAuthenticatedObservable.next(false);
     this.isAuthenticated = false;

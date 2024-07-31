@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { FormService } from 'src/app/services/form.service';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-view-image',
@@ -19,10 +20,10 @@ export class ViewImageComponent {
 
   imageUrl = '';
 
-  constructor(private formService: FormService, private dataService: DataService, private route: ActivatedRoute) { }
+  constructor(private urlService: UrlService, private formService: FormService, private dataService: DataService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.route.params.subscribe(params => {
       const productName = params['productName'];
       this.loadProduct(productName);

@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-wishlist',
@@ -20,8 +21,8 @@ export class WishlistComponent {
 
   imageUrl;
 
-  constructor(private cartService: CartService, private dataService: DataService, private authService: AuthService, private formService: FormService) {
-    this.imageUrl = this.dataService.getUploadURL();
+  constructor(private urlService: UrlService, private cartService: CartService, private dataService: DataService, private authService: AuthService, private formService: FormService) {
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   ngOnInit() {

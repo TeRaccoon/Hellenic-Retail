@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import { MailService } from 'src/app/services/mail.service';
+import { UrlService } from 'src/app/services/url.service'
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { CheckoutSummary } from '../../common/types/checkout';
 import {
@@ -14,6 +16,7 @@ import {
   ICreateOrderRequest 
 } from 'ngx-paypal';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
+import { Response } from '../../common/types/data-response'
 
 @Component({
   selector: 'app-checkout',
@@ -48,7 +51,7 @@ export class CheckoutComponent {
 
   payerDetails: any = {};
 
-  constructor(private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService, private checkoutService: CheckoutService) {
+  constructor(private urlService: UrlService, private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService, private checkoutService: CheckoutService, private mailService: MailService) {
     this.billingForm = this.fb.group({
       "First Name": ['', Validators.required],
       "Last Name": ['', Validators.required],
@@ -267,7 +270,7 @@ export class CheckoutComponent {
     }
   }
 
-  async sendEmailConfirmation() {
+  sendEmailConfirmation(): Promise<Response> {
     let products = this.cartProducts.map((product: any, index) => {
       return {
         name: product.name,
@@ -287,7 +290,7 @@ export class CheckoutComponent {
       total: '&pound;' + this.checkoutSummary.total.toFixed(2)
     };
 
-    const emailHTML = this.dataService.generateOrderConfirmationEmail(emailInformation);
+    const emailHTML = this.mailService.generateOrderConfirmationEmail(emailInformation);
 
     const emailData = {
       action: 'mail',
@@ -298,7 +301,7 @@ export class CheckoutComponent {
       name: `${formData['First Name']} -  ${formData['Last Name']}`,
     };
 
-    return await lastValueFrom(this.dataService.sendEmail(emailData));
+    return this.mailService.sendEmail(emailData);
   }
 
   async createInvoice(formData: any) {

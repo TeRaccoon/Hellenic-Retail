@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { CartService } from '../../services/cart.service';
 import { FormService } from '../../services/form.service';
+import { UrlService } from 'src/app/services/url.service'
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -18,11 +19,11 @@ export class ProductComponent {
   faEye = faEye;
 
   constructor(
+    private urlService: UrlService, 
     private cartService: CartService,
     private formService: FormService,
-    private dataService: DataService,
   ) {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   openImage(imageLocation: string) {
