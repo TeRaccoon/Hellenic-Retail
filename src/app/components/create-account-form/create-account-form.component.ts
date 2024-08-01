@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import { MailService } from 'src/app/services/mail.service';
 
 @Component({
   selector: 'app-create-account-form',
@@ -13,12 +14,12 @@ import { FormService } from 'src/app/services/form.service';
 export class CreateAccountFormComponent {
   registrationForm: FormGroup;
   submitted = false;
-  error = "";
+  error = '';
 
   subscribe = false;
   agreedToTerms = false;
 
-  constructor(private router: Router, private dataService: DataService, private formService: FormService, private formBuilder: FormBuilder) {
+  constructor(private mailService: MailService, private router: Router, private dataService: DataService, private formService: FormService, private formBuilder: FormBuilder) {
     this.registrationForm = this.formBuilder.group({
       forename: ['', Validators.required],
       surname: ['', Validators.required],
@@ -33,7 +34,7 @@ export class CreateAccountFormComponent {
 
   ngOnInit() {
     this.submitted = false;
-    this.error = "";
+    this.error = '';
 
     this.formService.setBannerMessage("Create Account");
   }
@@ -68,18 +69,15 @@ export class CreateAccountFormComponent {
         if (passed) {
           let response = await lastValueFrom(this.dataService.submitFormData(formData));
           if (response.success) {
-            this.formService.setPopupMessage("Account Created Successfully!");
-            if (this.subscribe) {
-              response = await this.subscribeToNewsletter();
-              if (!response.success) {
-                this.formService.setPopupMessage("There was an issue subscribing you to the newsletter!");
-              }
+            response = await this.sendAccountCreationEmail();
+            if (response) {
+              this.formService.setPopupMessage("Account Created Successfully!");
+              this.subscribe && await this.subscribeToNewsletter();
+              setTimeout(() => {
+                this.router.navigate(['/account']);
+              }, 3000);
             }
             this.formService.showPopup();
-            setTimeout(() => {
-              this.router.navigate(['/account']);
-            }, 3000);
-    
           } else {
             this.error = "There was an issue creating your account. Please double check your details!";
           }
@@ -90,6 +88,25 @@ export class CreateAccountFormComponent {
     }
   }
 
+  async sendAccountCreationEmail() {
+    const emailHTML = this.mailService.generateAccountCreationEmail(this.registrationForm.value);
+    const emailData = {
+      action: 'mail',
+      mail_type: 'account_creation',
+      subject: 'Welcome to Hellenic Grocery',
+      email_HTML: emailHTML,
+      address: this.registrationForm.get('email')?.value,
+      name: 'Customer',
+    };
+
+    let response = await this.mailService.sendEmail(emailData);
+    if (!response.success) {
+      this.formService.setPopupMessage('There was an issue sending you account creation confirmation email. Please contact support for help: support@hellenicgrocery.co.uk');
+    }
+
+    return response.success;
+  }
+
   async subscribeToNewsletter() {
     const formData = {
       email: this.registrationForm.get('email')!.value,
@@ -97,7 +114,10 @@ export class CreateAccountFormComponent {
       table_name: 'mailing_list',
     };
     let response = await lastValueFrom(this.dataService.submitFormData(formData));
-    return response;
+    
+    if (!response.success) {
+      this.formService.setPopupMessage("There was an issue subscribing you to the newsletter!");
+    }
   }
 
   async preSubmissionChecks() {
