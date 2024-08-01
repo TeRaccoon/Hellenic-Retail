@@ -121,7 +121,7 @@ export class CreateAccountFormComponent {
   }
 
   async preSubmissionChecks() {
-    let userIDs = await lastValueFrom(this.dataService.collectData("user-id-from-email", this.registrationForm.get('email')?.value));
+    let userIDs = await this.dataService.processGet("user-id-from-email", {filter: this.registrationForm.get('email')?.value});
     if (userIDs.length === 0) {
       return true;
     } else {

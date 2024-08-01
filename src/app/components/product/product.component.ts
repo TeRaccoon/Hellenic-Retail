@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { DataService } from '../../services/data.service';
 import { CartService } from '../../services/cart.service';
 import { FormService } from '../../services/form.service';
 import { UrlService } from 'src/app/services/url.service'

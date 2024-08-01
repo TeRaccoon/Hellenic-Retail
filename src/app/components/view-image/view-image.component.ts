@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { FormService } from 'src/app/services/form.service';
 import { UrlService } from 'src/app/services/url.service'
@@ -31,14 +31,14 @@ export class ViewImageComponent {
   }
 
   async loadProduct(productName: string) {
-    let product = await lastValueFrom<any>(this.dataService.collectData("product-view", productName));
+    let product = await this.dataService.processGet("product-view", {filter: productName});
     if (product['primary_image'] == null) {
       product['primary_image'] = 'placeholder.jpg';
     }
     
     this.product = product;
     this.primaryImage = this.product.primary_image;
-    this.productImages = await lastValueFrom(this.dataService.collectData("product-view-images", product.id));
+    this.productImages = await this.dataService.processGet("product-view-images", {filter: product.id});
   }
 
   changeImage(event: Event) {

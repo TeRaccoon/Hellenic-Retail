@@ -13,7 +13,6 @@ import {
   faCartShopping,
 } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
 import {
   animate,
   state,
@@ -125,15 +124,12 @@ export class NavbarComponent {
   async loadNavBar() {
     this.categories = this.dataService.getVisibleCategoryNames();
 
-    let subcategories = await lastValueFrom(
-      this.dataService.collectData('subcategories')
-    );
+    let subcategories = await this.dataService.processGet('subcategories');
     if (subcategories != null) {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.collectDataComplex('products');
-    products = Array.isArray(products) ? products : [products];
+    let products: any = await this.dataService.processGet('products', {}, true);
 
     if (products != null) {
       products = this.replaceNullImages(products);

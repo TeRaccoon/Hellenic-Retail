@@ -22,13 +22,10 @@ export class HomeCardSectionAComponent {
   }
 
   async loadSections() {
-    this.dataService.collectData("section-data", "home-section-A-card-1").subscribe((data: any) => {
-      this.card1 = data;
-      this.cardLocations.push(this.card1[0].image_file_name);
-    });
-    this.dataService.collectData("section-data", "home-section-A-card-2").subscribe((data: any) => {
-      this.card2 = data;
-      this.cardLocations.push(this.card2[0].image_file_name);
-    });
+    this.card1 = await this.dataService.processGet("section-data", {filter: "home-section-A-card-1"})
+    this.cardLocations.push(this.card1[0].image_file_name);
+
+    this.card2 = await this.dataService.processGet("section-data", {filter: "home-section-A-card-1"})
+    this.cardLocations.push(this.card2[0].image_file_name);
   }
 }

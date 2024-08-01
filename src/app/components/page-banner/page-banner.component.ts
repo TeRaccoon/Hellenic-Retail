@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../../services/data.service';
 import { FormService } from 'src/app/services/form.service';
 import { UrlService } from 'src/app/services/url.service'
@@ -15,7 +14,7 @@ export class PageBannerComponent {
 
   imageUrl = '';
 
-  constructor(private urlService: UrlService, private formService: FormService, private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private urlService: UrlService, private formService: FormService, private dataService: DataService) { }
 
   ngOnInit() {
     this.imageUrl = this.urlService.getUrl('uploads');;
@@ -30,8 +29,6 @@ export class PageBannerComponent {
   }
 
   async loadBannerImage() {
-    this.dataService.collectData("section-image", "page-banner").subscribe((data: any) => {
-      this.bannerImage = data;
-    });
+    this.bannerImage = this.dataService.processGet("section-image", {filter: "page-banner"})
   }
 }

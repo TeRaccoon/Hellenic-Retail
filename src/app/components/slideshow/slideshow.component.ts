@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { DataService } from '../../services/data.service';
 import { UrlService } from 'src/app/services/url.service'
@@ -62,8 +62,6 @@ export class SlideshowComponent implements OnInit {
   
   async loadSlideShow() {
     this.startSlideShow();
-    this.dataService.collectData("home-slideshow").subscribe((data: any) => {
-      this.imageNames = data;
-    });
+    this.imageNames = await this.dataService.processGet('home-slideshow', {}, true);
   }
 }

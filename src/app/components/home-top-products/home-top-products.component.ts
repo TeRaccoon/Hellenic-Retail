@@ -48,8 +48,7 @@ export class HomeTopProductsComponent {
   }
 
   async loadProducts() {
-    let topProducts = await this.dataService.collectDataComplex('top-products', { limit: this.limit });
-    this.topProducts = Array.isArray(topProducts) ? topProducts : [topProducts];
+    this.topProducts = await this.dataService.processGet('top-products', { limit: this.limit }, true);
 
     this.topProducts.forEach((product) => {
       if (product.discount && product.discount != null) {

@@ -164,7 +164,7 @@ export class LoginFormComponent {
 
   async checkCustomerEmail() {
     let email = this.loginForm.get('email')?.value;
-    let response = await lastValueFrom(this.dataService.collectData('user-id-from-email', email));
+    let response = await this.dataService.processGet('user-id-from-email', email);
     if (response.length == 0) {
       this.loginError = "A user doesn't exist with this email";
       return false;

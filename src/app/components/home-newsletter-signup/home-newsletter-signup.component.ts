@@ -36,7 +36,7 @@ export class HomeNewsletterSignupComponent {
   }
 
   async loadImage() {
-    this.signupImage = await lastValueFrom(this.dataService.collectData("home-signup"));
+    this.signupImage = await this.dataService.processGet("home-signup");
   }
 
   async submit() {

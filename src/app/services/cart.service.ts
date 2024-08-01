@@ -150,7 +150,7 @@ export class CartService {
     if (this.cart.length > 0 && this.cart[0].id) {
       let total = 0;
       for (const item of this.cart) {
-        let product: Product = await lastValueFrom(this.dataService.collectData('product-from-id', item.item_id.toString()));
+        let product: Product = await this.dataService.processGet('product-from-id', {filter: item.item_id.toString()});
         let formattedProduct = this.formatProduct(product, item);
 
         total += formattedProduct.discounted_price;
@@ -214,7 +214,7 @@ export class CartService {
           customer_id: customerID,
           table_name: "wishlist"
         };
-        let inWishlist: any = await this.dataService.collectDataComplex("is-product-in-wishlist", {id: customerID, product_id: productID});
+        let inWishlist: any = await this.dataService.processGet("is-product-in-wishlist", {id: customerID, product_id: productID});
 
         let popupMessage = "Product already in wishlist!";
         

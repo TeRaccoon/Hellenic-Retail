@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
@@ -38,8 +37,7 @@ export class WishlistComponent {
   async loadWishlist() {
     let userID = this.authService.getUserID();
     if (userID != null) {
-      let wishlistProducts = await lastValueFrom(this.dataService.collectData("wishlist-from-id", userID));
-      wishlistProducts = Array.isArray(wishlistProducts) ? wishlistProducts : [wishlistProducts];
+      let wishlistProducts = await this.dataService.processGet("wishlist-from-id", {filter: userID}, true);
   
       wishlistProducts.forEach((product: any) => {
         if (product.discount && product.discount != null) {

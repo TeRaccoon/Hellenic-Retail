@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
 import { UrlService } from 'src/app/services/url.service';
 
@@ -41,15 +40,12 @@ export class NavbarCategorySearchComponent {
   async loadNavBar() {
     this.categories = this.dataService.getVisibleCategoryNames();
 
-    let subcategories = await lastValueFrom(
-      this.dataService.collectData('subcategories')
-    );
+    let subcategories = await this.dataService.processGet('subcategories');
     if (subcategories != null) {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.collectDataComplex('products');
-    products = Array.isArray(products) ? products : [products];
+    let products: any = await this.dataService.processGet('products', {}, true);
 
     if (products != null) {
       products = this.calculatePrices(products);

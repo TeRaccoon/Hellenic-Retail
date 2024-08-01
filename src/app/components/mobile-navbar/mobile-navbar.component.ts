@@ -10,7 +10,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
-import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
 import { UrlService } from 'src/app/services/url.service'
 

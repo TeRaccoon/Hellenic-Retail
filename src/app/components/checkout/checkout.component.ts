@@ -166,7 +166,7 @@ export class CheckoutComponent {
   }
 
   async loadAddressBook() {
-    this.addressBook = await this.dataService.processPost({'action': 'address-book', 'customer_id': this.customerId?.toString()});
+    this.addressBook = await this.dataService.processPost({'action': 'address-book', 'customer_id': this.customerId?.toString()}, true);
   }
 
   async tracing() {
@@ -249,7 +249,7 @@ export class CheckoutComponent {
     let success = true;
     if (withTransaction) {
       const paymentData = this.craftPayload(formData);
-      let paymentResponse = await lastValueFrom(this.dataService.processTransaction(paymentData));
+      let paymentResponse = await this.dataService.processTransaction(paymentData);
   
       success = this.validateResponse(paymentResponse);
     }

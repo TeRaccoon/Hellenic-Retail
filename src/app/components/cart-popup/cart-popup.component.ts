@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
-import { DataService } from 'src/app/services/data.service';
 import { UrlService } from 'src/app/services/url.service'
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { faX } from '@fortawesome/free-solid-svg-icons';
@@ -40,7 +39,7 @@ export class CartPopupComponent {
 
   faX = faX;
 
-  constructor(private urlService: UrlService, private cartService: CartService, private dataService: DataService, private formService: FormService, private authService: AuthService) {}
+  constructor(private urlService: UrlService, private cartService: CartService, private formService: FormService, private authService: AuthService) {}
 
   ngOnInit() {
     this.imageUrl = this.urlService.getUrl('uploads');

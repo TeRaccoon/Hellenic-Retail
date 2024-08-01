@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { faHouse, faPhone, faEnvelope, faFileInvoice, faHashtag } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
 import { RenderService } from 'src/app/services/render.service';
 import { UrlService } from 'src/app/services/url.service';
 
@@ -34,6 +33,6 @@ export class FooterComponent {
   }
 
   async loadCategories() {
-    this.categories = await lastValueFrom(this.dataService.collectData("visible-categories"));
+    this.categories = await this.dataService.processGet("visible-categories");
   }
 }

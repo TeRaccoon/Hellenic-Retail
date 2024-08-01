@@ -68,7 +68,7 @@ export class AccountComponent {
   }
 
   async loadAccountDetails() {
-    let userData = await lastValueFrom(this.dataService.collectData('user-details-from-id', this.userId?.toString()));
+    let userData = await this.dataService.processGet('user-details-from-id', {filter: this.userId?.toString()});
 
     this.userData = userData;
     this.changeAccountDetails.patchValue({
@@ -81,13 +81,11 @@ export class AccountComponent {
   }
 
   async loadAddressBook() {
-    let addressBook = await this.dataService.processPost({'action': 'address-book', 'customer_id': this.userId?.toString()});
-    this.addressBook = Array.isArray(addressBook) ? addressBook : [addressBook];
+    this.addressBook = await this.dataService.processPost({'action': 'address-book', 'customer_id': this.userId?.toString()}, true);
   }
 
   async loadOrderHistory() {
-    let orderHistory = await this.dataService.processPost({'action': 'order-history', 'customer_id': this.userId?.toString()});
-    this.orderHistory =  Array.isArray(orderHistory) ? orderHistory : [orderHistory];
+    this.orderHistory = await this.dataService.processPost({'action': 'order-history', 'customer_id': this.userId?.toString()}, true);
   }
 
   toggleEdit() {
