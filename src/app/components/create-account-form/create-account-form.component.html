@@ -52,6 +52,18 @@
                         <input [class]="inputHasError('passwordRepeat') ? 'error-input' : ''" type="password" formControlName="passwordRepeat">
                     </div>
                 </div>
+                <div class="terms-and-conditions">
+                    <h1>Have you read our terms and conditions?</h1>
+                    <p>
+                        By creating an account on our website, you agree to abide by the terms and conditions.
+                    </p>
+                    <p>
+                        You must provide accurate and complete information when creating your account, including your forename, surname and address.
+                    </p>
+                    <p>
+                        You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.
+                    </p>
+                </div>
                 <div class="checkbox-container">
                     <label>You agree to receive promotional newsletters</label>
                     <input (change)="onPromoCheckboxChange($event)" type="checkbox">
@@ -76,4 +88,5 @@
             </p>
         </div>
     </div>
+    <app-footer></app-footer>
 </div>

@@ -26,6 +26,14 @@ $hellenicblue: rgb(0, 140, 255);
                 display: flex;
                 flex-direction: column;
             }
+            .terms-and-conditions {
+                display: none;
+                flex-direction: column;
+                width: 85%;
+                border: 1px solid #ccc;
+                padding: 18px;
+                height: fit-content;
+            }
             .checkbox-container {
                 display: flex;
                 label {
@@ -71,5 +79,24 @@ $hellenicblue: rgb(0, 140, 255);
             padding: 18px;
             height: 100%;
         }
+    }
+}
+
+@media screen and (max-width: 1079px) { //Mobile
+    .container {
+        width: 85%;
+        margin: auto;
+    }
+    .row-double {
+        flex-direction: column;
+    }
+    .side-bar {
+        display: none;
+    }
+    .terms-and-conditions {
+        display: flex!important;
+    }
+    .panel-container {
+        margin-bottom: 15px;
     }
 }
