@@ -88,7 +88,11 @@ export class CartService {
       let response: any = null;
       if (await this.checkStock(quantity, productId, true)) {
         if (rowIndex !== -1) {
-          response = await this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
+          if (cart[rowIndex].quantity == quantity) {
+            this.formService.setPopupMessage("Item already in basket!", true);
+          } else {
+            response = await this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
+          }
         } else {
           response = await this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit});
         }
