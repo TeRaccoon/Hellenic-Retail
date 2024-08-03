@@ -93,9 +93,9 @@ export class ShopGridComponent {
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
     if (category !== undefined && this.category !== undefined || category == 'All') {
-      products = await this.dataService.processGet('products-from-category', {category: category}, true);
+      products = await this.dataService.processGet('products-from-category', {category: category}, true, true);
     } else {
-      products = await this.dataService.processGet('products', {}, true)
+      products = await this.dataService.processGet('products', {}, true, true)
     }
 
     if (filter != null) {

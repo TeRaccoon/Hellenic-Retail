@@ -45,7 +45,7 @@ export class NavbarCategorySearchComponent {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.processGet('products', {}, true);
+    let products: any = await this.dataService.processGet('products', {}, true, true);
 
     if (products != null) {
       products = this.calculatePrices(products);

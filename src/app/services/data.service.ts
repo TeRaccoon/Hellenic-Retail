@@ -23,12 +23,12 @@ export class DataService {
 
     if (makeArray)
       response = Array.isArray(response) ? response : [response];
-
+      
     return response;
   }
 
-async processGet(query: string, filter: Record<string, any> = {}, makeArray = false): Promise<any> {
-  await this.authService.checkLogin();
+async processGet(query: string, filter: Record<string, any> = {}, makeArray = false, checkLogin = false): Promise<any> {
+  checkLogin && await this.authService.checkLogin();
   let userType = this.authService.getUserType();
 
   const url = new URL(this.urlService.getUrl('retail'));

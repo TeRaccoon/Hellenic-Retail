@@ -214,7 +214,7 @@ export class CartService {
           customer_id: customerID,
           table_name: "wishlist"
         };
-        let inWishlist: any = await this.dataService.processGet("is-product-in-wishlist", {id: customerID, product_id: productID});
+        let inWishlist: any = await this.dataService.processGet("is-product-in-wishlist", {id: customerID, product_id: productID}, true);
 
         let popupMessage = "Product already in wishlist!";
         

@@ -47,7 +47,7 @@ export class HomeFeaturedComponent {
   }
 
   async loadProducts() {
-    this.featuredProducts = await this.dataService.processGet('featured', { limit: this.limit }, true);
+    this.featuredProducts = await this.dataService.processGet('featured', { limit: this.limit }, true, true);
     
     this.featuredProducts.forEach((product) => {
       if (product.discount && product.discount != null) {

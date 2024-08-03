@@ -77,7 +77,7 @@ export class ViewDetailsComponent {
     await this.authService.checkLogin();
     this.userType = this.authService.getUserType();
 
-    let product: any = await this.dataService.processGet("product-view-details", { productName: productName });
+    let product: any = await this.dataService.processGet("product-view-details", { productName: productName}, true);
     
     if (product.discount && product.discount != null) {
       product.discounted_price = product.price * ((100 - product.discount) / 100);
