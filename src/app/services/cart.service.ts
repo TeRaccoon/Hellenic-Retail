@@ -85,28 +85,31 @@ export class CartService {
       let cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});      
       const rowIndex = cart.findIndex((item: any) => item.item_id === productId && item.unit === unit);
 
-      let response: any = null;
+      let response: Response | undefined;
+      let popupMessage = 'Item added to cart!';
+
       if (await this.checkStock(quantity, productId, true)) {
         if (rowIndex !== -1) {
           if (cart[rowIndex].quantity == quantity) {
-            this.formService.setPopupMessage("Item already in basket!", true);
+            this.formService.setPopupMessage('Item already in basket!', true);
           } else {
             response = await this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
+            popupMessage = 'Cart updated!';
           }
         } else {
           response = await this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit});
         }
   
-        if (response.success) {
+        if (response?.success) {
           await this.refreshCart();
-          this.formService.setPopupMessage("Item added to cart!", true);
+          this.formService.setPopupMessage(popupMessage, true);
           this.requestUpdate();
         } else {
-          this.formService.setPopupMessage("There was an issue adding this item!", true);
+          this.formService.setPopupMessage('There was an issue adding this item!', true);
         }
       }
     } else {
-      this.formService.setPopupMessage("Please sign in to use your cart!", true);
+      this.formService.setPopupMessage('Please sign in to use your cart!', true);
     }
   }
 
