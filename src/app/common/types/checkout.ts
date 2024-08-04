@@ -4,3 +4,8 @@ export interface CheckoutSummary {
     vat: number,
     total: number
 }
+
+export enum PaymentMethod {
+    Barclays = 'Barclays',
+    PayPal = 'PayPal'
+}

@@ -4,8 +4,9 @@
         <app-checkout-coupon></app-checkout-coupon>
         <div class="details-container">
             <div class="checkout-billing-container">
-                <div class="form-container">
-                    <h1>Billing details</h1>
+                <h1>Billing details</h1>
+                <h3 (click)="switchPaymentMethods()">Switch payment methods?</h3>
+                <div *ngIf="paymentMethod == PaymentMethod.Barclays else paypal" class="form-container">
                     <div class="error-container">
                         <ng-container *ngFor="let control of billingForm.controls | keyvalue">
                             <div *ngIf="billingForm.get(control.key)?.touched && billingForm.get(control.key)?.invalid">
@@ -90,12 +91,14 @@
                         </div>
                     </div>
                 </div>
+                <ng-template #paypal>
+                    <ngx-paypal *ngIf="userType == 'Retail'" [config]="paypalConfig"></ngx-paypal>
+                </ng-template>
             </div>
             <div class="checkout-summary-container">
                 <app-checkout-order-summary></app-checkout-order-summary>
                 <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a [routerLink]="'/documents/privacy-policy'">privacy policy</a>.</p>
                 <div class="payment-container">
-                    <ngx-paypal *ngIf="userType == 'Retail'" [config]="paypalConfig"></ngx-paypal>
                     <button type="submit" [disabled]="billingForm.invalid">
                         <ng-container *ngIf="!processing else paymentProcessing">
                             Place order

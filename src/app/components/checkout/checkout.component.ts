@@ -10,7 +10,7 @@ import { FormService } from 'src/app/services/form.service';
 import { MailService } from 'src/app/services/mail.service';
 import { UrlService } from 'src/app/services/url.service'
 import { CheckoutService } from 'src/app/services/checkout.service';
-import { CheckoutSummary } from '../../common/types/checkout';
+import { CheckoutSummary, PaymentMethod } from '../../common/types/checkout';
 import {
   IPayPalConfig,
   ICreateOrderRequest 
@@ -50,6 +50,7 @@ export class CheckoutComponent {
   addressBook: any[] = [];
 
   payerDetails: any = {};
+  paymentMethod = PaymentMethod.Barclays;
 
   constructor(private urlService: UrlService, private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService, private checkoutService: CheckoutService, private mailService: MailService) {
     this.billingForm = this.fb.group({
@@ -429,5 +430,13 @@ export class CheckoutComponent {
     this.billingForm.get('Town / City')?.setValue(address.delivery_address_three);
     this.billingForm.get('Postcode')?.setValue(address.delivery_postcode);
     this.addressBookVisible = false;
+  }
+
+  switchPaymentMethods() {
+    this.paymentMethod = this.paymentMethod == PaymentMethod.Barclays ? PaymentMethod.PayPal : PaymentMethod.Barclays;
+  }
+
+  get PaymentMethod() {
+    return PaymentMethod;
   }
 }
