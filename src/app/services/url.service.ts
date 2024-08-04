@@ -6,7 +6,7 @@ const UPLOAD_EXTENSION = 'uploads/';
 const DATA_PATH = API_EXTENSION + 'manage_data.php'
 const MAIL_PATH = API_EXTENSION + 'mail.php';
 const RETAIL_PATH = API_EXTENSION + 'retail_query_handler.php';
-const PAYMENT_PATH = 'payment.php';
+const PAYMENT_PATH = API_EXTENSION + 'payment.php';
 
 @Injectable({
   providedIn: 'root'
