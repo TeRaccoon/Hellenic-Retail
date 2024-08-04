@@ -179,13 +179,14 @@ export class CheckoutComponent {
     let subtotal = this.cartService.getCartTotal();
 
     let delivery = subtotal < 30 ? 7.50 : 0;
-    let vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2));
+    // let vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2)); This is VAT added onto the product prices which may already have VAT
+    let vat = (subtotal * 0.2) / (1 + 0.2);  //This is VAT taken from the products
 
     const updatedSummary = {
       delivery: delivery,
       subtotal: subtotal,
       vat: vat,
-      total: Number(Number(subtotal + vat + delivery).toFixed(2))
+      total: Number(Number(subtotal + delivery).toFixed(2))
     };
     this.checkoutService.updateCheckoutSummary(updatedSummary);
     
@@ -271,20 +272,20 @@ export class CheckoutComponent {
   }
 
   sendEmailConfirmation(): Promise<Response> {
-    let products = this.cartProducts.map((product: any, index) => {
+    let products = this.cartProducts.map((product: CartProduct, index) => {
       return {
         name: product.name,
         quantity: this.cart[index].quantity,
-        price: '&pound;' + Number(product.discounted_total).toFixed(2),
+        price: '&pound;' + Number(product.discounted_price).toFixed(2),
       };
     });
 
     const formData = this.billingForm.value;
-
+    console.log(products);
     const emailInformation = {
       reference: this.orderReference,
       products: products,
-      net_total: '&pound;' + this.checkoutSummary.subtotal.toFixed(2),
+      net_total: '&pound;' + (this.checkoutSummary.subtotal - this.checkoutSummary.vat).toFixed(2),
       vat: '&pound;' + this.checkoutSummary.vat.toFixed(2),
       delivery: '&pound' + this.checkoutSummary.delivery.toFixed(2),
       total: '&pound;' + this.checkoutSummary.total.toFixed(2)

@@ -19,10 +19,18 @@
         </tr>
         <tr>
             <td>
-                <p class="title">Subtotal</p>
+                <p class="title">Subtotal (inc VAT)</p>
             </td>
             <td>
                 <p class="row-price">£{{ checkoutSummary.subtotal | number: '1.2-2' }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="title">VAT</p>
+            </td>
+            <td>
+                <p class="row-price">£{{ checkoutSummary.vat | number: '1.2-2' }}</p>
             </td>
         </tr>
         <tr>
@@ -36,14 +44,6 @@
                 <ng-template #elseBlock>
                     <p class="row-price">--</p>
                 </ng-template>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p class="title">VAT</p>
-            </td>
-            <td>
-                <p class="row-price">£{{ checkoutSummary.vat | number: '1.2-2' }}</p>
             </td>
         </tr>
         <tr>
