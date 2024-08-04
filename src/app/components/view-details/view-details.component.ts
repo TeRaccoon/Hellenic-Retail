@@ -77,7 +77,7 @@ export class ViewDetailsComponent {
     await this.authService.checkLogin();
     this.userType = this.authService.getUserType();
 
-    let product: any = await this.dataService.processGet("product-view-details", { productName: productName}, true);
+    let product: any = await this.dataService.processGet("product-view-details", { productName: productName}, false);
     
     if (product.discount && product.discount != null) {
       product.discounted_price = product.price * ((100 - product.discount) / 100);
@@ -89,9 +89,9 @@ export class ViewDetailsComponent {
 
     this.product = product;
 
-    let stock = await this.dataService.processGet("total-stock-by-id", product.id);
-    this.stock = stock.total_quantity;
-    this.outOfStock = stock.total_quantity < 1;
+    let stock = await this.dataService.processGet("total-stock-by-id", { 'filter': product.id });
+    this.stock = stock.quantity;
+    this.outOfStock = stock.quantity < 1;
   }
 
   addToCart(productID: number, quantity: number) {
