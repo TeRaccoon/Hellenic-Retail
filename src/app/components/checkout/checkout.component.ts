@@ -79,6 +79,7 @@ export class CheckoutComponent {
     this.load();
     this.initConfig();
   }
+  
   private initConfig(): void {
     this.paypalConfig = {
       currency: 'GBP',
@@ -95,6 +96,7 @@ export class CheckoutComponent {
         actions.order.get().then((details: any) => {
           this.payerDetails = details;
         });
+        console.log(data);
       },
       onClientAuthorization: (data) => {
         
@@ -112,8 +114,6 @@ export class CheckoutComponent {
   }
 
   private createOrder(): ICreateOrderRequest {
-    const formData = this.billingForm.value;
-    
     return {
       intent: 'CAPTURE',
       purchase_units: [{
@@ -125,15 +125,6 @@ export class CheckoutComponent {
               currency_code: 'GBP',
               value: this.checkoutSummary.total.toString(),
             }
-          }
-        },
-        shipping: {
-          address: {
-            address_line_1: formData['Street Address'],
-            address_line_2: formData['Street Address 2'],
-            admin_area_2: formData['Town / City'],
-            postal_code: formData['Postcode'],
-            country_code: 'GB'
           }
         },
         items: [{
@@ -282,7 +273,6 @@ export class CheckoutComponent {
     });
 
     const formData = this.billingForm.value;
-    console.log(products);
     const emailInformation = {
       reference: this.orderReference,
       products: products,

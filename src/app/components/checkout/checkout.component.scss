@@ -16,6 +16,7 @@ $hellenicblue: rgb(0, 140, 255);
             h3 {
                 cursor: pointer;
                 font-size: 16px;
+                display: inline;
             }
             .form-container {
                 .billing-form {
@@ -113,6 +114,9 @@ $hellenicblue: rgb(0, 140, 255);
                         }
                     }
                 }
+            }
+            .paypal-container {
+                margin-top: 15px;
             }
         }
         .checkout-summary-container {

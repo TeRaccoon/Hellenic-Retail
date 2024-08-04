@@ -92,7 +92,9 @@
                     </div>
                 </div>
                 <ng-template #paypal>
-                    <ngx-paypal *ngIf="userType == 'Retail'" [config]="paypalConfig"></ngx-paypal>
+                    <div class="paypal-container">
+                        <ngx-paypal *ngIf="userType == 'Retail'" [config]="paypalConfig"></ngx-paypal>
+                    </div>
                 </ng-template>
             </div>
             <div class="checkout-summary-container">
