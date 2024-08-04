@@ -89,10 +89,8 @@ $hellenicblue: rgb(0, 140, 255);
                     }
                     .shown {
                         margin: 15px 0px;
-                        max-height: 300px;
+                        height: 300px;
                         overflow-y: scroll;
-                        width: initial;
-                        height: auto;
                         transition: height 1.6s ease, margin 1.6s ease;
                     }
                 }
