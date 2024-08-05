@@ -68,8 +68,8 @@ export class CartPopupComponent {
     }
   }
 
-  async removeFromCart(productId: number) {
-    await this.cartService.removeFromCart(productId);
+  async removeFromCart(cartId: number) {
+    await this.cartService.removeFromCart(cartId);
     await this.getCartData();
   }
 

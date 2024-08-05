@@ -122,10 +122,10 @@ export class CartService {
     return true
   }
 
-  async removeFromCart(productId: number) {
+  async removeFromCart(cartId: number) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      let response: Response = await this.dataService.processPost({'action': 'remove-cart', 'customer_id': userId, 'product_id': productId})
+      let response: Response = await this.dataService.processPost({'action': 'remove-cart', 'customer_id': userId, 'cart_id': cartId})
 
       if (response.success) {
         this.formService.setPopupMessage("Item removed successfully!", true);
