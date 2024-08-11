@@ -223,6 +223,7 @@ export class CheckoutComponent {
         item_id: item.item_id,
         quantity: item.quantity,
         discount: 0,
+        unit: item.unit,
         table_name: 'invoiced_items',
         action: 'add'
       };
