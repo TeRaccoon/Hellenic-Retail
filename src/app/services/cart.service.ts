@@ -137,17 +137,17 @@ export class CartService {
     }
   }
 
-  async clearCart() {
+  async clearCart(showPopup = true) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
       let response: Response = await this.dataService.processPost({'action': 'clear-cart', 'customer_id': userId});
 
       if (response.success) {
-        this.formService.setPopupMessage("Cart cleared successfully!", true);
+        showPopup && this.formService.setPopupMessage("Cart cleared successfully!", true);
         await this.refreshCart();
         this.requestUpdate();
       } else {
-        this.formService.setPopupMessage("There was an issue clearing your cart!", true);
+        showPopup && this.formService.setPopupMessage("There was an issue clearing your cart!", true);
       }
     }
   }

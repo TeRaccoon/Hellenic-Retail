@@ -249,13 +249,15 @@ export class CheckoutComponent {
     }
 
     if (success) {
+      await this.cartService.clearCart(false);
+
       let response = await this.sendEmailConfirmation();
-      if (!response.success) {
-        this.orderError = 'There was an error sending your email confirmation!';
-      } else {
+      if (response.success) {
         setTimeout(() => {
           this.router.navigate(['/order-complete']);
         }, 3000);
+      } else {
+        this.orderError = 'There was an error sending your email confirmation!';
       }
       await this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId});
     } else {
