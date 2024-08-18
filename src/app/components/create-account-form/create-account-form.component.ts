@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
 import { MailService } from 'src/app/services/mail.service';
@@ -19,7 +20,7 @@ export class CreateAccountFormComponent {
   subscribe = false;
   agreedToTerms = false;
 
-  constructor(private mailService: MailService, private router: Router, private dataService: DataService, private formService: FormService, private formBuilder: FormBuilder) {
+  constructor(private authService: AuthService, private mailService: MailService, private router: Router, private dataService: DataService, private formService: FormService, private formBuilder: FormBuilder) {
     this.registrationForm = this.formBuilder.group({
       forename: ['', Validators.required],
       surname: ['', Validators.required],
@@ -73,6 +74,7 @@ export class CreateAccountFormComponent {
             if (response) {
               this.formService.setPopupMessage("Account Created Successfully!");
               this.subscribe && await this.subscribeToNewsletter();
+              this.authService.checkLogin();
               setTimeout(() => {
                 this.router.navigate(['/account']);
               }, 3000);
