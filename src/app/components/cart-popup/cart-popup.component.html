@@ -11,7 +11,7 @@
                         <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
                             <img [src]="imageUrl + product.image_location" (error)="onImageError($event)">
                             <div class="cart-row-details">
-                                <p class="product-name">{{ product.name }}</p>
+                                <p [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</p>
                                 <div class="cart-price-options">
                                     <input (change)="changeQuantity($event, cart[i].item_id)" type=number [value]="cart[i].quantity">
                                     <div class="price-container">

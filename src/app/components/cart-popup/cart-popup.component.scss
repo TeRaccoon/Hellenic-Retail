@@ -81,6 +81,11 @@ $hellenicblue: rgb(0, 140, 255);
                             margin: 10px 0;
                             width: 70%;
                             max-lines: 2;
+                            cursor: pointer;
+                            transition: color 0.6s ease;
+                            &:hover {
+                                color: $hellenicblue
+                            }
                         }
                         .cart-price-options {
                             display: flex;
