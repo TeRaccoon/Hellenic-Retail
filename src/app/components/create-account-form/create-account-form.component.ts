@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
@@ -15,8 +16,11 @@ import { MailService } from 'src/app/services/mail.service';
 export class CreateAccountFormComponent {
   registrationForm: FormGroup;
   submitted = false;
+  loading = false;
   error = '';
 
+  faCircleNotch = faCircleNotch;
+  
   subscribe = false;
   agreedToTerms = false;
 
@@ -66,6 +70,8 @@ export class CreateAccountFormComponent {
         const formData = { ...this.registrationForm.value };
         delete formData.passwordRepeat;
     
+        this.loading = true;
+
         let passed = await this.preSubmissionChecks();
         if (passed) {
           let response = await lastValueFrom(this.dataService.submitFormData(formData));
@@ -84,6 +90,7 @@ export class CreateAccountFormComponent {
             this.error = "There was an issue creating your account. Please double check your details!";
           }
         }
+        this.loading = false;
       } else {
         this.error = "Please agree to the terms and conditions!";
       }

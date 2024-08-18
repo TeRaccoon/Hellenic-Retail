@@ -4,57 +4,71 @@
     <h2>All required fields are indicated with *</h2>
     <div class="panel-container">
         <div class="form-container">
-            <p class="error-message">{{ error }}</p>
+            <p class="error-message">{{ error }}</p>            
             <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
                 <div class="row-double">
                     <div>
                         <label>Forename*</label>
-                        <input [class]="inputHasError('forename') ? 'error-input' : ''" type="text" formControlName="forename">
+                        <input [ngClass]="{'error-input': inputHasError('forename')}" type="text" formControlName="forename">
+                        <div *ngIf="inputHasError('forename')" class="error-message">
+                            Forename is required.
+                        </div>
                     </div>
                     <div>
                         <label>Surname*</label>
-                        <input [class]="inputHasError('surname') ? 'error-input' : ''" type="text" formControlName="surname">
+                        <input [ngClass]="{'error-input': inputHasError('surname')}" type="text" formControlName="surname">
+                        <div *ngIf="inputHasError('surname')" class="error-message">
+                            Surname is required.
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <label>Phone number*</label>
-                    <input [class]="inputHasError('phoneNumber') ? 'error-input' : ''" type="tel" formControlName="phone_number_primary">
+                    <input [ngClass]="{'error-input': inputHasError('phone_number_primary')}" type="tel" formControlName="phone_number_primary">
+                    <div *ngIf="inputHasError('phone_number_primary')" class="error-message">
+                        Please enter a valid phone number.
+                    </div>
                 </div>
                 <div class="row">
                     <label>Email*</label>
-                    <input [class]="inputHasError('email') ? 'error-input' : ''" type="email" formControlName="email">
+                    <input [ngClass]="{'error-input': inputHasError('email')}" type="email" formControlName="email">
+                    <div *ngIf="inputHasError('email')" class="error-message">
+                        Please enter a valid email address.
+                    </div>
                 </div>
                 <div class="row-double">
                     <div>
                         <label>Password*</label>
-                        <input [class]="inputHasError('password') ? 'error-input' : ''" type="password" formControlName="password">
+                        <input [ngClass]="{'error-input': inputHasError('password')}" type="password" formControlName="password">
+                        <div *ngIf="inputHasError('password')" class="error-message">
+                            Password must be at least 8 characters long.
+                        </div>
                     </div>
                     <div>
                         <label>Password Repeat*</label>
-                        <input [class]="inputHasError('passwordRepeat') ? 'error-input' : ''" type="password" formControlName="passwordRepeat">
+                        <input [ngClass]="{'error-input': inputHasError('passwordRepeat')}" type="password" formControlName="passwordRepeat">
+                        <div *ngIf="!passwordsMatch()" class="error-message">
+                            Passwords do not match.
+                        </div>
                     </div>
                 </div>
                 <div class="terms-and-conditions">
                     <h1>Have you read our terms and conditions?</h1>
-                    <p>
-                        By creating an account on our website, you agree to abide by the terms and conditions.
-                    </p>
-                    <p>
-                        You must provide accurate and complete information when creating your account, including your forename, surname and address.
-                    </p>
-                    <p>
-                        You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.
-                    </p>
+                    <p>By creating an account on our website, you agree to abide by the terms and conditions.</p>
+                    <p>You must provide accurate and complete information when creating your account, including your forename, surname, and address.</p>
+                    <p>You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p>
+                </div>
+                <div class="checkbox-container">
+                    <div>
+                        <label>You agree to the <a>terms and conditions*</a></label>
+                        <input (change)="onTermsCheckboxChange($event)" type="checkbox" formControlName="termsAndConditions">
+                    </div>
                 </div>
                 <div class="checkbox-container">
                     <label>You agree to receive promotional newsletters</label>
-                    <input (change)="onPromoCheckboxChange($event)" type="checkbox">
+                    <input (change)="onPromoCheckboxChange($event)" type="checkbox" formControlName="promoConsent">
                 </div>
-                <div class="checkbox-container">
-                    <label>You agree to the <a>terms and conditions</a></label>
-                    <input (change)="onTermsCheckboxChange($event)" type="checkbox">
-                </div>
-                <button type="submit">Submit</button>
+                <button type="submit">Submit <fa-icon *ngIf="loading" class="loading-icon" [icon]="faCircleNotch" spinPulse [spin]="true" /></button>
             </form>
         </div>
         <div class="side-bar">
