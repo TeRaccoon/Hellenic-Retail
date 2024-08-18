@@ -250,7 +250,7 @@ export class MailService {
     <body>
         <div class="container">
             <h1>Welcome to Hellenic Grocery, ${accountData.forename}!</h1>
-            <p>Dear ${accountData.forename + accountData.surname},</p>
+            <p>Dear ${accountData.forename + ' ' + accountData.surname},</p>
             <br>
             <p>Thank you for creating an account with us! We are thrilled to have you on board.</p>
             <p>Your account has been successfully created and is now ready to use. You can log in anytime using the credentials you provided during registration.</p>
