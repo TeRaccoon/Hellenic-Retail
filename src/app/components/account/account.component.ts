@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { faPencil, faTrashCan, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Order } from 'src/app/common/account';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -22,7 +23,7 @@ export class AccountComponent {
   loggedIn: boolean | null = null;
   userId: string | null = null;
   userData: any = null;
-  orderHistory: any[] = [];
+  orderHistory: Order[] = [];
   addressBook: any[] = [];
   edit = false;
 

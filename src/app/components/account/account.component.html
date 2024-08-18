@@ -124,6 +124,7 @@
             <table class="order-history-table">
                 <thead>
                     <tr>
+                        <th>Date</th>
                         <th>Reference</th>
                         <th>Status</th>
                         <th>Payment Status</th>
@@ -134,6 +135,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let order of orderHistory">
+                        <td>{{ order.date | date: 'dd/MM/yyyy' }}</td>
                         <td class="Reference-number">{{ order.title }}</td>
                         <td>{{ order.status }}</td>
                         <td>{{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</td>
