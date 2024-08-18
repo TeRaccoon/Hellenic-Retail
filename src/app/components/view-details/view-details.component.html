@@ -38,8 +38,8 @@
                 <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
                 <select *ngIf="userType == 'Wholesale'" (change)="changePackageType($event)">
                     <option>Unit</option>
-                    <option>Box</option>
-                    <option>Pallet</option>
+                    <option *ngIf="product.box_price">Box</option>
+                    <option *ngIf="product.pallet_price">Pallet</option>
                 </select>
             </div>
         </div>
