@@ -5,7 +5,7 @@
         <div class="details-container">
             <div class="checkout-billing-container">
                 <h1>Billing details</h1>
-                <h3 (click)="switchPaymentMethods()">Switch payment methods?</h3>
+                <h3 *ngIf="userType == 'Retail'" (click)="switchPaymentMethods()">Switch payment methods?</h3>
                 <div *ngIf="paymentMethod == PaymentMethod.Barclays else paypal" class="form-container">
                     <div class="error-container">
                         <ng-container *ngFor="let control of billingForm.controls | keyvalue">
