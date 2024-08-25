@@ -9,7 +9,8 @@
                 <div *ngIf="paymentMethod == PaymentMethod.Barclays else paypal" class="form-container">
                     <div class="error-container">
                         <ng-container *ngFor="let control of billingForm.controls | keyvalue">
-                            <div *ngIf="billingForm.get(control.key)?.touched && billingForm.get(control.key)?.invalid">
+                            <div
+                                *ngIf="billingForm.get(control.key)?.touched && billingForm.get(control.key)?.invalid && submitted">
                                 <fa-icon class="interact-icon" [icon]="faCircleExclamation" />
                                 <p>{{ control.key | titlecase }} is invalid!</p>
                             </div>
@@ -23,16 +24,19 @@
                         <div class="row">
                             <div class="stack">
                                 <label>First name*</label>
-                                <input type="text" required formControlName="First Name">
+                                <input [ngClass]="{'error-input' : inputHasError('First Name')}" type="text" required
+                                    formControlName="First Name">
                             </div>
                             <div class="stack">
                                 <label>Last name*</label>
-                                <input type="text" required formControlName="Last Name">
+                                <input [ngClass]="{'error-input' : inputHasError('Last Name')}" type="text" required
+                                    formControlName="Last Name">
                             </div>
                         </div>
                         <div class="row single">
                             <label>Company name (optional)</label>
-                            <input type="text" formControlName="Company Name">
+                            <input [ngClass]="{'error-input' : inputHasError('Company Name')}" type="text"
+                                formControlName="Company Name">
                         </div>
                         <div class="row single">
                             <div class="column">
@@ -48,14 +52,15 @@
                                     <p>{{ address.delivery_postcode }}</p>
                                 </div>
                             </div>
-                            <input type="text" required formControlName="Street Address"
-                                placeholder="House number and street name">
-                            <input type="text" formControlName="Street Address 2"
-                                placeholder="Apartment, suite, unit etc. (optional)">
+                            <input [ngClass]="{'error-input' : inputHasError('Street Address')}" type="text" required
+                                formControlName="Street Address" placeholder="House number and street name">
+                            <input [ngClass]="{'error-input' : inputHasError('Street Address 2')}" type="text"
+                                formControlName="Street Address 2" placeholder="Apartment, suite, unit etc. (optional)">
                         </div>
                         <div class="row single">
                             <label>Town / City*</label>
-                            <input type="text" required formControlName="Town / City">
+                            <input [ngClass]="{'error-input' : inputHasError('Town / City')}" type="text" required
+                                formControlName="Town / City">
                         </div>
                         <div class="row single">
                             <label>County</label>
@@ -66,12 +71,14 @@
                             <input type="text" required formControlName="Postcode">
                         </div>
                         <div class="row single">
-                            <label>Phone*</label>
-                            <input type="text" required formControlName="Phone">
+                            <label>Phone</label>
+                            <input [ngClass]="{'error-input' : inputHasError('Phone')}" type="text" required
+                                formControlName="Phone">
                         </div>
                         <div class="row single">
                             <label>Email address*</label>
-                            <input type="text" required formControlName="Email Address">
+                            <input [ngClass]="{'error-input' : inputHasError('Email Address')}" type="text" required
+                                formControlName="Email Address">
                         </div>
                         <div class="row single">
                             <label>Card number*</label>
@@ -102,7 +109,7 @@
             </form>
             <ng-template #paypal>
                 <div class="paypal-container">
-                    <ngx-paypal *ngIf="userType == 'Retail'" [config]="paypalConfig"></ngx-paypal>
+                    <ngx-paypal *ngIf="userType == 'Retail' || customerId == null" [config]="paypalConfig"></ngx-paypal>
                 </div>
             </ng-template>
         </div>
@@ -130,7 +137,7 @@
                 </div>
             </div>
             <div class="payment-container">
-                <button (click)="formSubmit()" [disabled]="billingForm.invalid">
+                <button (click)="formSubmit()">
                     <ng-container *ngIf="!processing else paymentProcessing">
                         Place order
                     </ng-container>

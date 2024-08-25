@@ -36,6 +36,7 @@ export class CheckoutComponent {
   book = faAddressBook;
 
   processing = false;
+  submitted = false;
 
   shouldCreateAccount = true;
   terms = false;
@@ -69,7 +70,7 @@ export class CheckoutComponent {
       "Town / City": ['', Validators.required],
       "County": [''],
       "Postcode": ['', Validators.required],
-      "Phone": ['', [Validators.required, Validators.minLength(7), Validators.maxLength(14)]],
+      "Phone": ['', [Validators.minLength(7), Validators.maxLength(14)]],
       "Email Address": ['', [Validators.required, Validators.email]],
       "Card Number": ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
       "Expiry Month": ['', [Validators.required]],
@@ -194,15 +195,19 @@ export class CheckoutComponent {
 
   async formSubmit() {
     this.processing = true;
+    this.submitted = true;
 
     if (!this.billingForm.valid) {
       this.fieldError = 'Please address all incorrect fields!';
-
       window.scroll({
         top: 0,
         left: 0,
         behavior: 'smooth'
       });
+
+      this.processing = false;
+
+      return;
     }
 
     const formData: CheckoutFormFull = this.billingForm.value;
@@ -482,5 +487,9 @@ export class CheckoutComponent {
 
   get PaymentMethod() {
     return PaymentMethod;
+  }
+
+  inputHasError(field: string) {
+    return this.billingForm.get(field)?.invalid && this.submitted;
   }
 }

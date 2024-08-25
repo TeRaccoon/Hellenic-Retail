@@ -58,6 +58,10 @@ $hellenicblue: rgb(0, 140, 255);
                                 z-index: 999;
                             }
                         }
+                        .error-input {
+                            border: 1px solid red;
+                            outline: 1px solid red;
+                        }
                         .address-block {
                             font-size: 17px;
                             font-family: 'Poppins', sans-serif;
@@ -81,6 +85,9 @@ $hellenicblue: rgb(0, 140, 255);
                         flex-direction: row!important;
                         justify-content: space-between;
                         align-items: center;
+                        fa-icon {
+                            cursor: pointer;
+                        }
                     }
                     .addresses {
                         height: 0px;
@@ -98,6 +105,8 @@ $hellenicblue: rgb(0, 140, 255);
                 }
                 .error-container {
                     width: 95%;
+                    position: sticky;
+                    top: 0;
                     div {
                         display: flex;
                         align-items: center;
