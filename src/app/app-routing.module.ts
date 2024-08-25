@@ -12,6 +12,7 @@ import { CreateAccountFormComponent } from './components/create-account-form/cre
 import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
 import { AuthGuard } from './services/authguard.service';
 import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
+import { CartGuard } from './services/cartguard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -21,12 +22,12 @@ const routes: Routes = [
   { path: 'shop', component: ShopComponent },
   { path: 'view/:productName', component: ViewComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
-  { path: 'checkout', component: CheckoutComponent },
+  { path: 'checkout', component: CheckoutComponent, canActivate: [CartGuard] },
   { path: 'wishlist', component: WishlistComponent, canActivate: [AuthGuard] },
   { path: 'create-account', component: CreateAccountFormComponent },
   { path: 'order-complete', component: OrderCompleteComponent },
   { path: 'documents/:documentName', component: DocumentViewerComponent },
-  { path: '**', redirectTo: '/home'},
+  { path: '**', redirectTo: '/home' },
 ];
 
 @NgModule({
