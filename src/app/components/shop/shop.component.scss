@@ -8,7 +8,7 @@
 }
 
 ::ng-deep app-shop-sidebar {
-    flex: 0 1 25%
+    flex-shrink: 0;
 }
 
 @media screen and (max-width: 1079px) {
