@@ -8,7 +8,7 @@ export interface Order {
     payment_status: PaymentStatus,
 };
 
-enum OrderStatus {
+export enum OrderStatus {
     Pending = 'Pending',
     Overdue = 'Overdue',
     Complete = 'Complete',
@@ -20,19 +20,20 @@ enum PaymentStatus {
 };
 
 export interface RegistrationForm {
-    action: string,
+    action: 'create-account',
     email: string,
     forename: string,
-    password: string,
+    password?: string,
     passwordRepeat?: string,
-    phone: string,
+    phone?: string,
     promoConsent: boolean,
     surname: string,
-    table_name: string,
+    table_name: 'customers',
     termsAndConditions: boolean
 };
 
 export interface AccountResponse {
     success: boolean,
-    message: string
+    message: string,
+    data?: string
 };
