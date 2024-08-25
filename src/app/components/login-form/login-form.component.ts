@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-login-form',
@@ -16,15 +17,15 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./login-form.component.scss'],
   animations: [
     trigger('loginAnimation', [
-      state('visible', style({ opacity: 1, display: 'block'})),
-      state('hidden', style({ opacity: 0, display: 'none'})),
+      state('visible', style({ opacity: 1, display: 'block' })),
+      state('hidden', style({ opacity: 0, display: 'none' })),
       transition('hidden => visible', animate('600ms ease', keyframes([
-        style({opacity: 0, display: 'block', offset: 0}),
-        style({opacity: 1, offset: 1})
+        style({ opacity: 0, display: 'block', offset: 0 }),
+        style({ opacity: 1, offset: 1 })
       ]))),
       transition('visible => hidden', animate('600ms ease', keyframes([
-        style({opacity: 1, offset: 0}),
-        style({opacity: 0, display: 'none', offset: 1})
+        style({ opacity: 1, offset: 0 }),
+        style({ opacity: 0, display: 'none', offset: 1 })
       ])))
     ]),
   ]
@@ -52,7 +53,7 @@ export class LoginFormComponent {
     ]
   };
 
-  constructor(private urlService: UrlService, private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder, private mailService: MailService) { 
+  constructor(private accountService: AccountService, private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder, private mailService: MailService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -130,7 +131,7 @@ export class LoginFormComponent {
   async sendForgotPasswordEmail() {
     if (await this.checkCustomerEmail()) {
       this.loading = true;
-      let password = this.generatePassword();
+      let password = this.accountService.generatePassword();
       const emailHTML = this.mailService.generateForgotPasswordEmail(password);
       const emailData = {
         action: 'mail',
@@ -140,7 +141,7 @@ export class LoginFormComponent {
         address: this.loginForm.get('email')?.value,
         name: 'Customer',
       };
-      
+
       let response = await this.mailService.sendEmail(emailData);
       if (response.success) {
         this.changePassword(password);
@@ -154,7 +155,7 @@ export class LoginFormComponent {
   }
 
   async changePassword(password: string) {
-    let response = await this.dataService.processPost({'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password});
+    let response = await this.dataService.processPost({ 'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password });
     if (response.success) {
       this.formService.setPopupMessage('Password has been updated successfully', true, 10000);
     } else {
@@ -172,19 +173,9 @@ export class LoginFormComponent {
     return true;
   }
 
-  generatePassword() {
-    let length = 12;
-    let charset = 'abcdefghijklmnopqrstuvwxyz1234567890!,.#';
-    let password = '';
-    for (let i = 0, n = charset.length; i < length; i++) {
-      password  += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return password;
-  }
-
   async tracing() {
     let customerId = this.authService.getUserID();
-    await this.dataService.processPost({'action': 'tracing', 'page': 'login', 'customer_id': customerId});
+    await this.dataService.processPost({ 'action': 'tracing', 'page': 'login', 'customer_id': customerId });
   }
 
   createAccount() {
@@ -199,6 +190,5 @@ export class LoginFormComponent {
       this.loginForm.get('password')?.removeValidators(Validators.required);
     }
     this.forgotPasswordState = !this.forgotPasswordState;
-    console.log(this.loginForm);
   }
 }
