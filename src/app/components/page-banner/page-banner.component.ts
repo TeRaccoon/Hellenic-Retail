@@ -32,6 +32,5 @@ export class PageBannerComponent {
     let bannerImage = await this.dataService.processGet("section-image", { filter: "page-banner" })
 
     this.bannerUrl = 'url(' + this.imageUrl + bannerImage + ')';
-    console.log(this.bannerUrl);
   }
 }
