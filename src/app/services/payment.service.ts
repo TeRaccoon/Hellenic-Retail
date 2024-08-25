@@ -143,6 +143,6 @@ export class PaymentService {
 	}
 
 	handleResponse(response: any) {
-    console.log(JSON.parse(response));
+		console.log(JSON.parse(response));
 	}
 }
