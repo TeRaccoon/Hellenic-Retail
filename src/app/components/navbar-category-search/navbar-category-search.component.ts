@@ -17,7 +17,7 @@ export class NavbarCategorySearchComponent {
   loginVisible = 'hidden';
   cartVisible = 'hidden';
   cartState: string = 'inactive';
-  
+
   subcategories: any[] = [];
   categories: string[] = [];
   categoriesShown = false;
@@ -25,7 +25,7 @@ export class NavbarCategorySearchComponent {
 
   searchResults: any[] = [];
   categoryFilter: string = 'all';
-  searchStringFilter = "";
+  searchStringFilter = '';
   imageUrl: string;
 
   constructor(private urlService: UrlService, private dataService: DataService, private filterService: FilterService, private router: Router) {
@@ -75,7 +75,7 @@ export class NavbarCategorySearchComponent {
   toggleCategory() {
     this.categoriesShown = !this.categoriesShown;
   }
-  
+
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();
@@ -88,7 +88,7 @@ export class NavbarCategorySearchComponent {
       dropdown.classList.add('focused');
     }
   }
-  
+
   onInputBlur() {
     const dropdown = document.querySelector('.search-dropdown-items');
     if (dropdown) {
@@ -104,7 +104,7 @@ export class NavbarCategorySearchComponent {
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
-    } else if (this.categoryFilter != 'all') {
+    } else if (this.categoryFilter != 'all' && this.searchStringFilter == '') {
       this.router.navigate(['/shop/' + this.categoryFilter]);
     } else {
       this.dataService.setShopFilter(this.searchStringFilter);

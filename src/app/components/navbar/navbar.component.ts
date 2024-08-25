@@ -73,7 +73,7 @@ export class NavbarComponent {
   imageUrl: string;
 
   constructor(
-    private urlService: UrlService, 
+    private urlService: UrlService,
     private router: Router,
     private authService: AuthService,
     private dataService: DataService,
@@ -113,7 +113,7 @@ export class NavbarComponent {
         this.cartState = 'active';
 
         this.cartCount = (await this.cartService.getCart()).length;
-        
+
         setTimeout(() => {
           this.cartState = 'inactive';
         }, 500);
@@ -192,10 +192,11 @@ export class NavbarComponent {
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
-    } else if (this.categoryFilter == null || this.categoryFilter == 'all') {
-      this.router.navigate(['/shop/']);
-    } else {
+    } else if (this.categoryFilter != 'all' && this.searchStringFilter == '') {
       this.router.navigate(['/shop/' + this.categoryFilter]);
+    } else {
+      this.dataService.setShopFilter(this.searchStringFilter);
+      this.router.navigate(['/shop']);
     }
   }
 
