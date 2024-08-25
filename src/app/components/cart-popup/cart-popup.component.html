@@ -11,18 +11,18 @@
                         <div *ngFor="let product of cartProducts; let i = index;" class="cart-row">
                             <img [src]="imageUrl + product.image_location" (error)="onImageError($event)">
                             <div class="cart-row-details">
-                                <p class="product-name">{{ product.name }}</p>
+                                <p [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</p>
                                 <div class="cart-price-options">
                                     <input (change)="changeQuantity($event, cart[i].item_id)" type=number [value]="cart[i].quantity">
                                     <div class="price-container">
                                         <ng-container *ngIf="product.discount != null && product.discount != 0">
-                                            <p class="discounted-price">£{{ product.discounted_total | number: '1.2-2' }}</p>
+                                            <p class="discounted-price">£{{ product.discounted_price| number: '1.2-2' }}</p>
                                         </ng-container>
-                                        <p [class]="product.discount != null && product.discount != 0 ? 'original-price' : 'discounted-price'">£{{ product.total | number: '1.2-2' }}</p>
+                                        <p [class]="product.discount != null && product.discount != 0 ? 'original-price' : 'discounted-price'">£{{ product.price | number: '1.2-2' }}</p>
                                     </div>
                                 </div>
                                 <div class="cart-row-options">
-                                    <button (click)="removeFromCart(cart[i].item_id)"><fa-icon [icon]="faX" /></button>
+                                    <button (click)="removeFromCart(cart[i].id)"><fa-icon [icon]="faX" /></button>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                 <p>Subtotal:</p>
                 <p class="subtotal-value">£{{ subtotal | number: '1.2-2' }}</p>
             </div>
-            <button (click)="toggleCart()" [routerLink]="'/checkout'">Checkout</button>
+            <button *ngIf="cart.length > 0" (click)="toggleCart()" [routerLink]="'/checkout'">Checkout</button>
             <button (click)="changeConfirmationPopupState(true)" class="red">Clear cart</button>
         </div>
     </div>

@@ -10,10 +10,17 @@ $hellenicblue: rgb(0, 140, 255);
         display: flex;
         .checkout-billing-container {
             width: 65%;
+            h1 {
+                margin: 5px 0;
+            }
+            h3 {
+                cursor: pointer;
+                font-size: 16px;
+                display: inline;
+                text-decoration: underline;
+                color: $hellenicblue;
+            }
             .form-container {
-                h1 {
-                    margin: 5px 0;
-                }
                 .billing-form {
                     width: 95%;
                     .single {
@@ -48,8 +55,12 @@ $hellenicblue: rgb(0, 140, 255);
                                 outline: none;
                                 border: 1px solid $hellenicblue;
                                 outline: 1px solid $hellenicblue;
-                                z-index: 999;
+                                z-index: 2;
                             }
+                        }
+                        .error-input {
+                            border: 1px solid red;
+                            outline: 1px solid red;
                         }
                         .address-block {
                             font-size: 17px;
@@ -74,6 +85,9 @@ $hellenicblue: rgb(0, 140, 255);
                         flex-direction: row!important;
                         justify-content: space-between;
                         align-items: center;
+                        fa-icon {
+                            cursor: pointer;
+                        }
                     }
                     .addresses {
                         height: 0px;
@@ -84,15 +98,15 @@ $hellenicblue: rgb(0, 140, 255);
                     }
                     .shown {
                         margin: 15px 0px;
-                        max-height: 300px;
+                        height: 300px;
                         overflow-y: scroll;
-                        width: initial;
-                        height: auto;
                         transition: height 1.6s ease, margin 1.6s ease;
                     }
                 }
                 .error-container {
                     width: 95%;
+                    position: sticky;
+                    top: 0;
                     div {
                         display: flex;
                         align-items: center;
@@ -110,6 +124,9 @@ $hellenicblue: rgb(0, 140, 255);
                     }
                 }
             }
+            .paypal-container {
+                margin-top: 15px;
+            }
         }
         .checkout-summary-container {
             width: 35%;
@@ -123,6 +140,24 @@ $hellenicblue: rgb(0, 140, 255);
                 a {
                     color: $hellenicblue;
                     cursor: pointer;
+                }
+            }
+            .create-account-container {
+                margin: 10px 0 20px 0;
+                label {
+                    font-weight: bold;
+                }
+            }
+            .terms-and-conditions {
+                flex-direction: column;
+                height: fit-content;
+            }
+            .checkbox-container {
+                display: flex;
+                margin-bottom: 10px;
+                label {
+                    padding: 10px 10px 10px 0;
+                    font-weight: bold;
                 }
             }
             .payment-container {

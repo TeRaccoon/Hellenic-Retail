@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from './auth.service';
-import { Observable, lastValueFrom, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FormService } from './form.service';
 
 @Injectable({

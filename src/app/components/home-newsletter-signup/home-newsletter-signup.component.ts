@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { UrlService } from 'src/app/services/url.service'
 import { lastValueFrom } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +22,7 @@ export class HomeNewsletterSignupComponent {
 
   faCheck = faCheck;
 
-  constructor(private dataService: DataService, private fb: FormBuilder, private formService: FormService) {
+  constructor(private urlService: UrlService, private dataService: DataService, private fb: FormBuilder, private formService: FormService) {
     this.signupForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
@@ -31,11 +32,11 @@ export class HomeNewsletterSignupComponent {
 
   ngOnInit() {
     this.loadImage();
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   async loadImage() {
-    this.signupImage = await lastValueFrom(this.dataService.collectData("home-signup"));
+    this.signupImage = await this.dataService.processGet("home-signup");
   }
 
   async submit() {

@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import { UrlService } from 'src/app/services/url.service'
 import {
   faHeart,
   faEye,
   faBox,
   faPallet,
 } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
 import { RenderService } from 'src/app/services/render.service';
 
 @Component({
@@ -31,6 +31,7 @@ export class HomeTopProductsComponent {
   imageUrl = '';
 
   constructor(
+    private urlService: UrlService, 
     private cartService: CartService,
     private dataService: DataService,
     private formService: FormService,
@@ -38,7 +39,7 @@ export class HomeTopProductsComponent {
   ) {}
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.loadProducts();
     this.renderService.getScreenSize().subscribe(size => {
       this.screenSize = size;
@@ -47,8 +48,7 @@ export class HomeTopProductsComponent {
   }
 
   async loadProducts() {
-    let topProducts = await this.dataService.collectDataComplex('top-products', { limit: this.limit });
-    this.topProducts = Array.isArray(topProducts) ? topProducts : [topProducts];
+    this.topProducts = await this.dataService.processGet('top-products', { limit: this.limit }, true, true);
 
     this.topProducts.forEach((product) => {
       if (product.discount && product.discount != null) {

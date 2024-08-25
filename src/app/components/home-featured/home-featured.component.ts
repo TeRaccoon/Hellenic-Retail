@@ -3,8 +3,8 @@ import { DataService } from '../../services/data.service';
 import { faHeart, faEye, faBox, faPallet } from '@fortawesome/free-solid-svg-icons';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
-import { lastValueFrom } from 'rxjs';
 import { RenderService } from 'src/app/services/render.service';
+import { UrlService } from 'src/app/services/url.service';
 
 @Component({
   selector: 'app-home-featured',
@@ -25,11 +25,11 @@ export class HomeFeaturedComponent {
   screenSize: any = {};
   limit = 3;
 
-  constructor(private cartService: CartService, private dataService: DataService, private formService: FormService, private renderService: RenderService) { }
+  constructor(private urlService: UrlService, private cartService: CartService, private dataService: DataService, private formService: FormService, private renderService: RenderService) { }
 
   ngOnInit() {
     this.loadProducts();
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.loadRenderService();
   }
 
@@ -47,8 +47,7 @@ export class HomeFeaturedComponent {
   }
 
   async loadProducts() {
-    let featuredProducts = await this.dataService.collectDataComplex('featured', { limit: this.limit });
-    this.featuredProducts = Array.isArray(featuredProducts) ? featuredProducts : [featuredProducts];
+    this.featuredProducts = await this.dataService.processGet('featured', { limit: this.limit }, true, true);
     
     this.featuredProducts.forEach((product) => {
       if (product.discount && product.discount != null) {
@@ -62,7 +61,7 @@ export class HomeFeaturedComponent {
       }
     });
 
-    this.featuredData = await lastValueFrom(this.dataService.collectData('section-data', 'home-featured'));
+    this.featuredData = await this.dataService.processGet('section-data', {filter: 'home-featured'});
   }
 
   openImage(imageLocation: string) {

@@ -12,8 +12,8 @@
                             </a>
                             <div class="categories">
                                 <a *ngFor="let category of categories; let i = index;" (click)="goToCategory(category)">
-                                {{ category }}
-                            </a>
+                                    {{ category }}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -25,26 +25,31 @@
         </div>
         <div class="search-container">
             <div class="search-options">
-                <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()" (keydown.enter)="search()" type="text" placeholder="Search for products, categories, brands, sku..." name="search">
+                <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()"
+                    (keydown.enter)="search()" type="text" placeholder="Search for products, categories, brands, sku..."
+                    name="search">
                 <select (change)="changeCategory($event)">
                     <option value="all">All Categories</option>
-                    <option *ngFor="let category of categories; let i = index;" [value]="category">
+                    <option *ngFor="let category of categories">
                         {{ category }}
                     </option>
                 </select>
-                <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
+                <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch" /></button>
             </div>
             <div class="search-dropdown">
                 <div class="search-dropdown-items">
-                    <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;" [routerLink]="'/view/' + product.name">
+                    <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;"
+                        [routerLink]="'/view/' + product.name">
                         <div class="search-results-title">
                             <img [src]="imageUrl + product.image_location" (error)="onImageError($event)">
                             <p> {{ product.name }} </p>
                         </div>
                         <div class="price-container">
                             <ng-container *ngIf="product.pallet_price == undefined else wholesale">
-                                <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price | number: '1.2-2' }}</p>
-                                <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number: '1.2-2' }}</p>
+                                <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price |
+                                    number: '1.2-2' }}</p>
+                                <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price |
+                                    number: '1.2-2' }}</p>
                             </ng-container>
                             <ng-template #wholesale>
                                 <div class="wholesale-container">

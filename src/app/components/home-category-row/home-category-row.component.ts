@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { lastValueFrom } from 'rxjs';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-home-category-row',
@@ -11,15 +11,15 @@ export class HomeCategoryRowComponent {
   categories: any[] = [];
   imageUrl = '';
 
-  constructor(private dataService: DataService) { }
+  constructor(private urlService: UrlService, private dataService: DataService) { }
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.getCategories();
   }
 
   async getCategories() {
-    let categories = await lastValueFrom(this.dataService.collectData("visible-categories"));
+    let categories = await this.dataService.processGet("visible-categories");
     if (categories != null) {
       this.categories = categories;
     }

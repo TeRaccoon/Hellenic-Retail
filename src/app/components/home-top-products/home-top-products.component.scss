@@ -165,35 +165,11 @@ $hellenicblue: rgb(0, 140, 255);
     .grid-container {
         grid-template-columns: repeat(3, minmax(0, 1fr))!important;
     }
-    .product-container {
-        height: 42vw!important;
-        .discount-banner {
-            p {
-                font-size: 12px;
-                padding: 5px 10px;
-            }
-            .secondary {
-                top: 2rem;
-            }
-        }
-    }
 }
 
 @media screen and (max-width: 500px) {
     // Small mobile
     .grid-container {
         grid-template-columns: repeat(2, minmax(0, 1fr))!important;
-    }
-    .product-container {
-        height: 66vw!important;
-        .discount-banner {
-            p {
-                font-size: 12px!important;
-                padding: 5px 10px!important;
-            }
-            .secondary {
-                top: 2rem!important;
-            }
-        }
     }
 }

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
-import { DataService } from 'src/app/services/data.service';
+import { UrlService } from 'src/app/services/url.service'
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { CartItem } from 'src/app/common/types/cart';
+import { CartItem, CartProduct } from 'src/app/common/types/cart';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-cart-popup',
@@ -29,7 +30,7 @@ import { CartItem } from 'src/app/common/types/cart';
 export class CartPopupComponent {
   cartVisible = 'visible';
   cart: CartItem[] = [];
-  cartProducts: any[] = [];
+  cartProducts: CartProduct[] = [];
   displayProducts: any[] = [];
   subtotal = 0;
   loaded = false;
@@ -38,10 +39,10 @@ export class CartPopupComponent {
 
   faX = faX;
 
-  constructor(private cartService: CartService, private dataService: DataService, private formService: FormService) {}
+  constructor(private urlService: UrlService, private cartService: CartService, private formService: FormService, private authService: AuthService) {}
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');
 
     this.formService.getCartFormVisibility().subscribe(async(visible) => {
       this.cartVisible = visible ? 'visible' : 'hidden';
@@ -56,7 +57,7 @@ export class CartPopupComponent {
   }
 
   async getCartData() {
-    this.cart = this.cartService.getCart();
+    this.cart = await this.cartService.getCart();
     this.loadCartData();
   }
 
@@ -67,15 +68,15 @@ export class CartPopupComponent {
     }
   }
 
-  async removeFromCart(productId: number) {
-    await this.cartService.removeFromCart(productId);
-    this.getCartData();
+  async removeFromCart(cartId: number) {
+    await this.cartService.removeFromCart(cartId);
+    await this.getCartData();
   }
 
   async changeQuantity(event: any, productID: number) {
     const quantity = parseInt(event.target.value);
     await this.cartService.addToCart(productID, quantity);
-    this.getCartData();
+    await this.getCartData();
   }
 
   changeConfirmationPopupState(visible: boolean) {
@@ -86,33 +87,12 @@ export class CartPopupComponent {
   async clearCart() {
     await this.cartService.clearCart();
     this.confirmationPopupVisible = false;
-    this.getCartData();
+    await this.getCartData();
   }
 
   async loadCartData() {
-    let cartProducts: any[] = await this.cartService.getCartItems();
-    this.subtotal = 0;
-
-    cartProducts.forEach((product, index) => {
-      if (this.cart[index] && product != null) {
-        let individualPrice = product.retail_price;
-        let discountedPrice = individualPrice;
-        if (product.discount != null || product.discount != 0) {
-          discountedPrice = individualPrice * ((100 - product.discount) / 100);
-        }
-
-        product.total = individualPrice * this.cart[index].quantity;
-        product.discounted_total = discountedPrice * this.cart[index].quantity;
-
-        this.subtotal += product.discounted_total;
-
-        if (product.image_location === null) {
-          product.image_location = 'placeholder.jpg';
-        }
-      }
-    });
-
-    this.cartProducts = cartProducts;
+    this.cartProducts = await this.cartService.getCartItems();
+    this.subtotal = this.cartService.getCartTotal();
   }
 
   onImageError(event: Event) {

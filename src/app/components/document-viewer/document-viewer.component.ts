@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataService } from 'src/app/services/data.service';
+import { UrlService } from 'src/app/services/url.service'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FormService } from 'src/app/services/form.service';
 
 @Component({
   selector: 'app-document-viewer',
@@ -12,16 +13,21 @@ export class DocumentViewerComponent {
   documentUrl: SafeResourceUrl = '';
 
   constructor(
-    private route: ActivatedRoute, 
-    private dataService: DataService,
-    private sanitizer: DomSanitizer
+    private urlService: UrlService,
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    private formService: FormService
   ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       const document = params['documentName'];
-      let uploadURL = this.dataService.getUploadURL();
-      // Sanitize the documentUrl
+
+      this.formService.setBannerMessage(document
+        .split('-')
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' '));
+      let uploadURL = this.urlService.getUrl('uploads');;
       this.documentUrl = this.sanitizer.bypassSecurityTrustResourceUrl(uploadURL + document + ".html");
     });
   }

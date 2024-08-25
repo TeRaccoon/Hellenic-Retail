@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { RenderService } from 'src/app/services/render.service';
+import { UrlService } from 'src/app/services/url.service'
 import {
   faCaretDown,
   faEnvelope,
@@ -12,7 +13,6 @@ import {
   faCartShopping,
 } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
 import {
   animate,
   state,
@@ -21,6 +21,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { CartService } from 'src/app/services/cart.service';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-navbar',
@@ -60,7 +61,7 @@ export class NavbarComponent {
   products: any[] = [];
 
   searchResults: any[] = [];
-  categoryFilter: string | null = null;
+  categoryFilter: string = 'all';
   searchStringFilter = '';
 
   loginVisible = 'hidden';
@@ -72,14 +73,16 @@ export class NavbarComponent {
   imageUrl: string;
 
   constructor(
+    private urlService: UrlService,
     private router: Router,
     private authService: AuthService,
     private dataService: DataService,
     private formService: FormService,
+    private filterService: FilterService,
     private cartService: CartService,
     private renderService: RenderService
   ) {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   ngOnInit() {
@@ -104,13 +107,13 @@ export class NavbarComponent {
   }
 
   async getCartUpdates() {
-    this.cartService.getUpdateRequest().subscribe((updateRequested: boolean) => {
+    this.cartService.getUpdateRequest().subscribe(async (updateRequested: boolean) => {
       if (updateRequested) {
         this.cartService.performUpdate();
         this.cartState = 'active';
 
-        this.cartCount = this.cartService.getCart().length;
-        
+        this.cartCount = (await this.cartService.getCart()).length;
+
         setTimeout(() => {
           this.cartState = 'inactive';
         }, 500);
@@ -121,15 +124,12 @@ export class NavbarComponent {
   async loadNavBar() {
     this.categories = this.dataService.getVisibleCategoryNames();
 
-    let subcategories = await lastValueFrom(
-      this.dataService.collectData('subcategories')
-    );
+    let subcategories = await this.dataService.processGet('subcategories');
     if (subcategories != null) {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.collectDataComplex('products');
-    products = Array.isArray(products) ? products : [products];
+    let products: any = await this.dataService.processGet('products', {}, true, true);
 
     if (products != null) {
       products = this.replaceNullImages(products);
@@ -165,31 +165,14 @@ export class NavbarComponent {
   }
 
   changeCategory(event: Event) {
-    const option = event.target as HTMLInputElement;
-    const value = option.value;
-    this.categoryFilter = value === 'All' ? null : value;
-    this.applyFilters();
+    this.categoryFilter = (event.target as HTMLInputElement).value;
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
-  }
-
-  applyFilters() {
-    if (this.categoryFilter === null && !this.searchStringFilter) {
-      this.searchResults = this.products;
-      return;
-    }
-
-    this.searchResults = this.products.filter(
-      (product) =>
-        (this.categoryFilter === null ||
-          product.category?.toLowerCase() === this.categoryFilter) &&
-        (!this.searchStringFilter ||
-          product.name.toLowerCase().includes(this.searchStringFilter))
-    );
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   onInputFocus() {
@@ -209,10 +192,11 @@ export class NavbarComponent {
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
-    } else if (this.categoryFilter == null || this.categoryFilter == 'all') {
-      this.router.navigate(['/shop/']);
-    } else {
+    } else if (this.categoryFilter != 'all' && this.searchStringFilter == '') {
       this.router.navigate(['/shop/' + this.categoryFilter]);
+    } else {
+      this.dataService.setShopFilter(this.searchStringFilter);
+      this.router.navigate(['/shop']);
     }
   }
 

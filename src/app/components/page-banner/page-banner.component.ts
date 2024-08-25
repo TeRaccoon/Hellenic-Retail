@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../../services/data.service';
 import { FormService } from 'src/app/services/form.service';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-page-banner',
@@ -9,15 +9,15 @@ import { FormService } from 'src/app/services/form.service';
   styleUrls: ['./page-banner.component.scss']
 })
 export class PageBannerComponent {
-  bannerImage: any;
+  bannerUrl: string = '';
   message = '';
 
   imageUrl = '';
 
-  constructor(private formService: FormService, private dataService: DataService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private urlService: UrlService, private formService: FormService, private dataService: DataService) { }
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.loadBannerImage();
     this.getBannerMessage();
   }
@@ -29,8 +29,8 @@ export class PageBannerComponent {
   }
 
   async loadBannerImage() {
-    this.dataService.collectData("section-image", "page-banner").subscribe((data: any) => {
-      this.bannerImage = data;
-    });
+    let bannerImage = await this.dataService.processGet("section-image", { filter: "page-banner" })
+
+    this.bannerUrl = 'url(' + this.imageUrl + bannerImage + ')';
   }
 }

@@ -14,22 +14,30 @@
                 <p>{{ product.name }}</p>
             </td>
             <td class="row-price">
-                <p>£{{ product.discounted_total | number: '1.2-2' }}</p>
+                <p>£{{ product.discounted_price | number: '1.2-2' }}</p>
             </td>
         </tr>
         <tr>
             <td>
-                <p class="title">Subtotal</p>
+                <p class="title">Subtotal (inc VAT)</p>
             </td>
             <td>
-                <p class="row-price">£{{ subtotal | number: '1.2-2' }}</p>
+                <p class="row-price">£{{ checkoutSummary.subtotal | number: '1.2-2' }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="title">VAT</p>
+            </td>
+            <td>
+                <p class="row-price">£{{ checkoutSummary.vat | number: '1.2-2' }}</p>
             </td>
         </tr>
         <tr>
             <td>
                 <p class="title">Delivery</p>
             </td>
-            <td *ngIf="total < 30; else elseBlock">
+            <td *ngIf="checkoutSummary.total < 30; else elseBlock">
                 <p class="row-price">£7.50</p>
             </td>
             <td>
@@ -43,7 +51,7 @@
                 <p class="title">Total</p>
             </td>
             <td>
-                <p class="row-price">£{{ total | number: '1.2-2' }}</p>
+                <p class="row-price">£{{ checkoutSummary.total | number: '1.2-2' }}</p>
             </td>
         </tr>
     </ng-container>

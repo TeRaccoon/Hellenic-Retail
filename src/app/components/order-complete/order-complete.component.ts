@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormService } from 'src/app/services/form.service';
 
 @Component({
@@ -9,9 +10,12 @@ import { FormService } from 'src/app/services/form.service';
 export class OrderCompleteComponent {
   orderDetails: any = {};
 
-  constructor(private formService: FormService) {}
+  constructor(private formService: FormService, private router: Router) {}
 
   ngOnInit() {
     this.orderDetails = this.formService.getOrderDetails();
+    if (this.orderDetails == null) {
+      this.router.navigate(['/']);
+    }
   }
 }

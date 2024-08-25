@@ -4,10 +4,10 @@ import { DataService } from '../../services/data.service';
 import { CartService } from 'src/app/services/cart.service';
 import { FormService } from 'src/app/services/form.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
 import { RenderService } from 'src/app/services/render.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-shop-grid',
@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ShopGridComponent {
   screenSize: any = {};
-  
+
   faHeart = faHeart;
   faEye = faEye;
 
@@ -40,6 +40,7 @@ export class ShopGridComponent {
   filterHeader = 'Showing all results';
 
   constructor(
+    private urlService: UrlService,
     private filterService: FilterService,
     private cartService: CartService,
     private dataService: DataService,
@@ -47,11 +48,11 @@ export class ShopGridComponent {
     private formService: FormService,
     private renderService: RenderService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.products = [];
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.formService.setBannerMessage('Showing results');
     this.priceFilters = this.filterService.getShopPriceFilter();
     this.renderService.getScreenSize().subscribe(size => {
@@ -68,18 +69,20 @@ export class ShopGridComponent {
       this.category = category;
       if (category !== undefined) {
         this.formService.setBannerMessage(`${messageBase}${category}`);
-        this.filterHeader = `${messageBase}${category}`
+        this.filterHeader = category
       }
       this.loadProducts(category, null);
     });
+
     this.dataService.getShopFilter().subscribe((filter) => {
       this.filter = filter;
       if (filter !== null && filter != '') {
         this.formService.setBannerMessage(`${messageBase}${filter}`);
-        this.filterHeader = `${messageBase}${filter}`
+        this.filterHeader = (`Search results: ${filter}`)
         this.loadProducts(undefined, filter);
       }
     });
+
     this.filterService.getFilterUpdated().subscribe((updated) => {
       if (updated) {
         this.maxPrice = this.filterService.getMaxPrice();
@@ -92,20 +95,19 @@ export class ShopGridComponent {
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
     if (category !== undefined && this.category !== undefined || category == 'All') {
-      products = await this.dataService.collectDataComplex('products-from-category', {category: category});
+      products = await this.dataService.processGet('products-from-category', { category: category }, true, true);
     } else {
-      products = await this.dataService.collectDataComplex('products')
+      products = await this.dataService.processGet('products', {}, true, true)
     }
 
-    products = Array.isArray(products) ? products : [products];
     if (filter != null) {
       products = this.filterByString(filter, products);
     }
 
     this.resultsAmount = products.length === undefined ? 1 : products.length;
-    this.totalPages = Math.round(this.resultsAmount / this.itemsPerPage + 1);
+    this.totalPages = Math.floor(this.resultsAmount / this.itemsPerPage + 1);
 
-    products.forEach((product) => {
+    products.forEach((product: any) => {
       if (product.discount && product.discount != null) {
         product.discounted_price =
           product.price * ((100 - product.discount) / 100);
@@ -208,10 +210,7 @@ export class ShopGridComponent {
 
   isInPriceRange(product: any) {
     if (this.maxPrice != null && this.minPrice != null) {
-      if (product.price >= this.minPrice && product.price <= this.maxPrice) {
-        return true;
-      }
-      return false;
+      return (product.price >= this.minPrice && product.price <= this.maxPrice);
     }
     return true;
   }

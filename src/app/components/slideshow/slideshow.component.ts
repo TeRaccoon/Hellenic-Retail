@@ -1,6 +1,7 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { DataService } from '../../services/data.service';
+import { UrlService } from 'src/app/services/url.service'
 
 @Component({
   selector: 'app-slideshow',
@@ -13,10 +14,10 @@ export class SlideshowComponent implements OnInit {
   imageNames: any[] = [];
   imageUrl = '';
 
-  constructor(private dataService: DataService) { }
+  constructor(private urlService: UrlService, private dataService: DataService) { }
 
   ngOnInit() {
-    this.imageUrl = this.dataService.getUploadURL();
+    this.imageUrl = this.urlService.getUrl('uploads');;
     this.loadSlideShow();
   }
 
@@ -61,8 +62,6 @@ export class SlideshowComponent implements OnInit {
   
   async loadSlideShow() {
     this.startSlideShow();
-    this.dataService.collectData("home-slideshow").subscribe((data: any) => {
-      this.imageNames = data;
-    });
+    this.imageNames = await this.dataService.processGet('home-slideshow', {}, true);
   }
 }

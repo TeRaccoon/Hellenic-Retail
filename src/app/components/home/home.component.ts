@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({

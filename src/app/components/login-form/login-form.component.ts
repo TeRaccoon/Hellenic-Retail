@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
+import { MailService } from '../../services/mail.service';
 import { AuthService } from '../../services/auth.service';
+import { UrlService } from '../../services/url.service'
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-login-form',
@@ -14,15 +17,15 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./login-form.component.scss'],
   animations: [
     trigger('loginAnimation', [
-      state('visible', style({ opacity: 1, display: 'block'})),
-      state('hidden', style({ opacity: 0, display: 'none'})),
+      state('visible', style({ opacity: 1, display: 'block' })),
+      state('hidden', style({ opacity: 0, display: 'none' })),
       transition('hidden => visible', animate('600ms ease', keyframes([
-        style({opacity: 0, display: 'block', offset: 0}),
-        style({opacity: 1, offset: 1})
+        style({ opacity: 0, display: 'block', offset: 0 }),
+        style({ opacity: 1, offset: 1 })
       ]))),
       transition('visible => hidden', animate('600ms ease', keyframes([
-        style({opacity: 1, offset: 0}),
-        style({opacity: 0, display: 'none', offset: 1})
+        style({ opacity: 1, offset: 0 }),
+        style({ opacity: 0, display: 'none', offset: 1 })
       ])))
     ]),
   ]
@@ -50,7 +53,7 @@ export class LoginFormComponent {
     ]
   };
 
-  constructor(private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder) { 
+  constructor(private accountService: AccountService, private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder, private mailService: MailService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -98,6 +101,13 @@ export class LoginFormComponent {
     return this.loginForm.get(field)?.invalid && this.submitted;
   }
 
+  async loginSuccessful() {
+    await this.authService.checkLogin();
+    this.loginVisible = 'hidden';
+    await this.tracing();
+    window.location.reload();
+  }
+
   async formSubmit() {
     this.submitted = true;
     if (!this.forgotPasswordState) {
@@ -105,9 +115,7 @@ export class LoginFormComponent {
         this.loading = true;
         let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
         if (loginResponse.success) {
-          await this.authService.checkLogin();
-          this.loginVisible = 'hidden';
-          await this.tracing();
+          this.loginSuccessful();
         } else {
           this.loginError = loginResponse.message;
         }
@@ -115,43 +123,49 @@ export class LoginFormComponent {
       }
     } else {
       if (this.loginForm.valid) {
-        if (await this.checkCustomerEmail()) {
-          this.loading = true;
-          let password = this.generatePassword();
-          const emailHTML = this.dataService.generateForgotPasswordEmail(password);
-          const emailData = {
-            action: 'mail',
-            mail_type: 'forgot_password',
-            subject: 'Forgot Password Request',
-            email_HTML: emailHTML,
-            address: this.loginForm.get('email')?.value,
-            name: 'Customer',
-          };
-          let response = await lastValueFrom(this.dataService.sendEmail(emailData));
-          if (response.success) {
-            this.changePassword(password);
-            this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);
-          } else {
-            this.loginError = 'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
-          }
-          this.loading = false;
-        }
+        this.sendForgotPasswordEmail();
       }
     }
   }
 
+  async sendForgotPasswordEmail() {
+    if (await this.checkCustomerEmail()) {
+      this.loading = true;
+      let password = this.accountService.generatePassword();
+      const emailHTML = this.mailService.generateForgotPasswordEmail(password);
+      const emailData = {
+        action: 'mail',
+        mail_type: 'forgot_password',
+        subject: 'Forgot Password Request',
+        email_HTML: emailHTML,
+        address: this.loginForm.get('email')?.value,
+        name: 'Customer',
+      };
+
+      let response = await this.mailService.sendEmail(emailData);
+      if (response.success) {
+        this.changePassword(password);
+        this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);
+        this.forgotPassword();
+      } else {
+        this.loginError = 'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
+      }
+      this.loading = false;
+    }
+  }
+
   async changePassword(password: string) {
-    let response = await lastValueFrom<any>(this.dataService.processPost({'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password}));
+    let response = await this.dataService.processPost({ 'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password });
     if (response.success) {
-      console.log('Password changed successfully');
-    } else {
       this.formService.setPopupMessage('Password has been updated successfully', true, 10000);
+    } else {
+      this.formService.setPopupMessage('There was an issue changing your password! Please try again or contact support for help: support@hellenicgrocery.co.uk', true, 10000);
     }
   }
 
   async checkCustomerEmail() {
     let email = this.loginForm.get('email')?.value;
-    let response = await lastValueFrom(this.dataService.collectData('user-id-from-email', email));
+    let response = await this.dataService.processGet('user-id-from-email', email);
     if (response.length == 0) {
       this.loginError = "A user doesn't exist with this email";
       return false;
@@ -159,23 +173,9 @@ export class LoginFormComponent {
     return true;
   }
 
-  async sendForgotPasswordEmail() {
-    let emailHTML = this.dataService.generateForgotPasswordEmail(this.loginForm.get('email')?.value);
-  }
-
-  generatePassword() {
-    let length = 10;
-    let charset = 'abcdefghijklmnopqrstuvwxyz1234567890!,.#';
-    let password = '';
-    for (let i = 0, n = charset.length; i < length; i++) {
-      password  += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return password;
-  }
-
   async tracing() {
     let customerId = this.authService.getUserID();
-    await lastValueFrom(this.dataService.processPost({'action': 'tracing', 'page': 'login', 'customer_id': customerId}));
+    await this.dataService.processPost({ 'action': 'tracing', 'page': 'login', 'customer_id': customerId });
   }
 
   createAccount() {
@@ -190,6 +190,5 @@ export class LoginFormComponent {
       this.loginForm.get('password')?.removeValidators(Validators.required);
     }
     this.forgotPasswordState = !this.forgotPasswordState;
-    console.log(this.loginForm);
   }
 }

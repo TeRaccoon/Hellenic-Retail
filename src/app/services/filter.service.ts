@@ -2,43 +2,68 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class FilterService {
-    private maxPrice: (number | null) = null;
-    private minPrice: (number | null) = null;
-    private filterUpdated = new BehaviorSubject<boolean>(false);
-    private shopPriceFilters = [
-        { price: '£0.01-£5.00', maxPrice: 5, minPrice: 0.01 },
-        { price: '£5.00-£10.00', maxPrice: 10, minPrice: 5 },
-        { price: '£10.00-£15.00', maxPrice: 15, minPrice: 10 },
-        { price: '£15.00+', maxPrice: 999, minPrice: 15 }
-    ];    
+  private maxPrice: number | null = null;
+  private minPrice: number | null = null;
+  private filterUpdated = new BehaviorSubject<boolean>(false);
+  private shopPriceFilters = [
+    { price: '£0.01-£5.00', maxPrice: 5, minPrice: 0.01 },
+    { price: '£5.00-£10.00', maxPrice: 10, minPrice: 5 },
+    { price: '£10.00-£15.00', maxPrice: 15, minPrice: 10 },
+    { price: '£15.00+', maxPrice: 999, minPrice: 15 },
+  ];
 
-    getShopPriceFilter() {
-        return this.shopPriceFilters;
+  getShopPriceFilter() {
+    return this.shopPriceFilters;
+  }
+
+  getMaxPrice() {
+    return this.maxPrice;
+  }
+  getMinPrice() {
+    return this.minPrice;
+  }
+  setMaxPrice(maxPrice: number | null) {
+    this.maxPrice = maxPrice;
+  }
+  setMinPrice(minPrice: number | null) {
+    this.minPrice = minPrice;
+  }
+
+  getFilterUpdated() {
+    return this.filterUpdated.asObservable();
+  }
+  filterUpdateRequested() {
+    this.filterUpdated.next(true);
+  }
+  filterUpdateReceived() {
+    this.filterUpdated.next(false);
+  }
+
+  applyCategoryFilter(
+    categoryFilter: string,
+    searchFilter: string,
+    products: any[]
+  ) {
+    if (categoryFilter === 'all' && searchFilter === '') {
+      return products;
     }
 
-    getMaxPrice() {
-        return this.maxPrice;
-    }
-    getMinPrice() {
-        return this.minPrice;
-    }
-    setMaxPrice(maxPrice: number | null) {
-        this.maxPrice = maxPrice;
-    }
-    setMinPrice(minPrice: number | null) {
-        this.minPrice = minPrice;
-    }
+    return products.filter((product) => {
+      const categoryMatches =
+        categoryFilter === null ||
+        categoryFilter.toLowerCase() === 'all' ||
+        product.category?.toLowerCase() === categoryFilter.toLowerCase();
 
-    getFilterUpdated() {
-        return this.filterUpdated.asObservable();
-    }
-    filterUpdateRequested() {
-        this.filterUpdated.next(true);
-    }
-    filterUpdateReceived() {
-        this.filterUpdated.next(false);
-    }
+      const searchStringMatches =
+        !searchFilter ||
+        product.name
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase());
+
+      return categoryMatches && searchStringMatches;
+    });
+  }
 }

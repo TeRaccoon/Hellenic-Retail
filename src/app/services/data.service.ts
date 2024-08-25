@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, lastValueFrom, map, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
-import { NavigationStart, Router } from '@angular/router';
+import { UrlService } from './url.service';
 
-export const apiUrlBase = "http://localhost/API/";
 @Injectable({
   providedIn: 'root',
 })
@@ -14,30 +13,25 @@ export class DataService {
   visibleCategoryNames: any[] = [];
   visibleCategoryLocations: any[] = [];
 
-  uploadURL = `http://localhost/uploads/`;
-
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
+  constructor(private http: HttpClient, private authService: AuthService, private urlService: UrlService) {
     this.loadStandardData();
-  }  
-
-  collectData(query: string, filter?: string): Observable<any[]> {
-    let url = apiUrlBase + `retail_query_handler.php?query=${query}`;
-    if (filter != null) {
-      url += `&filter=${encodeURIComponent(filter)}`;
-    }
-    return this.http.get<any[]>(url);
   }
 
-  processPost(body: Record<string, any>) {
-    const url = 'http://localhost/API/retail_query_handler.php';
-    return this.http.post(url, {body});
+  async processPost(body: Record<string, any>, makeArray = false): Promise<any> {
+    const url = this.urlService.getUrl('retail');
+    let response = await lastValueFrom(this.http.post(url, {body}));
+
+    if (makeArray)
+      response = Array.isArray(response) ? response : [response];
+      
+    return response;
   }
 
-async collectDataComplex(query: string, filter: Record<string, any> = {}): Promise<any> {
-  await this.authService.checkLogin();
+async processGet(query: string, filter: Record<string, any> = {}, makeArray = false, checkLogin = false): Promise<any> {
+  checkLogin && await this.authService.checkLogin();
   let userType = this.authService.getUserType();
 
-  const url = new URL(apiUrlBase + 'retail_query_handler.php');
+  const url = new URL(this.urlService.getUrl('retail'));
   url.searchParams.append('query', query);
 
   const queryParams = { ...filter, queryType: userType };
@@ -45,22 +39,22 @@ async collectDataComplex(query: string, filter: Record<string, any> = {}): Promi
     url.searchParams.append(key, value ?? '');
   }
 
-  try {
-    return await lastValueFrom(this.http.get<any>(url.toString()));
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
+  let response = await lastValueFrom(this.http.get(url.toString()));
+
+  if (makeArray)
+    response = Array.isArray(response) ? response : [response];
+
+  return response;
 }
 
 
   submitFormDataQuery(query:string, data: any) {
-    const url = 'http://localhost/API/retail_query_handler.php';
+    const url = this.urlService.getUrl('retail');
     return this.http.post(url, { query, data });
   }
 
   submitFormData(data: any): Observable<any> {
-    const url = apiUrlBase + 'manage_data.php';
+    const url = this.urlService.getUrl('data');
     return this.http.post(url, data, {withCredentials: true}).pipe(
       map((response: any) => {
         if (response) {
@@ -76,42 +70,9 @@ async collectDataComplex(query: string, filter: Record<string, any> = {}): Promi
     );
   }
 
-  processTransaction(data: any) {
-    const url = apiUrlBase + 'payment.php';
-    return this.http.post(url, data, {withCredentials: true}).pipe(
-      map((response: any) => {
-        if (response) {
-          return response;
-        } else {
-          throw new Error('Unexpected response format');
-        }
-      }),
-      catchError((error: any) => {
-        console.error('HTTP error occurred:', error);
-        return throwError(error);
-      })
-    );
-  }
-
-  sendEmail(data: any) {
-    const url = apiUrlBase + 'mail.php';
-    return this.http.post(url, data, {withCredentials: true}).pipe(
-      map((response: any) => {
-        if (response) {
-          return response;
-        } else {
-          throw new Error('Unexpected response format');
-        }
-      }),
-      catchError((error: any) => {
-        console.error('HTTP error occurred:', error);
-        return throwError(error);
-      })
-    );
-  }
-
-  getUploadURL() {
-    return this.uploadURL;
+  async processTransaction(data: any) {
+    const url = this.urlService.getUrl('payment');
+    return await lastValueFrom(this.http.post(url, data, {withCredentials: true}));
   }
 
   setShopFilter(filter: any) {
@@ -121,204 +82,14 @@ async collectDataComplex(query: string, filter: Record<string, any> = {}): Promi
   getShopFilter() {
     return this.shopFilter.asObservable();
   }
-
-  generateForgotPasswordEmail(password: string) {
-    let email = `
-    <html>
-    <head>
-        <title>Forgotten Password</title>
-        <meta charset="UTF-8">
-        <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 30%;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #007bff;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: #fff;
-        }
-        .total-row {
-            font-weight: bold;
-        }
-        .total-row td {
-            text-align: right;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #555;
-        }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Password reset</h1>
-            <p>Dear Customer,</p>
-            <p>A request has been made to reset your password. Below is your temporary password: </p>
-            <table>
-                <tr>
-                    <th>Password</th>
-                </tr>
-                <tr>
-                    <td>${password}</td>
-                </tr>
-
-            </table>
-            <p>If this wasn't you, please send an email to support@hellenicgrocery.co.uk</p>
-            <p>Thank you for choosing our service!</p>
-            <div class="footer">
-                <p>Best regards,</p>
-                <p>Hellenic Grocery</p>
-            </div>
-        </div>
-    </body>
-    </html>`;
-
-    return email;
-  }
-
-  generateOrderConfirmationEmail(emailData: any) {
-    let email = `
-    <html>
-    <head>
-        <title>Order ${emailData.reference}</title>
-        <meta charset="UTF-8">
-        <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #007bff;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: #fff;
-        }
-        .total-row {
-            font-weight: bold;
-        }
-        .total-row td {
-            text-align: right;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #555;
-        }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Order Confirmation: ${emailData.reference}</h1>
-            <p>Dear Customer,</p>
-            <p>Thank you for your order! Your order has been received and is now being processed. Your order details are as follows:</p>
-            <table>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                </tr>`;
-
-    for (let product of emailData.products) {
-        email += `
-                <tr>
-                    <td>${product.name}</td>
-                    <td>${product.quantity}</td>
-                    <td style='text-align: right;'>${product.price}</td>
-                </tr>`;
-    }
-
-    email += `
-                <tr class="total-row">
-                    <td colspan="2">Net Total</td>
-                    <td>${emailData.net_total}</td>
-                </tr>
-                <tr class="total-row">
-                    <td colspan="2">VAT</td>
-                    <td>${emailData.vat}</td>
-                </tr>
-                <tr class="total-row">
-                    <td colspan="2">Delivery</td>
-                    <td>${emailData.delivery}</td>
-                </tr>
-                <tr class="total-row">
-                    <td colspan="2">Total</td>
-                    <td>${emailData.total}</td>
-                </tr>
-            </table>
-            <p>We will send you another email when your order is on its way.</p>
-            <p>Thank you for choosing our service!</p>
-            <div class="footer">
-                <p>Best regards,</p>
-                <p>Hellenic Grocery</p>
-            </div>
-        </div>
-    </body>
-    </html>`;
-
-    return email;
-  }
   
   async loadStandardData() {
     await this.loadVisibleCategories();
   }
 
   async loadVisibleCategories() {
-    let categories = await lastValueFrom(this.collectData("visible-categories"));
+    let categories = await this.processGet('visible-categories', {}, true);
+    
     for (const category of categories) {
       this.visibleCategoryNames.push(category.name);
       this.visibleCategoryLocations.push(category.location);

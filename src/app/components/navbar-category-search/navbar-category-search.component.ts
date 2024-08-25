@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { faBars, faCartShopping, faHeart, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
-import { AuthService } from 'src/app/services/auth.service';
-import { FormService } from 'src/app/services/form.service';
+import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { FilterService } from 'src/app/services/filter.service';
+import { UrlService } from 'src/app/services/url.service';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -18,19 +17,19 @@ export class NavbarCategorySearchComponent {
   loginVisible = 'hidden';
   cartVisible = 'hidden';
   cartState: string = 'inactive';
-  
+
   subcategories: any[] = [];
   categories: string[] = [];
   categoriesShown = false;
   products: any[] = [];
 
   searchResults: any[] = [];
-  categoryFilter: string | null = null;
-  searchStringFilter = "";
+  categoryFilter: string = 'all';
+  searchStringFilter = '';
   imageUrl: string;
 
-  constructor(private dataService: DataService, private authService: AuthService, private formService: FormService, private router: Router) {
-    this.imageUrl = this.dataService.getUploadURL();
+  constructor(private urlService: UrlService, private dataService: DataService, private filterService: FilterService, private router: Router) {
+    this.imageUrl = this.urlService.getUrl('uploads');;
   }
 
   ngOnInit() {
@@ -41,15 +40,12 @@ export class NavbarCategorySearchComponent {
   async loadNavBar() {
     this.categories = this.dataService.getVisibleCategoryNames();
 
-    let subcategories = await lastValueFrom(
-      this.dataService.collectData('subcategories')
-    );
+    let subcategories = await this.dataService.processGet('subcategories');
     if (subcategories != null) {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.collectDataComplex('products');
-    products = Array.isArray(products) ? products : [products];
+    let products: any = await this.dataService.processGet('products', {}, true, true);
 
     if (products != null) {
       products = this.calculatePrices(products);
@@ -79,23 +75,11 @@ export class NavbarCategorySearchComponent {
   toggleCategory() {
     this.categoriesShown = !this.categoriesShown;
   }
-  
+
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();
-    this.applyFilters();
-  }
-    
-  applyFilters() {
-    if (this.categoryFilter === null && !this.searchStringFilter) {
-      this.searchResults = this.products;
-      return;
-    }
-  
-    this.searchResults = this.products.filter(product =>
-      (this.categoryFilter === null || product.category?.toLowerCase() === this.categoryFilter) &&
-      (!this.searchStringFilter || product.name.toLowerCase().includes(this.searchStringFilter))
-    );
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   onInputFocus() {
@@ -104,7 +88,7 @@ export class NavbarCategorySearchComponent {
       dropdown.classList.add('focused');
     }
   }
-  
+
   onInputBlur() {
     const dropdown = document.querySelector('.search-dropdown-items');
     if (dropdown) {
@@ -113,16 +97,14 @@ export class NavbarCategorySearchComponent {
   }
 
   changeCategory(event: Event) {
-    const option = event.target as HTMLInputElement;
-    const value = option.value;
-    this.categoryFilter = value === 'All' ? null : value;
-    this.applyFilters();
+    this.categoryFilter = (event.target as HTMLInputElement).value;
+    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
   }
 
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
-    } else if (this.categoryFilter != 'all') {
+    } else if (this.categoryFilter != 'all' && this.searchStringFilter == '') {
       this.router.navigate(['/shop/' + this.categoryFilter]);
     } else {
       this.dataService.setShopFilter(this.searchStringFilter);

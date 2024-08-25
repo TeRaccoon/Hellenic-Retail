@@ -42,6 +42,7 @@ import { DocumentViewerComponent } from './components/document-viewer/document-v
 import { OrderCompleteComponent } from './components/order-complete/order-complete.component';
 import { AuthService } from './services/auth.service';
 import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.component';
+import { ProductComponent } from './components/product/product.component';
 
 export function initializeApp(authService: AuthService): () => Promise<void> {
   return () => authService.checkLogin();
@@ -81,7 +82,8 @@ export function initializeApp(authService: AuthService): () => Promise<void> {
     FooterComponent,
     DocumentViewerComponent,
     OrderCompleteComponent,
-    MobileNavbarComponent
+    MobileNavbarComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,
