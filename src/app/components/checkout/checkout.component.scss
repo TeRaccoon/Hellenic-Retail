@@ -131,6 +131,24 @@ $hellenicblue: rgb(0, 140, 255);
                     cursor: pointer;
                 }
             }
+            .create-account-container {
+                margin: 10px 0 20px 0;
+                label {
+                    font-weight: bold;
+                }
+            }
+            .terms-and-conditions {
+                flex-direction: column;
+                height: fit-content;
+            }
+            .checkbox-container {
+                display: flex;
+                margin-bottom: 10px;
+                label {
+                    padding: 10px 10px 10px 0;
+                    font-weight: bold;
+                }
+            }
             .payment-container {
                 display: flex;
                 align-items: center;

@@ -1,19 +1,24 @@
 <app-page-banner></app-page-banner>
 <div class="checkout-view-container">
-    <form [formGroup]="billingForm" (ngSubmit)="formSubmit()">
-        <app-checkout-coupon></app-checkout-coupon>
-        <div class="details-container">
-            <div class="checkout-billing-container">
-                <h1>Billing details</h1>
-                <h3 *ngIf="userType == 'Retail'" (click)="switchPaymentMethods()">Switch payment methods?</h3>
+    <app-checkout-coupon></app-checkout-coupon>
+    <div class="details-container">
+        <div class="checkout-billing-container">
+            <h1>Billing details</h1>
+            <h3 *ngIf="userType == 'Retail' || customerId == null" (click)="switchPaymentMethods()">Switch payment
+                methods?</h3>
+            <form [formGroup]="billingForm" (ngSubmit)="formSubmit()">
                 <div *ngIf="paymentMethod == PaymentMethod.Barclays else paypal" class="form-container">
                     <div class="error-container">
                         <ng-container *ngFor="let control of billingForm.controls | keyvalue">
                             <div *ngIf="billingForm.get(control.key)?.touched && billingForm.get(control.key)?.invalid">
-                                <fa-icon class="interact-icon" [icon]="faCircleExclamation"></fa-icon>
+                                <fa-icon class="interact-icon" [icon]="faCircleExclamation" />
                                 <p>{{ control.key | titlecase }} is invalid!</p>
                             </div>
                         </ng-container>
+                        <div *ngIf="fieldError != null">
+                            <fa-icon class="interact-icon" [icon]="faCircleExclamation" />
+                            <p>{{ fieldError }}</p>
+                        </div>
                     </div>
                     <div class="billing-form">
                         <div class="row">
@@ -36,15 +41,18 @@
                                 <fa-icon (click)="toggleAddressBook()" [icon]="book" />
                             </div>
                             <div class="row single addresses" [ngClass]="{'shown': addressBookVisible}">
-                                <div *ngFor="let address of addressBook" (click)="selectAddress(address)" class="column address-block">
+                                <div *ngFor="let address of addressBook" (click)="selectAddress(address)"
+                                    class="column address-block">
                                     <p>{{ address.delivery_address_one }}</p>
                                     <p>{{ address.delivery_address_two }}</p>
                                     <p>{{ address.delivery_address_three }}</p>
                                     <p>{{ address.delivery_postcode }}</p>
                                 </div>
                             </div>
-                            <input type="text" required formControlName="Street Address" placeholder="House number and street name">
-                            <input type="text" formControlName="Street Address 2" placeholder="Apartment, suite, unit etc. (optional)">
+                            <input type="text" required formControlName="Street Address"
+                                placeholder="House number and street name">
+                            <input type="text" formControlName="Street Address 2"
+                                placeholder="Apartment, suite, unit etc. (optional)">
                         </div>
                         <div class="row single">
                             <label>Town / City*</label>
@@ -87,32 +95,54 @@
                         <h2>Additional information</h2>
                         <div class="row single">
                             <label>Order notes (optional)</label>
-                            <textarea rows="10" class="message" type="text" formControlName="orderNotes" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                            <textarea rows="10" class="message" type="text" formControlName="orderNotes"
+                                placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
                         </div>
                     </div>
                 </div>
-                <ng-template #paypal>
-                    <div class="paypal-container">
-                        <ngx-paypal *ngIf="userType == 'Retail'" [config]="paypalConfig"></ngx-paypal>
-                    </div>
-                </ng-template>
+            </form>
+            <ng-template #paypal>
+                <div class="paypal-container">
+                    <ngx-paypal *ngIf="userType == 'Retail'" [config]="paypalConfig"></ngx-paypal>
+                </div>
+            </ng-template>
+        </div>
+        <div class="checkout-summary-container">
+            <app-checkout-order-summary></app-checkout-order-summary>
+            <p>Your personal data will be used to process your order, support your experience throughout this
+                website, and for other purposes described in our <a [routerLink]="'/documents/privacy-policy'">privacy
+                    policy</a>.</p>
+            <div class="create-account-container" *ngIf="this.customerId == null">
+                <label>Create acccount?</label>
+                <input type="checkbox" [(ngModel)]="shouldCreateAccount">
             </div>
-            <div class="checkout-summary-container">
-                <app-checkout-order-summary></app-checkout-order-summary>
-                <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a [routerLink]="'/documents/privacy-policy'">privacy policy</a>.</p>
-                <div class="payment-container">
-                    <button type="submit" [disabled]="billingForm.invalid">
-                        <ng-container *ngIf="!processing else paymentProcessing">
-                            Place order
-                        </ng-container>
-                        <ng-template #paymentProcessing>
-                            Place order <fa-icon class="loading-icon" [icon]="faCircleNotch" spinPulse [spin]="true" />
-                        </ng-template>
-                    </button>
-                    <p *ngIf="orderError" class="error">{{ orderError }} Please try again or contact support: <a href="mailto:support@hellenicgrocery.co.uk">support@hellenicgrocery.co.uk</a></p>
+            <div *ngIf="shouldCreateAccount" class="terms-and-conditions">
+                <h1>Have you read our terms and conditions?</h1>
+                <p>By creating an account on our website, you agree to abide by the terms and conditions.</p>
+                <p>You must provide accurate and complete information when creating your account, including your
+                    forename, surname, and address.</p>
+                <p>You are solely responsible for maintaining the confidentiality of your account credentials and
+                    for all activities that occur under your account.</p>
+            </div>
+            <div *ngIf="shouldCreateAccount" class="checkbox-container">
+                <div>
+                    <label>You agree to the <a>terms and conditions*</a></label>
+                    <input type="checkbox" (change)="terms = !terms" [checked]="terms">
                 </div>
             </div>
+            <div class="payment-container">
+                <button (click)="formSubmit()" [disabled]="billingForm.invalid">
+                    <ng-container *ngIf="!processing else paymentProcessing">
+                        Place order
+                    </ng-container>
+                    <ng-template #paymentProcessing>
+                        Place order <fa-icon class="loading-icon" [icon]="faCircleNotch" spinPulse [spin]="true" />
+                    </ng-template>
+                </button>
+                <p *ngIf="orderError" class="error">{{ orderError }} Please try again or contact support: <a
+                        href="mailto:support@hellenicgrocery.co.uk">support@hellenicgrocery.co.uk</a></p>
+            </div>
         </div>
-    </form>
+    </div>
 </div>
 <app-footer />

@@ -13,10 +13,13 @@ import { CheckoutService } from 'src/app/services/checkout.service';
 import { CheckoutSummary, PaymentMethod } from '../../common/types/checkout';
 import {
   IPayPalConfig,
-  ICreateOrderRequest 
+  ICreateOrderRequest
 } from 'ngx-paypal';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
+import { AccountResponse, RegistrationForm } from 'src/app/common/types/account';
+import { CheckoutFormFull } from '../../common/types/checkout';
 import { Response } from '../../common/types/data-response'
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-checkout',
@@ -24,7 +27,7 @@ import { Response } from '../../common/types/data-response'
   styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent {
-  public paypalConfig ? : IPayPalConfig;
+  public paypalConfig?: IPayPalConfig;
 
   billingForm: FormGroup;
 
@@ -33,6 +36,9 @@ export class CheckoutComponent {
   book = faAddressBook;
 
   processing = false;
+
+  shouldCreateAccount = true;
+  terms = false;
 
   checkoutSummary: CheckoutSummary;
 
@@ -45,6 +51,7 @@ export class CheckoutComponent {
   orderReference: string | null = null;
 
   orderError: string | null = null;
+  fieldError: string | null = null;
 
   addressBookVisible = false;
   addressBook: any[] = [];
@@ -52,7 +59,7 @@ export class CheckoutComponent {
   payerDetails: any = {};
   paymentMethod = PaymentMethod.Barclays;
 
-  constructor(private urlService: UrlService, private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService, private checkoutService: CheckoutService, private mailService: MailService) {
+  constructor(private accountService: AccountService, private router: Router, private authService: AuthService, private cartService: CartService, private fb: FormBuilder, private dataService: DataService, private formService: FormService, private checkoutService: CheckoutService, private mailService: MailService) {
     this.billingForm = this.fb.group({
       "First Name": ['', Validators.required],
       "Last Name": ['', Validators.required],
@@ -79,7 +86,7 @@ export class CheckoutComponent {
     this.load();
     this.initConfig();
   }
-  
+
   private initConfig(): void {
     this.paypalConfig = {
       currency: 'GBP',
@@ -99,7 +106,7 @@ export class CheckoutComponent {
         console.log(data);
       },
       onClientAuthorization: (data) => {
-        
+
       },
       onCancel: (data, actions) => {
         console.log('OnCancel', data, actions);
@@ -158,11 +165,11 @@ export class CheckoutComponent {
   }
 
   async loadAddressBook() {
-    this.addressBook = await this.dataService.processPost({'action': 'address-book', 'customer_id': this.customerId?.toString()}, true);
+    this.addressBook = await this.dataService.processPost({ 'action': 'address-book', 'customer_id': this.customerId?.toString() }, true);
   }
 
   async tracing() {
-    await this.dataService.processPost({'action': 'tracing', 'page': 'checkout', 'customer_id': this.customerId});
+    await this.dataService.processPost({ 'action': 'tracing', 'page': 'checkout', 'customer_id': this.customerId });
   }
 
   async calculateTotal() {
@@ -181,25 +188,69 @@ export class CheckoutComponent {
       total: Number(Number(subtotal + delivery).toFixed(2))
     };
     this.checkoutService.updateCheckoutSummary(updatedSummary);
-    
+
     this.checkoutSummary = this.checkoutService.getCheckoutSummary();
   }
 
   async formSubmit() {
-    if (this.billingForm.valid) {
-      this.processing = true;
-      const formData = this.billingForm.value;
+    this.processing = true;
 
-      let success = await this.processInvoice(formData);
-      
-      if (success) {
-        await this.processPayment(formData);
-      }
-      
-      this.processing = false;
+    if (!this.billingForm.valid) {
+      this.fieldError = 'Please address all incorrect fields!';
+
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
     }
+
+    const formData: CheckoutFormFull = this.billingForm.value;
+
+    let response = await this.createAccount(formData);
+    if (!response.success) {
+      this.fieldError = response.message;
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+      this.processing = false;
+      return;
+    }
+    if (response.data) {
+      this.customerId = response.data
+    }
+
+    let success = await this.processInvoice(formData);
+
+    if (success) {
+      await this.processPayment(formData);
+    }
+
+    this.processing = false;
   }
-  
+
+  async createAccount(formData: any): Promise<AccountResponse> {
+    if (this.shouldCreateAccount && this.customerId == null) {
+      const registrationFormData: RegistrationForm = {
+        action: 'create-account',
+        email: formData['Email Address'],
+        forename: formData['First Name'],
+        surname: formData['Last Name'],
+        promoConsent: false,
+        termsAndConditions: this.terms,
+        table_name: 'customers'
+      };
+
+      let response = await this.accountService.createAccount(registrationFormData, true, true);
+
+      return response;
+    }
+
+    return { success: true, message: '' };
+  }
+
   async paypalSubmit() {
     (window as any).paypal.Buttons(this.paypalConfig).render('#paypal-button-container');
   }
@@ -244,7 +295,7 @@ export class CheckoutComponent {
     if (withTransaction) {
       const paymentData = this.craftPayload(formData);
       let paymentResponse = await this.dataService.processTransaction(paymentData);
-  
+
       success = this.validateResponse(paymentResponse);
     }
 
@@ -253,13 +304,13 @@ export class CheckoutComponent {
 
       let response = await this.sendEmailConfirmation();
       if (response.success) {
-        setTimeout(() => {
-          this.router.navigate(['/order-complete']);
-        }, 3000);
+        // setTimeout(() => {
+        //   this.router.navigate(['/order-complete']);
+        // }, 3000);
       } else {
         this.orderError = 'There was an error sending your email confirmation!';
       }
-      await this.dataService.processPost({'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId});
+      await this.dataService.processPost({ 'action': 'tracing', 'page': 'payment', 'customer_id': this.customerId });
     } else {
       this.orderError = 'There was an error processing your payment details!';
       this.formService.setPopupMessage('There was an error processing your payment details!', true, 10000);
@@ -403,9 +454,9 @@ export class CheckoutComponent {
         }
       }
     };
-  
+
     const paymentDataString = JSON.stringify(paymentData, null, 2);
-  
+
     return paymentDataString;
   }
 
