@@ -3,14 +3,24 @@ import { DataService } from '../../services/data.service';
 import { CartService } from '../../services/cart.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faHeart, faEye, faClipboard } from '@fortawesome/free-solid-svg-icons';
-import { faFacebook, faTwitter, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import {
+  faFacebook,
+  faTwitter,
+  faInstagram,
+} from '@fortawesome/free-brands-svg-icons';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
-import { trigger, state, style, animate, transition } from '@angular/animations';
-import { lastValueFrom } from 'rxjs';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
 import { CartUnit } from 'src/app/common/types/cart';
+import { ProductDetails } from 'src/app/common/types/shop';
 
 @Component({
   selector: 'app-view-details',
@@ -18,17 +28,16 @@ import { CartUnit } from 'src/app/common/types/cart';
   styleUrls: ['./view-details.component.scss'],
   animations: [
     trigger('clipboardAnimation', [
-      state('active', style({
-        color: '#36b329'
-      })),
-      transition('inactive => active', [
-        animate('0.2s')
-      ]),
-      transition('active => inactive', [
-        animate('0.2s')
-      ]),
+      state(
+        'active',
+        style({
+          color: '#36b329',
+        })
+      ),
+      transition('inactive => active', [animate('0.2s')]),
+      transition('active => inactive', [animate('0.2s')]),
     ]),
-  ]
+  ],
 })
 export class ViewDetailsComponent {
   faHeart = faHeart;
@@ -37,8 +46,8 @@ export class ViewDetailsComponent {
   faInstagram = faInstagram;
   faFacebook = faFacebook;
   faTwitter = faTwitter;
-  
-  product: any;
+
+  product: ProductDetails | null = null;
   outOfStock: boolean = true;
   stock = 1;
   inWishlist = false;
@@ -50,24 +59,37 @@ export class ViewDetailsComponent {
 
   clipboardState: string = 'inactive';
 
-  constructor(private authService: AuthService, private cartService: CartService, private dataService: DataService, private route: ActivatedRoute, private router: Router, private clipboard: Clipboard, private location: Location, private formService: FormService) { }
+  constructor(
+    private authService: AuthService,
+    private cartService: CartService,
+    private dataService: DataService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private clipboard: Clipboard,
+    private location: Location,
+    private formService: FormService
+  ) {
+
+  }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       const productName = params['productName'];
       this.loadProduct(productName);
     });
   }
 
   share(option: string) {
-    switch(option) {
+    switch (option) {
       case 'clipboard':
-        this.clipboard.copy("https://hellenicgrocery.co.uk/" + this.location.path());
+        this.clipboard.copy(
+          'https://hellenicgrocery.co.uk/' + this.location.path()
+        );
         this.clipboardState = 'active';
         setTimeout(() => {
           this.clipboardState = 'inactive';
         }, 500);
-        this.formService.setPopupMessage("Copied to clipboard!");
+        this.formService.setPopupMessage('Copied to clipboard!');
         this.formService.showPopup();
         break;
     }
@@ -77,33 +99,42 @@ export class ViewDetailsComponent {
     await this.authService.checkLogin();
     this.userType = this.authService.getUserType();
 
-    let product: any = await this.dataService.processGet("product-view-details", { productName: productName}, false);
-    
+    let product: ProductDetails = await this.dataService.processGet(
+      'product-view-details',
+      { productName: productName },
+      false
+    );
+
     if (product.discount && product.discount != null) {
-      product.discounted_price = product.price * ((100 - product.discount) / 100);
-      if (product.box_price != null) {
-        product.discounted_box_price = product.box_price * ((100 - product.discount) / 100);
-        product.discounted_pallet_price = product.pallet_price * ((100 - product.discount) / 100);
+      product.discounted_price =
+        product.price * ((100 - product.discount) / 100);
+      if (product.box_price != null && product.pallet_price) {
+        product.discounted_box_price =
+          product.box_price * ((100 - product.discount) / 100);
+        product.discounted_pallet_price =
+          product.pallet_price * ((100 - product.discount) / 100);
       }
     }
 
     this.product = product;
 
-    let stock = await this.dataService.processGet("total-stock-by-id", { 'filter': product.id });
+    let stock = await this.dataService.processGet('total-stock-by-id', {
+      filter: product.id,
+    });
     this.stock = stock.quantity;
     this.outOfStock = stock.quantity < 1;
   }
 
   addToCart(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity, this.unit);
+    this.cartService.addToCart(productID, quantity, this.unit, this.product?.name);
   }
-  
+
   addToWishlist() {
-    this.cartService.addToWishlist(this.product.id);
+    this.product && this.cartService.addToWishlist(this.product.id);
   }
 
   viewSimilar() {
-    this.router.navigate(["/shop/" + this.product.category]);
+    this.product && this.router.navigate(['/shop/' + this.product.category]);
   }
 
   buyNow(productID: number, quantity: number) {

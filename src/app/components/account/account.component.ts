@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { faPencil, faTrashCan, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { Order } from 'src/app/common/account';
+import { Order } from 'src/app/common/types/account';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -36,7 +36,7 @@ export class AccountComponent {
       surname: [{ value: '', disabled: true }, [Validators.required]],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       primaryPhone: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(7), Validators.maxLength(14)]],
-      secondaryPhone: [{ value: '', disabled: true }]      
+      secondaryPhone: [{ value: '', disabled: true }]
     });
 
     this.addAddressForm = this.fb.group({
@@ -69,7 +69,7 @@ export class AccountComponent {
   }
 
   async loadAccountDetails() {
-    let userData = await this.dataService.processGet('user-details-from-id', {filter: this.userId?.toString()});
+    let userData = await this.dataService.processGet('user-details-from-id', { filter: this.userId?.toString() });
 
     this.userData = userData;
     this.changeAccountDetails.patchValue({
@@ -82,11 +82,11 @@ export class AccountComponent {
   }
 
   async loadAddressBook() {
-    this.addressBook = await this.dataService.processPost({'action': 'address-book', 'customer_id': this.userId?.toString()}, true);
+    this.addressBook = await this.dataService.processPost({ 'action': 'address-book', 'customer_id': this.userId?.toString() }, true);
   }
 
   async loadOrderHistory() {
-    this.orderHistory = await this.dataService.processPost({'action': 'order-history', 'customer_id': this.userId?.toString()}, true);
+    this.orderHistory = await this.dataService.processPost({ 'action': 'order-history', 'customer_id': this.userId?.toString() }, true);
   }
 
   toggleEdit() {
@@ -123,7 +123,7 @@ export class AccountComponent {
   }
 
   async removeAddress() {
-    let response = await lastValueFrom(this.dataService.submitFormData({action: 'delete', id: this.pendingDeleteId, table_name: 'customer_address'}));
+    let response = await lastValueFrom(this.dataService.submitFormData({ action: 'delete', id: this.pendingDeleteId, table_name: 'customer_address' }));
     if (!response.success) {
       this.formService.setPopupMessage('There was an error deleting this address!', true);
     } else {
@@ -138,7 +138,7 @@ export class AccountComponent {
 
   async addAddress() {
     this.addAddressForm.patchValue({ customer_id: this.userId });
-    
+
     let response = await lastValueFrom(this.dataService.submitFormData(this.addAddressForm.value));
     if (!response.success) {
       this.formService.setPopupMessage('There was an error adding this address!', true);
