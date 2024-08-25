@@ -219,8 +219,6 @@ export class CartService {
 
   async clearCartLocalStorage(showPopup = true) {
     localStorage.removeItem('cart');
-    console.log("REFRESH");
-    console.log(localStorage.getItem('cart'));
     showPopup && this.formService.setPopupMessage("Cart cleared successfully!", true);
     await this.refreshCart();
     this.requestUpdate();

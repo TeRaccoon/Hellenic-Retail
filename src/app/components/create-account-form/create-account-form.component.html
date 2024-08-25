@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label>Phone number*</label>
+                    <label>Phone number</label>
                     <input [ngClass]="{'error-input': inputHasError('phone')}" type="tel" formControlName="phone">
                     <div *ngIf="inputHasError('phone')" class="error-message">
                         Please enter a valid phone number.
