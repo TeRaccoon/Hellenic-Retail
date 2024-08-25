@@ -13,7 +13,7 @@ import { Response } from '../common/types/data-response';
 export class CartService {
   private cart: CartItem[] = [];
   private total = 0;
-  
+
   private updated = new BehaviorSubject<boolean>(false);
 
   constructor(private authService: AuthService, private dataService: DataService, private formService: FormService) {
@@ -25,15 +25,31 @@ export class CartService {
       if (loggedIn) {
         let userId = this.authService.getUserID();
         if (userId !== null) {
-          this.cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});
-          if (this.cart.length > 0 && this.cart[0].id == undefined) {
-            this.cart = [];
-          }
-          this.cart = await this.checkCartStock();
+          await this.loadCartDatabase(userId);
         }
-        this.requestUpdate();
       }
+      else {
+        this.loadCartLocalStorage();
+      }
+
+      this.requestUpdate();
     });
+  }
+
+  async loadCartDatabase(userId: string) {
+    this.cart = await this.dataService.processPost({ 'action': 'cart', 'customer_id': userId });
+    if (this.cart.length > 0 && this.cart[0].id == undefined) {
+      this.cart = [];
+    }
+    this.cart = await this.checkCartStock();
+  }
+
+  async loadCartLocalStorage() {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      const parsedCart: CartItem[] = JSON.parse(storedCart);
+      this.cart = parsedCart;
+    }
   }
 
   formatProduct(product: Product, cartItem: CartItem): CartProduct {
@@ -60,7 +76,7 @@ export class CartService {
 
   getProductPrice(product: Product, unit: CartUnit) {
     let customerType = this.authService.getUserType();
-    switch(unit) {
+    switch (unit) {
       case 'Unit':
         return customerType == 'Retail' ? product.retail_price : product.wholesale_price;
       case 'Box':
@@ -74,47 +90,88 @@ export class CartService {
   async refreshCart() {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      this.cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});
-      this.cart = await this.checkCartStock();
+      this.cart = await this.dataService.processPost({ 'action': 'cart', 'customer_id': userId });
+    } else {
+      let cart = localStorage.getItem('cart');
+      if (cart) {
+        this.cart = JSON.parse(cart);
+      } else {
+        this.cart = [];
+      }
+    }
+    this.cart = await this.checkCartStock();
+  }
+
+  async addToCart(productId: number, quantity: number, unit: CartUnit = CartUnit.Unit, productName = "") {
+    let userId = this.authService.getUserID();
+    if (userId !== null) {
+      this.addToCartDatabase(userId, productId, quantity, unit);
+    } else {
+      this.addToCartLocalStorage(productId, productName, quantity, unit)
     }
   }
 
-  async addToCart(productId: number, quantity: number, unit: CartUnit = CartUnit.Unit) {
-    let userId = this.authService.getUserID();
-    if (userId !== null) {
-      let cart = await this.dataService.processPost({'action': 'cart', 'customer_id': userId});      
-      const rowIndex = cart.findIndex((item: any) => item.item_id === productId && item.unit === unit);
+  async addToCartLocalStorage(productId: number, productName: string, quantity: number, unit: CartUnit = CartUnit.Unit) {
+    var currentCartItems = this.cart;
+    const existingCartItemIndex = currentCartItems.findIndex(cartItem => cartItem.item_id === productId);
 
-      let response: Response | undefined;
-      let popupMessage = 'Item added to cart!';
-
-      if (await this.checkStock(quantity, productId, true)) {
-        if (rowIndex !== -1) {
-          if (cart[rowIndex].quantity == quantity) {
-            this.formService.setPopupMessage('Item already in basket!', true);
-          } else {
-            response = await this.dataService.processPost({'action': 'update-cart', 'id': cart[rowIndex].id,'quantity': quantity});
-            popupMessage = 'Cart updated!';
-          }
-        } else {
-          response = await this.dataService.processPost({'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit});
-        }
-  
-        if (response?.success) {
-          await this.refreshCart();
-          this.formService.setPopupMessage(popupMessage, true);
-          this.requestUpdate();
-        } else {
-          this.formService.setPopupMessage('There was an issue adding this item!', true);
-        }
-      }
+    if (existingCartItemIndex !== -1) {
+      this.formService.setPopupMessage('Item already in basket!', true);
     } else {
-      this.formService.setPopupMessage('Please sign in to use your cart!', true);
+      if (await this.checkStock(quantity, productId, true)) {
+        let cartItem: CartItem = {
+          id: currentCartItems.length,
+          item_id: productId,
+          item_name: productName,
+          quantity: quantity,
+          unit: unit
+        };
+
+        currentCartItems.push(cartItem);
+
+        this.formService.setPopupMessage('Item added to cart!', true);
+
+        this.cart = currentCartItems;
+        localStorage.setItem('cart', JSON.stringify(currentCartItems));
+        await this.refreshCart();
+        this.requestUpdate();
+      } else {
+        this.formService.setPopupMessage('Item is out of stock!', true);
+      }
+    }
+  }
+
+  async addToCartDatabase(userId: string, productId: number, quantity: number, unit: CartUnit = CartUnit.Unit) {
+    let cart = await this.dataService.processPost({ 'action': 'cart', 'customer_id': userId });
+    const rowIndex = cart.findIndex((item: any) => item.item_id === productId && item.unit === unit);
+
+    let response: Response | undefined;
+    let popupMessage = 'Item added to cart!';
+
+    if (await this.checkStock(quantity, productId, true)) {
+      if (rowIndex !== -1) {
+        if (cart[rowIndex].quantity == quantity) {
+          this.formService.setPopupMessage('Item already in basket!', true);
+        } else {
+          response = await this.dataService.processPost({ 'action': 'update-cart', 'id': cart[rowIndex].id, 'quantity': quantity });
+          popupMessage = 'Cart updated!';
+        }
+      } else {
+        response = await this.dataService.processPost({ 'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit });
+      }
+
+      if (response?.success) {
+        await this.refreshCart();
+        this.formService.setPopupMessage(popupMessage, true);
+        this.requestUpdate();
+      } else {
+        this.formService.setPopupMessage('There was an issue adding this item!', true);
+      }
     }
   }
 
   async checkStock(quantity: number, productId: number, showPopup = false) {
-    let response = await this.dataService.processPost({'action': 'check-stock', 'id': productId});
+    let response = await this.dataService.processPost({ 'action': 'check-stock', 'id': productId });
     if (response.quantity == null || response.quantity < quantity) {
       showPopup && this.formService.setPopupMessage("There is no more stock of this item!", true);
       return false;
@@ -125,46 +182,75 @@ export class CartService {
   async removeFromCart(cartId: number) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      let response: Response = await this.dataService.processPost({'action': 'remove-cart', 'customer_id': userId, 'cart_id': cartId})
+      await this.removeFromCartDatabase(cartId, userId);
+    } else {
+      this.removeFromCartLocalStorage(cartId);
+    }
+  }
 
-      if (response.success) {
-        this.formService.setPopupMessage("Item removed successfully!", true);
-        await this.refreshCart();
-        this.requestUpdate();
-      } else {
-        this.formService.setPopupMessage("There was an issue removing this item!", true);
-      }
+  async removeFromCartLocalStorage(cartId: number) {
+    this.cart = this.cart.filter((cartItem: CartItem) => cartItem.id != cartId);
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+    this.formService.setPopupMessage("Item removed successfully!", true);
+    await this.refreshCart();
+    this.requestUpdate();
+  }
+
+  async removeFromCartDatabase(cartId: number, userId: string) {
+    let response: Response = await this.dataService.processPost({ 'action': 'remove-cart', 'customer_id': userId, 'cart_id': cartId })
+
+    if (response.success) {
+      this.formService.setPopupMessage("Item removed successfully!", true);
+      await this.refreshCart();
+      this.requestUpdate();
+    } else {
+      this.formService.setPopupMessage("There was an issue removing this item!", true);
     }
   }
 
   async clearCart(showPopup = true) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      let response: Response = await this.dataService.processPost({'action': 'clear-cart', 'customer_id': userId});
+      await this.clearCartDatabase(userId, showPopup);
+    } else {
+      this.clearCartLocalStorage(showPopup);
+    }
+  }
 
-      if (response.success) {
-        showPopup && this.formService.setPopupMessage("Cart cleared successfully!", true);
-        await this.refreshCart();
-        this.requestUpdate();
-      } else {
-        showPopup && this.formService.setPopupMessage("There was an issue clearing your cart!", true);
-      }
+  async clearCartLocalStorage(showPopup = true) {
+    localStorage.removeItem('cart');
+    console.log("REFRESH");
+    console.log(localStorage.getItem('cart'));
+    showPopup && this.formService.setPopupMessage("Cart cleared successfully!", true);
+    await this.refreshCart();
+    this.requestUpdate();
+  }
+
+  async clearCartDatabase(userId: string, showPopup = true) {
+    let response: Response = await this.dataService.processPost({ 'action': 'clear-cart', 'customer_id': userId });
+
+    if (response.success) {
+      showPopup && this.formService.setPopupMessage("Cart cleared successfully!", true);
+      await this.refreshCart();
+      this.requestUpdate();
+    } else {
+      showPopup && this.formService.setPopupMessage("There was an issue clearing your cart!", true);
     }
   }
 
   async getCartItems(): Promise<CartProduct[]> {
     let cartProducts: CartProduct[] = [];
-    if (this.cart.length > 0 && this.cart[0].id) {
+    if (this.cart.length > 0 && this.cart[0].id != null) {
       let total = 0;
       for (const item of this.cart) {
-        let product: Product = await this.dataService.processGet('product-from-id', {filter: item.item_id.toString()});
+        let product: Product = await this.dataService.processGet('product-from-id', { filter: item.item_id.toString() });
         let formattedProduct = this.formatProduct(product, item);
 
         total += formattedProduct.discounted_price;
 
         cartProducts.push(formattedProduct);
       }
-        
+
       this.total = total;
     }
 
@@ -180,7 +266,6 @@ export class CartService {
       this.cart = [];
     }
     checkStock && (this.cart = await this.checkCartStock());
-
     return this.cart;
   }
 
@@ -214,17 +299,17 @@ export class CartService {
     let isLoggedIn = this.authService.isLoggedIn();
     if (isLoggedIn) {
       let customerID = this.authService.getUserID();
-      if (customerID != null) {      
+      if (customerID != null) {
         let form = {
           action: "add",
           item_id: productID,
           customer_id: customerID,
           table_name: "wishlist"
         };
-        let inWishlist: any = await this.dataService.processGet("is-product-in-wishlist", {id: customerID, product_id: productID}, true);
+        let inWishlist: any = await this.dataService.processGet("is-product-in-wishlist", { id: customerID, product_id: productID }, true);
 
         let popupMessage = "Product already in wishlist!";
-        
+
         if (inWishlist < 1) {
           let response = await lastValueFrom(this.dataService.submitFormData(form));
           popupMessage = response.success ? "Product added to wishlist!" : "Whoops! Something went wrong. Please try again";
@@ -242,7 +327,7 @@ export class CartService {
     let isLoggedIn = this.authService.isLoggedIn();
     if (isLoggedIn) {
       let customerID = this.authService.getUserID();
-      if (customerID != null) {      
+      if (customerID != null) {
         let form = {
           action: "delete",
           id: wishlistID,
