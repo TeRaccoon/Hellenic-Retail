@@ -9,7 +9,7 @@ import { UrlService } from 'src/app/services/url.service'
   styleUrls: ['./page-banner.component.scss']
 })
 export class PageBannerComponent {
-  bannerImage: any;
+  bannerUrl: string = '';
   message = '';
 
   imageUrl = '';
@@ -29,6 +29,9 @@ export class PageBannerComponent {
   }
 
   async loadBannerImage() {
-    this.bannerImage = this.dataService.processGet("section-image", {filter: "page-banner"})
+    let bannerImage = await this.dataService.processGet("section-image", { filter: "page-banner" })
+
+    this.bannerUrl = 'url(' + this.imageUrl + bannerImage + ')';
+    console.log(this.bannerUrl);
   }
 }
