@@ -16,7 +16,7 @@ import { UrlService } from 'src/app/services/url.service'
 })
 export class ShopGridComponent {
   screenSize: any = {};
-  
+
   faHeart = faHeart;
   faEye = faEye;
 
@@ -40,7 +40,7 @@ export class ShopGridComponent {
   filterHeader = 'Showing all results';
 
   constructor(
-    private urlService: UrlService, 
+    private urlService: UrlService,
     private filterService: FilterService,
     private cartService: CartService,
     private dataService: DataService,
@@ -48,7 +48,7 @@ export class ShopGridComponent {
     private formService: FormService,
     private renderService: RenderService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.products = [];
@@ -69,18 +69,20 @@ export class ShopGridComponent {
       this.category = category;
       if (category !== undefined) {
         this.formService.setBannerMessage(`${messageBase}${category}`);
-        this.filterHeader = `${messageBase}${category}`
+        this.filterHeader = category
       }
       this.loadProducts(category, null);
     });
+
     this.dataService.getShopFilter().subscribe((filter) => {
       this.filter = filter;
       if (filter !== null && filter != '') {
         this.formService.setBannerMessage(`${messageBase}${filter}`);
-        this.filterHeader = `${messageBase}${filter}`
+        this.filterHeader = (`Search results: ${filter}`)
         this.loadProducts(undefined, filter);
       }
     });
+
     this.filterService.getFilterUpdated().subscribe((updated) => {
       if (updated) {
         this.maxPrice = this.filterService.getMaxPrice();
@@ -93,7 +95,7 @@ export class ShopGridComponent {
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
     if (category !== undefined && this.category !== undefined || category == 'All') {
-      products = await this.dataService.processGet('products-from-category', {category: category}, true, true);
+      products = await this.dataService.processGet('products-from-category', { category: category }, true, true);
     } else {
       products = await this.dataService.processGet('products', {}, true, true)
     }
@@ -103,7 +105,7 @@ export class ShopGridComponent {
     }
 
     this.resultsAmount = products.length === undefined ? 1 : products.length;
-    this.totalPages = Math.round(this.resultsAmount / this.itemsPerPage + 1);
+    this.totalPages = Math.floor(this.resultsAmount / this.itemsPerPage + 1);
 
     products.forEach((product: any) => {
       if (product.discount && product.discount != null) {

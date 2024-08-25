@@ -1,10 +1,8 @@
 $hellenicblue: rgb(0, 140, 255);
 .shop-grid-container {
-    margin-top: 50px;
+    margin-top: 5vh;
     display: flex;
     flex-direction: column;
-    width: 81%;
-    margin-left: 18vw;
     margin-bottom: 10px;
     justify-content: center;
     gap: 8px;
@@ -44,8 +42,8 @@ $hellenicblue: rgb(0, 140, 255);
             display: inline-flex;
             align-items: center;
             gap: 15px;
-            margin: 0 0 0 1.5vw;
-            font-size: 32px
+            margin: 0;
+            font-size: 20px
         }
         div {
             display: inline-flex;
@@ -74,6 +72,12 @@ $hellenicblue: rgb(0, 140, 255);
         grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 6px;
         flex: 1;
+    }
+}
+
+::ng-deep app-product {
+    .product-container {
+        height: 16vw!important;
     }
 }
 

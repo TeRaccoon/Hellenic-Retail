@@ -1,3 +1,19 @@
 .shop-container {
     min-height: 60vh;
+    width: 68%;
+    margin: 0 auto;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+::ng-deep app-shop-sidebar {
+    flex: 0 1 25%
+}
+
+@media screen and (max-width: 1079px) {
+    //mobile
+    .shop-container {
+        margin: 0;
+    }
 }
