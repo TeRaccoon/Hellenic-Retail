@@ -1,7 +1,6 @@
 <div [@loginAnimation]="loginVisible" class="form-container">
     <div class="login-form">
         <div class="text-section">
-            <span (click)="hideLogin()" class="close-mobile">&times;</span>
             <div>
                 <h1>Login</h1>
                 <p>Get access to your orders, wishlist and more!</p>
@@ -9,7 +8,6 @@
             <a (click)="createAccount()">Create Account</a>
         </div>
         <div class="input-section">
-            <span (click)="hideLogin()" class="close">&times;</span>
             <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
                 <p class="error">{{ loginError }}</p>
                 <div *ngFor="let error of errorMessages.email">
@@ -34,6 +32,7 @@
                 <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}
                     <fa-icon *ngIf="loading" class="loading-icon" [icon]="spinner" spinPulse [spin]="true" />
                 </button>
+                <button class="cancel-button" (click)="hideLogin()">Cancel</button>
             </form>
         </div>
     </div>

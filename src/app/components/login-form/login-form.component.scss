@@ -21,22 +21,6 @@ $hellenicblue: rgb(0, 140, 255);
             background-color: $hellenicblue;
             padding: 40px;
             width: 23%;
-            .close-mobile {
-                visibility: hidden;
-                position: absolute;
-                top: 0;
-                right: 0;
-                font-size: 25px;
-                padding: 0 5px;
-                border-radius: 0 0 0 20px;
-                background-color: rgb(0, 140, 255);
-                color: white;
-                transition: color 0.6s ease;
-                width: 28px;
-                display: flex;
-                justify-content: center;
-                cursor: pointer;
-            }
             h1 {
                 margin: 0px;
             }
@@ -52,24 +36,6 @@ $hellenicblue: rgb(0, 140, 255);
             position: relative;
             background-color: #ffffff;
             padding: 35px;
-            .close {
-                position: absolute;
-                top: 0;
-                right: 0;
-                font-size: 25px;
-                padding: 0 5px;
-                border-radius: 0 0 0 20px;
-                background-color: $hellenicblue;
-                color: white;
-                transition: color 0.6s ease;
-                width: 28px;
-                display: flex;
-                justify-content: center;
-                cursor: pointer;
-                &:hover {
-                    color: red;
-                }
-            }
             form {
                 display: contents;
                 input {
@@ -113,6 +79,16 @@ $hellenicblue: rgb(0, 140, 255);
                     background-color: $hellenicblue;
                     border: 0;
                     padding: 8px;
+                    margin-top: 20px;
+                }
+                .cancel-button {
+                    cursor: pointer;
+                    font-family: 'Poppins', sans-serif;
+                    color: red;
+                    font-size: 18px;
+                    background-color: white;
+                    border: 0;
+                    padding: 8px;
                     margin-top: 10px;
                 }
             }
@@ -137,11 +113,5 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .input-section {
         width: 80%!important;
-    }
-    .close {
-        display: none!important;
-    }
-    .close-mobile {
-        visibility: visible!important;
     }
 }
