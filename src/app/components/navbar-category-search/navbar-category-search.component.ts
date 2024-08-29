@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
@@ -11,6 +11,8 @@ import { UrlService } from 'src/app/services/url.service';
   styleUrls: ['./navbar-category-search.component.scss']
 })
 export class NavbarCategorySearchComponent {
+  @ViewChild('categorySearch') categorySearch!: ElementRef;
+
   faBars = faBars;
   faSearch = faSearch;
 
@@ -28,8 +30,19 @@ export class NavbarCategorySearchComponent {
   searchStringFilter = '';
   imageUrl: string;
 
-  constructor(private urlService: UrlService, private dataService: DataService, private filterService: FilterService, private router: Router) {
-    this.imageUrl = this.urlService.getUrl('uploads');;
+  constructor(private renderer: Renderer2, private urlService: UrlService, private dataService: DataService, private filterService: FilterService, private router: Router) {
+    const handleEvent = (e: Event) => {
+      const categorySearchClick = this.categorySearch?.nativeElement.contains(e.target);
+
+      if (!categorySearchClick) {
+        this.categoriesShown = false;
+      }
+    };
+
+    this.renderer.listen('window', 'mousedown', handleEvent);
+    this.renderer.listen('window', 'touchstart', handleEvent);
+
+    this.imageUrl = this.urlService.getUrl('uploads');
   }
 
   ngOnInit() {
