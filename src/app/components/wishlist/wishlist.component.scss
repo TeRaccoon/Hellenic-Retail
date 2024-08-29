@@ -105,4 +105,15 @@
             }
         }
     }
+    .price-container {
+        height: 15vw;
+        .discounted-price {
+            display: flex!important;
+            align-items: center!important;
+        }
+        .original-price {
+            display: flex!important;
+            align-items: center!important;
+        }
+    }
 }

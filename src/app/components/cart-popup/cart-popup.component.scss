@@ -200,8 +200,8 @@ $hellenicblue: rgb(0, 140, 255);
     .cart-form {
         width: 82vw!important;
     }
-    .form-container {
-        height: calc(100% - 77px);
+    .cart-body {
+        margin-top: 77px;
     }
     .cart-row{
         gap: 3px!important;
