@@ -24,6 +24,11 @@ $hellenicblue: rgb(0, 140, 255);
             p {
                 margin: 0px;
             }
+            .label-container {
+                fa-icon {
+                    display: none;
+                }
+            }
         }
         h1 {
             font-size: 16px;
@@ -68,6 +73,18 @@ $hellenicblue: rgb(0, 140, 255);
 
 @media screen and (max-width: 1079px) {
     //mobile
+    .footer {
+        font-size: 16px!important;
+    }
+    .label-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        fa-icon {
+            display: inline!important;
+        }
+    }
     .left-most {
         width: 60vw!important;
         margin-right: 0!important;
@@ -77,14 +94,24 @@ $hellenicblue: rgb(0, 140, 255);
     }
     .right-most {
         display: flex!important;
-        flex-direction: row!important;
-        flex-wrap: wrap!important;
+        flex-direction: column!important;
+        flex-wrap: nowrap!important;
         gap: 0!important;
+        width: 100%;
     }
     .container {
         flex-direction: column;
+        width: 78%!important;
+        h1 {
+            font-size: 20px!important;
+        }
     }
     .column {
-        width: 32vw!important;
+        width: 100%!important;
+    }
+    .link {
+        a {
+            font-size: 16px!important;
+        }
     }
 }
