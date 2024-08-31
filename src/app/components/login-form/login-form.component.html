@@ -11,17 +11,21 @@
             <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
                 <p class="error">{{ loginError }}</p>
                 <div *ngFor="let error of errorMessages.email">
-                    <div class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError(error.type) && submitted">
+                    <div class="error"
+                        *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError(error.type) && submitted">
                         {{ error.message }}
                     </div>
                 </div>
-                <input [class]="inputHasError('email') ? 'error-input' : ''" type="text" required formControlName="email" placeholder="Enter email address">
+                <input [class]="inputHasError('email') ? 'error-input' : ''" type="text" required
+                    formControlName="email" placeholder="Enter email address">
                 <div *ngFor="let error of errorMessages.password">
-                    <div class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type)">
+                    <div class="error"
+                        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type)">
                         {{ error.message }}
                     </div>
                 </div>
-                <input *ngIf="!forgotPasswordState" [class]="inputHasError('password') ? 'error-input' : ''" type="password" required formControlName="password" placeholder="Enter password">
+                <input *ngIf="!forgotPasswordState" [class]="inputHasError('password') ? 'error-input' : ''"
+                    type="password" required formControlName="password" placeholder="Enter password">
                 <div class="login-options">
                     <!-- <div>
                         <label for="remember-me">Remember me</label>
@@ -32,7 +36,7 @@
                 <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}
                     <fa-icon *ngIf="loading" class="loading-icon" [icon]="spinner" spinPulse [spin]="true" />
                 </button>
-                <button class="cancel-button" (click)="hideLogin()">Cancel</button>
+                <button type="button" class="cancel-button" (click)="hideLogin()">Cancel</button>
             </form>
         </div>
     </div>
