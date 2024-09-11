@@ -8,7 +8,7 @@ import { UrlService } from 'src/app/services/url.service';
 @Component({
   selector: 'app-navbar-category-search',
   templateUrl: './navbar-category-search.component.html',
-  styleUrls: ['./navbar-category-search.component.scss']
+  styleUrls: ['./navbar-category-search.component.scss'],
 })
 export class NavbarCategorySearchComponent {
   @ViewChild('categorySearch') categorySearch!: ElementRef;
@@ -30,9 +30,17 @@ export class NavbarCategorySearchComponent {
   searchStringFilter = '';
   imageUrl: string;
 
-  constructor(private renderer: Renderer2, private urlService: UrlService, private dataService: DataService, private filterService: FilterService, private router: Router) {
+  constructor(
+    private renderer: Renderer2,
+    private urlService: UrlService,
+    private dataService: DataService,
+    private filterService: FilterService,
+    private router: Router
+  ) {
     const handleEvent = (e: Event) => {
-      const categorySearchClick = this.categorySearch?.nativeElement.contains(e.target);
+      const categorySearchClick = this.categorySearch?.nativeElement.contains(
+        e.target
+      );
 
       if (!categorySearchClick) {
         this.categoriesShown = false;
@@ -58,7 +66,12 @@ export class NavbarCategorySearchComponent {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.processGet('products', {}, true, true);
+    let products: any = await this.dataService.processGet(
+      'products',
+      {},
+      true,
+      false
+    );
 
     if (products != null) {
       products = this.calculatePrices(products);
@@ -82,7 +95,7 @@ export class NavbarCategorySearchComponent {
 
   goToCategory(category: string) {
     this.dataService.setShopFilter(null);
-    this.router.navigate(["/shop/" + category]);
+    this.router.navigate(['/shop/' + category]);
   }
 
   toggleCategory() {
@@ -92,7 +105,11 @@ export class NavbarCategorySearchComponent {
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();
-    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
+    this.searchResults = this.filterService.applyCategoryFilter(
+      this.categoryFilter,
+      this.searchStringFilter,
+      this.products
+    );
   }
 
   onInputFocus() {
@@ -111,7 +128,11 @@ export class NavbarCategorySearchComponent {
 
   changeCategory(event: Event) {
     this.categoryFilter = (event.target as HTMLInputElement).value;
-    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
+    this.searchResults = this.filterService.applyCategoryFilter(
+      this.categoryFilter,
+      this.searchStringFilter,
+      this.products
+    );
   }
 
   search() {

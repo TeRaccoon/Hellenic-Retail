@@ -5,12 +5,16 @@ import { DataService } from 'src/app/services/data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
-import { faPencil, faTrashCan, faCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPencil,
+  faTrashCan,
+  faCheck,
+} from '@fortawesome/free-solid-svg-icons';
 import { Order } from 'src/app/common/types/account';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss']
+  styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent {
   pencil = faPencil;
@@ -30,13 +34,29 @@ export class AccountComponent {
   pendingDeleteId: string | null = null;
   showAddNew = false;
 
-  constructor(private router: Router, private dataService: DataService, private formService: FormService, private authService: AuthService, private fb: FormBuilder) {
+  constructor(
+    private router: Router,
+    private dataService: DataService,
+    private formService: FormService,
+    private authService: AuthService,
+    private fb: FormBuilder
+  ) {
     this.changeAccountDetails = this.fb.group({
       forename: [{ value: '', disabled: true }, [Validators.required]],
       surname: [{ value: '', disabled: true }, [Validators.required]],
-      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
-      primaryPhone: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(7), Validators.maxLength(14)]],
-      secondaryPhone: [{ value: '', disabled: true }]
+      email: [
+        { value: '', disabled: true },
+        [Validators.required, Validators.email],
+      ],
+      primaryPhone: [
+        { value: '', disabled: true },
+        [
+          Validators.required,
+          Validators.minLength(7),
+          Validators.maxLength(14),
+        ],
+      ],
+      secondaryPhone: [{ value: '', disabled: true }],
     });
 
     this.addAddressForm = this.fb.group({
@@ -46,7 +66,7 @@ export class AccountComponent {
       delivery_address_three: [''],
       delivery_postcode: ['', Validators.required],
       action: ['add'],
-      table_name: ['customer_address']
+      table_name: ['customer_address'],
     });
   }
 
@@ -55,21 +75,23 @@ export class AccountComponent {
   }
 
   async checkLogin() {
-    this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
-      if (loggedIn) {
-        this.userId = this.authService.getUserID();
-        if (this.userId != null) {
-          this.loggedIn = true;
-          this.loadAccountDetails();
-          this.loadOrderHistory();
-          this.loadAddressBook();
-        }
-      }
-    })
+    // this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
+    //   if (loggedIn) {
+    this.userId = this.authService.getUserID();
+    if (this.userId != null) {
+      this.loggedIn = true;
+      this.loadAccountDetails();
+      this.loadOrderHistory();
+      this.loadAddressBook();
+    }
+    //   }
+    // });
   }
 
   async loadAccountDetails() {
-    let userData = await this.dataService.processGet('user-details-from-id', { filter: this.userId?.toString() });
+    let userData = await this.dataService.processGet('user-details-from-id', {
+      filter: this.userId?.toString(),
+    });
 
     this.userData = userData;
     this.changeAccountDetails.patchValue({
@@ -77,21 +99,27 @@ export class AccountComponent {
       surname: this.userData.surname,
       email: this.userData.email,
       primaryPhone: this.userData.phone_number_primary,
-      secondaryPhone: this.userData.phone_number_secondary
+      secondaryPhone: this.userData.phone_number_secondary,
     });
   }
 
   async loadAddressBook() {
-    this.addressBook = await this.dataService.processPost({ 'action': 'address-book', 'customer_id': this.userId?.toString() }, true);
+    this.addressBook = await this.dataService.processPost(
+      { action: 'address-book', customer_id: this.userId?.toString() },
+      true
+    );
   }
 
   async loadOrderHistory() {
-    this.orderHistory = await this.dataService.processPost({ 'action': 'order-history', 'customer_id': this.userId?.toString() }, true);
+    this.orderHistory = await this.dataService.processPost(
+      { action: 'order-history', customer_id: this.userId?.toString() },
+      true
+    );
   }
 
   toggleEdit() {
     this.edit = !this.edit;
-    Object.keys(this.changeAccountDetails.controls).forEach(controlName => {
+    Object.keys(this.changeAccountDetails.controls).forEach((controlName) => {
       let control = this.changeAccountDetails.get(controlName);
       if (control) {
         control.disabled ? control.enable() : control.disable();
@@ -123,9 +151,18 @@ export class AccountComponent {
   }
 
   async removeAddress() {
-    let response = await lastValueFrom(this.dataService.submitFormData({ action: 'delete', id: this.pendingDeleteId, table_name: 'customer_address' }));
+    let response = await lastValueFrom(
+      this.dataService.submitFormData({
+        action: 'delete',
+        id: this.pendingDeleteId,
+        table_name: 'customer_address',
+      })
+    );
     if (!response.success) {
-      this.formService.setPopupMessage('There was an error deleting this address!', true);
+      this.formService.setPopupMessage(
+        'There was an error deleting this address!',
+        true
+      );
     } else {
       this.formService.setPopupMessage('Address deleted successfully', true);
       this.loadAddressBook();
@@ -139,9 +176,14 @@ export class AccountComponent {
   async addAddress() {
     this.addAddressForm.patchValue({ customer_id: this.userId });
 
-    let response = await lastValueFrom(this.dataService.submitFormData(this.addAddressForm.value));
+    let response = await lastValueFrom(
+      this.dataService.submitFormData(this.addAddressForm.value)
+    );
     if (!response.success) {
-      this.formService.setPopupMessage('There was an error adding this address!', true);
+      this.formService.setPopupMessage(
+        'There was an error adding this address!',
+        true
+      );
     } else {
       this.formService.setPopupMessage('Address added successfully', true);
       this.addAddressForm.reset();

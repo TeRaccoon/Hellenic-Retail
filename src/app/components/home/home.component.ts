@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
   loginChecked = false;
@@ -17,7 +17,7 @@ export class HomeComponent {
   }
 
   async checkLogin() {
-    await this.authService.checkLogin()
+    await this.authService.checkLogin();
     this.loginChecked = true;
   }
 }

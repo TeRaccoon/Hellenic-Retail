@@ -3,8 +3,15 @@ import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
 import { MailService } from '../../services/mail.service';
 import { AuthService } from '../../services/auth.service';
-import { UrlService } from '../../services/url.service'
-import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
+import { UrlService } from '../../services/url.service';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  keyframes,
+} from '@angular/animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
@@ -19,16 +26,28 @@ import { AccountService } from 'src/app/services/account.service';
     trigger('loginAnimation', [
       state('visible', style({ opacity: 1, display: 'block' })),
       state('hidden', style({ opacity: 0, display: 'none' })),
-      transition('hidden => visible', animate('600ms ease', keyframes([
-        style({ opacity: 0, display: 'block', offset: 0 }),
-        style({ opacity: 1, offset: 1 })
-      ]))),
-      transition('visible => hidden', animate('600ms ease', keyframes([
-        style({ opacity: 1, offset: 0 }),
-        style({ opacity: 0, display: 'none', offset: 1 })
-      ])))
+      transition(
+        'hidden => visible',
+        animate(
+          '600ms ease',
+          keyframes([
+            style({ opacity: 0, display: 'block', offset: 0 }),
+            style({ opacity: 1, offset: 1 }),
+          ])
+        )
+      ),
+      transition(
+        'visible => hidden',
+        animate(
+          '600ms ease',
+          keyframes([
+            style({ opacity: 1, offset: 0 }),
+            style({ opacity: 0, display: 'none', offset: 1 }),
+          ])
+        )
+      ),
     ]),
-  ]
+  ],
 })
 export class LoginFormComponent {
   spinner = faCircleNotch;
@@ -45,19 +64,30 @@ export class LoginFormComponent {
   errorMessages = {
     email: [
       { type: 'required', message: 'Email is required' },
-      { type: 'email', message: 'Invalid email format' }
+      { type: 'email', message: 'Invalid email format' },
     ],
     password: [
       { type: 'required', message: 'Password is required' },
-      { type: 'minlength', message: 'Password must be at least 8 characters long' }
-    ]
+      {
+        type: 'minlength',
+        message: 'Password must be at least 8 characters long',
+      },
+    ],
   };
 
-  constructor(private accountService: AccountService, private router: Router, private authService: AuthService, private dataService: DataService, private formService: FormService, private fb: FormBuilder, private mailService: MailService) {
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    private authService: AuthService,
+    private dataService: DataService,
+    private formService: FormService,
+    private fb: FormBuilder,
+    private mailService: MailService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      action: ['customer-login']
+      action: ['customer-login'],
     });
   }
 
@@ -113,7 +143,9 @@ export class LoginFormComponent {
     if (!this.forgotPasswordState) {
       if (this.loginForm.valid) {
         this.loading = true;
-        let loginResponse = await lastValueFrom(this.dataService.submitFormData(this.loginForm.value));
+        let loginResponse = await lastValueFrom(
+          this.dataService.submitFormData(this.loginForm.value)
+        );
         if (loginResponse.success) {
           this.loginSuccessful();
         } else {
@@ -145,27 +177,47 @@ export class LoginFormComponent {
       let response = await this.mailService.sendEmail(emailData);
       if (response.success) {
         this.changePassword(password);
-        this.formService.setPopupMessage('A temporary password has been sent!', true, 10000);
+        this.formService.setPopupMessage(
+          'A temporary password has been sent!',
+          true,
+          10000
+        );
         this.forgotPassword();
       } else {
-        this.loginError = 'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
+        this.loginError =
+          'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
       }
       this.loading = false;
     }
   }
 
   async changePassword(password: string) {
-    let response = await this.dataService.processPost({ 'action': 'change-password', 'email': this.loginForm.get('email')?.value, 'password': password });
+    let response = await this.dataService.processPost({
+      action: 'change-password',
+      email: this.loginForm.get('email')?.value,
+      password: password,
+    });
     if (response.success) {
-      this.formService.setPopupMessage('Password has been updated successfully', true, 10000);
+      this.formService.setPopupMessage(
+        'Password has been updated successfully',
+        true,
+        10000
+      );
     } else {
-      this.formService.setPopupMessage('There was an issue changing your password! Please try again or contact support for help: support@hellenicgrocery.co.uk', true, 10000);
+      this.formService.setPopupMessage(
+        'There was an issue changing your password! Please try again or contact support for help: support@hellenicgrocery.co.uk',
+        true,
+        10000
+      );
     }
   }
 
   async checkCustomerEmail() {
     let email = this.loginForm.get('email')?.value;
-    let response = await this.dataService.processGet('user-id-from-email', email);
+    let response = await this.dataService.processGet(
+      'user-id-from-email',
+      email
+    );
     if (response.length == 0) {
       this.loginError = "A user doesn't exist with this email";
       return false;
@@ -175,7 +227,11 @@ export class LoginFormComponent {
 
   async tracing() {
     let customerId = this.authService.getUserID();
-    await this.dataService.processPost({ 'action': 'tracing', 'page': 'login', 'customer_id': customerId });
+    await this.dataService.processPost({
+      action: 'tracing',
+      page: 'login',
+      customer_id: customerId,
+    });
   }
 
   createAccount() {

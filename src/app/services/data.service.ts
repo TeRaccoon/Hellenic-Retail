@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, lastValueFrom, map, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  lastValueFrom,
+  map,
+  throwError,
+} from 'rxjs';
 import { AuthService } from './auth.service';
 import { UrlService } from './url.service';
 
@@ -13,22 +20,33 @@ export class DataService {
   visibleCategoryNames: any[] = [];
   visibleCategoryLocations: any[] = [];
 
-  constructor(private http: HttpClient, private authService: AuthService, private urlService: UrlService) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private urlService: UrlService
+  ) {
     this.loadStandardData();
   }
 
-  async processPost(body: Record<string, any>, makeArray = false): Promise<any> {
+  async processPost(
+    body: Record<string, any>,
+    makeArray = false
+  ): Promise<any> {
     const url = this.urlService.getUrl('retail');
     let response = await lastValueFrom(this.http.post(url, { body }));
 
-    if (makeArray)
-      response = Array.isArray(response) ? response : [response];
+    if (makeArray) response = Array.isArray(response) ? response : [response];
 
     return response;
   }
 
-  async processGet(query: string, filter: Record<string, any> = {}, makeArray = false, checkLogin = false): Promise<any> {
-    checkLogin && await this.authService.checkLogin();
+  async processGet(
+    query: string,
+    filter: Record<string, any> = {},
+    makeArray = false,
+    checkLogin = false
+  ): Promise<any> {
+    checkLogin && (await this.authService.checkLogin());
     let userType = this.authService.getUserType();
 
     const url = new URL(this.urlService.getUrl('retail'));
@@ -41,12 +59,10 @@ export class DataService {
 
     let response = await lastValueFrom(this.http.get(url.toString()));
 
-    if (makeArray)
-      response = Array.isArray(response) ? response : [response];
+    if (makeArray) response = Array.isArray(response) ? response : [response];
 
     return response;
   }
-
 
   submitFormDataQuery(query: string, data: any) {
     const url = this.urlService.getUrl('retail');
@@ -72,7 +88,9 @@ export class DataService {
 
   async processTransaction(data: any) {
     const url = this.urlService.getUrl('payment');
-    return await lastValueFrom(this.http.post(url, data, { withCredentials: true }));
+    return await lastValueFrom(
+      this.http.post(url, data, { withCredentials: true })
+    );
   }
 
   setShopFilter(filter: any) {

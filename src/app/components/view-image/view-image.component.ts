@@ -3,12 +3,12 @@ import { DataService } from '../../services/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { FormService } from 'src/app/services/form.service';
-import { UrlService } from 'src/app/services/url.service'
+import { UrlService } from 'src/app/services/url.service';
 
 @Component({
   selector: 'app-view-image',
   templateUrl: './view-image.component.html',
-  styleUrls: ['./view-image.component.scss']
+  styleUrls: ['./view-image.component.scss'],
 })
 export class ViewImageComponent {
   product: any;
@@ -20,25 +20,33 @@ export class ViewImageComponent {
 
   imageUrl = '';
 
-  constructor(private urlService: UrlService, private formService: FormService, private dataService: DataService, private route: ActivatedRoute) { }
+  constructor(
+    private urlService: UrlService,
+    private formService: FormService,
+    private dataService: DataService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.imageUrl = this.urlService.getUrl('uploads');;
-    this.route.params.subscribe(params => {
+    this.imageUrl = this.urlService.getUrl('uploads');
+    this.route.params.subscribe((params) => {
       const productName = params['productName'];
       this.loadProduct(productName);
     });
   }
 
   async loadProduct(productName: string) {
-    let product = await this.dataService.processGet("product-view", {filter: productName});
-    if (product['primary_image'] == null) {
-      product['primary_image'] = 'placeholder.jpg';
-    }
-    
+    let product = await this.dataService.processGet('product-view', {
+      filter: productName,
+    });
+    product['primary_image'] ?? 'placeholder.jpg';
+
     this.product = product;
     this.primaryImage = this.product.primary_image;
-    this.productImages = await this.dataService.processGet("product-view-images", {filter: product.id});
+    this.productImages = await this.dataService.processGet(
+      'product-view-images',
+      { filter: product.id }
+    );
   }
 
   changeImage(event: Event) {
@@ -47,13 +55,13 @@ export class ViewImageComponent {
       this.primaryImage = target.getAttribute('data-image');
     }
     const containers = document.querySelectorAll('.sidebar-image-container');
-    containers.forEach(d => d.classList.remove('active'));
+    containers.forEach((d) => d.classList.remove('active'));
     const targetParent = target.parentElement;
     if (targetParent != null) {
       targetParent.classList.add('active');
     }
   }
-  
+
   openImage(imageLocation: any) {
     this.formService.setImageViewerUrl(this.imageUrl + imageLocation);
     this.formService.showImageViewer();
@@ -63,21 +71,20 @@ export class ViewImageComponent {
     if (event) {
       const container = event.currentTarget as HTMLElement;
       const boundingBox = container.getBoundingClientRect();
-      
+
       const containerX = boundingBox.left + window.scrollX;
       const containerY = boundingBox.top + window.scrollY;
-  
+
       const mouseX = event.clientX - containerX;
       const mouseY = event.clientY - containerY;
-  
+
       const zoomFactor = 1.25;
       this.zoomFactor = zoomFactor;
-  
+
       this.zoomX = (mouseX / boundingBox.width) * zoomFactor * 25 - 25;
       this.zoomY = (mouseY / boundingBox.height) * zoomFactor * 25 - 25;
     }
   }
-  
 
   resetZoom() {
     this.zoomFactor = 1;

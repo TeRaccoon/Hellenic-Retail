@@ -3,7 +3,7 @@ import { DataService } from '../../services/data.service';
 import { FormService } from '../../services/form.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { RenderService } from 'src/app/services/render.service';
-import { UrlService } from 'src/app/services/url.service'
+import { UrlService } from 'src/app/services/url.service';
 import {
   faCaretDown,
   faEnvelope,
@@ -82,13 +82,13 @@ export class NavbarComponent {
     private cartService: CartService,
     private renderService: RenderService
   ) {
-    this.imageUrl = this.urlService.getUrl('uploads');;
+    this.imageUrl = this.urlService.getUrl('uploads');
   }
 
   ngOnInit() {
     this.getLoginVisibility();
     this.getCartUpdates();
-    this.renderService.getScreenSize().subscribe(size => {
+    this.renderService.getScreenSize().subscribe((size) => {
       this.screenSize = size;
     });
 
@@ -107,18 +107,20 @@ export class NavbarComponent {
   }
 
   async getCartUpdates() {
-    this.cartService.getUpdateRequest().subscribe(async (updateRequested: boolean) => {
-      if (updateRequested) {
-        this.cartService.performUpdate();
-        this.cartState = 'active';
+    this.cartService
+      .getUpdateRequest()
+      .subscribe(async (updateRequested: boolean) => {
+        if (updateRequested) {
+          this.cartService.performUpdate();
+          this.cartState = 'active';
 
-        this.cartCount = (await this.cartService.getCart()).length;
+          this.cartCount = (await this.cartService.getCart()).length;
 
-        setTimeout(() => {
-          this.cartState = 'inactive';
-        }, 500);
-      }
-    });
+          setTimeout(() => {
+            this.cartState = 'inactive';
+          }, 500);
+        }
+      });
   }
 
   async loadNavBar() {
@@ -129,7 +131,12 @@ export class NavbarComponent {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.processGet('products', {}, true, true);
+    let products: any = await this.dataService.processGet(
+      'products',
+      {},
+      true,
+      false
+    );
 
     if (products != null) {
       products = this.replaceNullImages(products);
@@ -166,13 +173,21 @@ export class NavbarComponent {
 
   changeCategory(event: Event) {
     this.categoryFilter = (event.target as HTMLInputElement).value;
-    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
+    this.searchResults = this.filterService.applyCategoryFilter(
+      this.categoryFilter,
+      this.searchStringFilter,
+      this.products
+    );
   }
 
   searchFilter(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchStringFilter = inputElement.value.trim().toLowerCase();
-    this.searchResults = this.filterService.applyCategoryFilter(this.categoryFilter, this.searchStringFilter, this.products);
+    this.searchResults = this.filterService.applyCategoryFilter(
+      this.categoryFilter,
+      this.searchStringFilter,
+      this.products
+    );
   }
 
   onInputFocus() {

@@ -8,7 +8,7 @@ import { Product } from '../common/types/shop';
 import { Response } from '../common/types/data-response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
   private cart: CartItem[] = [];
@@ -16,28 +16,36 @@ export class CartService {
 
   private updated = new BehaviorSubject<boolean>(false);
 
-  constructor(private authService: AuthService, private dataService: DataService, private formService: FormService) {
+  constructor(
+    private authService: AuthService,
+    private dataService: DataService,
+    private formService: FormService
+  ) {
     this.loadCart();
   }
 
   private async loadCart() {
-    this.authService.isLoggedInObservable().subscribe(async (loggedIn: boolean) => {
-      if (loggedIn) {
-        let userId = this.authService.getUserID();
-        if (userId !== null) {
-          await this.loadCartDatabase(userId);
+    this.authService
+      .isLoggedInObservable()
+      .subscribe(async (loggedIn: boolean) => {
+        if (loggedIn) {
+          let userId = this.authService.getUserID();
+          if (userId !== null) {
+            await this.loadCartDatabase(userId);
+          }
+        } else {
+          this.loadCartLocalStorage();
         }
-      }
-      else {
-        this.loadCartLocalStorage();
-      }
 
-      this.requestUpdate();
-    });
+        this.requestUpdate();
+      });
   }
 
   async loadCartDatabase(userId: string) {
-    this.cart = await this.dataService.processPost({ 'action': 'cart', 'customer_id': userId });
+    this.cart = await this.dataService.processPost({
+      action: 'cart',
+      customer_id: userId,
+    });
     if (this.cart.length > 0 && this.cart[0].id == undefined) {
       this.cart = [];
     }
@@ -54,23 +62,29 @@ export class CartService {
 
   formatProduct(product: Product, cartItem: CartItem): CartProduct {
     let price = this.getProductPrice(product, cartItem.unit);
-    let discountedPrice = product.discount !== 0 ? price * ((100 - product.discount) / 100) : price;
+    let discountedPrice =
+      product.discount !== 0 ? price * ((100 - product.discount) / 100) : price;
 
-    let name = `${product.name} ${cartItem.unit === CartUnit.Unit ? '' : '(' + cartItem.unit + ')'}`;
+    let name = `${product.name} ${
+      cartItem.unit === CartUnit.Unit ? '' : '(' + cartItem.unit + ')'
+    }`;
 
     let total = price * cartItem.quantity;
     let discountedTotal = discountedPrice * cartItem.quantity;
 
     this.total += discountedTotal;
 
-    let imageLocation = product.image_location === null ? 'placeholder.jpg' : product.image_location;
+    let imageLocation =
+      product.image_location === null
+        ? 'placeholder.jpg'
+        : product.image_location;
 
     return {
       name: name,
       price: total,
       discounted_price: discountedTotal,
       discount: product.discount,
-      image_location: imageLocation
+      image_location: imageLocation,
     };
   }
 
@@ -78,7 +92,9 @@ export class CartService {
     let customerType = this.authService.getUserType();
     switch (unit) {
       case 'Unit':
-        return customerType == 'Retail' ? product.retail_price : product.wholesale_price;
+        return customerType == 'Retail'
+          ? product.retail_price
+          : product.wholesale_price;
       case 'Box':
         return product.box_price;
       case 'Pallet':
@@ -90,7 +106,10 @@ export class CartService {
   async refreshCart() {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      this.cart = await this.dataService.processPost({ 'action': 'cart', 'customer_id': userId });
+      this.cart = await this.dataService.processPost({
+        action: 'cart',
+        customer_id: userId,
+      });
     } else {
       let cart = localStorage.getItem('cart');
       if (cart) {
@@ -102,18 +121,30 @@ export class CartService {
     this.cart = await this.checkCartStock();
   }
 
-  async addToCart(productId: number, quantity: number, unit: CartUnit = CartUnit.Unit, productName = "") {
+  async addToCart(
+    productId: number,
+    quantity: number,
+    unit: CartUnit = CartUnit.Unit,
+    productName = ''
+  ) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
       this.addToCartDatabase(userId, productId, quantity, unit);
     } else {
-      this.addToCartLocalStorage(productId, productName, quantity, unit)
+      this.addToCartLocalStorage(productId, productName, quantity, unit);
     }
   }
 
-  async addToCartLocalStorage(productId: number, productName: string, quantity: number, unit: CartUnit = CartUnit.Unit) {
+  async addToCartLocalStorage(
+    productId: number,
+    productName: string,
+    quantity: number,
+    unit: CartUnit = CartUnit.Unit
+  ) {
     var currentCartItems = this.cart;
-    const existingCartItemIndex = currentCartItems.findIndex(cartItem => cartItem.item_id === productId);
+    const existingCartItemIndex = currentCartItems.findIndex(
+      (cartItem) => cartItem.item_id === productId
+    );
 
     if (existingCartItemIndex !== -1) {
       this.formService.setPopupMessage('Item already in basket!', true);
@@ -124,7 +155,7 @@ export class CartService {
           item_id: productId,
           item_name: productName,
           quantity: quantity,
-          unit: unit
+          unit: unit,
         };
 
         currentCartItems.push(cartItem);
@@ -141,9 +172,19 @@ export class CartService {
     }
   }
 
-  async addToCartDatabase(userId: string, productId: number, quantity: number, unit: CartUnit = CartUnit.Unit) {
-    let cart = await this.dataService.processPost({ 'action': 'cart', 'customer_id': userId });
-    const rowIndex = cart.findIndex((item: any) => item.item_id === productId && item.unit === unit);
+  async addToCartDatabase(
+    userId: string,
+    productId: number,
+    quantity: number,
+    unit: CartUnit = CartUnit.Unit
+  ) {
+    let cart = await this.dataService.processPost({
+      action: 'cart',
+      customer_id: userId,
+    });
+    const rowIndex = cart.findIndex(
+      (item: any) => item.item_id === productId && item.unit === unit
+    );
 
     let response: Response | undefined;
     let popupMessage = 'Item added to cart!';
@@ -153,11 +194,21 @@ export class CartService {
         if (cart[rowIndex].quantity == quantity) {
           this.formService.setPopupMessage('Item already in basket!', true);
         } else {
-          response = await this.dataService.processPost({ 'action': 'update-cart', 'id': cart[rowIndex].id, 'quantity': quantity });
+          response = await this.dataService.processPost({
+            action: 'update-cart',
+            id: cart[rowIndex].id,
+            quantity: quantity,
+          });
           popupMessage = 'Cart updated!';
         }
       } else {
-        response = await this.dataService.processPost({ 'action': 'add-cart', 'customer_id': userId, 'product_id': productId, 'quantity': quantity, 'unit': unit });
+        response = await this.dataService.processPost({
+          action: 'add-cart',
+          customer_id: userId,
+          product_id: productId,
+          quantity: quantity,
+          unit: unit,
+        });
       }
 
       if (response?.success) {
@@ -165,18 +216,28 @@ export class CartService {
         this.formService.setPopupMessage(popupMessage, true);
         this.requestUpdate();
       } else {
-        this.formService.setPopupMessage('There was an issue adding this item!', true);
+        this.formService.setPopupMessage(
+          'There was an issue adding this item!',
+          true
+        );
       }
     }
   }
 
   async checkStock(quantity: number, productId: number, showPopup = false) {
-    let response = await this.dataService.processPost({ 'action': 'check-stock', 'id': productId });
+    let response = await this.dataService.processPost({
+      action: 'check-stock',
+      id: productId,
+    });
     if (response.quantity == null || response.quantity < quantity) {
-      showPopup && this.formService.setPopupMessage("There is no more stock of this item!", true);
+      showPopup &&
+        this.formService.setPopupMessage(
+          'There is no more stock of this item!',
+          true
+        );
       return false;
     }
-    return true
+    return true;
   }
 
   async removeFromCart(cartId: number) {
@@ -191,20 +252,27 @@ export class CartService {
   async removeFromCartLocalStorage(cartId: number) {
     this.cart = this.cart.filter((cartItem: CartItem) => cartItem.id != cartId);
     localStorage.setItem('cart', JSON.stringify(this.cart));
-    this.formService.setPopupMessage("Item removed successfully!", true);
+    this.formService.setPopupMessage('Item removed successfully!', true);
     await this.refreshCart();
     this.requestUpdate();
   }
 
   async removeFromCartDatabase(cartId: number, userId: string) {
-    let response: Response = await this.dataService.processPost({ 'action': 'remove-cart', 'customer_id': userId, 'cart_id': cartId })
+    let response: Response = await this.dataService.processPost({
+      action: 'remove-cart',
+      customer_id: userId,
+      cart_id: cartId,
+    });
 
     if (response.success) {
-      this.formService.setPopupMessage("Item removed successfully!", true);
+      this.formService.setPopupMessage('Item removed successfully!', true);
       await this.refreshCart();
       this.requestUpdate();
     } else {
-      this.formService.setPopupMessage("There was an issue removing this item!", true);
+      this.formService.setPopupMessage(
+        'There was an issue removing this item!',
+        true
+      );
     }
   }
 
@@ -219,20 +287,29 @@ export class CartService {
 
   async clearCartLocalStorage(showPopup = true) {
     localStorage.removeItem('cart');
-    showPopup && this.formService.setPopupMessage("Cart cleared successfully!", true);
+    showPopup &&
+      this.formService.setPopupMessage('Cart cleared successfully!', true);
     await this.refreshCart();
     this.requestUpdate();
   }
 
   async clearCartDatabase(userId: string, showPopup = true) {
-    let response: Response = await this.dataService.processPost({ 'action': 'clear-cart', 'customer_id': userId });
+    let response: Response = await this.dataService.processPost({
+      action: 'clear-cart',
+      customer_id: userId,
+    });
 
     if (response.success) {
-      showPopup && this.formService.setPopupMessage("Cart cleared successfully!", true);
+      showPopup &&
+        this.formService.setPopupMessage('Cart cleared successfully!', true);
       await this.refreshCart();
       this.requestUpdate();
     } else {
-      showPopup && this.formService.setPopupMessage("There was an issue clearing your cart!", true);
+      showPopup &&
+        this.formService.setPopupMessage(
+          'There was an issue clearing your cart!',
+          true
+        );
     }
   }
 
@@ -241,7 +318,10 @@ export class CartService {
     if (this.cart.length > 0 && this.cart[0].id != null) {
       let total = 0;
       for (const item of this.cart) {
-        let product: Product = await this.dataService.processGet('product-from-id', { filter: item.item_id.toString() });
+        let product: Product = await this.dataService.processGet(
+          'product-from-id',
+          { filter: item.item_id.toString() }
+        );
         let formattedProduct = this.formatProduct(product, item);
 
         total += formattedProduct.discounted_price;
@@ -299,24 +379,32 @@ export class CartService {
       let customerID = this.authService.getUserID();
       if (customerID != null) {
         let form = {
-          action: "add",
+          action: 'add',
           item_id: productID,
           customer_id: customerID,
-          table_name: "wishlist"
+          table_name: 'wishlist',
         };
-        let inWishlist: any = await this.dataService.processGet("is-product-in-wishlist", { id: customerID, product_id: productID }, true);
+        let inWishlist: any = await this.dataService.processGet(
+          'is-product-in-wishlist',
+          { id: customerID, product_id: productID },
+          false
+        );
 
-        let popupMessage = "Product already in wishlist!";
+        let popupMessage = 'Product already in wishlist!';
 
         if (inWishlist < 1) {
-          let response = await lastValueFrom(this.dataService.submitFormData(form));
-          popupMessage = response.success ? "Product added to wishlist!" : "Whoops! Something went wrong. Please try again";
+          let response = await lastValueFrom(
+            this.dataService.submitFormData(form)
+          );
+          popupMessage = response.success
+            ? 'Product added to wishlist!'
+            : 'Whoops! Something went wrong. Please try again';
         }
 
         this.formService.setPopupMessage(popupMessage);
       }
     } else {
-      this.formService.setPopupMessage("Please login to use your wishlist!");
+      this.formService.setPopupMessage('Please login to use your wishlist!');
     }
     this.formService.showPopup();
   }
@@ -327,16 +415,20 @@ export class CartService {
       let customerID = this.authService.getUserID();
       if (customerID != null) {
         let form = {
-          action: "delete",
+          action: 'delete',
           id: wishlistID,
-          table_name: "wishlist"
+          table_name: 'wishlist',
         };
-        let response = await lastValueFrom(this.dataService.submitFormData(form));
-        let popupMessage = response.success ? "Product removed from wishlist!" : "Whoops! Something went wrong. Please try again";
+        let response = await lastValueFrom(
+          this.dataService.submitFormData(form)
+        );
+        let popupMessage = response.success
+          ? 'Product removed from wishlist!'
+          : 'Whoops! Something went wrong. Please try again';
         this.formService.setPopupMessage(popupMessage);
       }
     } else {
-      this.formService.setPopupMessage("Please login to use your wishlist!");
+      this.formService.setPopupMessage('Please login to use your wishlist!');
     }
     this.formService.showPopup();
   }
