@@ -44,7 +44,9 @@ import { AuthService } from './services/auth.service';
 import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.component';
 import { ProductComponent } from './components/product/product.component';
 
-export function initializeApp(authService: AuthService): () => Promise<void> {
+export function initializeApp(
+  authService: AuthService
+): () => Promise<boolean> {
   return () => authService.checkLogin();
 }
 
@@ -83,7 +85,7 @@ export function initializeApp(authService: AuthService): () => Promise<void> {
     DocumentViewerComponent,
     OrderCompleteComponent,
     MobileNavbarComponent,
-    ProductComponent
+    ProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,9 +97,7 @@ export function initializeApp(authService: AuthService): () => Promise<void> {
     FormsModule,
     NgxPayPalModule,
   ],
-  providers: [
-    {provide: LocationStrategy, useClass: HashLocationStrategy}
-  ],
-  bootstrap: [AppComponent]
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

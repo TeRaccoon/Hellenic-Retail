@@ -1,31 +1,46 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { FormService } from './form.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(private authService: AuthService, private router: Router, private formService: FormService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private formService: FormService
+  ) {
     this.checkLoginAndRedirect();
   }
 
   private checkLoginAndRedirect(): void {
-    this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
-      if (!loggedIn) {
-        this.router.navigate([this.router.url]);
-        this.formService.showLoginForm();
+    this.authService.waitForLoginCheck().then((loggedIn: boolean) => {
+      if (loggedIn) {
+        return true;
       } else {
-        this.formService.hideLoginForm();
+        return false;
       }
     });
   }
 
-  canActivate(
+  async canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.authService.isLoggedIn();
+    state: RouterStateSnapshot
+  ): Promise<boolean | UrlTree> {
+    const isLoggedIn = await this.authService.checkLogin();
+
+    if (isLoggedIn) {
+      return true;
+    } else {
+      return this.router.parseUrl('/login');
+    }
   }
 }

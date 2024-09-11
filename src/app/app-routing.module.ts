@@ -27,12 +27,13 @@ const routes: Routes = [
   { path: 'create-account', component: CreateAccountFormComponent },
   { path: 'order-complete', component: OrderCompleteComponent },
   { path: 'documents/:documentName', component: DocumentViewerComponent },
-  { path: '**', redirectTo: '/home' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {
   constructor(private router: Router) {
@@ -41,7 +42,7 @@ export class AppRoutingModule {
         window.scroll({
           top: 0,
           left: 0,
-          behavior: 'smooth'
+          behavior: 'smooth',
         });
       }
     });

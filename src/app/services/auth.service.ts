@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UrlService } from './url.service';
 
@@ -20,27 +20,27 @@ export class AuthService {
     this.checkLogin();
   }
 
-  async checkLogin(): Promise<void> {
-    const url = this.url;
-
-    let response = await lastValueFrom<any>(
+  async checkLogin(): Promise<boolean> {
+    const response = await lastValueFrom<any>(
       this.http.post(
-        url,
+        this.url,
         { action: 'check-login-customer' },
         { withCredentials: true }
       )
     );
+
     if (response.data != null) {
+      this.isAuthenticated = true;
       this.userID = response.data.id;
       this.userType = response.data.customer_type;
       this.isAuthenticatedObservable.next(true);
-      this.isAuthenticated = true;
     } else {
-      this.isAuthenticatedObservable.next(false);
       this.isAuthenticated = false;
+      this.isAuthenticatedObservable.next(false);
       this.userType = 'Retail';
       this.userID = null;
     }
+    return this.isAuthenticated;
   }
 
   login(userID: string) {
@@ -73,8 +73,14 @@ export class AuthService {
     return this.isAuthenticatedObservable.asObservable();
   }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     return this.isAuthenticated;
+  }
+
+  waitForLoginCheck(): Promise<boolean> {
+    return lastValueFrom(
+      this.isAuthenticatedObservable.asObservable().pipe(take(1))
+    );
   }
 
   getUserID() {
