@@ -1,5 +1,5 @@
 <div class="checkout-view-container">
-    <app-checkout-coupon></app-checkout-coupon>
+    <app-checkout-coupon (couponEvent)="applyCoupon($event)"></app-checkout-coupon>
     <div class="details-container">
         <div class="checkout-billing-container">
             <h1>Billing details</h1>
