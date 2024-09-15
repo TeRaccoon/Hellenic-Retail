@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { CartService } from '../../services/cart.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,6 +26,7 @@ import { ProductDetails } from 'src/app/common/types/shop';
   selector: 'app-view-details',
   templateUrl: './view-details.component.html',
   styleUrls: ['./view-details.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('clipboardAnimation', [
       state(
@@ -68,9 +69,7 @@ export class ViewDetailsComponent {
     private clipboard: Clipboard,
     private location: Location,
     private formService: FormService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -126,7 +125,12 @@ export class ViewDetailsComponent {
   }
 
   addToCart(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity, this.unit, this.product?.name);
+    this.cartService.addToCart(
+      productID,
+      quantity,
+      this.unit,
+      this.product?.name
+    );
   }
 
   addToWishlist() {
