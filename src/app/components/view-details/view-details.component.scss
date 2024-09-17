@@ -22,6 +22,18 @@ $hellenicblue: #008cff;
             font-size: 20px;
         }
 
+        .retail-price-container {
+            div {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+
+            p {
+                margin: 0;
+            }
+        }
+
         .wholesale-container {
             font-size: 18px;
 
