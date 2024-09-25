@@ -12,12 +12,10 @@
                             '1.2-2' }}
                         </p>
                     </div>
-
                     <p *ngIf="product.retail_box_price">
                         <span>Box: </span><span>£{{ product.retail_box_price | number: '1.2-2' }}</span>
                     </p>
                 </div>
-
             </ng-container>
             <ng-template #wholesale>
                 <div class="wholesale-container">
@@ -55,8 +53,10 @@
         <div class="purchasing-options">
             <div>
                 <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
-                <select *ngIf="userType == 'Wholesale'" (change)="changePackageType($event)">
+                <select *ngIf="userType == 'Wholesale' || product.retail_box_price"
+                    (change)="changePackageType($event)">
                     <option>Unit</option>
+                    <option value="Retail Box" *ngIf="product.retail_box_price">Box</option>
                     <option *ngIf="product.box_price">Box</option>
                     <option *ngIf="product.pallet_price">Pallet</option>
                 </select>

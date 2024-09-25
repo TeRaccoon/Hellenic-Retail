@@ -99,6 +99,8 @@ export class CartService {
         return product.box_price;
       case 'Pallet':
         return product.pallet_price;
+      case 'Retail Box':
+        return product.retail_box_price;
     }
     return 0;
   }

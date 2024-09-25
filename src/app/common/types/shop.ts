@@ -3,6 +3,7 @@ export interface Product {
   retail_price: number;
   wholesale_price: number;
   box_price: number;
+  retail_box_price: number;
   pallet_price: number;
   discount: number;
   image_location: string;
