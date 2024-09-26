@@ -46,20 +46,20 @@
                 </ng-template>
             </td>
         </tr>
-        <tr>
-            <td>
-                <p class="title">Total</p>
-            </td>
-            <td>
-                <p class="row-price">{{ checkoutSummary.total | currency: 'GBP' }}</p>
-            </td>
-        </tr>
         <tr *ngIf="checkoutSummary.discount != null">
             <td>
                 <p class="title">{{ checkoutSummary.discount.title }}</p>
             </td>
             <td>
                 <p class="row-price">{{ checkoutSummary.discount.value | currency: 'GBP' }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="title">Total</p>
+            </td>
+            <td>
+                <p class="row-price">{{ checkoutSummary.total | currency: 'GBP' }}</p>
             </td>
         </tr>
     </ng-container>

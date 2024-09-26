@@ -4,7 +4,6 @@ import { DataService } from '../../services/data.service';
 import { Coupon } from 'src/app/common/types/checkout';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
-import { RouterTestingHarness } from '@angular/router/testing';
 
 @Component({
   selector: 'app-checkout-coupon',

@@ -17,16 +17,11 @@ import { UrlService } from './url.service';
 export class DataService {
   shopFilter = new BehaviorSubject<string | null>(null);
 
-  visibleCategoryNames: any[] = [];
-  visibleCategoryLocations: any[] = [];
-
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     private urlService: UrlService
-  ) {
-    this.loadStandardData();
-  }
+  ) {}
 
   async processPost(
     body: Record<string, any>,
@@ -99,26 +94,5 @@ export class DataService {
 
   getShopFilter() {
     return this.shopFilter.asObservable();
-  }
-
-  async loadStandardData() {
-    await this.loadVisibleCategories();
-  }
-
-  async loadVisibleCategories() {
-    let categories = await this.processGet('visible-categories', {}, true);
-
-    for (const category of categories) {
-      this.visibleCategoryNames.push(category.name);
-      this.visibleCategoryLocations.push(category.location);
-    }
-  }
-
-  getVisibleCategoryNames() {
-    return this.visibleCategoryNames;
-  }
-
-  getVisibleCategoryLocations() {
-    return this.visibleCategoryLocations;
   }
 }
