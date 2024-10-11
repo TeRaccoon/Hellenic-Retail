@@ -4,6 +4,8 @@ import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { FilterService } from 'src/app/services/filter.service';
 import { UrlService } from 'src/app/services/url.service';
+import { CacheService } from 'src/app/services/cache.service';
+import { Category, SubCategory } from 'src/app/common/types/cache';
 
 @Component({
   selector: 'app-navbar-category-search',
@@ -20,8 +22,12 @@ export class NavbarCategorySearchComponent {
   cartVisible = 'hidden';
   cartState: string = 'inactive';
 
-  subcategories: any[] = [];
-  categories: string[] = [];
+  categories: Category[] = [];
+  categoryGroups: {
+    category: string;
+    subcategories: string[];
+  }[] = [];
+
   categoriesShown = false;
   products: any[] = [];
 
@@ -35,6 +41,7 @@ export class NavbarCategorySearchComponent {
     private urlService: UrlService,
     private dataService: DataService,
     private filterService: FilterService,
+    private cacheService: CacheService,
     private router: Router
   ) {
     const handleEvent = (e: Event) => {
@@ -55,16 +62,25 @@ export class NavbarCategorySearchComponent {
 
   ngOnInit() {
     this.loadNavBar();
-    this.categories = this.dataService.getVisibleCategoryNames();
+  }
+
+  async loadCategories() {
+    this.categories = await this.cacheService.getCategories();
+    let subCategories: SubCategory[] =
+      await this.cacheService.getSubCategories();
+
+    this.categories.forEach((category) => {
+      this.categoryGroups.push({
+        category: category.name,
+        subcategories: subCategories
+          .filter((s) => s.category_id == category.id)
+          .map((s) => s.name),
+      });
+    });
   }
 
   async loadNavBar() {
-    this.categories = this.dataService.getVisibleCategoryNames();
-
-    let subcategories = await this.dataService.processGet('subcategories');
-    if (subcategories != null) {
-      this.subcategories = subcategories;
-    }
+    await this.loadCategories();
 
     let products: any = await this.dataService.processGet(
       'products',

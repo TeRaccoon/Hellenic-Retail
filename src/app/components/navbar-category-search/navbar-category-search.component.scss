@@ -1,15 +1,18 @@
-$hellenicblue: rgb(0, 140, 255);
+$hellenicblue: #008cff;
+
 .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
     background-color: $hellenicblue;
+
     .category-bar {
         width: 68vw;
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-weight: bold;
+
         .nav-links {
             list-style: none;
             display: flex;
@@ -19,10 +22,12 @@ $hellenicblue: rgb(0, 140, 255);
             margin-left: 15.8vw;
             margin-block: 0px;
             padding: 0px;
+
             .dropdown {
                 position: relative;
                 color: #FFFFFF;
                 padding: 5px 10px;
+
                 .nav-link {
                     font-size: 18px;
                     color: #ffffff;
@@ -31,44 +36,76 @@ $hellenicblue: rgb(0, 140, 255);
                     display: inline-block;
                     margin: 10px 0 10px 0;
                 }
+
                 .text-icon {
                     padding: 0 15px;
                 }
+
                 .dropdown-content {
                     .categories {
-                        a {
-                            text-wrap: pretty;
-                            border-bottom: 1px solid #b9b9b9;
-                            display: block;
-                            padding: 10px 15px;
-                            color: #333333;
-                            text-decoration: none;
-                            transition: background-color 0.5s ease, color 0.5s ease;
-                        }
-                        a:hover {
-                            color: $hellenicblue;
-                            background-color: #eeeeee;
+                        .category-group {
+                            a {
+                                text-wrap: pretty;
+                                border-bottom: 1px solid #b9b9b9;
+                                display: block;
+                                padding: 10px 15px;
+                                color: #333333;
+                                text-decoration: none;
+                                transition: background-color 0.5s ease, color 0.5s ease;
+
+                                &:hover {
+                                    color: $hellenicblue;
+                                    background-color: #eeeeee;
+                                }
+                            }
+
+                            .sub-categories {
+                                max-height: 0px;
+                                opacity: 0;
+                                overflow: hidden;
+                                transition: max-height 1s ease 0.7s, opacity 1s ease 0.7s;
+                                background-color: $hellenicblue;
+
+                                a {
+                                    padding: 3px 5px;
+                                    background-color: white;
+                                    margin-left: 15px;
+                                    font-size: 16px;
+                                }
+                            }
+
+                            &:hover {
+                                .sub-categories {
+                                    max-height: 200px;
+                                    opacity: 1;
+                                }
+                            }
                         }
                     }
                 }
             }
+
             .hamburger {
                 background-color: rgb(0, 119, 255);
             }
         }
     }
 }
+
 .search-container {
     display: flex;
     flex: 0 1 50%;
     flex-direction: column;
     position: relative;
+
     .search-options {
         width: 100%;
         display: flex;
+
         select {
             cursor: pointer;
         }
+
         input,
         select,
         button {
@@ -78,10 +115,12 @@ $hellenicblue: rgb(0, 140, 255);
             font-size: 100%;
             padding: 8px 10px;
         }
+
         input {
             width: 100%;
             cursor: text;
         }
+
         button {
             background-color: $hellenicblue;
             color: #FFFFFF;
@@ -89,8 +128,10 @@ $hellenicblue: rgb(0, 140, 255);
             cursor: pointer;
         }
     }
+
     .search-dropdown {
         z-index: 2;
+
         .search-dropdown-items {
             position: absolute;
             background-color: #FFFFFF;
@@ -106,6 +147,7 @@ $hellenicblue: rgb(0, 140, 255);
             transform: translateX(-50%);
             transform-origin: top center;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+
             .search-results {
                 transition: background-color 0.3s ease;
                 display: flex;
@@ -115,11 +157,13 @@ $hellenicblue: rgb(0, 140, 255);
                 padding: 8px;
                 text-decoration: none;
                 transition: background-color 0.6s ease;
+
                 div {
                     display: flex;
                     align-items: center;
                     width: 50%
                 }
+
                 img {
                     margin: 5px;
                     max-width: 40px;
@@ -127,24 +171,29 @@ $hellenicblue: rgb(0, 140, 255);
                     object-fit: contain;
                     border-radius: 40px;
                 }
+
                 p {
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     color: black;
                 }
+
                 .price-container {
                     display: flex;
                     justify-content: space-between;
                     width: 20%;
+
                     .price {
                         font-weight: bold;
                     }
+
                     .old-price {
                         text-decoration: line-through;
                         color: #333333;
                     }
                 }
+
                 &:hover {
                     background-color: #eeeeee;
                 }
@@ -161,43 +210,56 @@ $hellenicblue: rgb(0, 140, 255);
 }
 
 
-@media screen and (max-width: 1079px) { //Mobile
+@media screen and (max-width: 1079px) {
+
+    //Mobile
     .container {
         background-color: white;
     }
+
     .category-bar {
-        width: 100%!important;
+        width: 100% !important;
     }
+
     .nav-links {
-        margin-left: 0%!important;
+        margin-left: 0% !important;
     }
+
     .nav-link {
-        display: none!important;
+        display: none !important;
     }
-    .nav-logo { 
+
+    .nav-logo {
         visibility: visible;
         display: flex;
         height: 30vw;
         padding: 3px;
         justify-content: center;
+
         img {
             height: 30vw;
             margin-bottom: 2vw;
         }
     }
+
     .hamburger {
-        display: flex; align-items: center;
+        display: flex;
+        align-items: center;
     }
+
     .ng-fa-icon {
         margin: 12px 0;
     }
+
     .visible {
-        width: 50%!important;
-        visibility: visible!important;
+        width: 50% !important;
+        visibility: visible !important;
     }
+
     .dropdown {
-        padding: 5px 5px!important;
+        padding: 5px 5px !important;
     }
+
     .dropdown-content {
         height: 100%;
         width: 0;
@@ -212,41 +274,49 @@ $hellenicblue: rgb(0, 140, 255);
         flex-direction: column;
         justify-content: space-between;
         max-width: fit-content;
-        margin-top: 77px!important;
+        margin-top: 77px !important;
     }
+
     .search-container {
         display: flex;
-        padding: 8px 10px!important;  
+        padding: 8px 10px !important;
     }
+
     .search-options {
         display: flex;
         height: 40px;
         justify-content: flex-end;
+
         select {
             display: none;
         }
     }
+
     .search-dropdown-items {
         div {
             p {
-                line-height: 12px!important;
-                max-height: 36px!important;
-                white-space: normal!important;
+                line-height: 12px !important;
+                max-height: 36px !important;
+                white-space: normal !important;
             }
         }
     }
+
     .search-results {
-        font-size: 12px!important;
-        gap: 3px!important;
+        font-size: 12px !important;
+        gap: 3px !important;
+
         p {
-            text-overflow: clip!important;
+            text-overflow: clip !important;
         }
     }
+
     .search-results-title {
-        width: 75%!important;
+        width: 75% !important;
     }
+
     .price-container {
-        width: 30%!important;
+        width: 30% !important;
     }
 }
 
@@ -256,44 +326,54 @@ $hellenicblue: rgb(0, 140, 255);
             display: none;
         }
     }
+
     .logo-container {
         margin-left: 17px;
     }
 }
 
-@media screen and (max-width: 425px) { //small mobile
+@media screen and (max-width: 425px) {
+
+    //small mobile
     .search-container {
         flex: 0 1 75%;
     }
+
     .search-dropdown-items {
         div {
             p {
-                line-height: 9px!important;
-                max-height: 27px!important;
-                white-space: normal!important;
+                line-height: 9px !important;
+                max-height: 27px !important;
+                white-space: normal !important;
             }
         }
     }
+
     .search-results {
-        font-size: 9px!important;
-        gap: 3px!important;
+        font-size: 9px !important;
+        gap: 3px !important;
     }
+
     .search-results-title {
-        width: 75%!important;
+        width: 75% !important;
     }
+
     .price-container {
-        width: 32%!important;
+        width: 32% !important;
     }
 }
 
 
-@media screen and (min-width: 1080px) { //Desktop
+@media screen and (min-width: 1080px) {
+
+    //Desktop
     .dropdown:hover .dropdown-content {
         opacity: 1;
         visibility: visible;
         transform: translateX(-50%);
         transition-delay: 0s, 0s, 0s;
     }
+
     .dropdown-content {
         position: absolute;
         background-color: #FFFFFF;
@@ -307,22 +387,21 @@ $hellenicblue: rgb(0, 140, 255);
         transform: translateX(-50%);
         transform-origin: top center;
         transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
-        }
-        .account-section {
-            display: none; 
-        }
-    .nav-logo { 
+    }
+
+    .account-section {
         display: none;
     }
+
+    .nav-logo {
+        display: none;
+    }
+
     .search-container {
         visibility: hidden;
     }
+
     .logo-container {
         display: none;
     }
 }
-
-
-
-
-

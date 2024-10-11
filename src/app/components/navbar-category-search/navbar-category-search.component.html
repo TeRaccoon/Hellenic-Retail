@@ -1,7 +1,7 @@
 <div #categorySearch class="container">
     <nav class="category-bar">
         <ul class="nav-links">
-            <ng-container *ngIf="categories">
+            <ng-container *ngIf="categoryGroups">
                 <li class="dropdown hamburger" (click)="toggleCategory()">
                     <p class="nav-link">Shop By Categories</p>
                     <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
@@ -11,9 +11,17 @@
                                 <img [src]='imageUrl + "/static/logo.jpg"' alt="Food Retail Logo">
                             </a>
                             <div class="categories">
-                                <a *ngFor="let category of categories; let i = index;" (click)="goToCategory(category)">
-                                    {{ category }}
-                                </a>
+                                <div *ngFor="let group of categoryGroups" class="category-group">
+                                    <a (click)="goToCategory(group.category)">
+                                        {{ group.category }}
+                                    </a>
+                                    <div class="sub-categories">
+                                        <a *ngFor="let subcategory of group.subcategories"
+                                            (click)="goToCategory(subcategory)">
+                                            {{ subcategory }}
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -31,7 +39,7 @@
                 <select (change)="changeCategory($event)">
                     <option value="all">All Categories</option>
                     <option *ngFor="let category of categories">
-                        {{ category }}
+                        {{ category.name }}
                     </option>
                 </select>
                 <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch" /></button>

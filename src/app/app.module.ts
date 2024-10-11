@@ -43,6 +43,7 @@ import { OrderCompleteComponent } from './components/order-complete/order-comple
 import { AuthService } from './services/auth.service';
 import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.component';
 import { ProductComponent } from './components/product/product.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 export function initializeApp(
   authService: AuthService
@@ -86,6 +87,7 @@ export function initializeApp(
     OrderCompleteComponent,
     MobileNavbarComponent,
     ProductComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,

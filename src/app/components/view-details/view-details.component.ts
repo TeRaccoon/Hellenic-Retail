@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Pipe,
+  Renderer2,
+  ViewEncapsulation,
+} from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { CartService } from '../../services/cart.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,11 +27,13 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
 import { CartUnit } from 'src/app/common/types/cart';
 import { ProductDetails } from 'src/app/common/types/shop';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-details',
   templateUrl: './view-details.component.html',
   styleUrls: ['./view-details.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('clipboardAnimation', [
       state(
@@ -67,10 +75,11 @@ export class ViewDetailsComponent {
     private router: Router,
     private clipboard: Clipboard,
     private location: Location,
-    private formService: FormService
-  ) {
-
-  }
+    private formService: FormService,
+    private sanitizer: DomSanitizer,
+    private elementRef: ElementRef,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -126,7 +135,12 @@ export class ViewDetailsComponent {
   }
 
   addToCart(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity, this.unit, this.product?.name);
+    this.cartService.addToCart(
+      productID,
+      quantity,
+      this.unit,
+      this.product?.name
+    );
   }
 
   addToWishlist() {

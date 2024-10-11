@@ -22,6 +22,7 @@ import {
 } from '@angular/animations';
 import { CartService } from 'src/app/services/cart.service';
 import { FilterService } from 'src/app/services/filter.service';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-navbar',
@@ -80,7 +81,8 @@ export class NavbarComponent {
     private formService: FormService,
     private filterService: FilterService,
     private cartService: CartService,
-    private renderService: RenderService
+    private renderService: RenderService,
+    private cacheService: CacheService
   ) {
     this.imageUrl = this.urlService.getUrl('uploads');
   }
@@ -124,7 +126,9 @@ export class NavbarComponent {
   }
 
   async loadNavBar() {
-    this.categories = this.dataService.getVisibleCategoryNames();
+    this.categories = (await this.cacheService.getCategories()).map(
+      (c) => c.name
+    );
 
     let subcategories = await this.dataService.processGet('subcategories');
     if (subcategories != null) {

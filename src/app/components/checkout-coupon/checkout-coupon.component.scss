@@ -1,4 +1,5 @@
 $hellenicblue: rgb(0, 140, 255);
+
 .coupon-section {
     .coupon-information {
         display: flex;
@@ -6,15 +7,18 @@ $hellenicblue: rgb(0, 140, 255);
         justify-content: center;
         border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
+
         p {
             margin: 10px;
         }
+
         a {
             font-weight: bold;
             color: $hellenicblue;
             cursor: pointer;
         }
     }
+
     .coupon-form {
         width: 45%;
         margin: 20px auto;
@@ -23,13 +27,16 @@ $hellenicblue: rgb(0, 140, 255);
         border: 3px dashed transparent;
         overflow: hidden;
         transition: padding 1.6s ease, height 1.6s ease, border 0.4s ease 1.2s;
+
         .heading {
             p {
                 margin: 8px;
             }
         }
+
         .options {
             display: flex;
+
             button {
                 cursor: pointer;
                 font-family: 'Poppins', sans-serif;
@@ -41,18 +48,21 @@ $hellenicblue: rgb(0, 140, 255);
                 margin: 5px;
                 flex-shrink: 0;
             }
+
             input {
                 font-size: 15px;
                 padding: 10px 15px;
                 border: 1px solid #cccccc;
                 margin: 5px;
                 width: 100%;
+
                 &:focus::placeholder {
                     color: white;
                 }
             }
         }
     }
+
     .shown {
         padding: 20px;
         height: 100px;
@@ -63,14 +73,16 @@ $hellenicblue: rgb(0, 140, 255);
 
 @media screen and (max-width: 1079px) {
     .options {
-        flex-wrap: wrap;    
+        flex-wrap: wrap;
         gap: 3px;
     }
+
     .shown {
-        height: auto!important;
-        padding: 10px!important;
+        height: auto !important;
+        padding: 10px !important;
     }
+
     .coupon-form {
-        width: 75%!important;
+        width: 75% !important;
     }
 }
