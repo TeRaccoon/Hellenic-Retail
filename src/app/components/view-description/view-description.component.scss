@@ -1,0 +1,26 @@
+.description {
+    width: 100%;
+    max-width: 1140px; //aprox max width of product-view-main 
+    max-height: 100px;
+    overflow-y: auto;
+    margin-top: 44px;
+    padding: 0!important;
+        word-wrap: break-word;
+        overflow: auto;
+        max-height: 6em;
+        line-height: 1.2em;
+}
+
+
+@media screen and (max-width: 1079px) {
+    .description {
+        margin-top: 20px;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .description {
+        margin-top: 0;
+    }
+}

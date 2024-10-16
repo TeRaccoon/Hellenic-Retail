@@ -44,6 +44,7 @@ import { AuthService } from './services/auth.service';
 import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.component';
 import { ProductComponent } from './components/product/product.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { ViewDescriptionComponent } from './components/view-description/view-description.component';
 
 export function initializeApp(
   authService: AuthService
@@ -88,6 +89,7 @@ export function initializeApp(
     MobileNavbarComponent,
     ProductComponent,
     SafeHtmlPipe,
+    ViewDescriptionComponent,
   ],
   imports: [
     BrowserModule,

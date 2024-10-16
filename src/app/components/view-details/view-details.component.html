@@ -49,7 +49,6 @@
         <ng-container *ngIf="stock < 1">
             <p class="quantity-message">Out of stock!</p>
         </ng-container>
-        <p class="description ql-editor" [innerHTML]="product.description | safeHtml"></p>
         <div class="purchasing-options">
             <div>
                 <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">

@@ -1,6 +1,9 @@
 <div class="product-view-container">
-    <app-view-image></app-view-image>
-    <app-view-details></app-view-details>
-    <app-image-viewer />
+    <div class="product-view-main">
+        <app-view-image></app-view-image>
+        <app-view-details></app-view-details>
+    </div>
+        <app-view-description [description]="product!.description" />
+        <app-image-viewer />
 </div>
 <app-footer />

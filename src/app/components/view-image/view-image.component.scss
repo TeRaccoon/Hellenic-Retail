@@ -58,6 +58,7 @@ $hellenicblue: #008cff;
 @media screen and (max-width: 1079px) {
     .view-image-container {
         flex-direction: column-reverse!important;
+        width: 35vw;
         .discount-banner {
             font-size: 15px;
         }
@@ -70,5 +71,11 @@ $hellenicblue: #008cff;
         width: auto!important;
         height: auto!important;
         margin-right: 0!important;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .view-image-container {
+        width: auto;
     }
 }
