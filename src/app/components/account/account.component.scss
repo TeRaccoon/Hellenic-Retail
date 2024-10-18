@@ -229,3 +229,18 @@ $hellenicblue: rgb(0, 140, 255);
         }
     }
 }
+
+@media screen and (max-width: 425px) {
+    .account-container {
+        width: 90%!important;
+    }
+    .order-history {
+        padding: 10px!important;
+    }
+    .address-book {
+        padding: 10px!important;
+    }
+    .order-history-table {
+        font-size: 7px!important;
+    }
+}
