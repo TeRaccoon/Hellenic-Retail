@@ -29,6 +29,7 @@ import {
 import { CheckoutFormFull } from '../../common/types/checkout';
 import { Response } from '../../common/types/data-response';
 import { AccountService } from 'src/app/services/account.service';
+import { ConstManager } from 'src/app/common/const/const-manager';
 
 @Component({
   selector: 'app-checkout',
@@ -83,7 +84,8 @@ export class CheckoutComponent {
     private formService: FormService,
     private checkoutService: CheckoutService,
     private mailService: MailService,
-    private router: Router
+    private router: Router,
+    private consts: ConstManager
   ) {
     this.billingForm = this.fb.group({
       'First Name': ['', Validators.required],
@@ -241,7 +243,8 @@ export class CheckoutComponent {
       };
     }
 
-    let delivery = subtotal < 30 ? 7.5 : 0;
+    let deliveryMinimum = await this.consts.getConstant('delivery-minimum');
+    let delivery = subtotal < deliveryMinimum ? 7.5 : 0;
     // let vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2)); This is VAT added onto the product prices which may already have VAT
     let vat = (subtotal * 0.2) / (1 + 0.2); //This is VAT taken from the products
 
@@ -408,9 +411,9 @@ export class CheckoutComponent {
 
       let response = await this.sendEmailConfirmation();
       if (response.success) {
-        // setTimeout(() => {
-        //   this.router.navigate(['/order-complete']);
-        // }, 3000);
+        setTimeout(() => {
+          this.router.navigate(['/order-complete']);
+        }, 3000);
       } else {
         this.orderError = 'There was an error sending your email confirmation!';
       }

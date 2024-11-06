@@ -37,7 +37,7 @@
             <td>
                 <p class="title">Delivery</p>
             </td>
-            <td *ngIf="checkoutSummary.total < 30; else elseBlock">
+            <td *ngIf="checkoutSummary.total < deliveryMinimum; else elseBlock">
                 <p class="row-price">£7.50</p>
             </td>
             <td>
