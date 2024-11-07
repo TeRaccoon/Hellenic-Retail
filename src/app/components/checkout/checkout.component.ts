@@ -297,7 +297,6 @@ export class CheckoutComponent {
     let success = await this.processInvoice(formData);
 
     if (success) {
-      console.log(this.coupon);
       if (this.coupon != null) {
         success = await this.applyInvoiceDiscount(formData);
       }

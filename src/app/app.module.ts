@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -43,6 +43,11 @@ import { OrderCompleteComponent } from './components/order-complete/order-comple
 import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.component';
 import { ProductComponent } from './components/product/product.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { ConfigService } from './services/config.service';
+
+export function initConfig(configService: ConfigService) {
+  return () => configService.loadConfig();
+}
 
 @NgModule({
   declarations: [
@@ -92,7 +97,16 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     FormsModule,
     NgxPayPalModule,
   ],
-  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
+  providers: [
+    ConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initConfig,
+      deps: [ConfigService],
+      multi: true,
+    },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
