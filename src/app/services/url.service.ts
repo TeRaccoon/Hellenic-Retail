@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
 
-const HOST_NAME = 'http://localhost/';
 const API_EXTENSION = 'API/';
 const UPLOAD_EXTENSION = 'uploads/';
 const DATA_PATH = API_EXTENSION + 'manage_data.php';
