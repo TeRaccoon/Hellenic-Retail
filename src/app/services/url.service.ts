@@ -23,7 +23,7 @@ export class UrlService {
   }
 
   getUrl(extension = 'api', full = true) {
-    var url = full ? HOST_NAME : '';
+    var url = full ? this.HOST_NAME : '';
     switch (extension) {
       case 'uploads':
         return (url += UPLOAD_EXTENSION);
