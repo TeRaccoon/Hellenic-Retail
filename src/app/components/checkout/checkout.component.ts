@@ -29,7 +29,7 @@ import {
 import { CheckoutFormFull } from '../../common/types/checkout';
 import { Response } from '../../common/types/data-response';
 import { AccountService } from 'src/app/services/account.service';
-import { ConstManager } from 'src/app/common/const/const-manager';
+import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 
 @Component({
   selector: 'app-checkout',
@@ -74,6 +74,8 @@ export class CheckoutComponent {
 
   invoiceId: number | null = null;
   originalSubtotal: number | null = null;
+
+  supportEmail = '';
 
   constructor(
     private accountService: AccountService,
@@ -120,6 +122,7 @@ export class CheckoutComponent {
     });
 
     this.checkoutSummary = this.checkoutService.getCheckoutSummary();
+    this.supportEmail = this.consts.getConstant(settingKeys.support_email);
   }
 
   ngOnInit() {
@@ -243,7 +246,9 @@ export class CheckoutComponent {
       };
     }
 
-    let deliveryMinimum = await this.consts.getConstant('delivery-minimum');
+    let deliveryMinimum = await this.consts.getConstant(
+      settingKeys.free_delivery_minimum
+    );
     let delivery = subtotal < deliveryMinimum ? 7.5 : 0;
     // let vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2)); This is VAT added onto the product prices which may already have VAT
     let vat = (subtotal * 0.2) / (1 + 0.2); //This is VAT taken from the products

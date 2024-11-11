@@ -6,5 +6,6 @@
         <p><strong>Order Reference:</strong> {{ orderDetails.reference }}</p>
         <p><strong>Total Amount:</strong> £{{ orderDetails.total | number: '1.2-2' }}</p>
     </div>
-    <p>For any inquiries regarding your order, please contact our customer support: <a href="mailto:support@hellenicgrocery.co.uk">support@hellenicgrocery.co.uk</a></p>
+    <p>For any inquiries regarding your order, please contact our customer support: <a
+            [href]="'mailto:' + supportEmail">{{ supportEmail }}</a></p>
 </div>

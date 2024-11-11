@@ -4,7 +4,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
 import { CheckoutSummary } from 'src/app/common/types/checkout';
 import { CheckoutService } from 'src/app/services/checkout.service';
-import { ConstManager } from 'src/app/common/const/const-manager';
+import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 
 @Component({
   selector: 'app-checkout-order-summary',
@@ -36,7 +36,9 @@ export class CheckoutOrderSummaryComponent {
   }
 
   async getDeliveryMinimum() {
-    this.deliveryMinimum = await this.consts.getConstant('delivery_minimum');
+    this.deliveryMinimum = await this.consts.getConstant(
+      settingKeys.free_delivery_minimum
+    );
   }
 
   async getCartData() {

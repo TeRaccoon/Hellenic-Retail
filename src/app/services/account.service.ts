@@ -5,17 +5,36 @@ import { FormService } from './form.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MailService } from './mail.service';
 import { DataService } from './data.service';
-import { RegistrationForm, AccountResponse } from 'src/app/common/types/account';
+import {
+  RegistrationForm,
+  AccountResponse,
+} from 'src/app/common/types/account';
 import { lastValueFrom } from 'rxjs';
+import { ConstManager, settingKeys } from '../common/const/const-manager';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
-  constructor(private authService: AuthService, private mailService: MailService, private router: Router, private dataService: DataService, private formService: FormService, private formBuilder: FormBuilder) { }
+  supportEmail = '';
 
-  async sendAccountCreationEmail(registrationForm: RegistrationForm, passwordless = false) {
-    const emailHTML = this.mailService.generateAccountCreationEmail(registrationForm, passwordless);
+  constructor(
+    private mailService: MailService,
+    private dataService: DataService,
+    private formService: FormService,
+    private consts: ConstManager
+  ) {
+    this.supportEmail = this.consts.getConstant(settingKeys.support_email);
+  }
+
+  async sendAccountCreationEmail(
+    registrationForm: RegistrationForm,
+    passwordless = false
+  ) {
+    const emailHTML = this.mailService.generateAccountCreationEmail(
+      registrationForm,
+      passwordless
+    );
     const emailData = {
       action: 'mail',
       mail_type: 'account_creation',
@@ -27,24 +46,36 @@ export class AccountService {
 
     let response = await this.mailService.sendEmail(emailData);
     if (!response.success) {
-      this.formService.setPopupMessage('There was an issue sending you account creation confirmation email. Please contact support for help: support@hellenicgrocery.co.uk');
+      this.formService.setPopupMessage(
+        `There was an issue sending you account creation confirmation email. Please contact support for help: ${this.supportEmail}`
+      );
     }
 
     return response.success;
   }
 
-  async createAccount(registrationForm: RegistrationForm, valid: boolean, passwordless = false): Promise<AccountResponse> {
+  async createAccount(
+    registrationForm: RegistrationForm,
+    valid: boolean,
+    passwordless = false
+  ): Promise<AccountResponse> {
     if (passwordless) {
       registrationForm.password = this.generatePassword();
       registrationForm.passwordRepeat = registrationForm.password;
     }
 
     if (!valid) {
-      return { success: false, message: 'Please address the fields highlighted in red!' };
+      return {
+        success: false,
+        message: 'Please address the fields highlighted in red!',
+      };
     }
 
     if (!registrationForm.termsAndConditions) {
-      return { success: false, message: 'Please accept the terms and conditions!' };
+      return {
+        success: false,
+        message: 'Please accept the terms and conditions!',
+      };
     }
 
     if (registrationForm.password != registrationForm.passwordRepeat) {
@@ -52,35 +83,53 @@ export class AccountService {
     }
 
     if (!(await this.preSubmissionChecks(registrationForm.email))) {
-      return { success: false, message: 'This email address has already been registered!' };
+      return {
+        success: false,
+        message: 'This email address has already been registered!',
+      };
     }
 
     delete registrationForm.passwordRepeat;
-    let response = await lastValueFrom(this.dataService.submitFormData(registrationForm));
+    let response = await lastValueFrom(
+      this.dataService.submitFormData(registrationForm)
+    );
 
     if (!response.success) {
-      return { success: false, message: 'There was an error creating your account! Please contact support: support@hellenicgrocery.co.uk' };
+      return {
+        success: false,
+        message: `There was an error creating your account! Please contact support: ${this.supportEmail}`,
+      };
     }
 
     await this.sendAccountCreationEmail(registrationForm, passwordless);
 
     if (!registrationForm.promoConsent) {
-      return { success: true, message: 'Account created successfully!', data: response.data.id };
+      return {
+        success: true,
+        message: 'Account created successfully!',
+        data: response.data.id,
+      };
     }
 
     const newsletterForm = {
       email: registrationForm.email,
       action: 'add',
-      table_name: 'mailing_list'
+      table_name: 'mailing_list',
     };
 
     await lastValueFrom(this.dataService.submitFormData(newsletterForm));
 
-    return { success: true, message: 'Account created successfully!', data: response.data.id };
+    return {
+      success: true,
+      message: 'Account created successfully!',
+      data: response.data.id,
+    };
   }
 
   async preSubmissionChecks(email: string) {
-    let userIDs = await this.dataService.processGet("user-id-from-email", { filter: email });
+    let userIDs = await this.dataService.processGet('user-id-from-email', {
+      filter: email,
+    });
 
     return userIDs.length === 0;
   }

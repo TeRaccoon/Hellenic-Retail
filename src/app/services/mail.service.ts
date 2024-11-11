@@ -4,25 +4,32 @@ import { lastValueFrom } from 'rxjs';
 import { Response } from '../common/types/data-response';
 import { UrlService } from './url.service';
 import { RegistrationForm } from '../common/types/account';
+import { ConstManager, settingKeys } from '../common/const/const-manager';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class MailService {
-    url: string;
+  url: string;
+  supportEmail: string;
 
-    constructor(private urlService: UrlService, private http: HttpClient) {
-        this.url = this.urlService.getUrl('mail');
-    }
+  constructor(
+    private urlService: UrlService,
+    private http: HttpClient,
+    private consts: ConstManager
+  ) {
+    this.url = this.urlService.getUrl('mail');
+    this.supportEmail = consts.getConstant(settingKeys.support_email);
+  }
 
-    async sendEmail(data: any): Promise<Response> {
-        return await lastValueFrom(
-            this.http.post<Response>(this.url, data, { withCredentials: true })
-        );
-    }
+  async sendEmail(data: any): Promise<Response> {
+    return await lastValueFrom(
+      this.http.post<Response>(this.url, data, { withCredentials: true })
+    );
+  }
 
-    generateForgotPasswordEmail(password: string) {
-        let email = `
+  generateForgotPasswordEmail(password: string) {
+    let email = `
     <html>
     <head>
         <title>Forgotten Password</title>
@@ -91,7 +98,7 @@ export class MailService {
                 </tr>
 
             </table>
-            <p>If this wasn't you, please send an email to support@hellenicgrocery.co.uk</p>
+            <p>If this wasn't you, please send an email to ${this.supportEmail}</p>
             <p>Thank you for choosing our service!</p>
             <div class="footer">
                 <p>Best regards,</p>
@@ -101,11 +108,11 @@ export class MailService {
     </body>
     </html>`;
 
-        return email;
-    }
+    return email;
+  }
 
-    generateOrderConfirmationEmail(emailData: any) {
-        let email = `
+  generateOrderConfirmationEmail(emailData: any) {
+    let email = `
     <html>
     <head>
         <title>Order ${emailData.reference}</title>
@@ -172,16 +179,16 @@ export class MailService {
                     <th>Price</th>
                 </tr>`;
 
-        for (let product of emailData.products) {
-            email += `
+    for (let product of emailData.products) {
+      email += `
                 <tr>
                     <td>${product.name}</td>
                     <td>${product.quantity}</td>
                     <td style='text-align: right;'>${product.price}</td>
                 </tr>`;
-        }
+    }
 
-        email += `
+    email += `
                 <tr class="total-row">
                     <td colspan="2">Net Total</td>
                     <td>${emailData.net_total}</td>
@@ -209,11 +216,14 @@ export class MailService {
     </body>
     </html>`;
 
-        return email;
-    }
+    return email;
+  }
 
-    generateAccountCreationEmail(accountData: RegistrationForm, passwordless = true) {
-        let email = `
+  generateAccountCreationEmail(
+    accountData: RegistrationForm,
+    passwordless = true
+  ) {
+    let email = `
     <html>
     <head>
         <title>Welcome to Hellenic Grocery</title>
@@ -269,8 +279,8 @@ export class MailService {
             <br>
             <p>Thank you for creating an account with us! We are thrilled to have you on board.</p>
             <p>Your account has been successfully created and is now ready to use. You can log in anytime using the credentials you provided during registration.</p>`;
-        if (passwordless) {
-            email += `
+    if (passwordless) {
+      email += `
                       <p>Below is your temporary password:</p>
                       <table>
                           <tr>
@@ -280,8 +290,8 @@ export class MailService {
                               <td>${accountData.password}</td>
                           </tr>
                       </table>`;
-        }
-        email += `<p>If you have any questions or need assistance, please do not hesitate to reach out to our support team at support@hellenicgrocery.co.uk.</p>
+    }
+    email += `<p>If you have any questions or need assistance, please do not hesitate to reach out to our support team at ${this.supportEmail}.</p>
             <p>We look forward to providing you with an excellent experience.</p>
             <div class="footer">
                 <p>Best regards,</p>
@@ -291,6 +301,6 @@ export class MailService {
     </body>
     </html>`;
 
-        return email;
-    }
+    return email;
+  }
 }

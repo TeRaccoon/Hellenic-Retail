@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { AccountService } from 'src/app/services/account.service';
+import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 
 @Component({
   selector: 'app-login-form',
@@ -75,6 +76,8 @@ export class LoginFormComponent {
     ],
   };
 
+  supportEmail = '';
+
   constructor(
     private accountService: AccountService,
     private router: Router,
@@ -82,13 +85,16 @@ export class LoginFormComponent {
     private dataService: DataService,
     private formService: FormService,
     private fb: FormBuilder,
-    private mailService: MailService
+    private mailService: MailService,
+    private consts: ConstManager
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       action: ['customer-login'],
     });
+
+    this.supportEmail = this.consts.getConstant(settingKeys.support_email);
   }
 
   ngOnInit() {
@@ -184,8 +190,7 @@ export class LoginFormComponent {
         );
         this.forgotPassword();
       } else {
-        this.loginError =
-          'There was a problem issuing a temporary password. Please try again or contact support for help: support@hellenicgrocery.co.uk';
+        this.loginError = `There was a problem issuing a temporary password. Please try again or contact support for help: ${this.supportEmail}`;
       }
       this.loading = false;
     }
@@ -205,7 +210,7 @@ export class LoginFormComponent {
       );
     } else {
       this.formService.setPopupMessage(
-        'There was an issue changing your password! Please try again or contact support for help: support@hellenicgrocery.co.uk',
+        `There was an issue changing your password! Please try again or contact support for help: ${this.supportEmail}`,
         true,
         10000
       );

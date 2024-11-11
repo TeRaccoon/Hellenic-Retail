@@ -146,7 +146,7 @@
                     </ng-template>
                 </button>
                 <p *ngIf="orderError" class="error">{{ orderError }} Please try again or contact support: <a
-                        href="mailto:support@hellenicgrocery.co.uk">support@hellenicgrocery.co.uk</a></p>
+                        [href]="'mailto:' + supportEmail">{{ supportEmail }}</a></p>
             </div>
         </div>
     </div>
