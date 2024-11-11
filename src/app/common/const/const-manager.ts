@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 
+const SETTING_KEYS = ['free_delivery_minimum', 'support_email'];
+export enum settingKeys {
+  free_delivery_minimum = 'free_delivery_minimum',
+  support_email = 'support_email',
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,13 +17,15 @@ export class ConstManager {
   constructor(private dataService: DataService) {}
 
   async loadConstants() {
-    this.consts['delivery_minimum'] = await this.dataService.processPost({
-      action: 'delivery-minimum',
-    });
+    for (let i = 0; i < SETTING_KEYS.length; i++) {
+      this.consts[SETTING_KEYS[i]] = await this.dataService.processPost({
+        action: 'settings',
+        key: SETTING_KEYS[i],
+      });
+    }
   }
 
-  async getConstant(key: string) {
-    if (!this.loaded) await this.loadConstants();
+  getConstant(key: settingKeys) {
     return this.consts[key];
   }
 }
