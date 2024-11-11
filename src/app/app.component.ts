@@ -11,16 +11,11 @@ export class AppComponent {
   title = 'Hellenic Grocery';
   screenSize: any = {};
 
-  constructor(
-    private renderService: RenderService,
-    private constManager: ConstManager
-  ) {}
+  constructor(private renderService: RenderService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.renderService.getScreenSize().subscribe((size) => {
       this.screenSize = size;
     });
-
-    this.constManager.loadConstants();
   }
 }

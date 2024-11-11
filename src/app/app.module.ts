@@ -44,9 +44,14 @@ import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.
 import { ProductComponent } from './components/product/product.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ConfigService } from './services/config.service';
+import { ConstManager } from './common/const/const-manager';
 
 export function initConfig(configService: ConfigService) {
   return () => configService.loadConfig();
+}
+
+export function initConsts(consts: ConstManager) {
+  return () => consts.loadConstants();
 }
 
 @NgModule({
@@ -103,6 +108,12 @@ export function initConfig(configService: ConfigService) {
       provide: APP_INITIALIZER,
       useFactory: initConfig,
       deps: [ConfigService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initConsts,
+      deps: [ConstManager],
       multi: true,
     },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
