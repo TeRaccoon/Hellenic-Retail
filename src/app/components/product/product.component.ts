@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { FormService } from '../../services/form.service';
-import { UrlService } from 'src/app/services/url.service'
+import { UrlService } from 'src/app/services/url.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent {
   @Input() product: any;
@@ -18,11 +18,32 @@ export class ProductComponent {
   faEye = faEye;
 
   constructor(
-    private urlService: UrlService, 
+    private urlService: UrlService,
     private cartService: CartService,
-    private formService: FormService,
+    private formService: FormService
   ) {
-    this.imageUrl = this.urlService.getUrl('uploads');;
+    this.imageUrl = this.urlService.getUrl('uploads');
+  }
+
+  ngOnInit() {
+    this.setProductBanner();
+  }
+
+  setProductBanner() {
+    if (this.product.discount && this.product.discount != null) {
+      this.product.discounted_price =
+        this.product.price * ((100 - this.product.discount) / 100);
+    }
+    if (
+      this.product.quantity === null ||
+      this.product.quantity === 0 ||
+      this.product.quantity === undefined
+    ) {
+      this.product.quantity = 0;
+      this.product.banner = 'Out of stock!';
+    } else if (this.product.quantity < 10) {
+      this.product.banner = 'Low on stock!';
+    }
   }
 
   openImage(imageLocation: string) {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
-import { UrlService } from 'src/app/services/url.service'
+import { UrlService } from 'src/app/services/url.service';
 import {
   faHeart,
   faEye,
@@ -31,7 +31,7 @@ export class HomeTopProductsComponent {
   imageUrl = '';
 
   constructor(
-    private urlService: UrlService, 
+    private urlService: UrlService,
     private cartService: CartService,
     private dataService: DataService,
     private formService: FormService,
@@ -39,29 +39,21 @@ export class HomeTopProductsComponent {
   ) {}
 
   ngOnInit() {
-    this.imageUrl = this.urlService.getUrl('uploads');;
+    this.imageUrl = this.urlService.getUrl('uploads');
     this.loadProducts();
-    this.renderService.getScreenSize().subscribe(size => {
+    this.renderService.getScreenSize().subscribe((size) => {
       this.screenSize = size;
       this.limit = this.screenSize.width < 1080 ? 6 : 10;
     });
   }
 
   async loadProducts() {
-    this.topProducts = await this.dataService.processGet('top-products', { limit: this.limit }, true, true);
-
-    this.topProducts.forEach((product) => {
-      if (product.discount && product.discount != null) {
-        product.discounted_price =
-          product.price * ((100 - product.discount) / 100);
-      }
-      if (product.quantity === null || product.quantity === 0 || product.quantity === undefined) {
-        product.quantity = 0;
-        product.banner = 'Out of stock!';
-      } else if (product.quantity < 10) {
-        product.banner = 'Low on stock!';
-      }
-    });
+    this.topProducts = await this.dataService.processGet(
+      'top-products',
+      { limit: this.limit },
+      true,
+      true
+    );
   }
 
   openImage(imageLocation: string) {
