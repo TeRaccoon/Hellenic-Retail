@@ -56,7 +56,7 @@ export class AccountService {
 
   async createAccount(
     registrationForm: RegistrationForm,
-    valid: boolean,
+    valid: boolean = true,
     passwordless = false
   ): Promise<AccountResponse> {
     if (passwordless) {

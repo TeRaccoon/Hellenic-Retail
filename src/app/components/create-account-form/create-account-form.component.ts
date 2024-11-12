@@ -12,7 +12,7 @@ import { MailService } from 'src/app/services/mail.service';
 @Component({
   selector: 'app-create-account-form',
   templateUrl: './create-account-form.component.html',
-  styleUrls: ['./create-account-form.component.scss']
+  styleUrls: ['./create-account-form.component.scss'],
 })
 export class CreateAccountFormComponent {
   registrationForm: FormGroup;
@@ -25,7 +25,15 @@ export class CreateAccountFormComponent {
   subscribe = false;
   agreedToTerms = false;
 
-  constructor(private authService: AuthService, private mailService: MailService, private router: Router, private dataService: DataService, private formService: FormService, private formBuilder: FormBuilder, private accountService: AccountService) {
+  constructor(
+    private authService: AuthService,
+    private mailService: MailService,
+    private router: Router,
+    private dataService: DataService,
+    private formService: FormService,
+    private formBuilder: FormBuilder,
+    private accountService: AccountService
+  ) {
     this.registrationForm = this.formBuilder.group({
       forename: ['', Validators.required],
       surname: ['', Validators.required],
@@ -36,7 +44,7 @@ export class CreateAccountFormComponent {
       termsAndConditions: [false, Validators.required],
       promoConsent: [false, Validators.required],
       action: ['create-account'],
-      table_name: ['customers']
+      table_name: ['customers'],
     });
   }
 
@@ -44,7 +52,7 @@ export class CreateAccountFormComponent {
     this.submitted = false;
     this.error = '';
 
-    this.formService.setBannerMessage("Create Account");
+    this.formService.setBannerMessage('Create Account');
   }
 
   passwordsMatch(): boolean {
@@ -55,7 +63,17 @@ export class CreateAccountFormComponent {
 
   async onSubmit() {
     this.submitted = true;
-    let response = await this.accountService.createAccount(this.registrationForm.value, this.registrationForm.valid);
+    this.loading = true;
+
+    if (!this.registrationForm.valid) {
+      this.error = 'Please address the fields highlighted in red!';
+    }
+
+    let response = await this.accountService.createAccount(
+      this.registrationForm.value
+    );
+
+    this.disableControls();
 
     if (response.success) {
       this.formService.setPopupMessage(response.message, true, 3000);
@@ -65,8 +83,23 @@ export class CreateAccountFormComponent {
         this.router.navigate(['/account']);
       }, 3000);
     } else {
+      this.enableControls();
       this.error = response.message;
     }
+
+    this.loading = false;
+  }
+
+  disableControls() {
+    Object.keys(this.registrationForm.controls).forEach((controlName) => {
+      this.registrationForm.controls[controlName].disable();
+    });
+  }
+
+  enableControls() {
+    Object.keys(this.registrationForm.controls).forEach((controlName) => {
+      this.registrationForm.controls[controlName].enable();
+    });
   }
 
   inputHasError(field: string) {
