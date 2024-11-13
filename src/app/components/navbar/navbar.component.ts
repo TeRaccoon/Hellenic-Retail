@@ -23,6 +23,7 @@ import {
 import { CartService } from 'src/app/services/cart.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { CacheService } from 'src/app/services/cache.service';
+import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 
 @Component({
   selector: 'app-navbar',
@@ -73,6 +74,8 @@ export class NavbarComponent {
 
   imageUrl: string;
 
+  email;
+
   constructor(
     private urlService: UrlService,
     private router: Router,
@@ -82,9 +85,11 @@ export class NavbarComponent {
     private filterService: FilterService,
     private cartService: CartService,
     private renderService: RenderService,
-    private cacheService: CacheService
+    private cacheService: CacheService,
+    private consts: ConstManager
   ) {
     this.imageUrl = this.urlService.getUrl('uploads');
+    this.email = this.consts.getConstant(settingKeys.support_email);
   }
 
   ngOnInit() {

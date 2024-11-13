@@ -13,7 +13,9 @@ import { FormService } from 'src/app/services/form.service';
 export class ContactComponent {
   contactForm: FormGroup;
 
-  supportEmail = '';
+  supportEmail;
+  supportPhone;
+  address;
 
   constructor(
     private formService: FormService,
@@ -29,6 +31,8 @@ export class ContactComponent {
     });
 
     this.supportEmail = this.consts.getConstant(settingKeys.support_email);
+    this.supportPhone = this.consts.getConstant(settingKeys.support_phone);
+    this.address = this.consts.getConstant(settingKeys.address);
   }
 
   async onSubmit() {

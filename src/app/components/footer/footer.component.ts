@@ -33,7 +33,9 @@ export class FooterComponent {
   options = ['Shop', 'Quick Links', 'About Us', 'Customer Care'];
   openedOptions: any[] = [];
 
-  supportEmail = '';
+  supportEmail;
+  supportPhone;
+  address;
 
   constructor(
     private consts: ConstManager,
@@ -42,6 +44,8 @@ export class FooterComponent {
     private renderService: RenderService
   ) {
     this.supportEmail = this.consts.getConstant(settingKeys.support_email);
+    this.supportPhone = this.consts.getConstant(settingKeys.support_phone);
+    this.address = this.consts.getConstant(settingKeys.address);
   }
 
   ngOnInit() {
