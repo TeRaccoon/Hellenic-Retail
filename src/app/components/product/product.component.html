@@ -21,7 +21,7 @@
         </ng-container>
         <ng-template #wholesale>
             <div class="wholesale-container">
-                <p><span>Unit: </span><span class="bold">£{{ (product.discounted_price ? product.discount_price :
+                <p><span>Unit: </span><span class="bold">£{{ (product.discounted_price ? product.discounted_price :
                         product.price) | number: '1.2-2' }}</span></p>
                 <p *ngIf="product.box_price">
                     <span>Box: </span><span class="bold">£{{ product.box_price | number: '1.2-2' }}</span>
