@@ -116,7 +116,6 @@ export function initConsts(consts: ConstManager) {
       deps: [ConstManager],
       multi: true,
     },
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent],
 })
