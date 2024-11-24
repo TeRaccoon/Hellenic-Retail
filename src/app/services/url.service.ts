@@ -14,7 +14,9 @@ const PAYMENT_PATH = API_EXTENSION + 'payment.php';
 export class UrlService {
   HOST_NAME = 'http://localhost/';
 
-  constructor(private config: ConfigService) {}
+  constructor(private config: ConfigService) {
+    this.loadConfig();
+  }
 
   async loadConfig() {
     this.HOST_NAME = this.config.getConfig().host;

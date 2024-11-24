@@ -6,18 +6,12 @@ import {
   UrlTree,
 } from '@angular/router';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
-import { FormService } from './form.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private formService: FormService
-  ) {
+  constructor(private authService: AuthService, private router: Router) {
     this.checkLoginAndRedirect();
   }
 
