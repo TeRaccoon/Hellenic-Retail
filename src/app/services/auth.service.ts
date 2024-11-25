@@ -16,8 +16,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private urlService: UrlService) {
     this.url = this.urlService.getUrl('data');
-
-    this.checkLogin();
   }
 
   async checkLogin(): Promise<boolean> {
