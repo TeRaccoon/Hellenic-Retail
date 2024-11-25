@@ -49,10 +49,6 @@ export function initConfig(configService: ConfigService) {
   return () => configService.loadConfig();
 }
 
-export function initConsts(consts: ConstManager) {
-  return () => consts.loadConstants();
-}
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -107,12 +103,6 @@ export function initConsts(consts: ConstManager) {
       provide: APP_INITIALIZER,
       useFactory: initConfig,
       deps: [ConfigService],
-      multi: true,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initConsts,
-      deps: [ConstManager],
       multi: true,
     },
   ],
