@@ -19,7 +19,7 @@ export class UrlService {
   }
 
   async loadConfig() {
-    this.HOST_NAME = this.config.getConfig().host;
+    this.HOST_NAME = (await this.config.getConfig()).host;
   }
 
   getUrl(extension = 'api', full = true) {

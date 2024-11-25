@@ -8,14 +8,20 @@ import { environment } from '../../environments/environment';
 })
 export class ConfigService {
   private config: any;
+  private loaded = false;
 
   constructor(private http: HttpClient) {}
 
   async loadConfig() {
     this.config = await lastValueFrom(this.http.get(environment.configUrl));
+    this.loaded = true;
   }
 
-  getConfig() {
+  async getConfig() {
+    if (!this.loaded) {
+      await this.loadConfig();
+    }
+
     return this.config;
   }
 }
