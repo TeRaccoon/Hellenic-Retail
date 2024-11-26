@@ -19,6 +19,7 @@ export class UrlService {
   }
 
   async loadConfig() {
+    console.log('url receive request');
     this.HOST_NAME = (await this.config.getConfig()).host;
   }
 
