@@ -15,15 +15,12 @@ export class ConfigService {
   async loadConfig(): Promise<void> {
     this.config = await lastValueFrom(this.http.get(environment.configUrl));
     this.loaded = true;
-    console.log('config loaded');
   }
 
   async getConfig() {
     if (!this.loaded) {
-      console.log('waiting');
       await this.loadConfig();
     }
-    console.log('done waiting');
 
     return this.config;
   }
