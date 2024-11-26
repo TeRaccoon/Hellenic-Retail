@@ -14,7 +14,7 @@ export class ConfigService {
     // this.loadConfig();
   }
 
-  async loadConfig() {
+  async loadConfig(): Promise<void> {
     this.config = await lastValueFrom(this.http.get(environment.configUrl));
     this.loaded = true;
     console.log('config loaded');

@@ -43,10 +43,9 @@ import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.
 import { ProductComponent } from './components/product/product.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ConfigService } from './services/config.service';
-import { ConstManager } from './common/const/const-manager';
 
 export function initConfig(configService: ConfigService) {
-  return () => configService.loadConfig();
+  return (): Promise<void> => configService.loadConfig();
 }
 
 @NgModule({
