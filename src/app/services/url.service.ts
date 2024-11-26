@@ -12,14 +12,14 @@ const PAYMENT_PATH = API_EXTENSION + 'payment.php';
   providedIn: 'root',
 })
 export class UrlService {
-  HOST_NAME: string = 'http://localhost/';
+  HOST_NAME: string | undefined;
 
   constructor(private config: ConfigService) {
     this.loadConfig();
   }
 
-  async loadConfig() {
-    this.HOST_NAME = (await this.config.getConfig()).host;
+  async loadConfig(): Promise<void> {
+    this.HOST_NAME = await (await this.config.getConfig()).host;
   }
 
   getUrl(extension = 'api', full = true) {

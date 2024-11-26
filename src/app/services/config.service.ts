@@ -10,9 +10,7 @@ export class ConfigService {
   private config: any;
   private loaded = false;
 
-  constructor(private http: HttpClient) {
-    // this.loadConfig();
-  }
+  constructor(private http: HttpClient) {}
 
   async loadConfig(): Promise<void> {
     this.config = await lastValueFrom(this.http.get(environment.configUrl));

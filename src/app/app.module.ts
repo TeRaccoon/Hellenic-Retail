@@ -43,9 +43,14 @@ import { MobileNavbarComponent } from './components/mobile-navbar/mobile-navbar.
 import { ProductComponent } from './components/product/product.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ConfigService } from './services/config.service';
+import { UrlService } from './services/url.service';
 
 export function initConfig(configService: ConfigService) {
   return (): Promise<void> => configService.loadConfig();
+}
+
+export function initURL(urlService: UrlService) {
+  return (): Promise<void> => urlService.loadConfig();
 }
 
 @NgModule({
@@ -102,6 +107,13 @@ export function initConfig(configService: ConfigService) {
       provide: APP_INITIALIZER,
       useFactory: initConfig,
       deps: [ConfigService],
+      multi: true,
+    },
+    UrlService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initURL,
+      deps: [UrlService],
       multi: true,
     },
   ],
