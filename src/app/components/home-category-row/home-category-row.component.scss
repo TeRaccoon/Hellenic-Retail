@@ -1,11 +1,53 @@
 $hellenicblue: rgb(0, 140, 255);
+
+
+.category-row-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.scroll-arrow {
+    top: 50%;
+    transform: translateY(-50%);
+    background: $hellenicblue;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+
+    &:hover {
+        background: darken($hellenicblue, 10%);
+    }
+
+    &.left {
+        left: 10px;
+    }
+
+    &.right {
+        right: 10px;
+    }
+}
+
 .category-row {
+    scroll-behavior: smooth;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     font-weight: bold;
     width: 68%;
     display: flex;
     justify-content: space-between;
-    margin-left: auto;
-    margin-right: auto;
     padding-top: 30px;
 }
 
@@ -14,16 +56,19 @@ $hellenicblue: rgb(0, 140, 255);
     flex-direction: column;
     text-align: center;
     align-items: center;
+
     a {
         text-decoration: none;
         padding: 10px;
         transition: color 0.5s ease;
     }
+
     .image-container {
         height: 150px;
         width: 150px;
         overflow: hidden;
         border-radius: 100px;
+
         img {
             border-radius: 50%;
             object-fit: cover;
@@ -32,26 +77,32 @@ $hellenicblue: rgb(0, 140, 255);
             transition: transform 0.5s ease;
         }
     }
+
     &:hover {
         cursor: pointer;
         color: $hellenicblue;
+
         img {
             transform: scale(1.1);
         }
     }
 }
 
-@media screen and (max-width: 1079px) { //mobile
+@media screen and (max-width: 1079px) {
+
+    //mobile
     .category-row {
         width: 90%;
         gap: 2vw;
         overflow-x: scroll;
     }
+
     .category {
         width: 44vw;
     }
+
     .image-container {
-        height: 30vw!important;
-        width: 30vw!important;
+        height: 30vw !important;
+        width: 30vw !important;
     }
 }

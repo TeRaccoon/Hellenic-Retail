@@ -1,8 +1,14 @@
-<div class="category-row">
-    <div class="category" *ngFor="let category of categories; let i = index;" [routerLink]="'/shop/' + category.name">
-        <div class="image-container">
-            <img [src]="category.location == null ? imageUrl + 'placeholder.jpg' : imageUrl + category.location" (error)="onImageError($event)">
+<div class="category-row-wrapper">
+    <button class="scroll-arrow left" (click)="scroll('left')"><fa-icon [icon]="caretLeft" /></button>
+    <div class="category-row">
+        <div class="category" *ngFor="let category of categories; let i = index;"
+            [routerLink]="'/shop/' + category.name">
+            <div class="image-container">
+                <img [src]="category.location == null ? imageUrl + 'placeholder.jpg' : imageUrl + category.location"
+                    (error)="onImageError($event)">
+            </div>
+            <a>{{ category.name }}</a>
         </div>
-        <a>{{ category.name }}</a>
     </div>
+    <button class="scroll-arrow right" (click)="scroll('right')"><fa-icon [icon]="caretRight" /></button>
 </div>
