@@ -231,15 +231,12 @@ export class CartService {
       action: 'check-stock',
       id: productId,
     });
-    console.log(stock);
-    console.log(quantity);
     if (stock == null || stock < quantity) {
       showPopup &&
         this.formService.setPopupMessage(
           'There is no more stock of this item!',
           true
         );
-      console.log('ERE');
       return false;
     }
     return true;
