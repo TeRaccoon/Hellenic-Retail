@@ -227,16 +227,19 @@ export class CartService {
   }
 
   async checkStock(quantity: number, productId: number, showPopup = false) {
-    let response = await this.dataService.processPost({
+    let stock = await this.dataService.processPost({
       action: 'check-stock',
       id: productId,
     });
-    if (response.quantity == null || response.quantity < quantity) {
+    console.log(stock);
+    console.log(quantity);
+    if (stock == null || stock < quantity) {
       showPopup &&
         this.formService.setPopupMessage(
           'There is no more stock of this item!',
           true
         );
+      console.log('ERE');
       return false;
     }
     return true;
