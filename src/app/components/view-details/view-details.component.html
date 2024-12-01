@@ -13,7 +13,12 @@
                         </p>
                     </div>
                     <p *ngIf="product.retail_box_price">
-                        <span>Box: </span><span>£{{ product.retail_box_price | number: '1.2-2' }}</span>
+                        <span>{{ 'Box (' + product.box_size + '): '}}</span>
+                        <span *ngIf="product.discounted_box_price" class="bold">£{{ product.discounted_box_price |
+                            number: '1.2-2' }}</span>
+                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.retail_box_price | number:
+                            '1.2-2'
+                            }}</span>
                     </p>
                 </div>
             </ng-container>
