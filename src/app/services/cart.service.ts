@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { DataService } from './data.service';
 import { FormService } from './form.service';
 import { CartItem, CartProduct, CartUnit } from '../common/types/cart';
-import { Product } from '../common/types/shop';
+import { Product, ProductDetails } from '../common/types/shop';
 import { Response } from '../common/types/data-response';
 
 @Injectable({
@@ -127,13 +127,20 @@ export class CartService {
     productId: number,
     quantity: number,
     unit: CartUnit = CartUnit.Unit,
-    productName = ''
+    productName = '',
+    multiplier: number = 1
   ) {
     let userId = this.authService.getUserID();
     if (userId !== null) {
-      this.addToCartDatabase(userId, productId, quantity, unit);
+      this.addToCartDatabase(userId, productId, quantity, unit, multiplier);
     } else {
-      this.addToCartLocalStorage(productId, productName, quantity, unit);
+      this.addToCartLocalStorage(
+        productId,
+        productName,
+        quantity,
+        unit,
+        multiplier
+      );
     }
   }
 
@@ -141,7 +148,8 @@ export class CartService {
     productId: number,
     productName: string,
     quantity: number,
-    unit: CartUnit = CartUnit.Unit
+    unit: CartUnit = CartUnit.Unit,
+    multiplier: number = 1
   ) {
     var currentCartItems = this.cart;
     const existingCartItemIndex = currentCartItems.findIndex(
@@ -151,7 +159,7 @@ export class CartService {
     if (existingCartItemIndex !== -1) {
       this.formService.setPopupMessage('Item already in basket!', true);
     } else {
-      if (await this.checkStock(quantity, productId, true)) {
+      if (await this.checkStock(quantity * multiplier, productId, true)) {
         let cartItem: CartItem = {
           id: currentCartItems.length,
           item_id: productId,
@@ -178,7 +186,8 @@ export class CartService {
     userId: string,
     productId: number,
     quantity: number,
-    unit: CartUnit = CartUnit.Unit
+    unit: CartUnit = CartUnit.Unit,
+    multiplier: number = 1
   ) {
     let cart = await this.dataService.processPost({
       action: 'cart',
@@ -191,7 +200,7 @@ export class CartService {
     let response: Response | undefined;
     let popupMessage = 'Item added to cart!';
 
-    if (await this.checkStock(quantity, productId, true)) {
+    if (await this.checkStock(quantity * multiplier, productId, true)) {
       if (rowIndex !== -1) {
         if (cart[rowIndex].quantity == quantity) {
           this.formService.setPopupMessage('Item already in basket!', true);
@@ -227,10 +236,13 @@ export class CartService {
   }
 
   async checkStock(quantity: number, productId: number, showPopup = false) {
-    let stock = await this.dataService.processPost({
-      action: 'check-stock',
-      id: productId,
-    });
+    let stock = (
+      await this.dataService.processPost({
+        action: 'check-stock',
+        id: productId,
+      })
+    ).quantity;
+
     if (stock == null || stock < quantity) {
       showPopup &&
         this.formService.setPopupMessage(
@@ -433,5 +445,21 @@ export class CartService {
       this.formService.setPopupMessage('Please login to use your wishlist!');
     }
     this.formService.showPopup();
+  }
+
+  getQuantityMultiplier(
+    product: ProductDetails,
+    selectedUnit: CartUnit
+  ): number {
+    switch (selectedUnit) {
+      case 'Box':
+      case 'Retail Box':
+        return product.box_size ?? 1;
+
+      case 'Pallet':
+        return product.pallet_size ?? 1;
+    }
+
+    return 1;
   }
 }
