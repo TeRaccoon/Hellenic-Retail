@@ -62,6 +62,7 @@ export class AuthService {
       )
     );
     if (logoutResponse.success) {
+      window.location.reload();
       return true;
     }
 

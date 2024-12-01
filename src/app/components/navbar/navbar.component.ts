@@ -102,9 +102,9 @@ export class NavbarComponent {
     });
 
     this.message =
-      this.authService.getUserType() == 'Retail'
-        ? 'Welcome to Hellenic Grocery'
-        : 'Welcome to Hellenic Grocery Wholesale';
+      this.authService.getUserType() == 'Wholesale'
+        ? 'Welcome to Hellenic Grocery Wholesale'
+        : 'Welcome to Hellenic Grocery Retail';
 
     this.loadCart();
     this.loadNavBar();

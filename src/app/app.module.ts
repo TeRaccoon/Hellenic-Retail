@@ -45,6 +45,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ConfigService } from './services/config.service';
 import { UrlService } from './services/url.service';
 import { ConstManager } from './common/const/const-manager';
+import { AuthService } from './services/auth.service';
 
 export function initConfig(configService: ConfigService) {
   return (): Promise<void> => configService.loadConfig();
@@ -56,6 +57,10 @@ export function initURL(urlService: UrlService) {
 
 export function initConsts(constService: ConstManager) {
   return (): Promise<void> => constService.loadConstants();
+}
+
+export function initAuth(authService: AuthService) {
+  return (): Promise<boolean> => authService.checkLogin();
 }
 
 @NgModule({
@@ -131,6 +136,15 @@ export function initConsts(constService: ConstManager) {
         await constManager.loadConstants();
       },
       deps: [ConstManager],
+      multi: true,
+    },
+    AuthService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (authService: AuthService) => async () => {
+        await authService.checkLogin();
+      },
+      deps: [AuthService],
       multi: true,
     },
   ],
