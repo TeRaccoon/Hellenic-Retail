@@ -12,13 +12,14 @@ export class AuthService {
   private userID: string | null = null;
   private userType: string | null = null;
 
-  url;
+  url: string = '';
 
-  constructor(private http: HttpClient, private urlService: UrlService) {
-    this.url = this.urlService.getUrl('data');
-  }
+  constructor(private http: HttpClient, private urlService: UrlService) {}
 
   async checkLogin(): Promise<boolean> {
+    await this.urlService.loadConfig();
+    this.url = this.urlService.getUrl('data');
+
     const response = await lastValueFrom<any>(
       this.http.post(
         this.url,

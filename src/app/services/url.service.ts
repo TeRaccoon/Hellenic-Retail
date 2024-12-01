@@ -12,18 +12,26 @@ const PAYMENT_PATH = API_EXTENSION + 'payment.php';
   providedIn: 'root',
 })
 export class UrlService {
+  private configReady: Promise<void>;
+
   HOST_NAME: string | undefined;
 
   constructor(private config: ConfigService) {
-    this.loadConfig();
+    this.configReady = this.init();
+  }
+
+  private async init(): Promise<void> {
+    const config = await this.config.getConfig();
+    this.HOST_NAME = config.host;
   }
 
   async loadConfig(): Promise<void> {
-    this.HOST_NAME = await (await this.config.getConfig()).host;
+    const config = await this.config.getConfig();
+    this.HOST_NAME = config.host;
   }
 
   getUrl(extension = 'api', full = true) {
-    var url = full ? this.HOST_NAME : '';
+    let url = full ? this.HOST_NAME : '';
     switch (extension) {
       case 'uploads':
         return (url += UPLOAD_EXTENSION);

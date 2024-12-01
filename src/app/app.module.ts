@@ -44,6 +44,7 @@ import { ProductComponent } from './components/product/product.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ConfigService } from './services/config.service';
 import { UrlService } from './services/url.service';
+import { ConstManager } from './common/const/const-manager';
 
 export function initConfig(configService: ConfigService) {
   return (): Promise<void> => configService.loadConfig();
@@ -51,6 +52,10 @@ export function initConfig(configService: ConfigService) {
 
 export function initURL(urlService: UrlService) {
   return (): Promise<void> => urlService.loadConfig();
+}
+
+export function initConsts(constService: ConstManager) {
+  return (): Promise<void> => constService.loadConstants();
 }
 
 @NgModule({
@@ -105,15 +110,27 @@ export function initURL(urlService: UrlService) {
     ConfigService,
     {
       provide: APP_INITIALIZER,
-      useFactory: initConfig,
+      useFactory: (configService: ConfigService) => () =>
+        configService.loadConfig(),
       deps: [ConfigService],
       multi: true,
     },
     UrlService,
     {
       provide: APP_INITIALIZER,
-      useFactory: initURL,
+      useFactory: (urlService: UrlService) => async () => {
+        await urlService.loadConfig();
+      },
       deps: [UrlService],
+      multi: true,
+    },
+    ConstManager,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (constManager: ConstManager) => async () => {
+        await constManager.loadConstants();
+      },
+      deps: [ConstManager],
       multi: true,
     },
   ],

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
+import { UrlService } from 'src/app/services/url.service';
 
 const SETTING_KEYS = [
   'free_delivery_minimum',
@@ -20,13 +21,20 @@ export enum settingKeys {
 export class ConstManager {
   private consts: { [key: string]: any } = {};
 
-  constructor(private dataService: DataService) {}
+  constructor(
+    private dataService: DataService,
+    private urlService: UrlService
+  ) {}
 
   async loadConstants() {
-    for (let i = 0; i < SETTING_KEYS.length; i++) {
-      this.consts[SETTING_KEYS[i]] = await this.dataService.processPost({
+    if (!this.urlService.HOST_NAME) {
+      await this.urlService.loadConfig();
+    }
+
+    for (let key of SETTING_KEYS) {
+      this.consts[key] = await this.dataService.processPost({
         action: 'settings',
-        key: SETTING_KEYS[i],
+        key: key,
       });
     }
   }
