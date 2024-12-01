@@ -13,7 +13,7 @@ export interface ProductDetails {
   id: number;
   category: string;
   sub_category: string;
-  description: string;
+  description?: string;
   brand: string;
   discount: number;
   name: string;
