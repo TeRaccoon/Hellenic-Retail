@@ -76,6 +76,8 @@ export class NavbarComponent {
 
   email;
 
+  message = 'Welcome to Hellenic Grocery';
+
   constructor(
     private urlService: UrlService,
     private router: Router,
@@ -98,6 +100,11 @@ export class NavbarComponent {
     this.renderService.getScreenSize().subscribe((size) => {
       this.screenSize = size;
     });
+
+    this.message =
+      this.authService.getUserType() == 'Retail'
+        ? 'Welcome to Hellenic Grocery'
+        : 'Welcome to Hellenic Grocery Wholesale';
 
     this.loadCart();
     this.loadNavBar();
