@@ -48,7 +48,7 @@
                 </div>
             </ng-template>
         </div>
-        <ng-container *ngIf="stock < 10 && stock > 1">
+        <ng-container *ngIf="stock <= 10 && stock > 1">
             <p class="quantity-message">Hurry! Only {{ stock }} left!</p>
         </ng-container>
         <ng-container *ngIf="stock < 1">
@@ -61,9 +61,11 @@
                 <select *ngIf="userType == 'Wholesale' || product.retail_box_price" (change)="changePackageType($event)"
                     [disabled]="outOfStock">
                     <option>Unit</option>
-                    <option value="Retail Box" *ngIf="product.retail_box_price">Box</option>
-                    <option *ngIf="product.box_price">Box</option>
-                    <option *ngIf="product.pallet_price">Pallet</option>
+                    <option value="Retail Box"
+                        *ngIf="product.retail_box_price && (product.box_size && product.box_size <= stock)">Box</option>
+                    <option *ngIf="product.box_price && (product.box_size && product.box_size <= stock) ">Box</option>
+                    <option *ngIf="product.pallet_price && (product.pallet_size && product.pallet_size <= stock)">Pallet
+                    </option>
                 </select>
             </div>
         </div>
