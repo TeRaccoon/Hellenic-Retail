@@ -19,6 +19,7 @@ export interface ProductDetails {
   name: string;
   price: number;
   discounted_price: number;
+  discounted_retail_box_price?: number;
   discounted_box_price?: number;
   discounted_pallet_price?: number;
   box_price?: number;
