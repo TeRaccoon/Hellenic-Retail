@@ -78,7 +78,7 @@
                 <fa-icon [class]="inWishlist ? 'red' : ''" [icon]="faHeart"></fa-icon> {{ inWishlist ? 'Remove from
                 wishlist' : 'Add to wishlist' }}
             </p>
-            <p (click)="viewSimilar()">
+            <p *ngIf="product.category != null" (click)="viewSimilar()">
                 <fa-icon [icon]="faEye"></fa-icon> View similar
             </p>
         </div>

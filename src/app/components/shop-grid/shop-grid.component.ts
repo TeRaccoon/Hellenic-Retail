@@ -7,7 +7,7 @@ import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FilterService } from 'src/app/services/filter.service';
 import { RenderService } from 'src/app/services/render.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { UrlService } from 'src/app/services/url.service'
+import { UrlService } from 'src/app/services/url.service';
 
 @Component({
   selector: 'app-shop-grid',
@@ -48,18 +48,18 @@ export class ShopGridComponent {
     private formService: FormService,
     private renderService: RenderService,
     private authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.products = [];
-    this.imageUrl = this.urlService.getUrl('uploads');;
+    this.imageUrl = this.urlService.getUrl('uploads');
     this.formService.setBannerMessage('Showing results');
     this.priceFilters = this.filterService.getShopPriceFilter();
-    this.renderService.getScreenSize().subscribe(size => {
+    this.renderService.getScreenSize().subscribe((size) => {
       this.screenSize = size;
     });
     this.getShopFilter();
-    this.authService.isLoggedInObservable
+    this.authService.isLoggedInObservable;
   }
 
   getShopFilter() {
@@ -69,7 +69,7 @@ export class ShopGridComponent {
       this.category = category;
       if (category !== undefined) {
         this.formService.setBannerMessage(`${messageBase}${category}`);
-        this.filterHeader = category
+        this.filterHeader = category;
       }
       this.loadProducts(category, null);
     });
@@ -78,7 +78,7 @@ export class ShopGridComponent {
       this.filter = filter;
       if (filter !== null && filter != '') {
         this.formService.setBannerMessage(`${messageBase}${filter}`);
-        this.filterHeader = (`Search results: ${filter}`)
+        this.filterHeader = `Search results: ${filter}`;
         this.loadProducts(undefined, filter);
       }
     });
@@ -94,10 +94,18 @@ export class ShopGridComponent {
 
   async loadProducts(category: string | undefined, filter: string | null) {
     let products = [];
-    if (category !== undefined && this.category !== undefined || category == 'All') {
-      products = await this.dataService.processGet('products-from-category', { category: category }, true, true);
+    if (
+      (category !== undefined && this.category !== undefined) ||
+      category == 'All'
+    ) {
+      products = await this.dataService.processGet(
+        'products-from-category',
+        { category: category },
+        true,
+        true
+      );
     } else {
-      products = await this.dataService.processGet('products', {}, true, true)
+      products = await this.dataService.processGet('products', {}, true, true);
     }
 
     if (filter != null) {
@@ -210,7 +218,7 @@ export class ShopGridComponent {
 
   isInPriceRange(product: any) {
     if (this.maxPrice != null && this.minPrice != null) {
-      return (product.price >= this.minPrice && product.price <= this.maxPrice);
+      return product.price >= this.minPrice && product.price <= this.maxPrice;
     }
     return true;
   }
