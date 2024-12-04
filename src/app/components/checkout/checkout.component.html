@@ -82,20 +82,21 @@
                         </div>
                         <div class="row single">
                             <label>Card number*</label>
-                            <input type="text" required formControlName="Card Number">
+                            <input [placeholder]="'1234123412341234'" type="text" required
+                                formControlName="Card Number">
                         </div>
                         <div class="row">
                             <div class="stack">
                                 <label>Expiry month*</label>
-                                <input type="text" required formControlName="Expiry Month">
+                                <input [placeholder]="'MM'" type="text" required formControlName="Expiry Month">
                             </div>
                             <div class="stack">
                                 <label>Expiry year*</label>
-                                <input type="text" required formControlName="Expiry Year">
+                                <input [placeholder]="'YYYY'" type="text" required formControlName="Expiry Year">
                             </div>
                             <div class="stack">
                                 <label>CVC*</label>
-                                <input type="text" required formControlName="CVC">
+                                <input [placeholder]="'123'" type="text" required formControlName="CVC">
                             </div>
                         </div>
                         <h2>Additional information</h2>
