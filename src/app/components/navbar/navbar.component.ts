@@ -102,7 +102,7 @@ export class NavbarComponent {
     });
 
     this.message =
-      this.authService.getUserType() == 'Wholesale'
+      this.authService.getCustomerType() == 'Wholesale'
         ? 'Welcome to Hellenic Grocery Wholesale'
         : 'Welcome to Hellenic Grocery Retail';
 

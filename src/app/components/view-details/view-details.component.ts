@@ -21,6 +21,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
 import { CartUnit } from 'src/app/common/types/cart';
 import { ProductDetails } from 'src/app/common/types/shop';
+import { CustomerType } from 'src/app/common/types/account';
 
 @Component({
   selector: 'app-view-details',
@@ -57,7 +58,7 @@ export class ViewDetailsComponent {
   quantityMultiplier = 1;
   unit: CartUnit = CartUnit.Unit;
 
-  userType: string | null = 'Retail';
+  customerType: CustomerType = CustomerType.Retail;
 
   clipboardState: string = 'inactive';
 
@@ -97,7 +98,7 @@ export class ViewDetailsComponent {
 
   async loadProduct(productName: string) {
     await this.authService.checkLogin();
-    this.userType = this.authService.getUserType();
+    this.customerType = this.authService.getCustomerType();
 
     let product: ProductDetails = await this.dataService.processGet(
       'product-view-details',
@@ -108,9 +109,12 @@ export class ViewDetailsComponent {
     if (product.discount && product.discount != null) {
       product.discounted_price =
         product.price * ((100 - product.discount) / 100);
-      if (product.box_price != null && product.pallet_price) {
+      if (product.box_price != null) {
         product.discounted_box_price =
           product.box_price * ((100 - product.discount) / 100);
+      }
+
+      if (product.pallet_price != null) {
         product.discounted_pallet_price =
           product.pallet_price * ((100 - product.discount) / 100);
       }

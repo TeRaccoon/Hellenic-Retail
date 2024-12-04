@@ -10,6 +10,8 @@ import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
 import { RenderService } from 'src/app/services/render.service';
 import { UrlService } from 'src/app/services/url.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { CustomerType } from 'src/app/common/types/account';
 
 @Component({
   selector: 'app-home-featured',
@@ -27,6 +29,8 @@ export class HomeFeaturedComponent {
 
   imageUrl = '';
 
+  customerType = CustomerType.Retail;
+
   screenSize: any = {};
   limit = 3;
 
@@ -35,13 +39,15 @@ export class HomeFeaturedComponent {
     private cartService: CartService,
     private dataService: DataService,
     private formService: FormService,
-    private renderService: RenderService
+    private renderService: RenderService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.loadProducts();
     this.imageUrl = this.urlService.getUrl('uploads');
     this.loadRenderService();
+    this.customerType = this.authService.getCustomerType();
   }
 
   loadRenderService() {

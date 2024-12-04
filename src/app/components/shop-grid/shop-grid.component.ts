@@ -8,6 +8,7 @@ import { FilterService } from 'src/app/services/filter.service';
 import { RenderService } from 'src/app/services/render.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UrlService } from 'src/app/services/url.service';
+import { CustomerType } from 'src/app/common/types/account';
 
 @Component({
   selector: 'app-shop-grid',
@@ -19,6 +20,8 @@ export class ShopGridComponent {
 
   faHeart = faHeart;
   faEye = faEye;
+
+  customerType: CustomerType = CustomerType.Retail;
 
   resultsAmount = 0;
   products: any[] = [];
@@ -48,7 +51,9 @@ export class ShopGridComponent {
     private formService: FormService,
     private renderService: RenderService,
     private authService: AuthService
-  ) {}
+  ) {
+    this.customerType = authService.getCustomerType();
+  }
 
   ngOnInit() {
     this.products = [];

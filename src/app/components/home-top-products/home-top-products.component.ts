@@ -10,6 +10,8 @@ import {
   faPallet,
 } from '@fortawesome/free-solid-svg-icons';
 import { RenderService } from 'src/app/services/render.service';
+import { CustomerType } from 'src/app/common/types/account';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home-top-products',
@@ -19,6 +21,8 @@ import { RenderService } from 'src/app/services/render.service';
 export class HomeTopProductsComponent {
   screenSize: any = {};
   limit = 10;
+
+  customerType: CustomerType = CustomerType.Retail;
 
   faHeart = faHeart;
   faEye = faEye;
@@ -35,8 +39,11 @@ export class HomeTopProductsComponent {
     private cartService: CartService,
     private dataService: DataService,
     private formService: FormService,
-    private renderService: RenderService
-  ) {}
+    private renderService: RenderService,
+    private authService: AuthService
+  ) {
+    this.customerType = this.authService.getCustomerType();
+  }
 
   ngOnInit() {
     this.imageUrl = this.urlService.getUrl('uploads');

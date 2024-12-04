@@ -77,7 +77,7 @@ export class AccountComponent {
   async checkLogin() {
     // this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
     //   if (loggedIn) {
-    this.userId = this.authService.getUserID();
+    this.userId = this.authService.getCustomerID();
     if (this.userId != null) {
       this.loggedIn = true;
       this.loadAccountDetails();
@@ -132,7 +132,7 @@ export class AccountComponent {
   }
 
   submitChanges() {
-    let id = this.authService.getUserID();
+    let id = this.authService.getCustomerID();
 
     if (id != null) {
       let formData = this.changeAccountDetails.value;

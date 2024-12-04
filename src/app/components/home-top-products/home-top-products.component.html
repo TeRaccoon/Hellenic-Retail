@@ -2,7 +2,7 @@
     <h2>Best Selling Products</h2>
     <div class="grid-container">
         <ng-container *ngFor="let product of topProducts.slice(0, limit); let i = index;">
-            <app-product [product]="product" />
+            <app-product [product]="product" [customerType]="customerType" />
         </ng-container>
     </div>
 </div>

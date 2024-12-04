@@ -231,7 +231,7 @@ export class LoginFormComponent {
   }
 
   async tracing() {
-    let customerId = this.authService.getUserID();
+    let customerId = this.authService.getCustomerID();
     await this.dataService.processPost({
       action: 'tracing',
       page: 'login',

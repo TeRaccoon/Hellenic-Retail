@@ -1,39 +1,44 @@
 export interface Order {
-    date: string,
-    title: string,
-    status: OrderStatus,
-    gross_value: number,
-    VAT: number,
-    total: number,
-    payment_status: PaymentStatus,
-};
+  date: string;
+  title: string;
+  status: OrderStatus;
+  gross_value: number;
+  VAT: number;
+  total: number;
+  payment_status: PaymentStatus;
+}
 
 export enum OrderStatus {
-    Pending = 'Pending',
-    Overdue = 'Overdue',
-    Complete = 'Complete',
-};
+  Pending = 'Pending',
+  Overdue = 'Overdue',
+  Complete = 'Complete',
+}
 
 enum PaymentStatus {
-    Yes = 'Yes',
-    No = 'No'
-};
+  Yes = 'Yes',
+  No = 'No',
+}
 
 export interface RegistrationForm {
-    action: 'create-account',
-    email: string,
-    forename: string,
-    password?: string,
-    passwordRepeat?: string,
-    phone?: string,
-    promoConsent: boolean,
-    surname: string,
-    table_name: 'customers',
-    termsAndConditions: boolean
-};
+  action: 'create-account';
+  email: string;
+  forename: string;
+  password?: string;
+  passwordRepeat?: string;
+  phone?: string;
+  promoConsent: boolean;
+  surname: string;
+  table_name: 'customers';
+  termsAndConditions: boolean;
+}
+
+export enum CustomerType {
+  Retail = 'Retail',
+  Wholesale = 'Wholesale',
+}
 
 export interface AccountResponse {
-    success: boolean,
-    message: string,
-    data?: string
-};
+  success: boolean;
+  message: string;
+  data?: string;
+}

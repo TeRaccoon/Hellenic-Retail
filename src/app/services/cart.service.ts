@@ -29,7 +29,7 @@ export class CartService {
       .isLoggedInObservable()
       .subscribe(async (loggedIn: boolean) => {
         if (loggedIn) {
-          let userId = this.authService.getUserID();
+          let userId = this.authService.getCustomerID();
           if (userId !== null) {
             await this.loadCartDatabase(userId);
           }
@@ -89,7 +89,7 @@ export class CartService {
   }
 
   getProductPrice(product: Product, unit: CartUnit) {
-    let customerType = this.authService.getUserType();
+    let customerType = this.authService.getCustomerType();
     switch (unit) {
       case 'Unit':
         return customerType == 'Retail'
@@ -106,7 +106,7 @@ export class CartService {
   }
 
   async refreshCart() {
-    let userId = this.authService.getUserID();
+    let userId = this.authService.getCustomerID();
     if (userId !== null) {
       this.cart = await this.dataService.processPost({
         action: 'cart',
@@ -130,7 +130,7 @@ export class CartService {
     productName = '',
     multiplier: number = 1
   ) {
-    let userId = this.authService.getUserID();
+    let userId = this.authService.getCustomerID();
     if (userId !== null) {
       this.addToCartDatabase(userId, productId, quantity, unit, multiplier);
     } else {
@@ -255,7 +255,7 @@ export class CartService {
   }
 
   async removeFromCart(cartId: number) {
-    let userId = this.authService.getUserID();
+    let userId = this.authService.getCustomerID();
     if (userId !== null) {
       await this.removeFromCartDatabase(cartId, userId);
     } else {
@@ -291,7 +291,7 @@ export class CartService {
   }
 
   async clearCart(showPopup = true) {
-    let userId = this.authService.getUserID();
+    let userId = this.authService.getCustomerID();
     if (userId !== null) {
       await this.clearCartDatabase(userId, showPopup);
     } else {
@@ -390,7 +390,7 @@ export class CartService {
   async addToWishlist(productID: number) {
     let isLoggedIn = this.authService.isLoggedIn();
     if (isLoggedIn) {
-      let customerID = this.authService.getUserID();
+      let customerID = this.authService.getCustomerID();
       if (customerID != null) {
         let form = {
           action: 'add',
@@ -426,7 +426,7 @@ export class CartService {
   async removeFromWishlist(wishlistID: number) {
     let isLoggedIn = this.authService.isLoggedIn();
     if (isLoggedIn) {
-      let customerID = this.authService.getUserID();
+      let customerID = this.authService.getCustomerID();
       if (customerID != null) {
         let form = {
           action: 'delete',

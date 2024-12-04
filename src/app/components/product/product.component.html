@@ -11,7 +11,7 @@
         (error)="onImageError($event)" />
     <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
     <div class="price-container">
-        <ng-container *ngIf="product.pallet_price == undefined else wholesale">
+        <ng-container *ngIf="customerType == 'Retail' else wholesale">
             <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price | number: '1.2-2' }}
             </p>
             <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number: '1.2-2' }}</p>

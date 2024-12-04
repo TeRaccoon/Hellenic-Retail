@@ -195,8 +195,8 @@ export class CheckoutComponent {
   async load() {
     this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
       if (loggedIn) {
-        this.customerId = this.authService.getUserID();
-        this.userType = this.authService.getUserType() ?? 'Retail';
+        this.customerId = this.authService.getCustomerID();
+        this.userType = this.authService.getCustomerType() ?? 'Retail';
         this.loadAddressBook();
       }
     });
@@ -456,6 +456,8 @@ export class CheckoutComponent {
       delivery: '&pound' + this.checkoutSummary.delivery.toFixed(2),
       total: '&pound;' + this.checkoutSummary.total.toFixed(2),
     };
+
+    console.log(products);
 
     const emailHTML =
       this.mailService.generateOrderConfirmationEmail(emailInformation);

@@ -41,7 +41,7 @@ export class WishlistComponent {
   }
 
   async loadWishlist() {
-    let userID = this.authService.getUserID();
+    let userID = this.authService.getCustomerID();
     if (userID != null) {
       let wishlistProducts = await this.dataService.processGet(
         'wishlist-from-id',

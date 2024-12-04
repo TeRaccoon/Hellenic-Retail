@@ -3,6 +3,7 @@ import { CartService } from '../../services/cart.service';
 import { FormService } from '../../services/form.service';
 import { UrlService } from 'src/app/services/url.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+import { CustomerType } from 'src/app/common/types/account';
 
 @Component({
   selector: 'app-product',
@@ -11,6 +12,7 @@ import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 })
 export class ProductComponent {
   @Input() product: any;
+  @Input() customerType: CustomerType = CustomerType.Retail;
 
   imageUrl: string;
 
@@ -27,6 +29,7 @@ export class ProductComponent {
 
   ngOnInit() {
     this.setProductBanner();
+    console.log(this.customerType);
   }
 
   setProductBanner() {

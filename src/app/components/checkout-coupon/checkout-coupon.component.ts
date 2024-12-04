@@ -82,7 +82,7 @@ export class CheckoutCouponComponent {
       return true;
     }
 
-    if (Number(this.authService.getUserID()) === customer_id) {
+    if (Number(this.authService.getCustomerID()) === customer_id) {
       return true;
     }
 

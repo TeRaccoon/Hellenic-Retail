@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, lastValueFrom, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UrlService } from './url.service';
+import { CustomerType } from '../common/types/account';
 
 @Injectable({
   providedIn: 'root',
@@ -9,8 +10,8 @@ import { UrlService } from './url.service';
 export class AuthService {
   private isAuthenticatedObservable = new BehaviorSubject<boolean>(false);
   private isAuthenticated = false;
-  private userID: string | null = null;
-  private userType: string | null = null;
+  private customerID: string | null = null;
+  private customerType: CustomerType | null = null;
 
   url: string = '';
 
@@ -30,20 +31,20 @@ export class AuthService {
 
     if (response.data != null) {
       this.isAuthenticated = true;
-      this.userID = response.data.id;
-      this.userType = response.data.customer_type;
+      this.customerID = response.data.id;
+      this.customerType = response.data.customer_type;
       this.isAuthenticatedObservable.next(true);
     } else {
       this.isAuthenticated = false;
       this.isAuthenticatedObservable.next(false);
-      this.userType = 'Retail';
-      this.userID = null;
+      this.customerType = CustomerType.Retail;
+      this.customerID = null;
     }
     return this.isAuthenticated;
   }
 
   login(userID: string) {
-    this.userID = userID;
+    this.customerID = userID;
     this.isAuthenticatedObservable.next(true);
     this.isAuthenticated = true;
   }
@@ -83,11 +84,11 @@ export class AuthService {
     );
   }
 
-  getUserID() {
-    return this.userID;
+  getCustomerID() {
+    return this.customerID;
   }
 
-  getUserType() {
-    return this.userType;
+  getCustomerType(): CustomerType {
+    return this.customerType ?? CustomerType.Retail;
   }
 }

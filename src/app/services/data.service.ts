@@ -42,7 +42,7 @@ export class DataService {
     checkLogin = false
   ): Promise<any> {
     checkLogin && (await this.authService.checkLogin());
-    let userType = this.authService.getUserType();
+    let userType = this.authService.getCustomerType();
 
     const url = new URL(this.urlService.getUrl('retail'));
     url.searchParams.append('query', query);

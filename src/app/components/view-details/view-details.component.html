@@ -2,7 +2,7 @@
     <ng-container *ngIf="product">
         <h1>{{ product.name }}</h1>
         <div class="price-container">
-            <ng-container *ngIf="product.pallet_price == undefined else wholesale">
+            <ng-container *ngIf="customerType == 'Retail' else wholesale">
                 <div class="retail-price-container">
                     <div>
                         <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price | number:
@@ -58,8 +58,8 @@
         <div class="purchasing-options">
             <div>
                 <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
-                <select *ngIf="userType == 'Wholesale' || product.retail_box_price" (change)="changePackageType($event)"
-                    [disabled]="outOfStock">
+                <select *ngIf="customerType == 'Wholesale' || product.retail_box_price"
+                    (change)="changePackageType($event)" [disabled]="outOfStock">
                     <option>Unit</option>
                     <option value="Retail Box"
                         *ngIf="product.retail_box_price && (product.box_size && product.box_size <= stock)">Box</option>
