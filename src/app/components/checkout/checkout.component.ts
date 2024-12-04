@@ -437,7 +437,6 @@ export class CheckoutComponent {
   }
 
   sendEmailConfirmation(): Promise<Response> {
-    console.log(this.cartProducts);
     let products = this.cartProducts.map((product: CartProduct, index) => {
       return {
         name: product.name,
@@ -457,8 +456,6 @@ export class CheckoutComponent {
       delivery: '&pound' + this.checkoutSummary.delivery.toFixed(2),
       total: '&pound;' + this.checkoutSummary.total.toFixed(2),
     };
-
-    console.log(emailInformation);
 
     const emailHTML =
       this.mailService.generateOrderConfirmationEmail(emailInformation);
