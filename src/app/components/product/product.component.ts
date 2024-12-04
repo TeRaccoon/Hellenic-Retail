@@ -29,7 +29,6 @@ export class ProductComponent {
 
   ngOnInit() {
     this.setProductBanner();
-    console.log(this.customerType);
   }
 
   setProductBanner() {

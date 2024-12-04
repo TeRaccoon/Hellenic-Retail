@@ -411,9 +411,9 @@ export class CheckoutComponent {
     }
 
     if (success) {
+      let response = await this.sendEmailConfirmation();
       await this.cartService.clearCart(false);
 
-      let response = await this.sendEmailConfirmation();
       if (response.success) {
         setTimeout(() => {
           this.router.navigate(['/order-complete']);
@@ -437,6 +437,7 @@ export class CheckoutComponent {
   }
 
   sendEmailConfirmation(): Promise<Response> {
+    console.log(this.cartProducts);
     let products = this.cartProducts.map((product: CartProduct, index) => {
       return {
         name: product.name,
@@ -457,7 +458,7 @@ export class CheckoutComponent {
       total: '&pound;' + this.checkoutSummary.total.toFixed(2),
     };
 
-    console.log(products);
+    console.log(emailInformation);
 
     const emailHTML =
       this.mailService.generateOrderConfirmationEmail(emailInformation);
