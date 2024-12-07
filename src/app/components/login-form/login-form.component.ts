@@ -58,6 +58,7 @@ export class LoginFormComponent {
   loginError: string = '';
 
   forgotPasswordState = false;
+  forgotPasswordText = 'Forgot your password?';
   loading = false;
 
   submitted = false;
@@ -116,6 +117,7 @@ export class LoginFormComponent {
   }
 
   reset() {
+    this.loginForm.enable();
     this.forgotPasswordState = false;
     this.submitted = false;
     this.loginError = '';
@@ -169,6 +171,7 @@ export class LoginFormComponent {
   async sendForgotPasswordEmail() {
     if (await this.checkCustomerEmail()) {
       this.loading = true;
+      this.loginForm.disable();
       let password = this.accountService.generatePassword();
       const emailHTML = this.mailService.generateForgotPasswordEmail(password);
       const emailData = {
@@ -219,15 +222,19 @@ export class LoginFormComponent {
 
   async checkCustomerEmail() {
     let email = this.loginForm.get('email')?.value;
-    let response = await this.dataService.processGet(
-      'user-id-from-email',
-      email
-    );
+    let response = await this.dataService.processGet('user-id-from-email', {
+      filter: email,
+    });
     if (response.length == 0) {
       this.loginError = "A user doesn't exist with this email";
       return false;
     }
     return true;
+  }
+
+  onPasswordChange() {
+    this.submitted = false;
+    console.log(this.submitted);
   }
 
   async tracing() {
@@ -251,5 +258,9 @@ export class LoginFormComponent {
       this.loginForm.get('password')?.removeValidators(Validators.required);
     }
     this.forgotPasswordState = !this.forgotPasswordState;
+    this.forgotPasswordText = this.forgotPasswordState
+      ? 'Remembered your password?'
+      : 'Forgot your password?';
+    console.log(this.forgotPasswordText);
   }
 }

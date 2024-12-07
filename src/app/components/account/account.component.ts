@@ -75,8 +75,6 @@ export class AccountComponent {
   }
 
   async checkLogin() {
-    // this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
-    //   if (loggedIn) {
     this.userId = this.authService.getCustomerID();
     if (this.userId != null) {
       this.loggedIn = true;
@@ -84,8 +82,6 @@ export class AccountComponent {
       this.loadOrderHistory();
       this.loadAddressBook();
     }
-    //   }
-    // });
   }
 
   async loadAccountDetails() {

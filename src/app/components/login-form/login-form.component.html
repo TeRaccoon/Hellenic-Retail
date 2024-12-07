@@ -16,11 +16,11 @@
                         {{ error.message }}
                     </div>
                 </div>
-                <input [class]="inputHasError('email') ? 'error-input' : ''" type="text" required
-                    formControlName="email" placeholder="Enter email address">
+                <input [class]="inputHasError('email') ? 'error-input' : ''" (input)="onPasswordChange()" type="text"
+                    required formControlName="email" placeholder="Enter email address">
                 <div *ngFor="let error of errorMessages.password">
                     <div class="error"
-                        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type)">
+                        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type) && submitted">
                         {{ error.message }}
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <label for="remember-me">Remember me</label>
                         <input type="checkbox" id="remember-me" name="remember-me" value="remember-me">
                     </div> -->
-                    <a (click)="forgotPassword()">Forgot your password?</a>
+                    <a (click)="forgotPassword()">{{ forgotPasswordText }}</a>
                 </div>
                 <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}
                     <fa-icon *ngIf="loading" class="loading-icon" [icon]="spinner" spinPulse [spin]="true" />
