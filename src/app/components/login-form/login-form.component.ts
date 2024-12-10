@@ -197,6 +197,7 @@ export class LoginFormComponent {
         this.loginError = `There was a problem issuing a temporary password. Please try again or contact support for help: ${this.supportEmail}`;
       }
       this.loading = false;
+      this.loginForm.enable();
     }
   }
 
