@@ -121,6 +121,7 @@ export class LoginFormComponent {
     this.forgotPasswordState = false;
     this.submitted = false;
     this.loginError = '';
+    this.forgotPasswordText = 'Forgot your password?';
   }
 
   toggleLogin() {
@@ -261,6 +262,5 @@ export class LoginFormComponent {
     this.forgotPasswordText = this.forgotPasswordState
       ? 'Remembered your password?'
       : 'Forgot your password?';
-    console.log(this.forgotPasswordText);
   }
 }
