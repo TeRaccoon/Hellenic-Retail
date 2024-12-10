@@ -110,6 +110,7 @@ export class CartPopupComponent {
     await this.cartService.clearCart();
     this.confirmationPopupVisible = false;
     await this.getCartData();
+    this.subtotal = 0;
   }
 
   async loadCartData() {
