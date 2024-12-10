@@ -131,10 +131,22 @@ export class CartService {
     multiplier: number = 1
   ) {
     let userId = this.authService.getCustomerID();
+
+    if (quantity < 1) {
+      this.formService.setPopupMessage('Quantity must be more than 1!', true);
+      return;
+    }
+
     if (userId !== null) {
-      this.addToCartDatabase(userId, productId, quantity, unit, multiplier);
+      await this.addToCartDatabase(
+        userId,
+        productId,
+        quantity,
+        unit,
+        multiplier
+      );
     } else {
-      this.addToCartLocalStorage(
+      await this.addToCartLocalStorage(
         productId,
         productName,
         quantity,
@@ -151,37 +163,71 @@ export class CartService {
     unit: CartUnit = CartUnit.Unit,
     multiplier: number = 1
   ) {
-    var currentCartItems = this.cart;
-    const existingCartItemIndex = currentCartItems.findIndex(
-      (cartItem) => cartItem.item_id === productId
-    );
+    try {
+      const currentCartItems = this.cart || [];
 
-    if (existingCartItemIndex !== -1) {
-      this.formService.setPopupMessage('Item already in basket!', true);
-    } else {
-      if (await this.checkStock(quantity * multiplier, productId, true)) {
-        let cartItem: CartItem = {
-          id: currentCartItems.length,
+      const existingCartItemIndex = currentCartItems.findIndex(
+        (cartItem) => cartItem.item_id === productId && cartItem.unit === unit
+      );
+
+      const isStockAvailable = await this.checkStock(
+        quantity * multiplier,
+        productId,
+        true
+      );
+
+      if (!isStockAvailable) {
+        this.formService.setPopupMessage('Item is out of stock!', true);
+        return;
+      }
+
+      if (existingCartItemIndex !== -1) {
+        const existingCartItem = currentCartItems[existingCartItemIndex];
+
+        if (existingCartItem.quantity === quantity) {
+          this.formService.setPopupMessage('Item already in basket!', true);
+          return;
+        }
+
+        existingCartItem.quantity = quantity;
+        this.formService.setPopupMessage('Cart item quantity updated!', true);
+      } else {
+        const newCartItem: CartItem = {
+          id:
+            currentCartItems.length > 0
+              ? currentCartItems[currentCartItems.length - 1].id + 1
+              : 1,
           item_id: productId,
           item_name: productName,
           quantity: quantity,
           unit: unit,
         };
-
-        currentCartItems.push(cartItem);
-
+        currentCartItems.push(newCartItem);
         this.formService.setPopupMessage('Item added to cart!', true);
-
-        this.cart = currentCartItems;
-        localStorage.setItem('cart', JSON.stringify(currentCartItems));
-        await this.refreshCart();
-        this.requestUpdate();
-      } else {
-        this.formService.setPopupMessage('Item is out of stock!', true);
       }
+
+      await this.processLocalStorage(currentCartItems);
+    } catch (error) {
+      this.formService.setPopupMessage(
+        'Failed to add item to cart. Please try again.',
+        true
+      );
     }
   }
 
+  async processLocalStorage(updatedCart: CartItem[]) {
+    try {
+      this.cart = updatedCart;
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      await this.refreshCart();
+      this.requestUpdate();
+    } catch (error) {
+      this.formService.setPopupMessage(
+        'Failed to update cart. Please try again.',
+        true
+      );
+    }
+  }
   async addToCartDatabase(
     userId: string,
     productId: number,

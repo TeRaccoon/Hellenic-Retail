@@ -236,7 +236,6 @@ export class LoginFormComponent {
 
   onPasswordChange() {
     this.submitted = false;
-    console.log(this.submitted);
   }
 
   async tracing() {

@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
 import { FormService } from 'src/app/services/form.service';
 import { CartService } from 'src/app/services/cart.service';
-import { UrlService } from 'src/app/services/url.service'
-import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
+import { UrlService } from 'src/app/services/url.service';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  keyframes,
+} from '@angular/animations';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { CartItem, CartProduct } from 'src/app/common/types/cart';
+import { CartItem, CartProduct, CartUnit } from 'src/app/common/types/cart';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -13,20 +20,31 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./cart-popup.component.scss'],
   animations: [
     trigger('cartAnimation', [
-      state('visible', style({ opacity: 1, display: 'block'})),
-      state('hidden', style({ opacity: 0, display: 'none'})),
-      transition('hidden => visible', animate('600ms ease', keyframes([
-        style({opacity: 0, display: 'block', offset: 0}),
-        style({opacity: 1, offset: 1})
-      ]))),
-      transition('visible => hidden', animate('600ms ease', keyframes([
-        style({opacity: 1, offset: 0}),
-        style({opacity: 0, display: 'none', offset: 1})
-      ])))
+      state('visible', style({ opacity: 1, display: 'block' })),
+      state('hidden', style({ opacity: 0, display: 'none' })),
+      transition(
+        'hidden => visible',
+        animate(
+          '600ms ease',
+          keyframes([
+            style({ opacity: 0, display: 'block', offset: 0 }),
+            style({ opacity: 1, offset: 1 }),
+          ])
+        )
+      ),
+      transition(
+        'visible => hidden',
+        animate(
+          '600ms ease',
+          keyframes([
+            style({ opacity: 1, offset: 0 }),
+            style({ opacity: 0, display: 'none', offset: 1 }),
+          ])
+        )
+      ),
     ]),
-  ]
+  ],
 })
-
 export class CartPopupComponent {
   cartVisible = 'visible';
   cart: CartItem[] = [];
@@ -39,12 +57,17 @@ export class CartPopupComponent {
 
   faX = faX;
 
-  constructor(private urlService: UrlService, private cartService: CartService, private formService: FormService, private authService: AuthService) {}
+  constructor(
+    private urlService: UrlService,
+    private cartService: CartService,
+    private formService: FormService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.imageUrl = this.urlService.getUrl('uploads');
 
-    this.formService.getCartFormVisibility().subscribe(async(visible) => {
+    this.formService.getCartFormVisibility().subscribe(async (visible) => {
       this.cartVisible = visible ? 'visible' : 'hidden';
 
       if (visible) {
@@ -73,16 +96,15 @@ export class CartPopupComponent {
     await this.getCartData();
   }
 
-  async changeQuantity(event: any, productID: number) {
+  async changeQuantity(event: any, productID: number, unit: CartUnit) {
     const quantity = parseInt(event.target.value);
-    await this.cartService.addToCart(productID, quantity);
+    await this.cartService.addToCart(productID, quantity, unit);
     await this.getCartData();
   }
 
   changeConfirmationPopupState(visible: boolean) {
     this.confirmationPopupVisible = visible;
   }
-
 
   async clearCart() {
     await this.cartService.clearCart();
