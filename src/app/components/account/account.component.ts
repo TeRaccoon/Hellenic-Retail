@@ -180,6 +180,7 @@ export class AccountComponent {
         'There was an error adding this address!',
         true
       );
+      this.pendingDeleteId = null;
     } else {
       this.formService.setPopupMessage('Address added successfully', true);
       this.addAddressForm.reset();

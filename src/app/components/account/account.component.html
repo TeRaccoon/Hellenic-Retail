@@ -10,36 +10,46 @@
                     <div class="inputs">
                         <div class="detail">
                             <label for="forename">Forename</label>
-                            <input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="forename" id="forename">
-                            <div *ngIf="changeAccountDetails.get('forename')?.hasError('required') && changeAccountDetails.get('forename')?.touched">
+                            <input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}"
+                                formControlName="forename" id="forename">
+                            <div
+                                *ngIf="changeAccountDetails.get('forename')?.hasError('required') && changeAccountDetails.get('forename')?.touched">
                                 Forename is required.
                             </div>
                         </div>
                         <div class="detail">
                             <label for="surname">Surname</label>
-                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="surname" id="surname">
-                            <div *ngIf="changeAccountDetails.get('surname')?.hasError('required') && changeAccountDetails.get('surname')?.touched">
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}"
+                                formControlName="surname" id="surname">
+                            <div
+                                *ngIf="changeAccountDetails.get('surname')?.hasError('required') && changeAccountDetails.get('surname')?.touched">
                                 Surname is required.
                             </div>
                         </div>
                         <div class="detail">
                             <label for="email">Email</label>
-                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="email" id="email">
-                            <div *ngIf="changeAccountDetails.get('email')?.hasError('required') && changeAccountDetails.get('email')?.touched">
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}"
+                                formControlName="email" id="email">
+                            <div
+                                *ngIf="changeAccountDetails.get('email')?.hasError('required') && changeAccountDetails.get('email')?.touched">
                                 Email is empty or invalid.
                             </div>
                         </div>
                         <div class="detail">
                             <label for="primary-phone">Phone number (primary)</label>
-                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="primaryPhone" id="primary-phone">
-                            <div *ngIf="changeAccountDetails.get('primary-phone')?.hasError('required') && changeAccountDetails.get('primary-phone')?.touched">
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}"
+                                formControlName="primaryPhone" id="primary-phone">
+                            <div
+                                *ngIf="changeAccountDetails.get('primary-phone')?.hasError('required') && changeAccountDetails.get('primary-phone')?.touched">
                                 Primary phone is empty or invalid.
                             </div>
                         </div>
                         <div class="detail">
                             <label for="secondary-phone">Phone number (secondary)</label>
-                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}" formControlName="secondaryPhone" id="secondary-phone">
-                            <div *ngIf="changeAccountDetails.get('secondary-phone')?.hasError('required') && changeAccountDetails.get('secondary-phone')?.touched">
+                            <input input [attr.disabled]="!edit ? true : null" [ngClass]="{'enabled': edit}"
+                                formControlName="secondaryPhone" id="secondary-phone">
+                            <div
+                                *ngIf="changeAccountDetails.get('secondary-phone')?.hasError('required') && changeAccountDetails.get('secondary-phone')?.touched">
                                 Secondary phone is empty or invalid.
                             </div>
                         </div>
@@ -56,72 +66,82 @@
         <div class="address-book">
             <h1>Address Book</h1>
             <form [formGroup]="addAddressForm" (ngSubmit)="addAddress()">
-                <table>
-                    <thead>
-                        <tr class="column-titles">
-                            <th>Line 1</th>
-                            <th>Line 2</th>
-                            <th>Line 3</th>
-                            <th>Postcode</th>
-                            <th class="edit">Edit</th>
-                            <th class="delete">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody class="address-book-table">
-                        <tr *ngFor="let address of addressBook">
-                            <td class="address-1">{{ address.delivery_address_one }}</td>
-                            <td class="address-2">{{ address.delivery_address_two }}</td>
-                            <td>{{ address.delivery_address_three }}</td>
-                            <td>{{ address.delivery_postcode }}</td>
-                            <td class="edit-icon">
-                                <fa-icon [icon]="pencil" />
-                            </td>
-                            <ng-container *ngIf="pendingDeleteId != address.id else pendingDelete">
-                                <td class="delete-icon" (click)="setDeleteId(address.id)">
-                                    <fa-icon [icon]="bin" />
+                <div class="address-book-table">
+                    <table>
+                        <thead>
+                            <tr class="column-titles">
+                                <th>Line 1</th>
+                                <th>Line 2</th>
+                                <th>Line 3</th>
+                                <th>Postcode</th>
+                                <th class="delete">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="address-book-table">
+                            <tr *ngFor="let address of addressBook">
+                                <td class="address-1">{{ address.delivery_address_one }}</td>
+                                <td class="address-2">{{ address.delivery_address_two }}</td>
+                                <td>{{ address.delivery_address_three }}</td>
+                                <td>{{ address.delivery_postcode }}</td>
+
+                                <ng-container *ngIf="pendingDeleteId != address.id else pendingDelete">
+                                    <td class="delete-icon" (click)="setDeleteId(address.id)">
+                                        <fa-icon [icon]="bin" />
+                                    </td>
+                                </ng-container>
+                                <ng-template #pendingDelete>
+                                    <td class="delete-icon" (click)="removeAddress()">
+                                        <fa-icon [icon]="tick" />
+                                    </td>
+                                </ng-template>
+                            </tr>
+                            <tr *ngIf="this.showAddNew">
+                                <td>
+                                    <input type="text" formControlName="delivery_address_one">
                                 </td>
+                                <td>
+                                    <input type="text" formControlName="delivery_address_two">
+                                </td>
+                                <td>
+                                    <input type="text" formControlName="delivery_address_three">
+                                </td>
+                                <td>
+                                    <input type="text" formControlName="delivery_postcode">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="buttons">
+                        <button type="button" (click)="toggleAddNew()">Add New</button>
+                        <button type="submit">Save</button>
+                        <button type="button" (click)="cancelAddAddress()">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="address-book-cards">
+                    <div *ngFor="let address of addressBook" class="address-card">
+                        <div class="address-line">{{ address.delivery_address_one }}</div>
+                        <div class="address-line">{{ address.delivery_address_two }}</div>
+                        <div class="address-line">{{ address.delivery_address_three }}</div>
+                        <div class="address-line">{{ address.delivery_postcode }}</div>
+                        <div class="address-actions">
+                            <ng-container *ngIf="pendingDeleteId != address.id else pendingDelete">
+                                <fa-icon [icon]="bin" class="delete-icon" (click)="setDeleteId(address.id)"></fa-icon>
                             </ng-container>
                             <ng-template #pendingDelete>
-                                <td (click)="removeAddress()">
-                                    <fa-icon [icon]="tick" />
-                                </td>
+                                <fa-icon [icon]="tick" (click)="removeAddress()"></fa-icon>
                             </ng-template>
-                        </tr>
-                        <tr *ngIf="this.showAddNew">
-                            <td>
-                                <input type="text" formControlName="delivery_address_one">
-                            </td>
-                            <td>
-                                <input type="text" formControlName="delivery_address_two">
-                            </td>
-                            <td>
-                                <input type="text" formControlName="delivery_address_three">
-                            </td>
-                            <td>
-                                <input type="text" formControlName="delivery_postcode">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div *ngIf="addressBook != null && addressBook.length != 0 else noAddresses" class="buttons">
-                    <button type="button" (click)="toggleAddNew()">Add New</button>
-                    <button type="submit">Save</button>
-                    <button type="button" (click)="cancelAddAddress()">Cancel</button>
-                </div>
-                <ng-template #noAddresses>
-                    <div class="no-addresses">
-                        <h2>Your address book is empty.</h2>
-                        <button type="button" (click)="toggleAddNew()">Add New</button>
-                        <button *ngIf="this.showAddNew" type="submit">Save</button>
+                        </div>
                     </div>
-                </ng-template>
+                </div>
             </form>
         </div>
+
     </div>
     <div class="order-history">
         <h1>Order history</h1>
         <ng-container *ngIf="orderHistory != null && orderHistory.length != 0 else noOrders">
-            <table class="order-history-table">
+            <table class="order-history-table desktop-only">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -136,7 +156,7 @@
                 <tbody>
                     <tr *ngFor="let order of orderHistory">
                         <td>{{ order.date | date: 'dd/MM/yyyy' }}</td>
-                        <td class="Reference-number">{{ order.title }}</td>
+                        <td>{{ order.title }}</td>
                         <td>{{ order.status }}</td>
                         <td>{{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</td>
                         <td>£{{ order.gross_value | number: '1.2-2' }}</td>
@@ -145,10 +165,22 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="order-card-layout mobile-only" *ngFor="let order of orderHistory">
+                <div class="order-card">
+                    <p><strong>Date:</strong> {{ order.date | date: 'dd/MM/yyyy' }}</p>
+                    <p><strong>Reference:</strong> {{ order.title }}</p>
+                    <p><strong>Status:</strong> {{ order.status }}</p>
+                    <p><strong>Payment Status:</strong> {{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</p>
+                    <p><strong>Net Value:</strong> £{{ order.gross_value | number: '1.2-2' }}</p>
+                    <p><strong>VAT:</strong> £{{ order.VAT | number: '1.2-2' }}</p>
+                    <p><strong>Total:</strong> £{{ order.total | number: '1.2-2' }}</p>
+                </div>
+            </div>
         </ng-container>
         <ng-template #noOrders>
             <h2 class="no-orders">Nothing to show here!</h2>
         </ng-template>
     </div>
+
 </div>
 <app-footer />

@@ -1,31 +1,37 @@
 $hellenicblue: rgb(0, 140, 255);
+
 .account-container {
     width: 68%;
     margin: 15px auto;
     min-height: 60vh;
-    max-height: 675px;
+    max-height: 75vh;
     display: flex;
     flex-direction: column;
     gap: 15px;
+
     h1 {
         font-size: 24px;
         margin-bottom: 20px;
         margin-top: 0px;
     }
+
     .account-details {
         display: flex;
         gap: 15px;
         max-height: 400px;
+
         .details {
             display: flex;
             flex-direction: column;
             border: 1px solid #ccc;
             padding: 20px;
+
             form {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
                 flex-grow: 1;
+
                 .inputs {
                     .detail {
                         display: flex;
@@ -33,10 +39,12 @@ $hellenicblue: rgb(0, 140, 255);
                         align-items: center;
                         border-bottom: 1px solid #cccccc;
                         font-size: 18px;
+
                         label {
                             font-weight: bold;
                             width: 100%;
                         }
+
                         input {
                             font-size: 18px;
                             border: none;
@@ -46,6 +54,7 @@ $hellenicblue: rgb(0, 140, 255);
                             padding: 5px;
                             margin: 3px;
                         }
+
                         .enabled {
                             color: #000000;
                         }
@@ -53,18 +62,22 @@ $hellenicblue: rgb(0, 140, 255);
                 }
             }
         }
+
         .address-book {
             border: 1px solid #ccc;
             padding: 20px;
             flex: 1;
             overflow-y: scroll;
+
             h2 {
                 font-size: 16px;
             }
+
             .no-addresses {
                 display: flex;
                 align-items: center;
                 gap: 10px;
+
                 button {
                     cursor: pointer;
                     font-family: 'Poppins', sans-serif;
@@ -76,11 +89,13 @@ $hellenicblue: rgb(0, 140, 255);
                 }
             }
         }
+
         .buttons {
             display: flex;
             justify-content: flex-start;
             gap: 5px;
             margin: 10px 0;
+
             button {
                 cursor: pointer;
                 font-family: 'Poppins', sans-serif;
@@ -92,32 +107,41 @@ $hellenicblue: rgb(0, 140, 255);
             }
         }
     }
+
     .order-history {
         padding: 20px;
         border: 1px solid #ccc;
         overflow-y: scroll;
+        max-height: 400px;
+
+
         .no-orders {
             margin: 0px;
             font-size: 18px;
         }
     }
+
     table {
         width: 100%;
         border-collapse: collapse;
+
         thead {
             position: sticky;
             top: -20px;
             background-color: white;
         }
+
         th,
         td {
             padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ccc;
+
             th {
                 background-color: #f2f2f2;
                 font-weight: bold;
             }
+
             input {
                 font-size: 18px;
                 border: 2px solid black;
@@ -127,105 +151,196 @@ $hellenicblue: rgb(0, 140, 255);
                 margin: 3px;
             }
         }
+
         .edit-icon {
             text-align: center;
         }
+
         .delete-icon {
             text-align: center;
         }
+
         .delete {
             text-align: center;
         }
+
         .edit {
             text-align: center;
         }
     }
 }
 
+.order-history-table {
+    display: table;
+}
+
+.order-card-layout {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .order-history-table {
+        display: none;
+    }
+
+    .order-card-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .order-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+
+        p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+    }
+}
+
+.address-book {
+    border: 1px solid #ccc;
+    padding: 20px;
+    flex: 1;
+    overflow-y: scroll;
+
+    h2 {
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .address-book-table {
+            display: none;
+        }
+
+        .address-book-cards {
+            display: block;
+        }
+
+        .address-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+
+        .address-line {
+            font-size: 14px;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+    }
+
+    @media (min-width: 769px) {
+        .address-book-cards {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .column-titles th {
+            text-align: left;
+        }
+
+        .address-book-table tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .edit-icon,
+        .delete-icon,
+        .tick {
+            cursor: pointer;
+        }
+    }
+}
+
+
+
 @media screen and (max-width: 1079px) {
     .account-container {
-        width: 85%!important;
+        width: 85% !important;
         max-height: 100%;
-        gap: 30px!important;
+        gap: 30px !important;
+
         h1 {
-            font-size: 18px!important;
+            font-size: 18px !important;
         }
+
         table {
             td {
-                padding: 2px!important;
+                padding: 2px !important;
             }
         }
+
         .account-details {
-            max-height: 100%!important;
+            max-height: 100% !important;
             flex-direction: column;
-            gap: 30px!important;
+            gap: 30px !important;
         }
     }
+
     .details {
-        padding: 15px!important;
+        padding: 15px !important;
     }
+
     .detail {
-        font-size: 12px!important;
-        padding: 15px 15px 15px 3px!important;
+        font-size: 12px !important;
+        padding: 15px 15px 15px 3px !important;
+
         input {
-            font-size: 12px!important;
+            font-size: 12px !important;
         }
     }
+
     .buttons {
         display: flex;
-            width: 75vw!important;
-            overflow: hidden;
+        width: 75vw !important;
+        overflow: hidden;
+
         button {
-            font-size: 10px!important;
-            padding: 4px 14px!important;
+            font-size: 10px !important;
+            padding: 4px 14px !important;
         }
     }
+
     .column-titles {
-        font-size: 10px!important;
+        font-size: 10px !important;
+
         th {
             white-space: nowrap;
             padding: 8px 2px 4px !important;
         }
     }
-    .address-book{
-        padding: 15px!important;
+
+    .address-book {
+        padding: 15px !important;
         max-height: 100vw;
     }
+
     .address-book-table {
-        font-size: 10px!important;
+        font-size: 10px !important;
     }
-    .address-1{
+
+    .address-1 {
         max-width: 6vw;
     }
+
     .address-2 {
         max-width: 8vw;
-    }
-    .order-history {
-        padding: 15px!important;
-        max-height: 100vw;
-        thead {
-            top: -15px;
-            tr {
-                th {
-                    padding: 8px 2px 4px !important;
-                }
-            }
-        }
-        table {
-            table-layout: fixed;
-            tbody {
-                tr {
-                    .Reference-number {
-                        width: 80px;
-                        white-space: pre-wrap;
-                        word-wrap: break-word;
-                        word-break: break-all;
-                    }
-                }
-            }
-        }
-        .order-history-table {
-            font-size: 9px;
-        }
     }
 }
