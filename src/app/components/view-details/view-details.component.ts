@@ -106,6 +106,11 @@ export class ViewDetailsComponent {
       false
     );
 
+    if (product == null || product.name == null) {
+      this.router.navigate(['/shop']);
+      return;
+    }
+
     if (product.discount && product.discount != null) {
       product.discounted_price =
         product.price * ((100 - product.discount) / 100);
