@@ -73,6 +73,7 @@ export class CheckoutComponent {
   paymentMethod = PaymentMethod.Barclays;
 
   invoiceId: number | null = null;
+  invoicedItemIDs: number[] = [];
   originalSubtotal: number | null = null;
 
   supportEmail = '';
@@ -123,6 +124,7 @@ export class CheckoutComponent {
 
     this.checkoutSummary = this.checkoutService.getCheckoutSummary();
     this.supportEmail = this.consts.getConstant(settingKeys.support_email);
+    this.invoicedItemIDs = [];
   }
 
   ngOnInit() {
@@ -395,6 +397,8 @@ export class CheckoutComponent {
         );
         return false;
       }
+
+      this.invoicedItemIDs.push(response.id);
     }
     return true;
   }
@@ -408,6 +412,7 @@ export class CheckoutComponent {
       );
 
       success = this.validateResponse(paymentResponse);
+      success = false;
     }
 
     if (success) {
@@ -415,6 +420,10 @@ export class CheckoutComponent {
       await this.cartService.clearCart(false);
 
       if (response.success) {
+        await lastValueFrom(
+          this.dataService.submitFormData({ action: 'commit' })
+        );
+
         setTimeout(() => {
           this.router.navigate(['/order-complete']);
         }, 3000);
@@ -433,7 +442,29 @@ export class CheckoutComponent {
         true,
         10000
       );
+
+      await this.revertInvoice();
     }
+  }
+
+  async revertInvoice() {
+    for (let i = 0; i < this.invoicedItemIDs.length; i++) {
+      await lastValueFrom(
+        this.dataService.submitFormData({
+          action: 'delete',
+          id: this.invoicedItemIDs[i],
+          table_name: 'invoiced_items',
+        })
+      );
+    }
+
+    await lastValueFrom(
+      this.dataService.submitFormData({
+        action: 'delete',
+        id: this.invoiceId,
+        table_name: 'invoices',
+      })
+    );
   }
 
   sendEmailConfirmation(): Promise<Response> {
