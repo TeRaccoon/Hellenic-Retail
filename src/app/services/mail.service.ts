@@ -43,6 +43,7 @@ export class MailService {
         }
         .container {
             width: 30%;
+            min-width: 450px;
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
