@@ -16,7 +16,7 @@
                         {{ error.message }}
                     </div>
                 </div>
-                <input [class]="inputHasError('email') ? 'error-input' : ''" (input)="onPasswordChange()" type="text"
+                <input [class]="inputHasError('email') ? 'error-input' : ''" (input)="onPasswordChange()" type="email"
                     required formControlName="email" placeholder="Enter email address">
                 <div *ngFor="let error of errorMessages.password">
                     <div class="error"

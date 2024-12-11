@@ -254,10 +254,16 @@ export class LoginFormComponent {
 
   forgotPassword() {
     if (this.forgotPasswordState) {
-      this.loginForm.get('password')?.addValidators(Validators.required);
+      this.loginForm.get('password')?.setValidators([Validators.required]);
     } else {
-      this.loginForm.get('password')?.removeValidators(Validators.required);
+      this.loginForm.get('password')?.clearValidators();
     }
+
+    this.loginForm.get('password')?.setErrors(null);
+    this.loginForm.get('password')?.markAsPristine();
+    this.loginForm.get('password')?.markAsUntouched();
+    this.loginForm.get('password')?.updateValueAndValidity();
+
     this.forgotPasswordState = !this.forgotPasswordState;
     this.forgotPasswordText = this.forgotPasswordState
       ? 'Remembered your password?'
