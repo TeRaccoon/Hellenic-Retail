@@ -52,12 +52,22 @@ $hellenicblue: rgb(0, 140, 255);
             input {
                 font-size: 15px;
                 padding: 10px 15px;
-                border: 1px solid #cccccc;
+                border: 1px solid #888888;
+                outline: 1px solid #fff;
                 margin: 5px;
                 width: 100%;
+                transition: border 0.4s ease, outline 0.3s ease;
 
                 &:focus::placeholder {
                     color: white;
+                }
+
+                &:focus,
+                &:hover {
+                    outline: none;
+                    border: 1px solid $hellenicblue;
+                    outline: 1px solid $hellenicblue;
+                    z-index: 2;
                 }
             }
         }
