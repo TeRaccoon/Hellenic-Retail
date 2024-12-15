@@ -198,6 +198,7 @@ export class CheckoutComponent {
     this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
       if (loggedIn) {
         this.customerId = this.authService.getCustomerID();
+        this.shouldCreateAccount = this.customerId == null;
         this.userType = this.authService.getCustomerType() ?? 'Retail';
         this.loadAddressBook();
       }
@@ -210,6 +211,7 @@ export class CheckoutComponent {
           this.calculateTotal();
         }
       });
+
     this.tracing();
   }
 
