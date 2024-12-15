@@ -67,6 +67,7 @@ export enum DeliveryType {
 }
 
 export interface Coupon {
+  id: number;
   value: number;
   type: CouponType | null;
   name: string;

@@ -412,7 +412,6 @@ export class CheckoutComponent {
       );
 
       success = this.validateResponse(paymentResponse);
-      success = false;
     }
 
     if (success) {
@@ -420,10 +419,15 @@ export class CheckoutComponent {
       await this.cartService.clearCart(false);
 
       if (response.success) {
-        await lastValueFrom(
-          this.dataService.submitFormData({ action: 'commit' })
-        );
+        console.log(this.coupon);
 
+        if (this.coupon?.quantity_limit) {
+          await this.dataService.processPost({
+            action: 'coupon-use',
+            coupon_id: this.coupon.id,
+            new_quantity_limit: this.coupon.quantity_limit - 1,
+          });
+        }
         setTimeout(() => {
           this.router.navigate(['/order-complete']);
         }, 3000);
@@ -443,28 +447,11 @@ export class CheckoutComponent {
         10000
       );
 
-      await this.revertInvoice();
-    }
-  }
-
-  async revertInvoice() {
-    for (let i = 0; i < this.invoicedItemIDs.length; i++) {
-      await lastValueFrom(
-        this.dataService.submitFormData({
-          action: 'delete',
-          id: this.invoicedItemIDs[i],
-          table_name: 'invoiced_items',
-        })
+      await this.checkoutService.revertInvoice(
+        this.invoicedItemIDs,
+        this.invoiceId!
       );
     }
-
-    await lastValueFrom(
-      this.dataService.submitFormData({
-        action: 'delete',
-        id: this.invoiceId,
-        table_name: 'invoices',
-      })
-    );
   }
 
   sendEmailConfirmation(): Promise<Response> {
@@ -510,7 +497,6 @@ export class CheckoutComponent {
         : formData['Last Name'] + '_' + Date.now().toString();
 
     let address_id = await this.checkAddresses(formData);
-
     const invoiceFormData = {
       title: this.orderReference,
       customer_id: this.customerId,
@@ -522,6 +508,9 @@ export class CheckoutComponent {
       ).toFixed(2),
       VAT: Number(this.checkoutSummary.vat).toFixed(2),
       total: Number(this.checkoutSummary.total).toFixed(2),
+      discount_value: Number(
+        Math.abs(this.checkoutSummary.discount?.value ?? 0)
+      ).toFixed(2),
       outstanding_balance: 0,
       delivery_type: 'Delivery',
       payment_status: 'Yes',
