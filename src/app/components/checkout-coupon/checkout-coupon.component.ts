@@ -38,7 +38,8 @@ export class CheckoutCouponComponent {
     if (
       coupon.name != null &&
       this.isInDate(coupon.offer_start, coupon.offer_end) &&
-      this.appliesToCustomer(coupon.customer_id)
+      this.appliesToCustomer(coupon.customer_id) &&
+      this.isWithinQuantityLimit(coupon.quantity_limit)
     ) {
       this.couponEvent.emit(coupon);
       this.formService.setPopupMessage(
@@ -87,5 +88,9 @@ export class CheckoutCouponComponent {
     }
 
     return false;
+  }
+
+  isWithinQuantityLimit(quantityLimit: number | null) {
+    return quantityLimit == null || quantityLimit > 0;
   }
 }
