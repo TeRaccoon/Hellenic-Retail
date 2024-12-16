@@ -12,7 +12,7 @@
                             <div
                                 *ngIf="billingForm.get(control.key)?.touched && billingForm.get(control.key)?.invalid && submitted">
                                 <fa-icon class="interact-icon" [icon]="faCircleExclamation" />
-                                <p>{{ control.key | titlecase }} is invalid!</p>
+                                <p>{{ control.key }} is invalid!</p>
                             </div>
                         </ng-container>
                         <div *ngIf="fieldError != null">
