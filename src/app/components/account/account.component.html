@@ -97,16 +97,19 @@
                             </tr>
                             <tr *ngIf="this.showAddNew">
                                 <td>
-                                    <input type="text" formControlName="delivery_address_one">
+                                    <input type="text" formControlName="delivery_address_one"
+                                        placeholder="House number and street name">
                                 </td>
                                 <td>
-                                    <input type="text" formControlName="delivery_address_two">
+                                    <input type="text" formControlName="delivery_address_two"
+                                        placeholder="Apartment, suite, unit etc. (optional)">
                                 </td>
                                 <td>
-                                    <input type="text" formControlName="delivery_address_three">
+                                    <input type="text" formControlName="delivery_address_three"
+                                        placeholder="Town / City">
                                 </td>
                                 <td>
-                                    <input type="text" formControlName="delivery_postcode">
+                                    <input type="text" formControlName="delivery_postcode" placeholder="Postcode">
                                 </td>
                             </tr>
                         </tbody>
@@ -132,6 +135,31 @@
                                 <fa-icon [icon]="tick" (click)="removeAddress()"></fa-icon>
                             </ng-template>
                         </div>
+                    </div>
+                    <div *ngIf="this.showAddNew" class="address-card">
+                        <div class="address-line">
+                            <label>Line 1</label>
+                            <input type="text" formControlName="delivery_address_one"
+                                placeholder="House number and street name">
+                        </div>
+                        <div class="address-line">
+                            <label>Line 2</label>
+                            <input type="text" formControlName="delivery_address_two"
+                                placeholder="Apartment, suite, unit etc. (optional)">
+                        </div>
+                        <div class="address-line">
+                            <label>Town / City</label>
+                            <input type="text" formControlName="delivery_address_three" placeholder="Town / City">
+                        </div>
+                        <div class="address-line">
+                            <label>Postcode</label>
+                            <input type="text" formControlName="delivery_postcode">
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button type="button" (click)="toggleAddNew()">Add New</button>
+                        <button type="submit">Save</button>
+                        <button type="button" (click)="cancelAddAddress()">Cancel</button>
                     </div>
                 </div>
             </form>

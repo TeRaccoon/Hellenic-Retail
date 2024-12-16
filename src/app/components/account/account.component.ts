@@ -85,8 +85,9 @@ export class AccountComponent {
   }
 
   async loadAccountDetails() {
-    let userData = await this.dataService.processGet('user-details-from-id', {
-      filter: this.userId?.toString(),
+    let userData = await this.dataService.processPost({
+      action: 'account-details',
+      customer_id: this.userId?.toString(),
     });
 
     this.userData = userData;
