@@ -41,7 +41,10 @@
                         <div class="row single">
                             <div class="column">
                                 <label>Street address*</label>
-                                <fa-icon (click)="toggleAddressBook()" [icon]="book" />
+                                <div class="address-options">
+                                    <fa-icon (click)="toggleAddressBook()" [icon]="book" />
+                                    <p (click)="clearAddressFields()">Clear</p>
+                                </div>
                             </div>
                             <div class="row single addresses" [ngClass]="{'shown': addressBookVisible}">
                                 <div *ngFor="let address of addressBook" (click)="selectAddress(address)"
@@ -136,6 +139,10 @@
                     <label>You agree to the <a>terms and conditions*</a></label>
                     <input type="checkbox" (change)="terms = !terms" [checked]="terms">
                 </div>
+            </div>
+            <div class="checkbox-container">
+                <label>Save address?</label>
+                <input type="checkbox" (change)="saveAddress = !saveAddress" [checked]="saveAddress">
             </div>
             <div class="payment-container">
                 <button (click)="formSubmit()">

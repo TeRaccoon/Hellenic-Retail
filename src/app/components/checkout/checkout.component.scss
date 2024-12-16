@@ -1,4 +1,5 @@
 $hellenicblue: rgb(0, 140, 255);
+
 .checkout-view-container {
     display: flex;
     flex-direction: column;
@@ -6,13 +7,17 @@ $hellenicblue: rgb(0, 140, 255);
     margin: 50px auto 40px auto;
     width: 68%;
     gap: 30px;
+
     .details-container {
         display: flex;
+
         .checkout-billing-container {
             width: 65%;
+
             h1 {
                 margin: 5px 0;
             }
+
             h3 {
                 cursor: pointer;
                 font-size: 16px;
@@ -20,26 +25,32 @@ $hellenicblue: rgb(0, 140, 255);
                 text-decoration: underline;
                 color: $hellenicblue;
             }
+
             .form-container {
                 .billing-form {
                     width: 95%;
+
                     .single {
                         flex-direction: column;
-                        gap: 0px!important;
+                        gap: 0px !important;
                     }
+
                     .row {
                         display: flex;
                         margin: 15px 0;
+
                         .stack {
                             display: flex;
                             flex-direction: column;
                             width: 100%;
                         }
+
                         label {
                             font-size: 15px;
                             font-weight: bold;
                             margin: 3px;
                         }
+
                         input,
                         textarea {
                             font-size: 17px;
@@ -50,6 +61,7 @@ $hellenicblue: rgb(0, 140, 255);
                             border: 1px solid #888888;
                             outline: 1px solid #fff;
                             transition: border 0.4s ease, outline 0.3s ease;
+
                             &:focus,
                             &:hover {
                                 outline: none;
@@ -58,10 +70,12 @@ $hellenicblue: rgb(0, 140, 255);
                                 z-index: 2;
                             }
                         }
+
                         .error-input {
                             border: 1px solid red;
                             outline: 1px solid red;
                         }
+
                         .address-block {
                             font-size: 17px;
                             font-family: 'Poppins', sans-serif;
@@ -70,6 +84,7 @@ $hellenicblue: rgb(0, 140, 255);
                             border: 1px solid #888888;
                             outline: 1px solid #fff;
                             transition: border 0.4s ease, outline 0.3s ease;
+
                             &:focus,
                             &:hover {
                                 cursor: pointer;
@@ -80,15 +95,30 @@ $hellenicblue: rgb(0, 140, 255);
                             }
                         }
                     }
+
                     .column {
                         display: flex;
-                        flex-direction: row!important;
+                        flex-direction: row !important;
                         justify-content: space-between;
                         align-items: center;
+
                         fa-icon {
                             cursor: pointer;
                         }
+
+                        .address-options {
+                            display: flex;
+                            align-items: center;
+                            gap: 15px;
+
+                            p {
+                                margin: 0px;
+                                cursor: pointer;
+                                text-decoration: underline;
+                            }
+                        }
                     }
+
                     .addresses {
                         height: 0px;
                         overflow: hidden;
@@ -96,6 +126,7 @@ $hellenicblue: rgb(0, 140, 255);
                         margin: 0px;
                         transition: height 1.6s ease, margin 1.6s ease;
                     }
+
                     .shown {
                         margin: 15px 0px;
                         height: 300px;
@@ -103,10 +134,12 @@ $hellenicblue: rgb(0, 140, 255);
                         transition: height 1.6s ease, margin 1.6s ease;
                     }
                 }
+
                 .error-container {
                     width: 95%;
                     position: sticky;
                     top: 0;
+
                     div {
                         display: flex;
                         align-items: center;
@@ -114,9 +147,11 @@ $hellenicblue: rgb(0, 140, 255);
                         border-bottom: 3px solid rgb(200, 0, 0);
                         padding: 8px 20px;
                         margin: 10px 0px;
+
                         fa-icon {
                             color: rgb(200, 0, 0);
                         }
+
                         p {
                             margin: 0px;
                             padding: 0px 8px;
@@ -124,10 +159,12 @@ $hellenicblue: rgb(0, 140, 255);
                     }
                 }
             }
+
             .paypal-container {
                 margin-top: 15px;
             }
         }
+
         .checkout-summary-container {
             width: 35%;
             border: 1px solid #ccc;
@@ -135,36 +172,45 @@ $hellenicblue: rgb(0, 140, 255);
             height: 100%;
             position: sticky;
             top: 10px;
+
             p {
                 font-size: 15px;
+
                 a {
                     color: $hellenicblue;
                     cursor: pointer;
                 }
             }
+
             .create-account-container {
                 margin: 10px 0 20px 0;
+
                 label {
                     font-weight: bold;
                 }
             }
+
             .terms-and-conditions {
                 flex-direction: column;
                 height: fit-content;
             }
+
             .checkbox-container {
                 display: flex;
                 margin-bottom: 10px;
+
                 label {
                     padding: 10px 10px 10px 0;
                     font-weight: bold;
                 }
             }
+
             .payment-container {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 gap: 20px;
+
                 button {
                     cursor: pointer;
                     font-family: 'Poppins', sans-serif;
@@ -177,13 +223,16 @@ $hellenicblue: rgb(0, 140, 255);
                     min-width: 90px;
                     flex-shrink: 0;
                     transition: background-color 0.4s ease;
+
                     &:hover {
                         background-color: #0075f3;
                     }
+
                     fa-icon {
                         font-size: 18px;
                     }
                 }
+
                 .error {
                     color: red;
                 }
@@ -194,33 +243,42 @@ $hellenicblue: rgb(0, 140, 255);
 
 @media screen and (max-width: 1079px) {
     .checkout-summary-container {
-        position: static!important;
+        position: static !important;
     }
+
     .details-container {
         flex-direction: column-reverse;
         gap: 30px;
     }
+
     .payment-container {
         flex-wrap: wrap;
     }
+
     .checkout-view-container {
         width: 90%;
     }
+
     .checkout-summary-container {
-        width: 85%!important;
+        width: 85% !important;
     }
+
     .checkout-billing-container {
-        width: 100%!important;
+        width: 100% !important;
     }
+
     .row {
         flex-wrap: wrap;
     }
+
     .shown {
         height: auto;
     }
+
     .options {
         gap: 3px
     }
+
     .form-container {
         border: 1px solid gray;
         padding: 10px;

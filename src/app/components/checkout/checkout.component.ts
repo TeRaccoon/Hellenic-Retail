@@ -24,6 +24,7 @@ import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
 import {
   AccountResponse,
+  CustomerDetails,
   RegistrationForm,
 } from 'src/app/common/types/account';
 import { CheckoutFormFull } from '../../common/types/checkout';
@@ -50,6 +51,7 @@ export class CheckoutComponent {
 
   shouldCreateAccount = true;
   terms = false;
+  saveAddress = false;
 
   checkoutSummary: CheckoutSummary;
 
@@ -68,6 +70,7 @@ export class CheckoutComponent {
 
   addressBookVisible = false;
   addressBook: any[] = [];
+  customerDetails: CustomerDetails | null = null;
 
   payerDetails: any = {};
   paymentMethod = PaymentMethod.Barclays;
@@ -200,6 +203,7 @@ export class CheckoutComponent {
         this.customerId = this.authService.getCustomerID();
         this.shouldCreateAccount = this.customerId == null;
         this.userType = this.authService.getCustomerType() ?? 'Retail';
+        this.loadCustomerDetails();
         this.loadAddressBook();
       }
     });
@@ -215,11 +219,33 @@ export class CheckoutComponent {
     this.tracing();
   }
 
+  async loadCustomerDetails() {
+    this.customerDetails = await this.dataService.processPost({
+      action: 'account-details',
+      customer_id: this.customerId?.toString(),
+    });
+
+    this.billingForm
+      .get('First Name')
+      ?.setValue(this.customerDetails?.forename);
+    this.billingForm.get('Last Name')?.setValue(this.customerDetails?.surname);
+    this.billingForm
+      .get('Email Address')
+      ?.setValue(this.customerDetails?.email);
+    this.billingForm
+      .get('Phone')
+      ?.setValue(this.customerDetails?.phone_number_primary);
+  }
+
   async loadAddressBook() {
     this.addressBook = await this.dataService.processPost(
       { action: 'address-book', customer_id: this.customerId?.toString() },
       true
     );
+
+    if (this.addressBook.length > 0) {
+      this.selectAddress(this.addressBook[this.addressBook.length - 1]);
+    }
   }
 
   async tracing() {
@@ -530,13 +556,12 @@ export class CheckoutComponent {
   }
 
   async checkAddresses(formData: any) {
-    // TODO
-    if (true) {
-      //If the customers address doesn't exist in the database, add it
+    if (this.saveAddress) {
       const addressFormData = {
         customer_id: this.customerId,
         delivery_address_one: formData['Street Address'],
         delivery_address_two: formData['Street Address 2'],
+        delivery_address_three: formData['Town / City'],
         delivery_postcode: formData['Postcode'],
         table_name: 'customer_address',
         action: 'add',
@@ -632,6 +657,13 @@ export class CheckoutComponent {
     }
   }
 
+  clearAddressFields() {
+    this.billingForm.get('Street Address')?.setValue('');
+    this.billingForm.get('Street Address 2')?.setValue('');
+    this.billingForm.get('Town / City')?.setValue('');
+    this.billingForm.get('Postcode')?.setValue('');
+  }
+
   selectAddress(address: any) {
     this.billingForm
       .get('Street Address')
@@ -644,6 +676,7 @@ export class CheckoutComponent {
       ?.setValue(address.delivery_address_three);
     this.billingForm.get('Postcode')?.setValue(address.delivery_postcode);
     this.addressBookVisible = false;
+    this.saveAddress = false;
   }
 
   switchPaymentMethods() {
