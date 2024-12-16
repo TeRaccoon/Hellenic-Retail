@@ -42,3 +42,11 @@ export interface AccountResponse {
   message: string;
   data?: string;
 }
+
+export interface CustomerDetails {
+  forename: string;
+  surname: string;
+  email: string;
+  phone_number_primary: string;
+  phone_number_secondary: string;
+}

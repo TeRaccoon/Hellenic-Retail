@@ -10,7 +10,7 @@ import {
   faTrashCan,
   faCheck,
 } from '@fortawesome/free-solid-svg-icons';
-import { Order } from 'src/app/common/types/account';
+import { CustomerDetails, Order } from 'src/app/common/types/account';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -85,7 +85,7 @@ export class AccountComponent {
   }
 
   async loadAccountDetails() {
-    let userData = await this.dataService.processPost({
+    let userData: CustomerDetails = await this.dataService.processPost({
       action: 'account-details',
       customer_id: this.userId?.toString(),
     });
