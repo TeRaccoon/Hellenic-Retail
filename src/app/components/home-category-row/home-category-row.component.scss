@@ -6,6 +6,7 @@ $hellenicblue: rgb(0, 140, 255);
     justify-content: center;
     align-items: center;
     gap: 25px;
+    margin: 10px;
 }
 
 .scroll-arrow {
@@ -18,7 +19,7 @@ $hellenicblue: rgb(0, 140, 255);
     width: 35px;
     height: 35px;
     cursor: pointer;
-    z-index: 10;
+    z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
