@@ -9,8 +9,11 @@ import {
   faPencil,
   faTrashCan,
   faCheck,
+  faL,
+  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { CustomerDetails, Order } from 'src/app/common/types/account';
+import { Response } from 'src/app/common/types/data-response';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -20,8 +23,10 @@ export class AccountComponent {
   pencil = faPencil;
   bin = faTrashCan;
   tick = faCheck;
+  loading = faCircleNotch;
 
   changeAccountDetails: FormGroup;
+  changePasswordForm: FormGroup;
   addAddressForm: FormGroup;
 
   loggedIn: boolean | null = null;
@@ -30,9 +35,13 @@ export class AccountComponent {
   orderHistory: Order[] = [];
   addressBook: any[] = [];
   edit = false;
+  isChangingPassword = false;
 
   pendingDeleteId: string | null = null;
   showAddNew = false;
+
+  isLoading = false;
+  error: string | null = null;
 
   constructor(
     private router: Router,
@@ -41,6 +50,11 @@ export class AccountComponent {
     private authService: AuthService,
     private fb: FormBuilder
   ) {
+    this.changePasswordForm = this.fb.group({
+      oldPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required]],
+    });
+
     this.changeAccountDetails = this.fb.group({
       forename: [{ value: '', disabled: true }, [Validators.required]],
       surname: [{ value: '', disabled: true }, [Validators.required]],
@@ -138,6 +152,27 @@ export class AccountComponent {
     }
   }
 
+  async changePassword() {
+    this.isLoading = true;
+
+    let response: Response = await this.dataService.processPost({
+      action: 'change-password-with-check',
+      customer_id: this.userId,
+      old_password: this.changePasswordForm.get('oldPassword')?.value,
+      new_password: this.changePasswordForm.get('newPassword')?.value,
+    });
+
+    if (response.success) {
+      this.formService.setPopupMessage('Password changed successfully!', true);
+    } else {
+      this.error =
+        'There was an issue changing your password! Please try again later.';
+    }
+
+    this.isChangingPassword = false;
+    this.isLoading = false;
+  }
+
   async logout() {
     await this.router.navigate(['/home']);
     this.authService.logout();
@@ -168,6 +203,10 @@ export class AccountComponent {
 
   toggleAddNew() {
     this.showAddNew = !this.showAddNew;
+  }
+
+  toggleChangePassword() {
+    this.isChangingPassword = !this.isChangingPassword;
   }
 
   async addAddress() {

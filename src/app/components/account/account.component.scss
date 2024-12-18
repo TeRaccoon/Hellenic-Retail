@@ -25,6 +25,7 @@ $hellenicblue: rgb(0, 140, 255);
             flex-direction: column;
             border: 1px solid #ccc;
             padding: 20px;
+            min-width: 350px;
 
             form {
                 display: flex;
@@ -39,6 +40,7 @@ $hellenicblue: rgb(0, 140, 255);
                         align-items: center;
                         border-bottom: 1px solid #cccccc;
                         font-size: 18px;
+                        flex: 0.85;
 
                         label {
                             font-weight: bold;
@@ -57,6 +59,30 @@ $hellenicblue: rgb(0, 140, 255);
 
                         .enabled {
                             color: #000000;
+                        }
+                    }
+
+                    .change-password-field {
+                        display: flex;
+                        flex-direction: column;
+
+                        input {
+                            font-size: 15px;
+                            font-family: 'Poppins', sans-serif;
+                            padding: 6px;
+                            margin: 7px 0px;
+                            outline: none;
+                            border: 1px solid #888888;
+                            outline: 1px solid #fff;
+                            transition: border 0.4s ease, outline 0.3s ease;
+
+                            &:focus,
+                            &:hover {
+                                outline: none;
+                                border: 1px solid $hellenicblue;
+                                outline: 1px solid $hellenicblue;
+                                z-index: 2;
+                            }
                         }
                     }
                 }
@@ -93,6 +119,7 @@ $hellenicblue: rgb(0, 140, 255);
         .buttons {
             display: flex;
             justify-content: flex-start;
+            flex-wrap: wrap;
             gap: 5px;
             margin: 10px 0;
 
@@ -301,6 +328,10 @@ $hellenicblue: rgb(0, 140, 255);
         .delete-icon,
         .tick {
             cursor: pointer;
+        }
+
+        .details {
+            min-width: 0px;
         }
     }
 }
