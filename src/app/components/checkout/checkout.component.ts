@@ -102,7 +102,14 @@ export class CheckoutComponent {
       'Town / City': ['', Validators.required],
       County: [''],
       Postcode: ['', Validators.required],
-      Phone: ['', [Validators.minLength(7), Validators.maxLength(14)]],
+      Phone: [
+        '',
+        [
+          Validators.minLength(7),
+          Validators.maxLength(14),
+          Validators.pattern(/^\d*$/),
+        ],
+      ],
       'Email Address': ['', [Validators.required, Validators.email]],
       'Card Number': [
         '',
@@ -494,6 +501,8 @@ export class CheckoutComponent {
       };
     });
 
+    console.log(this.checkoutSummary.discount);
+
     const formData = this.billingForm.value;
     const emailInformation = {
       reference: this.orderReference,
@@ -503,6 +512,9 @@ export class CheckoutComponent {
         (this.checkoutSummary.subtotal - this.checkoutSummary.vat).toFixed(2),
       vat: '&pound;' + this.checkoutSummary.vat.toFixed(2),
       delivery: '&pound' + this.checkoutSummary.delivery.toFixed(2),
+      discount_value:
+        '&pound;' +
+        Math.abs(this.checkoutSummary.discount?.value ?? 0).toFixed(2),
       total: '&pound;' + this.checkoutSummary.total.toFixed(2),
     };
 

@@ -203,6 +203,10 @@ export class MailService {
                     <td>${emailData.delivery}</td>
                 </tr>
                 <tr class="total-row">
+                    <td colspan="2">Savings</td>
+                    <td>${emailData.discount_value}</td>
+                </tr>
+                <tr class="total-row">
                     <td colspan="2">Total</td>
                     <td>${emailData.total}</td>
                 </tr>
