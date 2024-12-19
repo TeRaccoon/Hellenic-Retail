@@ -24,6 +24,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { CacheService } from 'src/app/services/cache.service';
 import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
+import { CustomerType } from 'src/app/common/types/account';
 
 @Component({
   selector: 'app-navbar',
@@ -57,6 +58,8 @@ export class NavbarComponent {
   faUser = faUser;
   faHeart = faHeart;
   faCartShopping = faCartShopping;
+
+  customerType: CustomerType = CustomerType.Retail;
 
   categories: string[] = [];
   subcategories: any[] = [];
@@ -92,6 +95,7 @@ export class NavbarComponent {
   ) {
     this.imageUrl = this.urlService.getUrl('uploads');
     this.email = this.consts.getConstant(settingKeys.support_email);
+    this.customerType = this.authService.getCustomerType();
   }
 
   ngOnInit() {

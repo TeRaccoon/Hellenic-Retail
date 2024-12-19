@@ -13,8 +13,7 @@
     <div class="search-container">
         <div class="search-options">
             <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()"
-                (keydown.enter)="search()" type="text" placeholder="Search for products, categories, brands, sku..."
-                name="search">
+                (keydown.enter)="search()" type="text" placeholder="Search for products..." name="search">
             <select (change)="changeCategory($event)">
                 <option value="all">All Categories</option>
                 <option *ngFor="let category of categories">
@@ -32,11 +31,14 @@
                         <p> {{ product.name }} </p>
                     </div>
                     <div class="price-container">
-                        <ng-container *ngIf="product.pallet_price == undefined else wholesale">
-                            <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price |
-                                number: '1.2-2' }}</p>
-                            <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number:
+                        <ng-container *ngIf="customerType == 'Retail' else wholesale">
+                            <p
+                                [class]="(product.discounted_price != null && product.discounted_price != product.price) ? 'old-price' : 'price'">
+                                £{{ product.price | number:
                                 '1.2-2' }}</p>
+                            <p *ngIf="product.discounted_price != null && product.discounted_price != product.price"
+                                class="price">£{{ product.discounted_price |
+                                number: '1.2-2' }}</p>
                         </ng-container>
                         <ng-template #wholesale>
                             <div class="wholesale-container">
