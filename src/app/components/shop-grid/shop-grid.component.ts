@@ -25,6 +25,7 @@ export class ShopGridComponent {
 
   resultsAmount = 0;
   products: any[] = [];
+  filteredProducts: any[] = [];
   oldPrices: (number | null)[] = [];
   messageSet = false;
 
@@ -35,6 +36,7 @@ export class ShopGridComponent {
   itemsPerPage = 10;
   currentPage = 1;
   totalPages = 1;
+  pageRange = [1];
 
   imageUrl = '';
 
@@ -45,7 +47,6 @@ export class ShopGridComponent {
   constructor(
     private urlService: UrlService,
     private filterService: FilterService,
-    private cartService: CartService,
     private dataService: DataService,
     private route: ActivatedRoute,
     private formService: FormService,
@@ -85,16 +86,26 @@ export class ShopGridComponent {
         this.formService.setBannerMessage(`${messageBase}${filter}`);
         this.filterHeader = `Search results: ${filter}`;
         this.loadProducts(undefined, filter);
+      } else {
+        this.formService.setBannerMessage('Showing results');
+        this.filterHeader = 'Showing all results';
+        this.loadProducts(undefined, null);
       }
     });
 
     this.filterService.getFilterUpdated().subscribe((updated) => {
       if (updated) {
-        this.maxPrice = this.filterService.getMaxPrice();
-        this.minPrice = this.filterService.getMinPrice();
-        this.filterService.filterUpdateReceived();
+        this.filterUpdated();
       }
     });
+  }
+
+  filterUpdated() {
+    this.maxPrice = this.filterService.getMaxPrice();
+    this.minPrice = this.filterService.getMinPrice();
+    this.filterService.filterUpdateReceived();
+    this.filteredProducts = this.products.filter((p) => this.isInPriceRange(p));
+    this.getPageRange();
   }
 
   async loadProducts(category: string | undefined, filter: string | null) {
@@ -117,9 +128,6 @@ export class ShopGridComponent {
       products = this.filterByString(filter, products);
     }
 
-    this.resultsAmount = products.length === undefined ? 1 : products.length;
-    this.totalPages = Math.floor(this.resultsAmount / this.itemsPerPage + 1);
-
     products.forEach((product: any) => {
       if (product.discount && product.discount != null) {
         product.discounted_price =
@@ -128,6 +136,9 @@ export class ShopGridComponent {
     });
 
     this.products = products;
+    this.filteredProducts = products;
+
+    this.getPageRange();
   }
 
   filterByString(filter: string, products: any[]) {
@@ -170,55 +181,47 @@ export class ShopGridComponent {
     }
   }
 
-  setPriceFilter(filter: any) {
-    this.filterService.setMaxPrice(filter.maxPrice);
-    this.filterService.setMinPrice(filter.minPrice);
-    this.filterService.filterUpdateRequested();
-  }
-
-  openImage(imageLocation: string) {
-    this.formService.setImageViewerUrl(this.imageUrl + imageLocation);
-    this.formService.showImageViewer();
-  }
-
-  async addToCart(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity);
-  }
-
-  async addToWishlist(productID: number) {
-    this.cartService.addToWishlist(productID);
-  }
-
   changeItemsPerPage(event: any) {
     this.itemsPerPage = event.target.value;
     this.totalPages = Math.trunc(this.resultsAmount / this.itemsPerPage + 1);
   }
 
-  getPageRange(): number[] {
+  calculatePages() {
+    this.resultsAmount =
+      this.products.length === undefined ? 1 : this.filteredProducts.length;
+    this.totalPages = Math.floor(this.resultsAmount / this.itemsPerPage + 1);
+  }
+
+  getPageRange() {
+    this.calculatePages();
+
     const range = [];
-    var start = this.currentPage;
+    let start = this.currentPage;
 
-    if (this.currentPage > this.totalPages - 2 && this.totalPages - 2 > 0) {
-      start = this.totalPages - 2;
-    }
-    if (start == 1 && this.totalPages > 1) {
-      start += 2;
-    } else if (start == 2 && this.totalPages > 1) {
-      start += 1;
-    }
-    for (
-      let i = start - 1;
-      i < start + 2 && i < this.totalPages && this.totalPages > 1;
-      i++
-    ) {
-      range.push(i);
+    if (this.currentPage > this.totalPages) {
+      start = this.totalPages;
+    } else if (this.currentPage < 1) {
+      start = 1;
     }
 
-    if (this.totalPages > 1) {
-      range.push(this.totalPages);
+    if (this.totalPages <= 3) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        range.push(i);
+      }
+    } else {
+      const lowerBound = Math.max(1, start - 1);
+      const upperBound = Math.min(this.totalPages, start + 1);
+
+      for (let i = lowerBound; i <= upperBound; i++) {
+        range.push(i);
+      }
+
+      if (!range.includes(this.totalPages)) {
+        range.push(this.totalPages);
+      }
     }
 
-    return range;
+    this.pageRange = range;
   }
 
   isInPriceRange(product: any) {
@@ -226,10 +229,5 @@ export class ShopGridComponent {
       return product.price >= this.minPrice && product.price <= this.maxPrice;
     }
     return true;
-  }
-
-  onImageError(event: Event) {
-    const target = event.target as HTMLImageElement;
-    target.src = this.imageUrl + 'placeholder.jpg';
   }
 }
