@@ -227,11 +227,16 @@ export class NavbarComponent {
   search() {
     if (this.searchResults.length == 1) {
       this.router.navigate(['/view/' + this.searchResults[0].name]);
-    } else if (this.categoryFilter != 'all' && this.searchStringFilter == '') {
-      this.router.navigate(['/shop/' + this.categoryFilter]);
     } else {
-      this.dataService.setShopFilter(this.searchStringFilter);
-      this.router.navigate(['/shop']);
+      if (this.searchStringFilter != '') {
+        this.dataService.setShopFilter(this.searchStringFilter);
+      }
+
+      if (this.categoryFilter != 'all') {
+        this.router.navigate(['/shop/' + this.categoryFilter]);
+      } else {
+        this.router.navigate(['/shop']);
+      }
     }
   }
 

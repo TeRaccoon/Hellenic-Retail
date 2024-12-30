@@ -9,6 +9,7 @@ import { RenderService } from 'src/app/services/render.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UrlService } from 'src/app/services/url.service';
 import { CustomerType } from 'src/app/common/types/account';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-shop-grid',
@@ -69,27 +70,18 @@ export class ShopGridComponent {
   }
 
   getShopFilter() {
-    let messageBase = 'Showing results for: ';
     this.route.params.subscribe((params) => {
       const category = params['category'];
       this.category = category;
-      if (category !== undefined) {
-        this.formService.setBannerMessage(`${messageBase}${category}`);
-        this.filterHeader = category;
-      }
-      this.loadProducts(category, null);
+
+      this.loadShop(category);
     });
 
     this.dataService.getShopFilter().subscribe((filter) => {
       this.filter = filter;
-      if (filter !== null && filter != '') {
-        this.formService.setBannerMessage(`${messageBase}${filter}`);
-        this.filterHeader = `Search results: ${filter}`;
-        this.loadProducts(undefined, filter);
-      } else {
-        this.formService.setBannerMessage('Showing results');
-        this.filterHeader = 'Showing all results';
-        this.loadProducts(undefined, null);
+      if (filter != null) {
+        let category = this.route.snapshot.params['category'];
+        this.loadShop(category);
       }
     });
 
@@ -98,6 +90,37 @@ export class ShopGridComponent {
         this.filterUpdated();
       }
     });
+  }
+
+  loadShop(categoryFilter: string | undefined) {
+    let messageBase = 'Showing results for: ';
+    let stringFilter = null;
+
+    this.dataService
+      .getShopFilter()
+      .pipe(take(1))
+      .subscribe((value) => {
+        stringFilter = value;
+      });
+
+    if (
+      (stringFilter !== null && stringFilter !== '') ||
+      categoryFilter !== undefined
+    ) {
+      if (categoryFilter === undefined) {
+        this.formService.setBannerMessage(`${messageBase}${stringFilter}`);
+        this.filterHeader = `Search results: ${stringFilter}`;
+      } else {
+        this.formService.setBannerMessage(`${messageBase}${categoryFilter}`);
+        this.filterHeader = categoryFilter;
+      }
+
+      this.loadProducts(categoryFilter, stringFilter);
+    } else {
+      this.formService.setBannerMessage('Showing results');
+      this.filterHeader = 'Showing all results';
+      this.loadProducts(undefined, null);
+    }
   }
 
   filterUpdated() {
