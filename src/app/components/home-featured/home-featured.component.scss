@@ -1,22 +1,27 @@
 $hellenicblue: rgb(0, 140, 255);
+
 .featured {
     width: 68%;
     margin-left: auto;
     margin-right: auto;
+
     .featured-container {
         display: flex;
         gap: 10px;
+
         .background-card {
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
-            width: 25%;
+            width: 35%;
+
             .annotation {
                 display: flex;
                 justify-content: flex-end;
                 align-items: flex-start;
                 height: 100%;
                 width: 100%;
+
                 h2 {
                     padding: 15px;
                     background-color: $hellenicblue;
@@ -27,6 +32,7 @@ $hellenicblue: rgb(0, 140, 255);
                 }
             }
         }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -34,19 +40,23 @@ $hellenicblue: rgb(0, 140, 255);
             flex: 1;
         }
     }
+
     h1 {
         border-bottom: 3px solid $hellenicblue;
     }
 }
 
 @media screen and (max-width: 1079px) {
+
     //mobile
     .background-card {
-        width: 100%!important;
+        width: 100% !important;
     }
+
     .featured-container {
         flex-direction: column;
     }
+
     .featured {
         width: 85%;
     }
@@ -54,6 +64,6 @@ $hellenicblue: rgb(0, 140, 255);
 
 @media screen and (max-width: 500px) {
     .grid-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr))!important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
 }
