@@ -10,8 +10,10 @@
                         <ng-container *ngIf="item.element_type === 'Paragraph'">
                             <p>{{ item.text_content }}</p>
                         </ng-container>
+                        <ng-container *ngIf="item.element_type === 'Other'">
+                            <button [routerLink]="item.text_content">Shop now</button>
+                        </ng-container>
                     </ng-container>
-                    <button [routerLink]="'/shop'">Shop now</button>
                 </div>
             </div>
         </ng-container>
