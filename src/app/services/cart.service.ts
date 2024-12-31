@@ -72,8 +72,6 @@ export class CartService {
     let total = price * cartItem.quantity;
     let discountedTotal = discountedPrice * cartItem.quantity;
 
-    this.total += discountedTotal;
-
     let imageLocation =
       product.image_location === null
         ? 'placeholder.jpg'
@@ -185,7 +183,7 @@ export class CartService {
         const existingCartItem = currentCartItems[existingCartItemIndex];
 
         if (existingCartItem.quantity === quantity) {
-          this.formService.setPopupMessage('Item already in basket!', true);
+          this.formService.setPopupMessage('Item already in cart!', true);
           return;
         }
 
@@ -249,7 +247,7 @@ export class CartService {
     if (await this.checkStock(quantity * multiplier, productId, true)) {
       if (rowIndex !== -1) {
         if (cart[rowIndex].quantity == quantity) {
-          this.formService.setPopupMessage('Item already in basket!', true);
+          this.formService.setPopupMessage('Item already in cart!', true);
         } else {
           response = await this.dataService.processPost({
             action: 'update-cart',
@@ -390,6 +388,8 @@ export class CartService {
       }
 
       this.total = total;
+    } else {
+      this.total = 0;
     }
 
     return cartProducts;
