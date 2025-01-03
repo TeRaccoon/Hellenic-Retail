@@ -1,4 +1,5 @@
 $hellenicblue: rgb(0, 140, 255);
+
 .shop-grid-container {
     margin-top: 5vh;
     display: flex;
@@ -6,18 +7,22 @@ $hellenicblue: rgb(0, 140, 255);
     margin-bottom: 10px;
     justify-content: center;
     gap: 8px;
+
     .footer {
         margin: 10px 0;
+
         .page-options {
             .active-page {
                 background-color: #008cff;
                 color: white;
                 border: 1px solid #008cff;
+
                 &:hover {
                     background-color: #0082ed;
                     border: 1px solid #0082ed;
                 }
             }
+
             button {
                 background-color: white;
                 font-size: 16px;
@@ -26,18 +31,21 @@ $hellenicblue: rgb(0, 140, 255);
                 margin: 2px;
                 padding: 5px;
                 cursor: pointer;
+
                 &:hover {
                     background-color: #eaeef3;
                 }
             }
         }
     }
+
     .shop-grid-header {
         border-bottom: 1px solid $hellenicblue;
         display: flex;
         align-items: center;
         justify-content: space-between;
         width: 100%;
+
         h3 {
             display: inline-flex;
             align-items: center;
@@ -45,14 +53,17 @@ $hellenicblue: rgb(0, 140, 255);
             margin: 0;
             font-size: 20px
         }
+
         div {
             display: inline-flex;
             align-items: center;
             gap: 7px;
+
             p {
                 margin: 5px;
                 font-size: 12px;
             }
+
             select {
                 border: 1px solid #e9e9e9;
                 border-radius: 0px;
@@ -63,10 +74,12 @@ $hellenicblue: rgb(0, 140, 255);
                 cursor: pointer;
             }
         }
+
         label {
-            color: white;
+            color: black;
         }
     }
+
     .grid-container {
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -77,27 +90,33 @@ $hellenicblue: rgb(0, 140, 255);
 
 ::ng-deep app-product {
     .product-container {
-        height: 16vw!important;
+        height: 16vw !important;
     }
 }
 
 @media screen and (max-width: 1079px) {
+
     //mobile
     .grid-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr))!important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
+
     .sorting-select {
         width: 150px;
     }
+
     .shop-grid-container {
         margin: auto;
         margin-top: 35px;
         width: 90%;
     }
+
     .shop-grid-header {
         flex-wrap: wrap;
+
         div {
             margin-left: 1.5vw;
+
             lable {
                 color: white;
             }

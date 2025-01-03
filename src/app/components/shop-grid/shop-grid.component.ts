@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../../services/data.service';
-import { CartService } from 'src/app/services/cart.service';
 import { FormService } from 'src/app/services/form.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FilterService } from 'src/app/services/filter.service';
@@ -206,7 +205,7 @@ export class ShopGridComponent {
 
   changeItemsPerPage(event: any) {
     this.itemsPerPage = event.target.value;
-    this.totalPages = Math.trunc(this.resultsAmount / this.itemsPerPage + 1);
+    this.getPageRange();
   }
 
   calculatePages() {
