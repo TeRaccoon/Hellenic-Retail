@@ -230,6 +230,8 @@ export class NavbarComponent {
     } else {
       if (this.searchStringFilter != '') {
         this.dataService.setShopFilter(this.searchStringFilter);
+      } else {
+        this.dataService.setShopFilter('');
       }
 
       if (this.categoryFilter != 'all') {
