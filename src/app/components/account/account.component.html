@@ -56,8 +56,8 @@
                             </div>
                         </div>
                         <div class="buttons">
-                            <button type="button" (click)="toggleEdit()">Edit</button>
-                            <button type="submit" [disabled]="changeAccountDetails.invalid">Save</button>
+                            <button *ngIf="!edit" type="button" (click)="toggleEdit()">Edit</button>
+                            <button *ngIf="edit" type="submit" [disabled]="changeAccountDetails.invalid">Save</button>
                             <button *ngIf="!edit" type="button" (click)="toggleChangePassword()">Change
                                 Password</button>
                             <button *ngIf="edit" type="button" (click)="cancelEdit()">Cancel</button>
