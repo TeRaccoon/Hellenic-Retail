@@ -43,6 +43,10 @@
     margin: 10px 0 10px 0;
 }
 
+.form-group {
+    margin: 15px auto 2px auto;
+}
+
 .form-container {
     flex: 2;
     background-color: rgba(255, 255, 255, 0.8);
@@ -59,9 +63,10 @@
 
 .form-container input,
 .form-container textarea {
+    font-family: inherit;
+    line-height: inherit;
     box-sizing: border-box;
     font-size: 16px;
-    margin: 10px auto 10px auto;
     border: 1px solid #ccc;
     /* width: 100%; */
     padding: 10px;
@@ -78,8 +83,17 @@
     cursor: pointer;
 }
 
+.errors {
+    p {
+        color: red;
+        margin: 0px 0 15px 0;
+    }
+}
 
-@media screen and (max-width: 1079px) { //mobile
+
+@media screen and (max-width: 1079px) {
+
+    //mobile
     .contact-page {
         flex-direction: column;
         margin-bottom: 0;

@@ -74,12 +74,11 @@ export class CheckoutComponent {
 
   payerDetails: any = {};
   paymentMethod = PaymentMethod.Barclays;
+  supportEmail;
 
   invoiceId: number | null = null;
   invoicedItemIDs: number[] = [];
   originalSubtotal: number | null = null;
-
-  supportEmail = '';
 
   constructor(
     private accountService: AccountService,

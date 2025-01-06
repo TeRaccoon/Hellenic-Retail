@@ -18,29 +18,30 @@
             <div class="form-group">
                 <label for="name">Name*:</label>
                 <input type="text" formControlName="name" required>
-                <div
-                    *ngIf="contactForm.get('name')?.invalid && (contactForm.get('name')?.dirty || contactForm.get('name')?.touched)">
-                    <div *ngIf="contactForm.get('name')?.errors!['required']">Name is required.</div>
+                <div *ngIf="submitted || contactForm.get('name')?.invalid && (contactForm.get('name')?.dirty || contactForm.get('name')?.touched)"
+                    class="errors">
+                    <p *ngIf="contactForm.get('name')?.errors?.['required'] ?? false">Name is required.</p>
                 </div>
             </div>
             <div class="form-group">
                 <label for="email">Email*:</label>
                 <input type="email" formControlName="email" required>
-                <div
-                    *ngIf="contactForm.get('email')?.invalid && (contactForm.get('email')?.dirty || contactForm.get('email')?.touched)">
-                    <div *ngIf="contactForm.get('email')?.errors!['required']">Email is required.</div>
-                    <div *ngIf="contactForm.get('email')?.errors!['email']">Invalid email format.</div>
+                <div *ngIf="submitted || contactForm.get('email')?.invalid && (contactForm.get('email')?.dirty || contactForm.get('email')?.touched)"
+                    class="errors">
+                    <p *ngIf="contactForm.get('email')?.errors?.['required'] ?? false">Email is required.</p>
+                    <p *ngIf="contactForm.get('email')?.errors?.['email'] ?? false">Invalid email format.</p>
                 </div>
             </div>
             <div class="form-group">
                 <label for="message">Message*:</label>
                 <textarea formControlName="message" rows="4" required></textarea>
-                <div
-                    *ngIf="contactForm.get('message')?.invalid && (contactForm.get('message')?.dirty || contactForm.get('message')?.touched)">
-                    <div *ngIf="contactForm.get('message')?.errors!['required']">Message is required.</div>
+                <div *ngIf="submitted || contactForm.get('message')?.invalid && (contactForm.get('message')?.dirty || contactForm.get('message')?.touched)"
+                    class="errors">
+                    <p *ngIf="contactForm.get('message')?.errors?.['required'] ?? false">Message is required.</p>
                 </div>
             </div>
-            <button type="submit" [disabled]="contactForm.invalid">Submit</button>
+            <button type="submit" [disabled]="contactForm.invalid">Submit <fa-icon *ngIf="isLoading"
+                    class="loading-icon" [icon]="loading" spinPulse [spin]="true" /></button>
         </form>
     </div>
 </div>

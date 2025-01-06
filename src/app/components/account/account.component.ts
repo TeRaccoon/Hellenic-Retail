@@ -9,7 +9,6 @@ import {
   faPencil,
   faTrashCan,
   faCheck,
-  faL,
   faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { CustomerDetails, Order } from 'src/app/common/types/account';
