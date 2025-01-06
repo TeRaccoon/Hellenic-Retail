@@ -127,6 +127,7 @@ export class ShopGridComponent {
     this.minPrice = this.filterService.getMinPrice();
     this.filterService.filterUpdateReceived();
     this.filteredProducts = this.products.filter((p) => this.isInPriceRange(p));
+    this.currentPage = 1;
     this.getPageRange();
   }
 
@@ -188,11 +189,23 @@ export class ShopGridComponent {
         break;
 
       case 'high-low':
-        this.products.sort((a, b) => b.price - a.price);
+        this.filteredProducts.sort((a, b) => {
+          const priceA =
+            a.discounted_price != null ? a.discounted_price : a.price;
+          const priceB =
+            b.discounted_price != null ? b.discounted_price : b.price;
+          return priceB - priceA;
+        });
         break;
 
       case 'low-high':
-        this.products.sort((a, b) => a.price - b.price);
+        this.filteredProducts.sort((a, b) => {
+          const priceA =
+            a.discounted_price != null ? a.discounted_price : a.price;
+          const priceB =
+            b.discounted_price != null ? b.discounted_price : b.price;
+          return priceA - priceB;
+        });
         break;
 
       default:
@@ -247,8 +260,14 @@ export class ShopGridComponent {
   }
 
   isInPriceRange(product: any) {
+    console.log(product);
+    const priceToCheck =
+      product.discounted_price != null
+        ? product.discounted_price
+        : product.price;
+
     if (this.maxPrice != null && this.minPrice != null) {
-      return product.price >= this.minPrice && product.price <= this.maxPrice;
+      return priceToCheck >= this.minPrice && priceToCheck <= this.maxPrice;
     }
     return true;
   }
