@@ -4,6 +4,7 @@ import { DataService } from '../../services/data.service';
 import { Coupon } from 'src/app/common/types/checkout';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-checkout-coupon',
@@ -17,6 +18,9 @@ export class CheckoutCouponComponent {
   shown = false;
   coupon: string = '';
 
+  loading = faCircleNotch;
+  isLoading = false;
+
   constructor(
     private dataService: DataService,
     private authService: AuthService,
@@ -25,6 +29,8 @@ export class CheckoutCouponComponent {
 
   async applyCoupon() {
     if (this.coupon != '') {
+      this.isLoading = true;
+
       let response = await this.dataService.processPost({
         action: 'coupon',
         code: this.coupon,
@@ -47,6 +53,8 @@ export class CheckoutCouponComponent {
         true,
         5000
       );
+
+      this.coupon = '';
       this.shown = false;
     } else {
       this.formService.setPopupMessage(
@@ -55,6 +63,8 @@ export class CheckoutCouponComponent {
         5000
       );
     }
+
+    this.isLoading = false;
   }
 
   isInDate(startDate: Date | null, endDate: Date | null) {

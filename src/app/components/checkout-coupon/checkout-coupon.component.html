@@ -10,7 +10,8 @@
         <div class="input-container">
             <div class="options">
                 <input [(ngModel)]="coupon" type="text" placeholder="Coupon code">
-                <button (click)="applyCoupon()">Apply coupon</button>
+                <button (click)="applyCoupon()">Apply coupon <fa-icon *ngIf="isLoading" class="loading-icon"
+                        [icon]="loading" spinPulse [spin]="true" /></button>
             </div>
         </div>
     </div>
