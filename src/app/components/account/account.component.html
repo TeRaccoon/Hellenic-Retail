@@ -141,9 +141,9 @@
                         </tbody>
                     </table>
                     <div class="buttons">
-                        <button type="button" (click)="toggleAddNew()">Add New</button>
-                        <button type="submit">Save</button>
-                        <button type="button" (click)="cancelAddAddress()">Cancel</button>
+                        <button *ngIf="!showAddNew" type="button" (click)="toggleAddNew()">Add New</button>
+                        <button *ngIf="showAddNew" type="submit">Save</button>
+                        <button *ngIf="showAddNew" type="button" (click)="cancelAddAddress()">Cancel</button>
                     </div>
                 </div>
 

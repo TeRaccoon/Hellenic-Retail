@@ -74,8 +74,8 @@ export class AccountComponent {
       delivery_address_two: [''],
       delivery_address_three: [''],
       delivery_postcode: ['', Validators.required],
-      action: ['add'],
-      table_name: ['customer_address'],
+      action: 'add',
+      table_name: 'customer_address',
     });
   }
 
