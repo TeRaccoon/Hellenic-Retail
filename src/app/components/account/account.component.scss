@@ -26,6 +26,7 @@ $hellenicblue: rgb(0, 140, 255);
             border: 1px solid #ccc;
             padding: 20px;
             min-width: 350px;
+            width: 28vw;
 
             form {
                 display: flex;
@@ -75,6 +76,7 @@ $hellenicblue: rgb(0, 140, 255);
                             border: 1px solid #888888;
                             outline: 1px solid #fff;
                             transition: border 0.4s ease, outline 0.3s ease;
+                            max-width: 275px;
 
                             &:focus,
                             &:hover {
@@ -86,6 +88,11 @@ $hellenicblue: rgb(0, 140, 255);
                         }
                     }
                 }
+            }
+
+            .error {
+                color: red;
+                margin: 5px 0;
             }
         }
 

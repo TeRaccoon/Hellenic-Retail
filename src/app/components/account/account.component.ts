@@ -63,11 +63,7 @@ export class AccountComponent {
       ],
       primaryPhone: [
         { value: '', disabled: true },
-        [
-          Validators.required,
-          Validators.minLength(7),
-          Validators.maxLength(14),
-        ],
+        [Validators.minLength(7), Validators.maxLength(14)],
       ],
       secondaryPhone: [{ value: '', disabled: true }],
     });
@@ -104,6 +100,10 @@ export class AccountComponent {
     });
 
     this.userData = userData;
+    this.patchForm();
+  }
+
+  patchForm() {
     this.changeAccountDetails.patchValue({
       forename: this.userData.forename,
       surname: this.userData.surname,
@@ -139,16 +139,29 @@ export class AccountComponent {
 
   cancelEdit() {
     this.edit = false;
+    this.patchForm();
   }
 
-  submitChanges() {
+  async submitChanges() {
+    this.isLoading = true;
+
     let id = this.authService.getCustomerID();
 
     if (id != null) {
       let formData = this.changeAccountDetails.value;
       formData['id'] = id;
-      this.dataService.submitFormDataQuery('change-account-details', formData);
+      await this.dataService.submitFormDataQuery(
+        'change-account-details',
+        formData
+      );
     }
+
+    this.isLoading = false;
+    this.toggleEdit();
+    this.formService.setPopupMessage(
+      'Account details changed successfully!',
+      true
+    );
   }
 
   async changePassword() {
@@ -163,12 +176,11 @@ export class AccountComponent {
 
     if (response.success) {
       this.formService.setPopupMessage('Password changed successfully!', true);
+      this.isChangingPassword = false;
     } else {
-      this.error =
-        'There was an issue changing your password! Please try again later.';
+      this.error = response.message;
     }
 
-    this.isChangingPassword = false;
     this.isLoading = false;
   }
 
@@ -206,6 +218,10 @@ export class AccountComponent {
 
   toggleChangePassword() {
     this.isChangingPassword = !this.isChangingPassword;
+    this.changePasswordForm = this.fb.group({
+      oldPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required]],
+    });
   }
 
   async addAddress() {

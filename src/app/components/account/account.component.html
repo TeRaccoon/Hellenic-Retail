@@ -57,7 +57,9 @@
                         </div>
                         <div class="buttons">
                             <button *ngIf="!edit" type="button" (click)="toggleEdit()">Edit</button>
-                            <button *ngIf="edit" type="submit" [disabled]="changeAccountDetails.invalid">Save</button>
+                            <button *ngIf="edit" type="submit" [disabled]="changeAccountDetails.invalid">Save <fa-icon
+                                    *ngIf="isLoading" class="loading-icon" [icon]="loading" spinPulse
+                                    [spin]="true" /></button>
                             <button *ngIf="!edit" type="button" (click)="toggleChangePassword()">Change
                                 Password</button>
                             <button *ngIf="edit" type="button" (click)="cancelEdit()">Cancel</button>
@@ -67,8 +69,8 @@
                 </ng-container>
                 <ng-template #changingPassword>
                     <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
-                        <p *ngIf="error != null" class="error">{{ error }}</p>
                         <div class="inputs">
+                            <p *ngIf="error != null" class="error">{{ error }}</p>
                             <div class="change-password-field">
                                 <label>Old Password</label>
                                 <input formControlName="oldPassword" type="password">

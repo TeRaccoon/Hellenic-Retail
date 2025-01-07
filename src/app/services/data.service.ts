@@ -59,9 +59,9 @@ export class DataService {
     return response;
   }
 
-  submitFormDataQuery(query: string, data: any) {
+  async submitFormDataQuery(query: string, data: any) {
     const url = this.urlService.getUrl('retail');
-    return this.http.post(url, { query, data });
+    return await lastValueFrom(this.http.post(url, { query, data }));
   }
 
   submitFormData(data: any): Observable<any> {
