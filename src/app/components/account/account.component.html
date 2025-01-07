@@ -201,7 +201,6 @@
                         <th>Date</th>
                         <th>Reference</th>
                         <th>Status</th>
-                        <th>Payment Status</th>
                         <th>Net Value</th>
                         <th>VAT</th>
                         <th>Total</th>
@@ -212,7 +211,6 @@
                         <td>{{ order.date | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ order.title }}</td>
                         <td>{{ order.status }}</td>
-                        <td>{{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</td>
                         <td>£{{ order.gross_value | number: '1.2-2' }}</td>
                         <td>£{{ order.VAT | number: '1.2-2' }}</td>
                         <td>£{{ order.total | number: '1.2-2' }}</td>
@@ -224,7 +222,6 @@
                     <p><strong>Date:</strong> {{ order.date | date: 'dd/MM/yyyy' }}</p>
                     <p><strong>Reference:</strong> {{ order.title }}</p>
                     <p><strong>Status:</strong> {{ order.status }}</p>
-                    <p><strong>Payment Status:</strong> {{ order.payment_status == 'Yes' ? 'Paid' : 'Pending' }}</p>
                     <p><strong>Net Value:</strong> £{{ order.gross_value | number: '1.2-2' }}</p>
                     <p><strong>VAT:</strong> £{{ order.VAT | number: '1.2-2' }}</p>
                     <p><strong>Total:</strong> £{{ order.total | number: '1.2-2' }}</p>
