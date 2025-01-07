@@ -41,12 +41,13 @@
                         <div class="row single">
                             <div class="column">
                                 <label>Street address*</label>
-                                <div class="address-options">
+                                <div *ngIf="!shouldCreateAccount" class="address-options">
                                     <fa-icon (click)="toggleAddressBook()" [icon]="book" />
                                     <p (click)="clearAddressFields()">Clear</p>
                                 </div>
                             </div>
-                            <div class="row single addresses" [ngClass]="{'shown': addressBookVisible}">
+                            <div *ngIf="!shouldCreateAccount" class="row single addresses"
+                                [ngClass]="{'shown': addressBookVisible}">
                                 <div *ngFor="let address of addressBook" (click)="selectAddress(address)"
                                     class="column address-block">
                                     <p>{{ address.delivery_address_one }}</p>
@@ -70,7 +71,7 @@
                             <input type="text" formControlName="County">
                         </div>
                         <div class="row single">
-                            <label>Postcode</label>
+                            <label>Postcode*</label>
                             <input type="text" required formControlName="Postcode">
                         </div>
                         <div class="row single">
@@ -140,11 +141,11 @@
                     <input type="checkbox" (change)="terms = !terms" [checked]="terms">
                 </div>
             </div>
-            <div class="checkbox-container">
+            <div *ngIf="paymentMethod == PaymentMethod.Barclays" class="checkbox-container">
                 <label>Save address?</label>
                 <input type="checkbox" (change)="saveAddress = !saveAddress" [checked]="saveAddress">
             </div>
-            <div class="payment-container">
+            <div *ngIf="paymentMethod == PaymentMethod.Barclays" class="payment-container">
                 <button (click)="formSubmit()">
                     <ng-container *ngIf="!processing else paymentProcessing">
                         Place order
