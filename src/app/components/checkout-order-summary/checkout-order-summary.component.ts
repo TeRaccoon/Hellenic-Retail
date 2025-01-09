@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { UrlService } from 'src/app/services/url.service';
 import { CartService } from 'src/app/services/cart.service';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
-import { CheckoutSummary } from 'src/app/common/types/checkout';
+import { CheckoutSummary, CheckoutType } from 'src/app/common/types/checkout';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 
@@ -61,8 +61,15 @@ export class CheckoutOrderSummaryComponent {
   }
 
   async loadCartData() {
-    this.cart = await this.cartService.getCart();
-    this.cartProducts = await this.cartService.getCartItems();
+    let checkoutType: CheckoutType = this.cartService.getCheckoutType();
+
+    if (checkoutType == CheckoutType.BuyNow) {
+      this.cart = this.cartService.getBuyNowProduct();
+      this.cartProducts = await this.cartService.getBuyNowAsCartProduct();
+    } else {
+      this.cart = await this.cartService.getCart(true);
+      this.cartProducts = await this.cartService.getCartItems();
+    }
   }
 
   onImageError(event: Event) {

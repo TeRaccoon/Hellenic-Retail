@@ -6,6 +6,7 @@ import { FormService } from './form.service';
 import { CartItem, CartProduct, CartUnit } from '../common/types/cart';
 import { Product, ProductDetails } from '../common/types/shop';
 import { Response } from '../common/types/data-response';
+import { CheckoutType } from '../common/types/checkout';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,9 @@ export class CartService {
   private total = 0;
 
   private updated = new BehaviorSubject<boolean>(false);
+
+  private checkoutType: CheckoutType = CheckoutType.Cart;
+  private buyNowProduct: CartItem | undefined = undefined;
 
   constructor(
     private authService: AuthService,
@@ -49,7 +53,7 @@ export class CartService {
     if (this.cart.length > 0 && this.cart[0].id == undefined) {
       this.cart = [];
     }
-    this.cart = await this.checkCartStock();
+    this.cart = await this.checkCartStock(this.cart);
   }
 
   async loadCartLocalStorage() {
@@ -118,7 +122,7 @@ export class CartService {
         this.cart = [];
       }
     }
-    this.cart = await this.checkCartStock();
+    this.cart = await this.checkCartStock(this.cart);
   }
 
   async addToCart(
@@ -193,7 +197,7 @@ export class CartService {
         const newCartItem: CartItem = {
           id:
             currentCartItems.length > 0
-              ? currentCartItems[currentCartItems.length - 1].id + 1
+              ? currentCartItems[currentCartItems.length - 1].id ?? 0 + 1
               : 1,
           item_id: productId,
           item_name: productName,
@@ -376,23 +380,28 @@ export class CartService {
     if (this.cart.length > 0 && this.cart[0].id != null) {
       let total = 0;
       for (const item of this.cart) {
-        let product: Product = await this.dataService.processGet(
-          'product-from-id',
-          { filter: item.item_id.toString() }
-        );
-        let formattedProduct = this.formatProduct(product, item);
+        let formattedProduct = await this.getProductFromId(item);
 
         total += formattedProduct.discounted_price;
 
         cartProducts.push(formattedProduct);
       }
-
       this.total = total;
     } else {
       this.total = 0;
     }
 
     return cartProducts;
+  }
+
+  async getProductFromId(item: CartItem) {
+    let product: Product = await this.dataService.processGet(
+      'product-from-id',
+      { filter: item.item_id.toString() }
+    );
+    let formattedProduct = this.formatProduct(product, item);
+
+    return formattedProduct;
   }
 
   getCartTotal() {
@@ -403,15 +412,16 @@ export class CartService {
     if (this.cart.length > 0 && this.cart[0].id == undefined) {
       this.cart = [];
     }
-    checkStock && (this.cart = await this.checkCartStock());
+    checkStock && (this.cart = await this.checkCartStock(this.cart));
     return this.cart;
   }
 
-  async checkCartStock() {
+  async checkCartStock(currentCart: CartItem[]) {
     let cart: CartItem[] = [];
     if (this.cart.length > 0 && this.cart[0].id == undefined) {
-      this.cart = [];
+      return [];
     }
+
     for (let item of this.cart) {
       if (await this.checkStock(item.quantity, item.item_id)) {
         cart.push(item);
@@ -507,5 +517,28 @@ export class CartService {
     }
 
     return 1;
+  }
+
+  setCheckoutType(checkoutType: CheckoutType, buyNowProduct?: CartItem) {
+    this.checkoutType = checkoutType;
+    this.buyNowProduct = buyNowProduct;
+  }
+
+  getCheckoutType() {
+    return this.checkoutType;
+  }
+
+  getBuyNowProduct() {
+    return this.buyNowProduct ? [this.buyNowProduct] : this.cart;
+  }
+
+  async getBuyNowAsCartProduct() {
+    if (this.buyNowProduct) {
+      let formattedProduct = await this.getProductFromId(this.buyNowProduct);
+      this.total = formattedProduct.discounted_price;
+      return [formattedProduct];
+    } else {
+      return [];
+    }
   }
 }

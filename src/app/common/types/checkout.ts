@@ -18,6 +18,11 @@ export enum PaymentMethod {
   PayPal = 'PayPal',
 }
 
+export enum CheckoutType {
+  Cart = 'Cart',
+  BuyNow = 'BuyNow',
+}
+
 export interface CheckoutFormFull {
   forename: string;
   surname: string;

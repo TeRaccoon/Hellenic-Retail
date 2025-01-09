@@ -13,6 +13,7 @@ import {
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { CartItem, CartProduct, CartUnit } from 'src/app/common/types/cart';
 import { AuthService } from 'src/app/services/auth.service';
+import { CheckoutType } from 'src/app/common/types/checkout';
 
 @Component({
   selector: 'app-cart-popup',
@@ -91,8 +92,8 @@ export class CartPopupComponent {
     }
   }
 
-  async removeFromCart(cartId: number) {
-    await this.cartService.removeFromCart(cartId);
+  async removeFromCart(cartId: number | null) {
+    if (cartId) await this.cartService.removeFromCart(cartId);
     await this.getCartData();
   }
 
@@ -121,5 +122,10 @@ export class CartPopupComponent {
   onImageError(event: Event) {
     const target = event.target as HTMLImageElement;
     target.src = this.imageUrl + 'placeholder.jpg';
+  }
+
+  checkout() {
+    this.toggleCart();
+    this.cartService.setCheckoutType(CheckoutType.Cart);
   }
 }

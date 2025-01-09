@@ -19,9 +19,10 @@ import {
 } from '@angular/animations';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormService } from 'src/app/services/form.service';
-import { CartUnit } from 'src/app/common/types/cart';
+import { CartItem, CartUnit } from 'src/app/common/types/cart';
 import { ProductDetails } from 'src/app/common/types/shop';
 import { CustomerType } from 'src/app/common/types/account';
+import { CheckoutType } from 'src/app/common/types/checkout';
 
 @Component({
   selector: 'app-view-details',
@@ -158,7 +159,15 @@ export class ViewDetailsComponent {
   }
 
   buyNow(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity, this.unit);
+    let cartItem: CartItem = {
+      id: null,
+      item_id: productID,
+      item_name: this.product!.name,
+      quantity: quantity,
+      unit: this.unit,
+    };
+
+    this.cartService.setCheckoutType(CheckoutType.BuyNow, cartItem);
     this.router.navigate(['/checkout']);
   }
 

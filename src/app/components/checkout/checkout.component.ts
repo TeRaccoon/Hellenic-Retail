@@ -15,6 +15,7 @@ import { MailService } from 'src/app/services/mail.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import {
   CheckoutSummary,
+  CheckoutType,
   Coupon,
   CouponType,
   Discount,
@@ -55,6 +56,7 @@ export class CheckoutComponent {
 
   checkoutSummary: CheckoutSummary;
 
+  checkoutType: CheckoutType = CheckoutType.Cart;
   cartProducts: CartProduct[] = [];
   cart: CartItem[] = [];
 
@@ -266,8 +268,16 @@ export class CheckoutComponent {
   }
 
   async calculateTotal(coupon: Coupon | null = null) {
-    this.cart = await this.cartService.getCart(true);
-    this.cartProducts = await this.cartService.getCartItems();
+    this.checkoutType = this.cartService.getCheckoutType();
+
+    if (this.checkoutType == CheckoutType.BuyNow) {
+      this.cart = this.cartService.getBuyNowProduct();
+      this.cartProducts = await this.cartService.getBuyNowAsCartProduct();
+    } else {
+      this.cart = await this.cartService.getCart(true);
+      this.cartProducts = await this.cartService.getCartItems();
+    }
+
     let subtotal = this.cartService.getCartTotal();
     let total = subtotal;
     let discount: Discount | null = null;
@@ -299,8 +309,8 @@ export class CheckoutComponent {
       total: Number(Number(total + delivery).toFixed(2)),
       discount: discount,
     };
-    this.checkoutService.updateCheckoutSummary(updatedSummary);
 
+    this.checkoutService.updateCheckoutSummary(updatedSummary);
     this.checkoutSummary = this.checkoutService.getCheckoutSummary();
   }
 
@@ -453,11 +463,12 @@ export class CheckoutComponent {
 
     if (success) {
       let response = await this.sendEmailConfirmation();
-      await this.cartService.clearCart(false);
+
+      if (this.checkoutType == CheckoutType.Cart) {
+        await this.cartService.clearCart(false);
+      }
 
       if (response.success) {
-        console.log(this.coupon);
-
         if (this.coupon?.quantity_limit) {
           await this.dataService.processPost({
             action: 'coupon-use',
