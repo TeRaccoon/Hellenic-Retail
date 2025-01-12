@@ -260,7 +260,6 @@ export class ShopGridComponent {
   }
 
   isInPriceRange(product: any) {
-    console.log(product);
     const priceToCheck =
       product.discounted_price != null
         ? product.discounted_price
