@@ -76,11 +76,9 @@ export class ContactComponent {
         );
       }
       this.formService.showPopup();
-      console.log('boo');
     } else {
       this.contactForm.markAllAsTouched();
     }
     this.isLoading = false;
-    console.log(this.isLoading);
   }
 }
