@@ -64,6 +64,9 @@
                                 Password</button>
                             <button *ngIf="edit" type="button" (click)="cancelEdit()">Cancel</button>
                             <button *ngIf="!edit" type="button" (click)="logout()">Logout</button>
+                            <button *ngIf="userData.subscribed == 1" type="button" (click)="unsubscribe()">Unsubscribe
+                                <fa-icon *ngIf="isUnsubscribing" class="loading-icon" [icon]="loading" spinPulse
+                                    [spin]="true" /></button>
                         </div>
                     </form>
                 </ng-container>

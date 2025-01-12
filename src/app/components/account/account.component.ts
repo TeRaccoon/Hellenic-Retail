@@ -30,7 +30,7 @@ export class AccountComponent {
 
   loggedIn: boolean | null = null;
   userId: string | null = null;
-  userData: any = null;
+  userData: CustomerDetails | null = null;
   orderHistory: Order[] = [];
   addressBook: any[] = [];
   edit = false;
@@ -40,6 +40,7 @@ export class AccountComponent {
   showAddNew = false;
 
   isLoading = false;
+  isUnsubscribing = false;
   error: string | null = null;
 
   constructor(
@@ -105,11 +106,11 @@ export class AccountComponent {
 
   patchForm() {
     this.changeAccountDetails.patchValue({
-      forename: this.userData.forename,
-      surname: this.userData.surname,
-      email: this.userData.email,
-      primaryPhone: this.userData.phone_number_primary,
-      secondaryPhone: this.userData.phone_number_secondary,
+      forename: this.userData!.forename,
+      surname: this.userData!.surname,
+      email: this.userData!.email,
+      primaryPhone: this.userData!.phone_number_primary,
+      secondaryPhone: this.userData!.phone_number_secondary,
     });
   }
 
@@ -247,5 +248,27 @@ export class AccountComponent {
   cancelAddAddress() {
     this.addAddressForm.reset();
     this.showAddNew = false;
+  }
+
+  async unsubscribe() {
+    this.isUnsubscribing = true;
+
+    let response = await this.dataService.processPost({
+      action: 'unsubscribe',
+      email: this.userData!.email,
+    });
+
+    if (response == null) {
+      this.formService.setPopupMessage('Unsubscribed successfully!', true);
+      this.userData!.subscribed = 0;
+    } else {
+      this.formService.setPopupMessage(
+        'There was an issue unsubscribing! Please contact support',
+        true,
+        10000
+      );
+    }
+
+    this.isUnsubscribing = false;
   }
 }

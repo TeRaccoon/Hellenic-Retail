@@ -37,6 +37,11 @@ export enum CustomerType {
   Wholesale = 'Wholesale',
 }
 
+export enum Bitwise {
+  No = 0,
+  Yes = 1,
+}
+
 export interface AccountResponse {
   success: boolean;
   message: string;
@@ -49,4 +54,5 @@ export interface CustomerDetails {
   email: string;
   phone_number_primary: string;
   phone_number_secondary: string;
+  subscribed: Bitwise;
 }
