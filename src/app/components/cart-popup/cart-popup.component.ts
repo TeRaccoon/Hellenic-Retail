@@ -14,6 +14,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { CartItem, CartProduct, CartUnit } from 'src/app/common/types/cart';
 import { AuthService } from 'src/app/services/auth.service';
 import { CheckoutType } from 'src/app/common/types/checkout';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart-popup',
@@ -62,7 +63,7 @@ export class CartPopupComponent {
     private urlService: UrlService,
     private cartService: CartService,
     private formService: FormService,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -127,5 +128,6 @@ export class CartPopupComponent {
   checkout() {
     this.toggleCart();
     this.cartService.setCheckoutType(CheckoutType.Cart);
+    this.router.navigate(['/checkout']);
   }
 }
