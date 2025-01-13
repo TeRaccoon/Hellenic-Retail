@@ -521,7 +521,7 @@ export class CheckoutComponent {
         '&pound;' +
         (this.checkoutSummary.subtotal - this.checkoutSummary.vat).toFixed(2),
       vat: '&pound;' + this.checkoutSummary.vat.toFixed(2),
-      delivery: '&pound' + this.checkoutSummary.delivery.toFixed(2),
+      delivery: '&pound;' + this.checkoutSummary.delivery.toFixed(2),
       discount_value:
         '&pound;' +
         Math.abs(this.checkoutSummary.discount?.value ?? 0).toFixed(2),
