@@ -221,42 +221,50 @@ export class ShopGridComponent {
     this.getPageRange();
   }
 
-  calculatePages() {
-    this.resultsAmount =
-      this.products.length === undefined ? 1 : this.filteredProducts.length;
-    this.totalPages = Math.floor(this.resultsAmount / this.itemsPerPage + 1);
-  }
-
   getPageRange() {
     this.calculatePages();
 
-    const range = [];
-    let start = this.currentPage;
+    this.pageRange = [];
+    let startPage = Math.max(1, this.currentPage - 1);
+    let endPage = Math.min(this.totalPages, this.currentPage + 1);
 
-    if (this.currentPage > this.totalPages) {
-      start = this.totalPages;
-    } else if (this.currentPage < 1) {
-      start = 1;
-    }
-
-    if (this.totalPages <= 3) {
+    if (this.totalPages <= 2) {
       for (let i = 1; i <= this.totalPages; i++) {
-        range.push(i);
+        this.pageRange.push(i);
       }
     } else {
-      const lowerBound = Math.max(1, start - 1);
-      const upperBound = Math.min(this.totalPages, start + 1);
-
-      for (let i = lowerBound; i <= upperBound; i++) {
-        range.push(i);
+      if (startPage > 1) this.pageRange.push(1);
+      for (let i = startPage; i <= endPage; i++) {
+        this.pageRange.push(i);
       }
-
-      if (!range.includes(this.totalPages)) {
-        range.push(this.totalPages);
-      }
+      if (endPage < this.totalPages) this.pageRange.push(this.totalPages);
     }
+  }
 
-    this.pageRange = range;
+  calculatePages() {
+    this.resultsAmount = this.filteredProducts.length;
+    this.totalPages = Math.ceil(this.resultsAmount / this.itemsPerPage);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getPageRange();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.getPageRange();
+    }
+  }
+
+  goToPage(pageNumber: number) {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.currentPage = pageNumber;
+      this.getPageRange();
+    }
   }
 
   isInPriceRange(product: any) {
