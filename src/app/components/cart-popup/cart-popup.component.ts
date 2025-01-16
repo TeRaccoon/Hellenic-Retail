@@ -15,6 +15,7 @@ import { CartItem, CartProduct, CartUnit } from 'src/app/common/types/cart';
 import { AuthService } from 'src/app/services/auth.service';
 import { CheckoutType } from 'src/app/common/types/checkout';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart-popup',
@@ -48,6 +49,8 @@ import { Router } from '@angular/router';
   ],
 })
 export class CartPopupComponent {
+  private readonly subscriptions = new Subscription();
+
   cartVisible = 'visible';
   cart: CartItem[] = [];
   cartProducts: CartProduct[] = [];
@@ -69,16 +72,26 @@ export class CartPopupComponent {
   ngOnInit() {
     this.imageUrl = this.urlService.getUrl('uploads');
 
-    this.formService.getCartFormVisibility().subscribe(async (visible) => {
-      this.cartVisible = visible ? 'visible' : 'hidden';
+    this.subscriptions.add(
+      this.formService.getCartFormVisibility().subscribe((visible) => {
+        this.cartVisible = visible ? 'visible' : 'hidden';
 
-      if (visible) {
-        this.loaded = false;
-        await this.getCartData();
-        this.loaded = true;
-        this.confirmationPopupVisible = false;
-      }
-    });
+        if (visible) {
+          this.loadCart();
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  async loadCart() {
+    this.loaded = false;
+    await this.getCartData();
+    this.loaded = true;
+    this.confirmationPopupVisible = false;
   }
 
   async getCartData() {

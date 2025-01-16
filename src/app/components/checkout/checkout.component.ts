@@ -6,7 +6,7 @@ import {
   faCircleNotch,
   faAddressBook,
 } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
@@ -39,6 +39,8 @@ import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
   styleUrls: ['./checkout.component.scss'],
 })
 export class CheckoutComponent {
+  private readonly subscriptions = new Subscription();
+
   public paypalConfig?: IPayPalConfig;
 
   billingForm: FormGroup;
@@ -146,6 +148,10 @@ export class CheckoutComponent {
     this.initConfig();
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   private initConfig(): void {
     this.paypalConfig = {
       currency: 'GBP',
@@ -209,15 +215,13 @@ export class CheckoutComponent {
   }
 
   async load() {
-    this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
-      if (loggedIn) {
-        this.customerId = this.authService.getCustomerID();
-        this.shouldCreateAccount = this.customerId == null;
-        this.userType = this.authService.getCustomerType() ?? 'Retail';
-        this.loadCustomerDetails();
-        this.loadAddressBook();
-      }
-    });
+    this.subscriptions.add(
+      this.authService.isLoggedInObservable().subscribe((loggedIn: boolean) => {
+        if (loggedIn) {
+          this.initializeCustomerData();
+        }
+      })
+    );
 
     this.cartService
       .getUpdateRequest()
@@ -228,6 +232,14 @@ export class CheckoutComponent {
       });
 
     this.tracing();
+  }
+
+  initializeCustomerData() {
+    this.customerId = this.authService.getCustomerID();
+    this.shouldCreateAccount = this.customerId == null;
+    this.userType = this.authService.getCustomerType() ?? 'Retail';
+    this.loadCustomerDetails();
+    this.loadAddressBook();
   }
 
   async loadCustomerDetails() {
