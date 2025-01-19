@@ -88,6 +88,21 @@ export class DataService {
     );
   }
 
+  async processDocument(location: string): Promise<string> {
+    const url = this.urlService.getUrl('retail');
+    let value = (
+      await lastValueFrom(
+        this.http.post(url, {
+          body: {
+            action: 'document',
+            url: this.urlService.getUrl('uploads') + location,
+          },
+        })
+      )
+    ).toString();
+    return value;
+  }
+
   setShopFilter(filter: any) {
     this.shopFilter.next(filter);
   }
