@@ -53,6 +53,7 @@ $hellenicblue: rgb(0, 140, 255);
 
         select {
             cursor: pointer;
+            max-width: 190px;
         }
 
         input,
@@ -68,6 +69,7 @@ $hellenicblue: rgb(0, 140, 255);
         input {
             width: 100%;
             cursor: text;
+            min-width: 20vw;
         }
 
         button {
