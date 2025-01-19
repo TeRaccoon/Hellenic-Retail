@@ -82,15 +82,9 @@ $hellenicblue: rgb(0, 140, 255);
 
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 6px;
         flex: 1;
-    }
-}
-
-::ng-deep app-product {
-    .product-container {
-        height: 16vw !important;
     }
 }
 

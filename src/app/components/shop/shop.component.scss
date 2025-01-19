@@ -10,10 +10,16 @@
     flex-shrink: 0;
 }
 
+::ng-deep app-shop-grid {
+    flex: 1;
+
+}
+
 @media screen and (max-width: 1079px) {
 
     //mobile
     .shop-container {
         margin: 0;
+        width: 100%;
     }
 }
