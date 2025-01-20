@@ -91,10 +91,6 @@ $hellenicblue: rgb(0, 140, 255);
 @media screen and (max-width: 1079px) {
 
     //mobile
-    .grid-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-
     .sorting-select {
         width: 150px;
     }
