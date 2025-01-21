@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import { lastValueFrom } from 'rxjs';
+import { faCircleNotch, faL } from '@fortawesome/free-solid-svg-icons';
 import { AccountService } from 'src/app/services/account.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
-import { MailService } from 'src/app/services/mail.service';
 
 @Component({
   selector: 'app-create-account-form',
@@ -27,9 +24,7 @@ export class CreateAccountFormComponent {
 
   constructor(
     private authService: AuthService,
-    private mailService: MailService,
     private router: Router,
-    private dataService: DataService,
     private formService: FormService,
     private formBuilder: FormBuilder,
     private accountService: AccountService
@@ -43,6 +38,7 @@ export class CreateAccountFormComponent {
       passwordRepeat: ['', Validators.required],
       termsAndConditions: [false, Validators.required],
       promoConsent: [false, Validators.required],
+      businessRequest: [false, Validators.required],
       action: ['create-account'],
       table_name: ['customers'],
     });

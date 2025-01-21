@@ -388,6 +388,7 @@ export class CheckoutComponent {
         forename: formData['First Name'],
         surname: formData['Last Name'],
         promoConsent: false,
+        businessRequest: false,
         termsAndConditions: this.terms,
         table_name: 'customers',
       };

@@ -21,6 +21,7 @@ enum PaymentStatus {
 
 export interface RegistrationForm {
   action: 'create-account';
+  businessRequest: boolean;
   email: string;
   forename: string;
   password?: string;

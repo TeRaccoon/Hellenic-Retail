@@ -1,31 +1,39 @@
 $hellenicblue: rgb(0, 140, 255);
+
 .container {
     width: 68%;
     margin: 10px auto 30px auto;
+
     .panel-container {
         display: flex;
         gap: 20px;
+
         .form-container {
             display: flex;
             flex-direction: column;
             flex: 1;
+
             h2 {
                 font-size: 15px;
             }
+
             .row-double {
                 display: flex;
                 width: 100%;
                 gap: 10px;
+
                 div {
                     display: flex;
                     flex-direction: column;
                     flex: 1;
                 }
             }
+
             .row {
                 display: flex;
                 flex-direction: column;
             }
+
             .terms-and-conditions {
                 display: none;
                 flex-direction: column;
@@ -34,12 +42,19 @@ $hellenicblue: rgb(0, 140, 255);
                 padding: 18px;
                 height: fit-content;
             }
+
             .checkbox-container {
                 display: flex;
+
                 label {
                     padding: 10px 10px 10px 0;
+
+                    a {
+                        text-decoration: underline;
+                    }
                 }
             }
+
             div {
                 input {
                     font-size: 17px;
@@ -52,12 +67,15 @@ $hellenicblue: rgb(0, 140, 255);
                     transition: border 0.4s ease, outline 0.3s ease;
                 }
             }
+
             .error-input {
                 border: 1px solid red;
             }
+
             .error-message {
                 color: red;
             }
+
             button {
                 cursor: pointer;
                 font-family: 'Poppins', sans-serif;
@@ -68,11 +86,13 @@ $hellenicblue: rgb(0, 140, 255);
                 border: 0;
                 padding: 8px 18px;
                 transition: background-color 0.4s ease;
+
                 &:hover {
                     background-color: #0075f3;
                 }
             }
         }
+
         .side-bar {
             width: 35%;
             border: 1px solid #ccc;
@@ -82,20 +102,26 @@ $hellenicblue: rgb(0, 140, 255);
     }
 }
 
-@media screen and (max-width: 1079px) { //Mobile
+@media screen and (max-width: 1079px) {
+
+    //Mobile
     .container {
         width: 85%;
         margin: auto;
     }
+
     .row-double {
         flex-direction: column;
     }
+
     .side-bar {
         display: none;
     }
+
     .terms-and-conditions {
-        display: flex!important;
+        display: flex !important;
     }
+
     .panel-container {
         margin-bottom: 15px;
     }

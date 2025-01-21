@@ -293,6 +293,72 @@ export class MailService {
     return email;
   }
 
+  generateBusinessRequestEmail(accountData: RegistrationForm) {
+    let email = `
+        <html>
+    <head>
+        <title>New Business Account Request from ${accountData.forename} ${accountData.surname}</title>
+        <meta charset="UTF-8">
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .message-details {
+            margin-bottom: 20px;
+        }
+        .message-content {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>New Business Account Request</h1>
+            <p>Dear Team,</p>
+            <p>You have received a new business account request from a customer. Here are the details:</p>
+            <div class="message-details">
+                <p><strong>Name:</strong> ${accountData.forename} ${accountData.surname}</p>
+                <p><strong>Email:</strong> <a href="mailto:${accountData.email}">${accountData.email}</a></p>
+            </div>
+            <p>Please respond as soon as possible.</p>
+            <div class="footer">
+                <p>Best regards,</p>
+                <p>Hellenic Grocery Support Team</p>
+            </div>
+        </div>
+    </body>
+    </html>`;
+
+    return email;
+  }
+
   generateAccountCreationEmail(
     accountData: RegistrationForm,
     passwordless = true

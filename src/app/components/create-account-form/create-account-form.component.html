@@ -66,13 +66,19 @@
                 </div>
                 <div class="checkbox-container">
                     <div>
-                        <label>You agree to the <a>terms and conditions*</a></label>
+                        <label>You agree to the <a [routerLink]="'/documents/terms-and-conditions'">terms and
+                                conditions</a>*</label>
                         <input type="checkbox" formControlName="termsAndConditions">
                     </div>
                 </div>
                 <div class="checkbox-container">
                     <label>You agree to receive promotional newsletters</label>
                     <input type="checkbox" formControlName="promoConsent">
+                </div>
+                <div class="checkbox-container">
+                    <label>Request a business account. Please read the <a
+                            [routerLink]="'/documents/business-terms'">business terms</a></label>
+                    <input type="checkbox" formControlName="businessRequest">
                 </div>
                 <button type="submit">Submit <fa-icon *ngIf="loading" class="loading-icon" [icon]="faCircleNotch"
                         spinPulse [spin]="true" /></button>

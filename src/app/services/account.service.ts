@@ -27,33 +27,6 @@ export class AccountService {
     this.supportEmail = this.consts.getConstant(settingKeys.support_email);
   }
 
-  async sendAccountCreationEmail(
-    registrationForm: RegistrationForm,
-    passwordless = false
-  ) {
-    const emailHTML = this.mailService.generateAccountCreationEmail(
-      registrationForm,
-      passwordless
-    );
-    const emailData = {
-      action: 'mail',
-      mail_type: 'account_creation',
-      subject: 'Welcome to Hellenic Grocery',
-      email_HTML: emailHTML,
-      address: registrationForm.email,
-      name: 'Customer',
-    };
-
-    let response = await this.mailService.sendEmail(emailData);
-    if (!response.success) {
-      this.formService.setPopupMessage(
-        `There was an issue sending you account creation confirmation email. Please contact support for help: ${this.supportEmail}`
-      );
-    }
-
-    return response.success;
-  }
-
   async createAccount(
     registrationForm: RegistrationForm,
     valid: boolean = true,
@@ -103,27 +76,73 @@ export class AccountService {
 
     await this.sendAccountCreationEmail(registrationForm, passwordless);
 
-    if (!registrationForm.promoConsent) {
-      return {
-        success: true,
-        message: 'Account created successfully!',
-        data: response.data.id,
-      };
+    if (registrationForm.promoConsent) {
+      this.registerForNewsletters(registrationForm.email);
     }
-
-    const newsletterForm = {
-      email: registrationForm.email,
-      action: 'add',
-      table_name: 'mailing_list',
-    };
-
-    await lastValueFrom(this.dataService.submitFormData(newsletterForm));
+    if (registrationForm.businessRequest) {
+      this.requestBusinessAccount(registrationForm);
+    }
 
     return {
       success: true,
       message: 'Account created successfully!',
       data: response.data.id,
     };
+  }
+
+  async sendAccountCreationEmail(
+    registrationForm: RegistrationForm,
+    passwordless = false
+  ) {
+    const emailHTML = this.mailService.generateAccountCreationEmail(
+      registrationForm,
+      passwordless
+    );
+    const emailData = {
+      action: 'mail',
+      mail_type: 'account_creation',
+      subject: 'New Business Account Request',
+      email_HTML: emailHTML,
+      address: registrationForm.email,
+      name: 'Customer',
+    };
+
+    let response = await this.mailService.sendEmail(emailData);
+    if (!response.success) {
+      this.formService.setPopupMessage(
+        `There was an issue sending you account creation confirmation email. Please contact support for help: ${this.supportEmail}`
+      );
+    }
+
+    return response.success;
+  }
+
+  async requestBusinessAccount(registrationForm: RegistrationForm) {
+    const emailHTML =
+      this.mailService.generateBusinessRequestEmail(registrationForm);
+
+    const emailData = {
+      action: 'mail',
+      mail_type: 'business_account_request',
+      subject: 'Welcome to Hellenic Grocery',
+      email_HTML: emailHTML,
+      address: this.supportEmail,
+      name: 'Customer',
+    };
+
+    let response = await this.mailService.sendEmail(emailData);
+
+    return response.success;
+  }
+
+  async registerForNewsletters(email: string) {
+    const newsletterForm = {
+      email: email,
+      action: 'add',
+      table_name: 'mailing_list',
+    };
+
+    await lastValueFrom(this.dataService.submitFormData(newsletterForm));
   }
 
   async preSubmissionChecks(email: string) {
