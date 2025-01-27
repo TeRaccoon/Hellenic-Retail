@@ -60,7 +60,6 @@ $hellenicblue: rgb(0, 140, 255);
         text-decoration: none;
         color: #000000;
         align-self: flex-start;
-        padding-left: 10px;
         margin: 5px;
         white-space: nowrap;
         overflow: hidden;
@@ -125,7 +124,7 @@ $hellenicblue: rgb(0, 140, 255);
         }
 
         p {
-            margin: auto 0;
+            margin: auto 3px;
             width: auto;
 
             fa-icon {

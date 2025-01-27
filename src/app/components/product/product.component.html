@@ -1,4 +1,4 @@
-<div class="product-container">
+<div class="product-container" [ngClass]="{ 'selected': isSelected }" (click)="toggleSelected()">
     <div class="discount-banner">
         <p *ngIf="product.discount && product.discount != null">{{ product.discount }}% OFF</p>
         <p *ngIf="product.banner" [class]="product.discount && product.discount != null ? 'secondary' : ''" [ngClass]="{
@@ -7,8 +7,7 @@
             'yellow': product.quantity != 0 && product.quantity != null
         }">{{ product.banner }}</p>
     </div>
-    <img [routerLink]="'/view/' + product.name" [src]="imageUrl + product.image_location"
-        (error)="onImageError($event)" />
+    <img [src]="imageUrl + product.image_location" (error)="onImageError($event)" />
     <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
     <div class="price-container">
         <ng-container *ngIf="customerType == 'Retail' else wholesale">
