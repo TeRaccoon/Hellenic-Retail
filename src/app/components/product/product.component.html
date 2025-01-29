@@ -1,4 +1,4 @@
-<div class="product-container" [ngClass]="{ 'selected': isSelected }" (click)="toggleSelected()">
+<div class="product-container">
     <div class="discount-banner">
         <p *ngIf="product.discount && product.discount != null">{{ product.discount }}% OFF</p>
         <p *ngIf="product.banner" [class]="product.discount && product.discount != null ? 'secondary' : ''" [ngClass]="{
