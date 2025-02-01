@@ -1,3 +1,5 @@
+import { YesNo } from './checkout';
+
 export interface Order {
   date: string;
   title: string;
@@ -29,6 +31,7 @@ export interface RegistrationForm {
   phone?: string;
   promoConsent: boolean;
   surname: string;
+  pending_approval: YesNo;
   table_name: 'customers';
   termsAndConditions: boolean;
 }
@@ -55,5 +58,6 @@ export interface CustomerDetails {
   email: string;
   phone_number_primary: string;
   phone_number_secondary: string;
+  pending_approval: YesNo;
   subscribed: Bitwise;
 }

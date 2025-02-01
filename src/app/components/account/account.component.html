@@ -55,6 +55,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p *ngIf="userData?.pending_approval == 'Yes'">*Business account approval pending</p>
                         <div class="buttons">
                             <button *ngIf="!edit" type="button" (click)="toggleEdit()">Edit</button>
                             <button *ngIf="edit" type="submit" [disabled]="changeAccountDetails.invalid">Save <fa-icon

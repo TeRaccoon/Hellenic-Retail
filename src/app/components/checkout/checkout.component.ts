@@ -20,6 +20,7 @@ import {
   CouponType,
   Discount,
   PaymentMethod,
+  YesNo,
 } from '../../common/types/checkout';
 import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
@@ -390,6 +391,7 @@ export class CheckoutComponent {
         promoConsent: false,
         businessRequest: false,
         termsAndConditions: this.terms,
+        pending_approval: YesNo.No,
         table_name: 'customers',
       };
 

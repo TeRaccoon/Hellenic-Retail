@@ -11,6 +11,7 @@ import {
 } from 'src/app/common/types/account';
 import { lastValueFrom } from 'rxjs';
 import { ConstManager, settingKeys } from '../common/const/const-manager';
+import { YesNo } from '../common/types/checkout';
 
 @Injectable({
   providedIn: 'root',
@@ -60,6 +61,10 @@ export class AccountService {
         success: false,
         message: 'This email address has already been registered!',
       };
+    }
+
+    if (registrationForm.businessRequest) {
+      registrationForm.pending_approval = YesNo.Yes;
     }
 
     delete registrationForm.passwordRepeat;

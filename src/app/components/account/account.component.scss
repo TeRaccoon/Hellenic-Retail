@@ -34,6 +34,12 @@ $hellenicblue: rgb(0, 140, 255);
                 justify-content: space-between;
                 flex-grow: 1;
 
+                >p {
+                    margin: 5px 0px;
+                    color: gray;
+                    font-size: 14px;
+                }
+
                 .inputs {
                     .detail {
                         display: flex;

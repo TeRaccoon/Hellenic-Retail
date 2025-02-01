@@ -39,6 +39,7 @@ export class CreateAccountFormComponent {
       termsAndConditions: [false, Validators.required],
       promoConsent: [false, Validators.required],
       businessRequest: [false, Validators.required],
+      pending_approval: ['No'],
       action: ['create-account'],
       table_name: ['customers'],
     });
