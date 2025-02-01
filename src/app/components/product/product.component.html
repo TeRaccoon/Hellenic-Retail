@@ -35,12 +35,32 @@
         </ng-template>
     </div>
     <div class="product-options">
-        <button [disabled]="product.quantity == 0" (click)="addToCart(product.id, 1)">Add to cart</button>
-        <p (click)="addToWishlist(product.id)">
-            <fa-icon [icon]="faHeart"></fa-icon>
-        </p>
-        <p *ngIf="product.image_location != null" (click)="openImage(product.image_location)">
-            <fa-icon [icon]="faEye"></fa-icon>
-        </p>
+        <div class="cart-options">
+            <input type="number" [disabled]="product.quantity == 0" [min]="1" [max]="product.adjusted_quantity"
+                [(ngModel)]="quantity">
+            <select *ngIf="customerType == 'Wholesale' || product.retail_box_price" (change)="changePackageType($event)"
+                [disabled]="product.quantity == 0">
+                <option>Unit</option>
+                <option value="Retail Box"
+                    *ngIf="product.retail_box_price && (product.box_size && product.box_size <= product.quantity)">Box
+                </option>
+                <option *ngIf="product.box_price && (product.box_size && product.box_size <= product.quantity) ">Box
+                </option>
+                <option
+                    *ngIf="product.pallet_price && (product.pallet_size && product.pallet_size <= product.quantity)">
+                    Pallet
+                </option>
+            </select>
+        </div>
+        <div class="purchase-options">
+            <button [disabled]="product.quantity == 0" (click)="addToCart(product.id)">Add to cart</button>
+            <p (click)="addToWishlist(product.id)">
+                <fa-icon [icon]="faHeart"></fa-icon>
+            </p>
+            <p *ngIf="product.image_location != null" (click)="openImage(product.image_location)">
+                <fa-icon [icon]="faEye"></fa-icon>
+            </p>
+        </div>
+
     </div>
 </div>

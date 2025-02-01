@@ -4,6 +4,7 @@ import { FormService } from '../../services/form.service';
 import { UrlService } from 'src/app/services/url.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { CustomerType } from 'src/app/common/types/account';
+import { CartUnit } from 'src/app/common/types/cart';
 
 @Component({
   selector: 'app-product',
@@ -15,6 +16,8 @@ export class ProductComponent {
   @Input() customerType: CustomerType = CustomerType.Retail;
 
   imageUrl: string;
+  unit: CartUnit = CartUnit.Unit;
+  quantity: number = 1;
 
   faHeart = faHeart;
   faEye = faEye;
@@ -28,6 +31,8 @@ export class ProductComponent {
   }
 
   ngOnInit() {
+    console.log(this.product);
+    this.product.adjusted_quantity = this.product.quantity;
     this.setProductBanner();
   }
 
@@ -53,8 +58,8 @@ export class ProductComponent {
     this.formService.showImageViewer();
   }
 
-  async addToCart(productID: number, quantity: number) {
-    this.cartService.addToCart(productID, quantity);
+  async addToCart(productID: number) {
+    this.cartService.addToCart(productID, this.quantity, this.unit);
   }
 
   async addToWishlist(productID: number) {
@@ -64,5 +69,19 @@ export class ProductComponent {
   onImageError(event: Event) {
     const target = event.target as HTMLImageElement;
     target.src = this.imageUrl + 'placeholder.jpg';
+  }
+
+  changePackageType(event: any) {
+    this.unit = event.target.value;
+    if (this.product) {
+      this.product.adjusted_quantity = Math.trunc(
+        this.product.quantity /
+          this.cartService.getQuantityMultiplier(this.product, this.unit)
+      );
+    }
+
+    if (this.quantity > this.product.adjusted_quantity) {
+      this.quantity = this.product.adjusted_quantity;
+    }
   }
 }

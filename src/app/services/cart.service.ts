@@ -503,10 +503,7 @@ export class CartService {
     this.formService.showPopup();
   }
 
-  getQuantityMultiplier(
-    product: ProductDetails,
-    selectedUnit: CartUnit
-  ): number {
+  getQuantityMultiplier(product: any, selectedUnit: CartUnit): number {
     switch (selectedUnit) {
       case 'Box':
       case 'Retail Box':
