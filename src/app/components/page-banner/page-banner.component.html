@@ -1,5 +1,5 @@
-<ng-container *ngIf="bannerUrl">
-    <div class="banner-container" [style.background-image]="bannerUrl">
-        <h1>{{ message }}</h1>
-    </div>
-</ng-container>
+@if (bannerUrl) {
+  <div class="banner-container" [style.background-image]="bannerUrl">
+    <h1>{{ message }}</h1>
+  </div>
+}

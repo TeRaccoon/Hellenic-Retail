@@ -1,4 +1,6 @@
-<app-mobile-navbar *ngIf="screenSize.width <= 1080"></app-mobile-navbar>
+@if (screenSize.width <= 1080) {
+  <app-mobile-navbar></app-mobile-navbar>
+}
 <app-navbar></app-navbar>
 <app-popup />
 <router-outlet></router-outlet>

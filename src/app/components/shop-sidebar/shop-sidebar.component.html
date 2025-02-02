@@ -1,21 +1,27 @@
 <div class="sidebar-container">
-    <div *ngIf="screenSize.width>1080" class="sidebar">
-        <h2>Filter By Price</h2>
-        <ul>
-            <ng-container *ngIf="prices">
-                <li *ngIf="priceFilterIndex != -1">
-                    <div class="list-item" (click)="clearFilter()">
-                        <div class="toggle-icon"></div>
-                        <a>Clear</a>
-                    </div>
-                </li>
-                <li *ngFor="let price of prices; let i = index;">
-                    <div class="list-item" (click)="selectFilter(i)">
-                        <div [ngClass]="priceFilterIndex == i ? 'selected' : ''" class="toggle-icon"></div>
-                        <a>{{ price }}</a>
-                    </div>
-                </li>
-            </ng-container>
-        </ul>
+  @if (screenSize.width>1080) {
+    <div class="sidebar">
+      <h2>Filter By Price</h2>
+      <ul>
+        @if (prices) {
+          @if (priceFilterIndex != -1) {
+            <li>
+              <div class="list-item" (click)="clearFilter()">
+                <div class="toggle-icon"></div>
+                <a>Clear</a>
+              </div>
+            </li>
+          }
+          @for (price of prices; track price; let i = $index) {
+            <li>
+              <div class="list-item" (click)="selectFilter(i)">
+                <div [ngClass]="priceFilterIndex == i ? 'selected' : ''" class="toggle-icon"></div>
+                <a>{{ price }}</a>
+              </div>
+            </li>
+          }
+        }
+      </ul>
     </div>
+  }
 </div>

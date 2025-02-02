@@ -1,7 +1,9 @@
 <div id="slideshow-container" class="slideshow-container">
-    <ng-container *ngIf="imageNames">
-        <div *ngFor="let imageName of imageNames; let i = index" [style.display]="i === slideIndex ? 'block' : 'none'" class="slide fade">
-            <img [src]="imageUrl + imageName" [alt]="imageName">
-        </div>
-    </ng-container>
+  @if (imageNames) {
+    @for (imageName of imageNames; track imageName; let i = $index) {
+      <div [style.display]="i === slideIndex ? 'block' : 'none'" class="slide fade">
+        <img [src]="imageUrl + imageName" [alt]="imageName">
+      </div>
+    }
+  }
 </div>

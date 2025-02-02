@@ -1,18 +1,18 @@
 <div class="featured">
-    <h1>Featured Products</h1>
-    <div class="featured-container">
-        <ng-container *ngIf="featuredData && featuredProducts">
-            <div class="background-card card"
-                [style.background-image]="'url(' + imageUrl + featuredData.image_file_name + ')'">
-                <div class="annotation">
-                    <h2>{{ featuredData.text_content }}</h2>
-                </div>
-            </div>
-            <div class="grid-container">
-                <ng-container *ngFor="let product of featuredProducts; let i = index;">
-                    <app-product [product]="product" [customerType]="customerType" />
-                </ng-container>
-            </div>
-        </ng-container>
-    </div>
+  <h1>Featured Products</h1>
+  <div class="featured-container">
+    @if (featuredData && featuredProducts) {
+      <div class="background-card card"
+        [style.background-image]="'url(' + imageUrl + featuredData.image_file_name + ')'">
+        <div class="annotation">
+          <h2>{{ featuredData.text_content }}</h2>
+        </div>
+      </div>
+      <div class="grid-container">
+        @for (product of featuredProducts; track product; let i = $index) {
+          <app-product [product]="product" [customerType]="customerType" />
+        }
+      </div>
+    }
+  </div>
 </div>

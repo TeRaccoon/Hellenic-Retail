@@ -1,45 +1,53 @@
 <div class="shop-grid-container">
-    <div class="shop-grid-header">
-        <h3>{{ filterHeader }}</h3>
-        <div>
-            <label>Show:</label>
-            <select (change)="changeItemsPerPage($event)">
-                <option>1</option>
-                <option>10</option>
-                <option>15</option>
-                <option>20</option>
-                <option>30</option>
-            </select>
-            <select (change)="changeSorting($event)" class="sorting-select">
-                <option value="default">Default Sorting</option>
-                <option value="high-low">Sort by price: High to Low</option>
-                <option value="low-high">Sort by price: Low to High</option>
-                <ng-container *ngIf="screenSize.width < 1080">
-                    <option *ngFor="let filter of priceFilters; let index = index" [value]="filter"
-                        [class]="index == 0 ? 'top-border' : ''">{{ filter.price }}</option>
-                </ng-container>
-            </select>
-        </div>
+  <div class="shop-grid-header">
+    <h3>{{ filterHeader }}</h3>
+    <div>
+      <label>Show:</label>
+      <select (change)="changeItemsPerPage($event)">
+        <option>1</option>
+        <option>10</option>
+        <option>15</option>
+        <option>20</option>
+        <option>30</option>
+      </select>
+      <select (change)="changeSorting($event)" class="sorting-select">
+        <option value="default">Default Sorting</option>
+        <option value="high-low">Sort by price: High to Low</option>
+        <option value="low-high">Sort by price: Low to High</option>
+        @if (screenSize.width < 1080) {
+          @for (filter of priceFilters; track filter; let index = $index) {
+            <option [value]="filter"
+            [class]="index == 0 ? 'top-border' : ''">{{ filter.price }}</option>
+          }
+        }
+      </select>
     </div>
-    <div class="grid-container">
-        <ng-container *ngIf="filteredProducts.length > 0 else noProducts">
-            <ng-container
-                *ngFor="let product of filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); let i = index;">
-                <app-product [product]="product" [customerType]="customerType" />
-            </ng-container>
-        </ng-container>
-        <ng-template #noProducts>
-            <div class="no-products-container">
-                <h2>There were no products found matching your selection!</h2>
-            </div>
-        </ng-template>
+  </div>
+  <div class="grid-container">
+    @if (filteredProducts.length > 0) {
+      @for (product of filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); track product; let i = $index) {
+        <app-product [product]="product" [customerType]="customerType" />
+      }
+    } @else {
+      <div class="no-products-container">
+        <h2>There were no products found matching your selection!</h2>
+      </div>
+    }
+  </div>
+  @if (filteredProducts.length > 0 && totalPages > 1) {
+    <div class="footer">
+      <div class="page-options">
+        @if (currentPage > 1) {
+          <button (click)="previousPage()">Previous</button>
+        }
+        @for (pageNumber of pageRange; track pageNumber) {
+          <button [class]="currentPage == pageNumber ? 'active-page' : ''"
+          (click)="goToPage(pageNumber)">{{ pageNumber }}</button>
+        }
+        @if (currentPage < totalPages) {
+          <button (click)="nextPage()">Next</button>
+        }
+      </div>
     </div>
-    <div *ngIf="filteredProducts.length > 0 && totalPages > 1" class="footer">
-        <div class="page-options">
-            <button *ngIf="currentPage > 1" (click)="previousPage()">Previous</button>
-            <button *ngFor="let pageNumber of pageRange" [class]="currentPage == pageNumber ? 'active-page' : ''"
-                (click)="goToPage(pageNumber)">{{ pageNumber }}</button>
-            <button *ngIf="currentPage < totalPages" (click)="nextPage()">Next</button>
-        </div>
-    </div>
+  }
 </div>

@@ -1,3 +1,5 @@
-<div *ngIf="visible" class="container" [@popAnimation]>
+@if (visible) {
+  <div class="container" [@popAnimation]>
     <p>{{ message }}</p>
-</div>
+  </div>
+}

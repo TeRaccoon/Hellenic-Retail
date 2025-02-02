@@ -1,43 +1,55 @@
 <div [@loginAnimation]="loginVisible" class="form-container">
-    <div class="login-form">
-        <div class="text-section">
-            <div>
-                <h1>Login</h1>
-                <p>Get access to your orders, wishlist and more!</p>
-            </div>
-            <a (click)="createAccount()">Create Account</a>
-        </div>
-        <div class="input-section">
-            <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
-                <p class="error">{{ loginError }}</p>
-                <div *ngFor="let error of errorMessages.email">
-                    <div class="error"
-                        *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError(error.type) && submitted">
-                        {{ error.message }}
-                    </div>
-                </div>
-                <input [class]="inputHasError('email') ? 'error-input' : ''" (input)="onPasswordChange()" type="email"
-                    required formControlName="email" placeholder="Enter email address">
-                <div *ngFor="let error of errorMessages.password">
-                    <div class="error"
-                        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type) && submitted">
-                        {{ error.message }}
-                    </div>
-                </div>
-                <input *ngIf="!forgotPasswordState" [class]="inputHasError('password') ? 'error-input' : ''"
-                    type="password" required formControlName="password" placeholder="Enter password">
-                <div class="login-options">
-                    <!-- <div>
-                        <label for="remember-me">Remember me</label>
-                        <input type="checkbox" id="remember-me" name="remember-me" value="remember-me">
-                    </div> -->
-                    <a (click)="forgotPassword()">{{ forgotPasswordText }}</a>
-                </div>
-                <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}
-                    <fa-icon *ngIf="loading" class="loading-icon" [icon]="spinner" spinPulse [spin]="true" />
-                </button>
-                <button type="button" class="cancel-button" (click)="hideLogin()">Cancel</button>
-            </form>
-        </div>
+  <div class="login-form">
+    <div class="text-section">
+      <div>
+        <h1>Login</h1>
+        <p>Get access to your orders, wishlist and more!</p>
+      </div>
+      <a (click)="createAccount()">Create Account</a>
     </div>
+    <div class="input-section">
+      <form [formGroup]="loginForm" (ngSubmit)="formSubmit()">
+        <p class="error">{{ loginError }}</p>
+        @for (error of errorMessages.email; track error) {
+          <div>
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.hasError(error.type) && submitted) {
+              <div class="error"
+                >
+                {{ error.message }}
+              </div>
+            }
+          </div>
+        }
+        <input [class]="inputHasError('email') ? 'error-input' : ''" (input)="onPasswordChange()" type="email"
+          required formControlName="email" placeholder="Enter email address">
+        @for (error of errorMessages.password; track error) {
+          <div>
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError(error.type) && submitted) {
+              <div class="error"
+                >
+                {{ error.message }}
+              </div>
+            }
+          </div>
+        }
+        @if (!forgotPasswordState) {
+          <input [class]="inputHasError('password') ? 'error-input' : ''"
+            type="password" required formControlName="password" placeholder="Enter password">
+        }
+        <div class="login-options">
+          <!-- <div>
+          <label for="remember-me">Remember me</label>
+          <input type="checkbox" id="remember-me" name="remember-me" value="remember-me">
+        </div> -->
+        <a (click)="forgotPassword()">{{ forgotPasswordText }}</a>
+      </div>
+      <button type="submit">{{ !forgotPasswordState ? 'Login' : 'Send Recovery Email' }}
+        @if (loading) {
+          <fa-icon class="loading-icon" [icon]="spinner" spinPulse [spin]="true" />
+        }
+      </button>
+      <button type="button" class="cancel-button" (click)="hideLogin()">Cancel</button>
+    </form>
+  </div>
+</div>
 </div>

@@ -1,73 +1,87 @@
 <div #categorySearch class="container">
-    <nav class="category-bar">
-        <ul class="nav-links">
-            <ng-container *ngIf="categoryGroups">
-                <li class="dropdown hamburger" (click)="toggleCategory()">
-                    <p class="nav-link">Shop By Categories</p>
-                    <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
-                    <div class="dropdown-content" [class]="categoriesShown ? 'visible' : ''">
-                        <div>
-                            <a routerLink="/" class="nav-logo">
-                                <img [src]='imageUrl + "/static/logo.jpg"' alt="Food Retail Logo">
-                            </a>
-                            <div class="categories">
-                                <div *ngFor="let group of categoryGroups" class="category-group">
-                                    <a (click)="goToCategory(group.category)">
-                                        {{ group.category }}
-                                    </a>
-                                    <div class="sub-categories">
-                                        <a *ngFor="let subcategory of group.subcategories"
-                                            (click)="goToCategory(subcategory)">
-                                            {{ subcategory }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ng-container>
-        </ul>
-        <div class="logo-container">
-            <img routerLink="/" [src]='imageUrl + "/static/logo-wide.png"' alt="Logo">
-        </div>
-        <div class="search-container">
-            <div class="search-options">
-                <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()"
-                    (keydown.enter)="search()" type="text" placeholder="Search for products, categories, brands, sku..."
-                    name="search">
-                <select (change)="changeCategory($event)">
-                    <option value="all">All Categories</option>
-                    <option *ngFor="let category of categories">
-                        {{ category.name }}
-                    </option>
-                </select>
-                <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch" /></button>
-            </div>
-            <div class="search-dropdown">
-                <div class="search-dropdown-items">
-                    <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;"
-                        [routerLink]="'/view/' + product.name">
-                        <div class="search-results-title">
-                            <img [src]="imageUrl + product.image_location" (error)="onImageError($event)">
-                            <p> {{ product.name }} </p>
-                        </div>
-                        <div class="price-container">
-                            <ng-container *ngIf="product.pallet_price == undefined else wholesale">
-                                <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price |
-                                    number: '1.2-2' }}</p>
-                                <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price |
-                                    number: '1.2-2' }}</p>
-                            </ng-container>
-                            <ng-template #wholesale>
-                                <div class="wholesale-container">
-                                    <p><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
-                                </div>
-                            </ng-template>
-                        </div>
+  <nav class="category-bar">
+    <ul class="nav-links">
+      @if (categoryGroups) {
+        <li class="dropdown hamburger" (click)="toggleCategory()">
+          <p class="nav-link">Shop By Categories</p>
+          <fa-icon class="text-icon" [icon]="faBars"></fa-icon>
+          <div class="dropdown-content" [class]="categoriesShown ? 'visible' : ''">
+            <div>
+              <a routerLink="/" class="nav-logo">
+                <img [src]='imageUrl + "/static/logo.jpg"' alt="Food Retail Logo">
+              </a>
+              <div class="categories">
+                @for (group of categoryGroups; track group) {
+                  <div class="category-group">
+                    <a (click)="goToCategory(group.category)">
+                      {{ group.category }}
                     </a>
-                </div>
+                    <div class="sub-categories">
+                      @for (subcategory of group.subcategories; track subcategory) {
+                        <a
+                          (click)="goToCategory(subcategory)">
+                          {{ subcategory }}
+                        </a>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
+          </div>
+        </li>
+      }
+    </ul>
+    <div class="logo-container">
+      <img routerLink="/" [src]='imageUrl + "/static/logo-wide.png"' alt="Logo">
+    </div>
+    <div class="search-container">
+      <div class="search-options">
+        <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()"
+          (keydown.enter)="search()" type="text" placeholder="Search for products, categories, brands, sku..."
+          name="search">
+        <select (change)="changeCategory($event)">
+          <option value="all">All Categories</option>
+          @for (category of categories; track category) {
+            <option>
+              {{ category.name }}
+            </option>
+          }
+        </select>
+        <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch" /></button>
+      </div>
+      <div class="search-dropdown">
+        <div class="search-dropdown-items">
+          @for (product of searchResults.slice(0, 5); track product; let i = $index) {
+            <a class="search-results"
+              [routerLink]="'/view/' + product.name">
+              <div class="search-results-title">
+                <img [src]="imageUrl + product.image_location" (error)="onImageError($event)">
+                <p> {{ product.name }} </p>
+              </div>
+              <div class="price-container">
+                @if (product.pallet_price == undefined) {
+                  @if (product.discounted_price != null) {
+                    <p class="price">£{{ product.discounted_price |
+                    number: '1.2-2' }}</p>
+                  }
+                  <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price |
+                  number: '1.2-2' }}</p>
+                } @else {
+                  <div class="wholesale-container">
+                    <p><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
+                  </div>
+                }
+                <ng-template #wholesale>
+                  <div class="wholesale-container">
+                    <p><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
+                  </div>
+                </ng-template>
+              </div>
+            </a>
+          }
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </div>

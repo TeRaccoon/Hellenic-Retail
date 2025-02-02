@@ -1,25 +1,24 @@
 <div class="signup-container">
-    <ng-container *ngIf="signupImage">
-        <div class="background-image" [style.background-image]="'url(' + imageUrl + signupImage + ')'">
-            <div>
-                <div class="signup-form">
-                    <form [formGroup]="signupForm" (ngSubmit)="submit()">
-                        <label>Stay home & get your daily needs from our shop</label>
-                        <div class="signup-form-footer">
-                            <input formControlName="email" type="email" required placeholder="Your email address">
-                            <button type="submit">
-                                <ng-container *ngIf="!signedUp; else formSubmitted">
-                                    Sign Up
-                                </ng-container>
-                                <ng-template #formSubmitted>
-                                    <fa-icon [icon]="faCheck" />
-                                </ng-template>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <img [src]="imageUrl + '/static/logo.jpg'" alt="Food Retail Logo">
+  @if (signupImage) {
+    <div class="background-image" [style.background-image]="'url(' + imageUrl + signupImage + ')'">
+      <div>
+        <div class="signup-form">
+          <form [formGroup]="signupForm" (ngSubmit)="submit()">
+            <label>Stay home & get your daily needs from our shop</label>
+            <div class="signup-form-footer">
+              <input formControlName="email" type="email" required placeholder="Your email address">
+              <button type="submit">
+                @if (!signedUp) {
+                  Sign Up
+                } @else {
+                  <fa-icon [icon]="faCheck" />
+                }
+              </button>
             </div>
+          </form>
         </div>
-    </ng-container>
+        <img [src]="imageUrl + '/static/logo.jpg'" alt="Food Retail Logo">
+      </div>
+    </div>
+  }
 </div>

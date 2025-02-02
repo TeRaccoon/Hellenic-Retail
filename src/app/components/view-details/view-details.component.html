@@ -1,95 +1,155 @@
 <div class="view-details-container">
-    <ng-container *ngIf="product">
-        <h1>{{ product.name }}</h1>
-        <div class="price-container">
-            <ng-container *ngIf="customerType == 'Retail' else wholesale">
-                <div class="retail-price-container">
-                    <div>
-                        <p *ngIf="product.discounted_price != null" class="price">£{{ product.discounted_price | number:
-                            '1.2-2'
-                            }}</p>
-                        <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number:
-                            '1.2-2' }}
-                        </p>
-                    </div>
-                    <p *ngIf="product.retail_box_price">
-                        <span>{{ 'Box (' + product.box_size + '): '}}</span>
-                        <span *ngIf="product.discounted_box_price" class="bold">£{{ product.discounted_box_price |
-                            number: '1.2-2' }}</span>
-                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.retail_box_price | number:
-                            '1.2-2'
-                            }}</span>
-                    </p>
-                </div>
-            </ng-container>
-            <ng-template #wholesale>
-                <div class="wholesale-container">
-                    <p>
-                        <span>Unit: </span>
-                        <span *ngIf="product.discounted_price" class="bold">£{{ product.discounted_price | number:
-                            '1.2-2' }}</span>
-                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.price | number: '1.2-2'
-                            }}</span>
-                    </p>
-                    <p *ngIf="product.box_price">
-                        <span>{{ 'Box (' + product.box_size + '): '}}</span>
-                        <span *ngIf="product.discounted_box_price" class="bold">£{{ product.discounted_box_price |
-                            number: '1.2-2' }}</span>
-                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.box_price | number: '1.2-2'
-                            }}</span>
-                    </p>
-                    <p *ngIf="product.pallet_price">
-                        <span>{{ 'Pallet (' + product.pallet_size + '): '}}</span>
-                        <span *ngIf="product.discounted_pallet_price" class="bold">£{{ product.discounted_pallet_price |
-                            number: '1.2-2' }}</span>
-                        <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.pallet_price | number:
-                            '1.2-2' }}</span>
-                    </p>
-                </div>
-            </ng-template>
-        </div>
-        <ng-container *ngIf="stock <= 10 && stock > 1">
-            <p class="quantity-message">Hurry! Only {{ stock }} left!</p>
-        </ng-container>
-        <ng-container *ngIf="stock < 1">
-            <p class="quantity-message">Out of stock!</p>
-        </ng-container>
-        <p class="description ql-editor" [innerHTML]="product.description ?? '' | safeHtml"></p>
-        <div class="purchasing-options">
-            <div>
-                <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
-                <select *ngIf="customerType == 'Wholesale' || product.retail_box_price"
-                    (change)="changePackageType($event)" [disabled]="outOfStock">
-                    <option>Unit</option>
-                    <option value="Retail Box"
-                        *ngIf="product.retail_box_price && (product.box_size && product.box_size <= stock)">Box</option>
-                    <option *ngIf="product.box_price && (product.box_size && product.box_size <= stock) ">Box</option>
-                    <option *ngIf="product.pallet_price && (product.pallet_size && product.pallet_size <= stock)">Pallet
-                    </option>
-                </select>
-            </div>
-        </div>
-        <div class="purchase-buttons">
-            <button (click)="addToCart(product.id, quantity)" [disabled]="outOfStock" class="cart">Add To Cart</button>
-            <button (click)="buyNow(product.id, quantity)" [disabled]="outOfStock" class="purchase">Buy Now</button>
-        </div>
-        <div class="other-options">
-            <p (click)="addToWishlist()">
-                <fa-icon [class]="inWishlist ? 'red' : ''" [icon]="faHeart"></fa-icon> {{ inWishlist ? 'Remove from
-                wishlist' : 'Add to wishlist' }}
+  @if (product) {
+    <h1>{{ product.name }}</h1>
+    <div class="price-container">
+      @if (customerType == 'Retail') {
+        <div class="retail-price-container">
+          <div>
+            @if (product.discounted_price != null) {
+              <p class="price">£{{ product.discounted_price | number:
+                '1.2-2'
+              }}</p>
+            }
+            <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number:
+              '1.2-2' }}
             </p>
-            <p *ngIf="product.category != null" (click)="viewSimilar()">
-                <fa-icon [icon]="faEye"></fa-icon> View similar
+          </div>
+          @if (product.retail_box_price) {
+            <p>
+              <span>{{ 'Box (' + product.box_size + '): '}}</span>
+              @if (product.discounted_box_price) {
+                <span class="bold">£{{ product.discounted_box_price |
+                number: '1.2-2' }}</span>
+              }
+              <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.retail_box_price | number:
+                '1.2-2'
+              }}</span>
             </p>
+          }
         </div>
-        <div class="share-options">
-            <p>Share: </p>
-            <a (click)="share('clipboard')">
-                <fa-icon [@clipboardAnimation]="clipboardState" [icon]="faClipboard"></fa-icon>
-            </a>
-            <a>
-                <fa-icon [icon]="faFacebook"></fa-icon>
-            </a>
+      } @else {
+        <div class="wholesale-container">
+          <p>
+            <span>Unit: </span>
+            @if (product.discounted_price) {
+              <span class="bold">£{{ product.discounted_price | number:
+              '1.2-2' }}</span>
+            }
+            <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.price | number: '1.2-2'
+            }}</span>
+          </p>
+          @if (product.box_price) {
+            <p>
+              <span>{{ 'Box (' + product.box_size + '): '}}</span>
+              @if (product.discounted_box_price) {
+                <span class="bold">£{{ product.discounted_box_price |
+                number: '1.2-2' }}</span>
+              }
+              <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.box_price | number: '1.2-2'
+              }}</span>
+            </p>
+          }
+          @if (product.pallet_price) {
+            <p>
+              <span>{{ 'Pallet (' + product.pallet_size + '): '}}</span>
+              @if (product.discounted_pallet_price) {
+                <span class="bold">£{{ product.discounted_pallet_price |
+                number: '1.2-2' }}</span>
+              }
+              <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.pallet_price | number:
+              '1.2-2' }}</span>
+            </p>
+          }
         </div>
-    </ng-container>
+      }
+      <ng-template #wholesale>
+        <div class="wholesale-container">
+          <p>
+            <span>Unit: </span>
+            @if (product.discounted_price) {
+              <span class="bold">£{{ product.discounted_price | number:
+              '1.2-2' }}</span>
+            }
+            <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.price | number: '1.2-2'
+            }}</span>
+          </p>
+          @if (product.box_price) {
+            <p>
+              <span>{{ 'Box (' + product.box_size + '): '}}</span>
+              @if (product.discounted_box_price) {
+                <span class="bold">£{{ product.discounted_box_price |
+                number: '1.2-2' }}</span>
+              }
+              <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.box_price | number: '1.2-2'
+              }}</span>
+            </p>
+          }
+          @if (product.pallet_price) {
+            <p>
+              <span>{{ 'Pallet (' + product.pallet_size + '): '}}</span>
+              @if (product.discounted_pallet_price) {
+                <span class="bold">£{{ product.discounted_pallet_price |
+                number: '1.2-2' }}</span>
+              }
+              <span [class]="product.discount > 0 ? 'strike' : 'bold'">£{{ product.pallet_price | number:
+              '1.2-2' }}</span>
+            </p>
+          }
+        </div>
+      </ng-template>
+    </div>
+    @if (stock <= 10 && stock > 1) {
+      <p class="quantity-message">Hurry! Only {{ stock }} left!</p>
+    }
+    @if (stock < 1) {
+      <p class="quantity-message">Out of stock!</p>
+    }
+    <p class="description ql-editor" [innerHTML]="product.description ?? '' | safeHtml"></p>
+    <div class="purchasing-options">
+      <div>
+        <input [disabled]="outOfStock" type="number" [(ngModel)]="quantity" value="1">
+        @if (customerType == 'Wholesale' || product.retail_box_price) {
+          <select
+            (change)="changePackageType($event)" [disabled]="outOfStock">
+            <option>Unit</option>
+            @if (product.retail_box_price && (product.box_size && product.box_size <= stock)) {
+              <option value="Retail Box"
+              >Box</option>
+            }
+            @if (product.box_price && (product.box_size && product.box_size <= stock) ) {
+              <option>Box</option>
+            }
+            @if (product.pallet_price && (product.pallet_size && product.pallet_size <= stock)) {
+              <option>Pallet
+              </option>
+            }
+          </select>
+        }
+      </div>
+    </div>
+    <div class="purchase-buttons">
+      <button (click)="addToCart(product.id, quantity)" [disabled]="outOfStock" class="cart">Add To Cart</button>
+      <button (click)="buyNow(product.id, quantity)" [disabled]="outOfStock" class="purchase">Buy Now</button>
+    </div>
+    <div class="other-options">
+      <p (click)="addToWishlist()">
+        <fa-icon [class]="inWishlist ? 'red' : ''" [icon]="faHeart"></fa-icon> {{ inWishlist ? 'Remove from
+        wishlist' : 'Add to wishlist' }}
+      </p>
+      @if (product.category != null) {
+        <p (click)="viewSimilar()">
+          <fa-icon [icon]="faEye"></fa-icon> View similar
+        </p>
+      }
+    </div>
+    <div class="share-options">
+      <p>Share: </p>
+      <a (click)="share('clipboard')">
+        <fa-icon [@clipboardAnimation]="clipboardState" [icon]="faClipboard"></fa-icon>
+      </a>
+      <a>
+        <fa-icon [icon]="faFacebook"></fa-icon>
+      </a>
+    </div>
+  }
 </div>

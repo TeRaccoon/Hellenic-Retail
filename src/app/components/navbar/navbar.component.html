@@ -1,81 +1,93 @@
 <div class="container">
-    <div class="intro-bar">
-        <p>{{ message }}</p>
-        <p class="support-email">
-            <fa-icon [icon]="faEnvelope"></fa-icon> {{ email }}
-        </p>
-    </div>
+  <div class="intro-bar">
+    <p>{{ message }}</p>
+    <p class="support-email">
+      <fa-icon [icon]="faEnvelope"></fa-icon> {{ email }}
+    </p>
+  </div>
 </div>
-<nav *ngIf="screenSize.width > 1080" class="navbar">
+@if (screenSize.width > 1080) {
+  <nav class="navbar">
     <a routerLink="/" class="nav-logo">
-        <img [src]='imageUrl + "/static/logo.jpg"' alt="Food Retail Logo">
+      <img [src]='imageUrl + "/static/logo.jpg"' alt="Food Retail Logo">
     </a>
     <div class="search-container">
-        <div class="search-options">
-            <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()"
-                (keydown.enter)="search()" type="text" placeholder="Search for products..." name="search">
-            <select (change)="changeCategory($event)">
-                <option value="all">All Categories</option>
-                <option *ngFor="let category of categories">
-                    {{ category }}
-                </option>
-            </select>
-            <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
+      <div class="search-options">
+        <input autocomplete="off" (input)="searchFilter($event)" (focus)="onInputFocus()" (blur)="onInputBlur()"
+          (keydown.enter)="search()" type="text" placeholder="Search for products..." name="search">
+          <select (change)="changeCategory($event)">
+            <option value="all">All Categories</option>
+            @for (category of categories; track category) {
+              <option>
+                {{ category }}
+              </option>
+            }
+          </select>
+          <button type="submit" (click)="search()"><fa-icon class="text-icon" [icon]="faSearch"></fa-icon></button>
         </div>
         <div class="search-dropdown">
-            <div class="search-dropdown-items">
-                <a class="search-results" *ngFor="let product of searchResults.slice(0, 5); let i = index;"
-                    [routerLink]="'/view/' + product.name">
-                    <div>
-                        <img [src]="product.image_location" (error)="onImageError($event)">
-                        <p> {{ product.name }} </p>
+          <div class="search-dropdown-items">
+            @for (product of searchResults.slice(0, 5); track product; let i = $index) {
+              <a class="search-results"
+                [routerLink]="'/view/' + product.name">
+                <div>
+                  <img [src]="product.image_location" (error)="onImageError($event)">
+                  <p> {{ product.name }} </p>
+                </div>
+                <div class="price-container">
+                  @if (customerType == 'Retail') {
+                    <p
+                      [class]="(product.discounted_price != null && product.discounted_price != product.price) ? 'old-price' : 'price'">
+                      £{{ product.price | number:
+                    '1.2-2' }}</p>
+                    @if (product.discounted_price != null && product.discounted_price != product.price) {
+                      <p
+                        class="price">£{{ product.discounted_price |
+                      number: '1.2-2' }}</p>
+                    }
+                  } @else {
+                    <div class="wholesale-container">
+                      <p><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
                     </div>
-                    <div class="price-container">
-                        <ng-container *ngIf="customerType == 'Retail' else wholesale">
-                            <p
-                                [class]="(product.discounted_price != null && product.discounted_price != product.price) ? 'old-price' : 'price'">
-                                £{{ product.price | number:
-                                '1.2-2' }}</p>
-                            <p *ngIf="product.discounted_price != null && product.discounted_price != product.price"
-                                class="price">£{{ product.discounted_price |
-                                number: '1.2-2' }}</p>
-                        </ng-container>
-                        <ng-template #wholesale>
-                            <div class="wholesale-container">
-                                <p><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
-                            </div>
-                        </ng-template>
+                  }
+                  <ng-template #wholesale>
+                    <div class="wholesale-container">
+                      <p><span class="bold">£{{ product.price | number: '1.2-2' }}</span></p>
                     </div>
-                </a>
-            </div>
+                  </ng-template>
+                </div>
+              </a>
+            }
+          </div>
         </div>
-    </div>
-    <div class="account-section">
+      </div>
+      <div class="account-section">
         <a (click)="showAccount()">
-            <div class="icon-container">
-                <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
-            </div>
-            Account
+          <div class="icon-container">
+            <fa-icon class="interact-icon" [icon]="faUser"></fa-icon>
+          </div>
+          Account
         </a>
         <a (click)="showWishlist()">
-            <div class="icon-container">
-                <fa-icon class="interact-icon" [icon]="faHeart"></fa-icon>
-            </div>
-            Wishlist
+          <div class="icon-container">
+            <fa-icon class="interact-icon" [icon]="faHeart"></fa-icon>
+          </div>
+          Wishlist
         </a>
         <a (click)="toggleCart()">
-            <div class="icon-container">
-                <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
-                <p>{{ cartCount }}</p>
-            </div>
-            Cart
+          <div class="icon-container">
+            <fa-icon [@cartAnimation]="cartState" class="interact-icon" [icon]="faCartShopping"></fa-icon>
+            <p>{{ cartCount }}</p>
+          </div>
+          Cart
         </a>
-    </div>
-</nav>
-<app-navbar-category-search></app-navbar-category-search>
-<ng-container *ngIf="loginVisible">
+      </div>
+    </nav>
+  }
+  <app-navbar-category-search></app-navbar-category-search>
+  @if (loginVisible) {
     <app-login-form></app-login-form>
-</ng-container>
-<ng-container *ngIf="cartVisible">
+  }
+  @if (cartVisible) {
     <app-cart-popup></app-cart-popup>
-</ng-container>
+  }

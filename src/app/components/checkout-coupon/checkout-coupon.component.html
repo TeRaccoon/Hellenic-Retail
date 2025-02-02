@@ -1,18 +1,20 @@
 <div class="coupon-section">
-    <div class="coupon-information">
-        <fa-icon class="interact-icon" [icon]="faInfoCircle"></fa-icon>
-        <p>Have a coupon? <a (click)="shown = !shown">Click here to enter your code</a></p>
+  <div class="coupon-information">
+    <fa-icon class="interact-icon" [icon]="faInfoCircle"></fa-icon>
+    <p>Have a coupon? <a (click)="shown = !shown">Click here to enter your code</a></p>
+  </div>
+  <div [ngClass]="{'shown': shown}" class="coupon-form">
+    <div class="heading">
+      <p>If you have a coupon code, please apply it below.</p>
     </div>
-    <div [ngClass]="{'shown': shown}" class="coupon-form">
-        <div class="heading">
-            <p>If you have a coupon code, please apply it below.</p>
-        </div>
-        <div class="input-container">
-            <div class="options">
-                <input [(ngModel)]="coupon" type="text" placeholder="Coupon code">
-                <button (click)="applyCoupon()">Apply coupon <fa-icon *ngIf="isLoading" class="loading-icon"
-                        [icon]="loading" spinPulse [spin]="true" /></button>
-            </div>
-        </div>
+    <div class="input-container">
+      <div class="options">
+        <input [(ngModel)]="coupon" type="text" placeholder="Coupon code">
+        <button (click)="applyCoupon()">Apply coupon @if (isLoading) {
+          <fa-icon class="loading-icon"
+            [icon]="loading" spinPulse [spin]="true" />
+        }</button>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,21 +1,21 @@
 <div class="card-container">
-    <ng-container *ngFor="let card of [card1, card2]; let cardIndex = index">
-        <ng-container *ngIf="card">
-            <div class="card" [style.background-image]="'url(' + imageUrl + cardLocations[cardIndex] + ')'">
-                <div>
-                    <ng-container *ngFor="let item of card; let i = index">
-                        <ng-container *ngIf="item.element_type === 'Header'">
-                            <h4>{{ item.text_content }}</h4>
-                        </ng-container>
-                        <ng-container *ngIf="item.element_type === 'Paragraph'">
-                            <p>{{ item.text_content }}</p>
-                        </ng-container>
-                        <ng-container *ngIf="item.element_type === 'Other'">
-                            <button [routerLink]="item.text_content">Shop now</button>
-                        </ng-container>
-                    </ng-container>
-                </div>
-            </div>
-        </ng-container>
-    </ng-container>
+  @for (card of [card1, card2]; track card; let cardIndex = $index) {
+    @if (card) {
+      <div class="card" [style.background-image]="'url(' + imageUrl + cardLocations[cardIndex] + ')'">
+        <div>
+          @for (item of card; track item; let i = $index) {
+            @if (item.element_type === 'Header') {
+              <h4>{{ item.text_content }}</h4>
+            }
+            @if (item.element_type === 'Paragraph') {
+              <p>{{ item.text_content }}</p>
+            }
+            @if (item.element_type === 'Other') {
+              <button [routerLink]="item.text_content">Shop now</button>
+            }
+          }
+        </div>
+      </div>
+    }
+  }
 </div>

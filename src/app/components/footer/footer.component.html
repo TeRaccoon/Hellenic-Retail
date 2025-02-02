@@ -1,94 +1,96 @@
 <footer class="footer" [class]="screenSize.width <= 1080 ? 'mobile-footer' : ''">
-    <div class="container">
-        <div class="left-most">
-            <img [src]="imageUrl + 'static/logo2.jpg'" />
-            <div>
-                <fa-icon [icon]="faHouse" />
-                <p>{{ address }}</p>
-            </div>
-            <div>
-                <fa-icon [icon]="faPhone" />
-                <p>{{ supportPhone }}</p>
-            </div>
-            <div>
-                <fa-icon [icon]="faEnvelope" />
-                <p>{{ supportEmail }}</p>
-            </div>
-            <div>
-                <fa-icon [icon]="faFileInvoice" />
-                <p>VAT No.: GB171817403</p>
-            </div>
-            <div>
-                <fa-icon [icon]="faHashtag" />
-                <p>Company No.: 8603006</p>
-            </div>
-        </div>
-        <div class="right-most">
-            <div class="column">
-                <div (click)="openDropdown(options[0])" class="label-container">
-                    <h1>{{ options[0] }}</h1>
-                    <fa-icon [icon]="faCaretDown" />
-                </div>
-                <ng-container *ngIf="openedOptions.includes(options[0]) || screenSize.width > 1080">
-                    <span *ngFor="let category of categories" class="link">
-                        <a [routerLink]="'/shop/' + category.name">{{ category.name }}</a>
-                    </span>
-                </ng-container>
-            </div>
-            <div class="column">
-                <div (click)="openDropdown(options[1])" class="label-container">
-                    <h1>{{ options[1] }}</h1>
-                    <fa-icon [icon]="faCaretDown" />
-                </div>
-                <ng-container *ngIf="openedOptions.includes(options[1]) || screenSize.width > 1080">
-                    <span class="link">
-                        <a [routerLink]="'/account'">My Account</a>
-                    </span>
-                    <span class="link">
-                        <a [routerLink]="'/wishlist'">Wishlist</a>
-                    </span>
-                    <span class="link">
-                        <a [routerLink]="'/contact'">Contact Us</a>
-                    </span>
-                </ng-container>
-            </div>
-            <div class="column">
-                <div (click)="openDropdown(options[2])" class="label-container">
-                    <h1>{{ options[2] }}</h1>
-                    <fa-icon [icon]="faCaretDown" />
-                </div>
-                <ng-container *ngIf="openedOptions.includes(options[2]) || screenSize.width > 1080">
-                    <span class="link">
-                        <a [routerLink]="'/documents/terms-and-conditions'">Terms and Conditions</a>
-                    </span>
-                    <!-- <span class="link">
-                        <a [routerLink]="'/documents/about-us'">About Us</a>
-                    </span> -->
-                    <span class="link">
-                        <a [routerLink]="'/contact'">Contact Us</a>
-                    </span>
-                </ng-container>
-            </div>
-            <div class="column">
-                <div (click)="openDropdown(options[3])" class="label-container">
-                    <h1>{{ options[3] }}</h1>
-                    <fa-icon [icon]="faCaretDown" />
-                </div>
-                <ng-container *ngIf="openedOptions.includes(options[3]) || screenSize.width > 1080">
-                    <span class="link">
-                        <a [routerLink]="'/documents/privacy-policy'">Privacy Policy</a>
-                    </span>
-                    <span class="link">
-                        <a [routerLink]="'/documents/refund-policy'">Refund Policy</a>
-                    </span>
-                    <span class="link">
-                        <a [routerLink]="'/documents/shipping-policy'">Shipping Policy</a>
-                    </span>
-                    <span class="link">
-                        <a [routerLink]="'/documents/business-terms'">Business Terms</a>
-                    </span>
-                </ng-container>
-            </div>
-        </div>
+  <div class="container">
+    <div class="left-most">
+      <img [src]="imageUrl + 'static/logo2.jpg'" />
+      <div>
+        <fa-icon [icon]="faHouse" />
+        <p>{{ address }}</p>
+      </div>
+      <div>
+        <fa-icon [icon]="faPhone" />
+        <p>{{ supportPhone }}</p>
+      </div>
+      <div>
+        <fa-icon [icon]="faEnvelope" />
+        <p>{{ supportEmail }}</p>
+      </div>
+      <div>
+        <fa-icon [icon]="faFileInvoice" />
+        <p>VAT No.: GB171817403</p>
+      </div>
+      <div>
+        <fa-icon [icon]="faHashtag" />
+        <p>Company No.: 8603006</p>
+      </div>
     </div>
+    <div class="right-most">
+      <div class="column">
+        <div (click)="openDropdown(options[0])" class="label-container">
+          <h1>{{ options[0] }}</h1>
+          <fa-icon [icon]="faCaretDown" />
+        </div>
+        @if (openedOptions.includes(options[0]) || screenSize.width > 1080) {
+          @for (category of categories; track category) {
+            <span class="link">
+              <a [routerLink]="'/shop/' + category.name">{{ category.name }}</a>
+            </span>
+          }
+        }
+      </div>
+      <div class="column">
+        <div (click)="openDropdown(options[1])" class="label-container">
+          <h1>{{ options[1] }}</h1>
+          <fa-icon [icon]="faCaretDown" />
+        </div>
+        @if (openedOptions.includes(options[1]) || screenSize.width > 1080) {
+          <span class="link">
+            <a [routerLink]="'/account'">My Account</a>
+          </span>
+          <span class="link">
+            <a [routerLink]="'/wishlist'">Wishlist</a>
+          </span>
+          <span class="link">
+            <a [routerLink]="'/contact'">Contact Us</a>
+          </span>
+        }
+      </div>
+      <div class="column">
+        <div (click)="openDropdown(options[2])" class="label-container">
+          <h1>{{ options[2] }}</h1>
+          <fa-icon [icon]="faCaretDown" />
+        </div>
+        @if (openedOptions.includes(options[2]) || screenSize.width > 1080) {
+          <span class="link">
+            <a [routerLink]="'/documents/terms-and-conditions'">Terms and Conditions</a>
+          </span>
+          <!-- <span class="link">
+          <a [routerLink]="'/documents/about-us'">About Us</a>
+        </span> -->
+        <span class="link">
+          <a [routerLink]="'/contact'">Contact Us</a>
+        </span>
+      }
+    </div>
+    <div class="column">
+      <div (click)="openDropdown(options[3])" class="label-container">
+        <h1>{{ options[3] }}</h1>
+        <fa-icon [icon]="faCaretDown" />
+      </div>
+      @if (openedOptions.includes(options[3]) || screenSize.width > 1080) {
+        <span class="link">
+          <a [routerLink]="'/documents/privacy-policy'">Privacy Policy</a>
+        </span>
+        <span class="link">
+          <a [routerLink]="'/documents/refund-policy'">Refund Policy</a>
+        </span>
+        <span class="link">
+          <a [routerLink]="'/documents/shipping-policy'">Shipping Policy</a>
+        </span>
+        <span class="link">
+          <a [routerLink]="'/documents/business-terms'">Business Terms</a>
+        </span>
+      }
+    </div>
+  </div>
+</div>
 </footer>
