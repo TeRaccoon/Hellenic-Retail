@@ -16,7 +16,7 @@
     "@angular/compiler": "^17.3.12",
     "@angular/core": "^17.3.12",
     "@angular/forms": "^17.3.12",
-    "@angular/material": "^16.2.10",
+    "@angular/material": "^17.2.0",
     "@angular/platform-browser": "^17.3.12",
     "@angular/platform-browser-dynamic": "^17.3.12",
     "@angular/router": "^17.3.12",
@@ -28,7 +28,7 @@
     "crypto-js": "^4.2.0",
     "material-icons": "^1.13.12",
     "ngx-paypal": "^11.0.0",
-    "ngx-quill": "^23.0.3",
+    "ngx-quill": "^24.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
