@@ -31,7 +31,6 @@ export class ProductComponent {
   }
 
   ngOnInit() {
-    console.log(this.product);
     this.product.adjusted_quantity = this.product.quantity;
     this.setProductBanner();
   }
