@@ -27,4 +27,5 @@ export interface ProductDetails {
   pallet_price?: number;
   box_size?: number;
   pallet_size?: number;
+  sku?: string
 }

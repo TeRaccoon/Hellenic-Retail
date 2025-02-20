@@ -2,8 +2,16 @@ $hellenicblue: #008cff;
 
 .view-details-container {
 
-    // display: flex;
-    // flex-direction: column;
+    h1 {
+        margin-bottom: 0;
+    }
+
+    ;
+
+    >p {
+        margin: 0 0 10px 0;
+    }
+
     .price-container {
         display: flex;
         justify-content: flex-start;
