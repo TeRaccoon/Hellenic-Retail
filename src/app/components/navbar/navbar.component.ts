@@ -25,6 +25,7 @@ import { FilterService } from 'src/app/services/filter.service';
 import { CacheService } from 'src/app/services/cache.service';
 import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 import { CustomerType } from 'src/app/common/types/account';
+import { Product } from 'src/app/common/types/navbar';
 
 @Component({
   selector: 'app-navbar',
@@ -63,7 +64,7 @@ export class NavbarComponent {
 
   categories: string[] = [];
   subcategories: any[] = [];
-  products: any[] = [];
+  products: Product[] = [];
 
   searchResults: any[] = [];
   categoryFilter: string = 'all';
@@ -151,7 +152,11 @@ export class NavbarComponent {
       this.subcategories = subcategories;
     }
 
-    let products: any = await this.dataService.processGet(
+    await this.loadProducts();
+  }
+
+  async loadProducts() {
+    let products: Product[] = await this.dataService.processGet(
       'products',
       {},
       true,
@@ -161,13 +166,22 @@ export class NavbarComponent {
     if (products != null) {
       products = this.replaceNullImages(products);
       products = this.calculatePrices(products);
+      products = this.joinNameSKU(products);
 
       this.products = products;
       this.searchResults = products;
     }
   }
 
-  calculatePrices(products: any[]) {
+  joinNameSKU(products: Product[]) {
+    products.map(product => {
+      product.name = `${product.name} - ${product.sku}`
+    });
+
+    return products;
+  }
+
+  calculatePrices(products: Product[]) {
     return products.map((product) => {
       return {
         ...product,
@@ -179,7 +193,7 @@ export class NavbarComponent {
     });
   }
 
-  replaceNullImages(products: any[]) {
+  replaceNullImages(products: Product[]) {
     return products.map((product) => {
       return {
         ...product,
