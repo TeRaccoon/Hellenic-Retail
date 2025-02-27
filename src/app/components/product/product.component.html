@@ -1,103 +1,140 @@
 <div class="product-container">
   <div class="discount-banner">
     @if (product.discount && product.discount != null) {
-      <p>{{ product.discount }}% OFF</p>
-    }
-    @if (product.banner) {
-<p [class]="product.discount && product.discount != null ? 'secondary' : ''" [ngClass]="{
-            'secondary': product.discount && product.discount != null,
-            'red': product.quantity == 0,
-            'yellow': product.quantity != 0 && product.quantity != null
-        }">{{ product.banner }}</p>
+    <p>{{ product.discount }}% OFF</p>
+    } @if (banner.message) {
+    <p
+      [class]="product.discount && product.discount != null ? 'secondary' : ''"
+      [ngClass]="banner.class"
+    >
+      {{ banner.message }}
+    </p>
     }
   </div>
-  <img [src]="imageUrl + product.image_location" (error)="onImageError($event)" />
-  <a [routerLink]="'/view/' + product.name" class="product-name">{{ product.name }}</a>
+  <img
+    [src]="imageUrl + product.image_location"
+    (error)="onImageError($event)"
+  />
+  <a [routerLink]="'/view/' + product.name" class="product-name">{{
+    product.name
+  }}</a>
   <div class="price-container">
     @if (customerType == 'Retail') {
-      <div>
-        @if (product.discounted_price != null) {
-          <p class="price">£{{ product.discounted_price | number: '1.2-2'
-            }}
-          </p>
-        }
-        <p [class]="product.discounted_price ? 'old-price' : 'price'">£{{ product.price | number: '1.2-2' }}</p>
-      </div>
-      @if (product.retail_box_price) {
-        <p>
-          <span>Box: </span><span class="bold">£{{ product.retail_box_price | number: '1.2-2' }}</span>
-        </p>
+    <div>
+      @if (product.discounted_price != null) {
+      <p class="price">£{{ product.discounted_price | number : "1.2-2" }}</p>
       }
-    } @else {
-      <div class="wholesale-container">
-        <p><span>Unit: </span><span class="bold">£{{ (product.discounted_price ? product.discounted_price :
-      product.price) | number: '1.2-2' }}</span></p>
+      <p [class]="product.discounted_price ? 'old-price' : 'price'">
+        £{{ product.price | number : "1.2-2" }}
+      </p>
+    </div>
+    @if (product.retail_box_price) {
+    <p>
+      <span>Box: </span
+      ><span class="bold"
+        >£{{ product.retail_box_price | number : "1.2-2" }}</span
+      >
+    </p>
+    } } @else {
+    <div class="wholesale-container">
+      <p>
+        <span>Unit: </span
+        ><span class="bold"
+          >£{{
+            (product.discounted_price
+              ? product.discounted_price
+              : product.price
+            ) | number : "1.2-2"
+          }}</span
+        >
+      </p>
       @if (product.box_price) {
-        <p>
-          <span>Box: </span><span class="bold">£{{ product.box_price | number: '1.2-2' }}</span>
-        </p>
-      }
-      @if (product.pallet_price) {
-        <p>
-          <span>Pallet: </span><span class="bold">£{{ product.pallet_price | number: '1.2-2' }}</span>
-        </p>
+      <p>
+        <span>Box: </span
+        ><span class="bold">£{{ product.box_price | number : "1.2-2" }}</span>
+      </p>
+      } @if (product.pallet_price) {
+      <p>
+        <span>Pallet: </span
+        ><span class="bold"
+          >£{{ product.pallet_price | number : "1.2-2" }}</span
+        >
+      </p>
       }
     </div>
-  }
-  <ng-template #wholesale>
-    <div class="wholesale-container">
-      <p><span>Unit: </span><span class="bold">£{{ (product.discounted_price ? product.discounted_price :
-    product.price) | number: '1.2-2' }}</span></p>
-    @if (product.box_price) {
-      <p>
-        <span>Box: </span><span class="bold">£{{ product.box_price | number: '1.2-2' }}</span>
-      </p>
     }
-    @if (product.pallet_price) {
-      <p>
-        <span>Pallet: </span><span class="bold">£{{ product.pallet_price | number: '1.2-2' }}</span>
-      </p>
-    }
+    <ng-template #wholesale>
+      <div class="wholesale-container">
+        <p>
+          <span>Unit: </span
+          ><span class="bold"
+            >£{{
+              (product.discounted_price
+                ? product.discounted_price
+                : product.price
+              ) | number : "1.2-2"
+            }}</span
+          >
+        </p>
+        @if (product.box_price) {
+        <p>
+          <span>Box: </span
+          ><span class="bold">£{{ product.box_price | number : "1.2-2" }}</span>
+        </p>
+        } @if (product.pallet_price) {
+        <p>
+          <span>Pallet: </span
+          ><span class="bold"
+            >£{{ product.pallet_price | number : "1.2-2" }}</span
+          >
+        </p>
+        }
+      </div>
+    </ng-template>
   </div>
-</ng-template>
-</div>
-<div class="product-options">
-  <div class="cart-options">
-    <input type="number" [disabled]="product.quantity == 0" [min]="1" [max]="product.adjusted_quantity"
-      [(ngModel)]="quantity">
-    @if (customerType == 'Wholesale' || product.retail_box_price) {
-      <select (change)="changePackageType($event)"
-        [disabled]="product.quantity == 0">
+  <div class="product-options">
+    <div class="cart-options">
+      <input
+        type="number"
+        [disabled]="product.quantity == 0"
+        [min]="1"
+        [max]="product.adjusted_quantity"
+        [(ngModel)]="quantity"
+      />
+      @if (customerType == 'Wholesale' || product.retail_box_price) {
+      <select
+        (change)="changePackageType($event)"
+        [disabled]="product.quantity == 0"
+      >
         <option>Unit</option>
-        @if (product.retail_box_price && (product.box_size && product.box_size <= product.quantity)) {
-          <option value="Retail Box"
-            >Box
-          </option>
-        }
-        @if (product.box_price && (product.box_size && product.box_size <= product.quantity) ) {
-          <option>Box
-          </option>
-        }
-        @if (product.pallet_price && (product.pallet_size && product.pallet_size <= product.quantity)) {
-          <option
-            >
-            Pallet
-          </option>
+        @if (product.retail_box_price && (product.box_size && product.box_size
+        <= product.quantity)) {
+        <option value="Retail Box">Box</option>
+        } @if (product.box_price && (product.box_size && product.box_size <=
+        product.quantity) ) {
+        <option>Box</option>
+        } @if (product.pallet_price && (product.pallet_size &&
+        product.pallet_size <= product.quantity)) {
+        <option>Pallet</option>
         }
       </select>
-    }
-  </div>
-  <div class="purchase-options">
-    <button [disabled]="product.quantity == 0" (click)="addToCart(product.id)">Add to cart</button>
-    <p (click)="addToWishlist(product.id)">
-      <fa-icon [icon]="faHeart"></fa-icon>
-    </p>
-    @if (product.image_location != null) {
+      }
+    </div>
+    <div class="purchase-options">
+      <button
+        [disabled]="product.quantity == 0"
+        (click)="addToCart(product.id)"
+      >
+        Add to cart
+      </button>
+      <p (click)="addToWishlist(product.id)">
+        <fa-icon [icon]="faHeart"></fa-icon>
+      </p>
+      @if (product.image_location != null) {
       <p (click)="openImage(product.image_location)">
         <fa-icon [icon]="faEye"></fa-icon>
       </p>
-    }
+      }
+    </div>
   </div>
-
-</div>
 </div>

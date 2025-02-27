@@ -5,6 +5,7 @@ import { UrlService } from 'src/app/services/url.service';
 import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
 import { CustomerType } from 'src/app/common/types/account';
 import { CartUnit } from 'src/app/common/types/cart';
+import { ProductBanner } from 'src/app/common/types/shop';
 
 @Component({
   selector: 'app-product',
@@ -18,6 +19,11 @@ export class ProductComponent {
   imageUrl: string;
   unit: CartUnit = CartUnit.Unit;
   quantity: number = 1;
+
+  banner: ProductBanner = {
+    message: 'In stock',
+    class: 'in-stock'
+  };
 
   faHeart = faHeart;
   faEye = faEye;
@@ -40,15 +46,17 @@ export class ProductComponent {
       this.product.discounted_price =
         this.product.price * ((100 - this.product.discount) / 100);
     }
-    if (
-      this.product.quantity === null ||
-      this.product.quantity === 0 ||
-      this.product.quantity === undefined
-    ) {
+
+    if (this.product.quantity > 10) {
+      this.banner.message = 'In stock'
+      this.banner.class = 'in-stock';
+    } else if (this.product.quantity > 0) {
+      this.banner.message = 'Low on stock!';
+      this.banner.class = 'low-stock';
+    } else {
       this.product.quantity = 0;
-      this.product.banner = 'Out of stock!';
-    } else if (this.product.quantity < 10) {
-      this.product.banner = 'Low on stock!';
+      this.banner.message = 'Out of stock!';
+      this.banner.class = 'out-of-stock';
     }
   }
 
@@ -75,7 +83,7 @@ export class ProductComponent {
     if (this.product) {
       this.product.adjusted_quantity = Math.trunc(
         this.product.quantity /
-          this.cartService.getQuantityMultiplier(this.product, this.unit)
+        this.cartService.getQuantityMultiplier(this.product, this.unit)
       );
     }
 

@@ -29,3 +29,8 @@ export interface ProductDetails {
   pallet_size?: number;
   sku?: string
 }
+
+export interface ProductBanner {
+  message: string,
+  class: string
+}

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import { ProductBanner } from 'src/app/common/types/shop';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
 import { DataService } from 'src/app/services/data.service';
@@ -17,6 +18,7 @@ export class WishlistComponent {
   loggedIn = false;
 
   wishlistProducts: any[] = [];
+  banners: ProductBanner[] = []
 
   imageUrl;
 
@@ -58,9 +60,30 @@ export class WishlistComponent {
         if (!product.image && product.image == null) {
           product.image = 'placeholder.jpg';
         }
+
+        this.setBanner(product);
       });
 
       this.wishlistProducts = wishlistProducts;
+    }
+  }
+
+  setBanner(product: any) {
+    if (product.total_quantity > 10) {
+      this.banners.push({
+        message: 'In stock',
+        class: 'in-stock'
+      });
+    } else if (product.total_quantity > 0) {
+      this.banners.push({
+        message: 'Low on stock!',
+        class: 'low-stock'
+      });
+    } else {
+      this.banners.push({
+        message: 'Out of stock!',
+        class: 'out-of-stock'
+      });
     }
   }
 

@@ -1,56 +1,50 @@
 <app-page-banner></app-page-banner>
 @if (loggedIn) {
-  <div class="container">
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Product</th>
-          <th>Price</th>
-          <th>In stock</th>
-          <th></th>
-        </tr>
-      </thead>
-      @if (wishlistProducts.length > 0) {
-        @for (product of wishlistProducts; track product) {
-          <tr>
-            <td><img [src]="imageUrl + product.image" (error)="onImageError($event)" /></td>
-            <td [routerLink]="'/view/' + product.name">{{ product.name }}</td>
-            <td class="price-container">
-              @if (product.discount > 0) {
-                <p class="discounted-price">£{{ product.discounted_price | number: '1.2-2' }}</p>
-              }
-              <p [class]="product.discount > 0 ? 'original-price' : 'discounted-price'">£{{ product.price | number: '1.2-2' }}</p>
-            </td>
-                <td [ngClass]="{
-                    'out-of-stock': product.total_quantity === null,
-                    'low-stock': product.total_quantity !== null && product.total_quantity <= 10,
-                    'in-stock': product.total_quantity !== null && product.total_quantity > 10
-                }">
-              @if (product.total_quantity === null) {
-                <span>Out of stock</span>
-              }
-              @if (product.total_quantity !== null && product.total_quantity <= 10) {
-                <span>Low on stock</span>
-              }
-              @if (product.total_quantity !== null && product.total_quantity > 10) {
-                <span>In stock</span>
-              }
-            </td>
-            <td (click)="removeFromWishlist(product.id)">
-              <fa-icon [icon]="faX" />
-            </td>
-          </tr>
+<div class="container">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>In stock</th>
+        <th></th>
+      </tr>
+    </thead>
+    @for (product of wishlistProducts; track product; let i = $index) {
+    <tr>
+      <td>
+        <img [src]="imageUrl + product.image" (error)="onImageError($event)" />
+      </td>
+      <td [routerLink]="'/view/' + product.name">{{ product.name }}</td>
+      <td class="price-container">
+        @if (product.discount > 0) {
+        <p class="discounted-price">
+          £{{ product.discounted_price | number : "1.2-2" }}
+        </p>
         }
-      }
-    </table>
-    @if (wishlistProducts.length < 1) {
-      <div class="empty-container">
-        <h1>Your wishlist is empty!</h1>
-        <button [routerLink]="'/shop'">Add products</button>
-      </div>
+        <p
+          [class]="product.discount > 0 ? 'original-price' : 'discounted-price'"
+        >
+          £{{ product.price | number : "1.2-2" }}
+        </p>
+      </td>
+      <td [ngClass]="banners[i].class">
+        <span>{{ banners[i].message }}</span>
+      </td>
+      <td (click)="removeFromWishlist(product.id)">
+        <fa-icon [icon]="faX" />
+      </td>
+    </tr>
     }
+  </table>
+  @if (wishlistProducts.length < 1) {
+  <div class="empty-container">
+    <h1>Your wishlist is empty!</h1>
+    <button [routerLink]="'/shop'">Add products</button>
   </div>
+  }
+</div>
 }
 <app-login-form />
 <app-footer />
