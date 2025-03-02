@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { FormService } from '../../services/form.service';
 import { UrlService } from 'src/app/services/url.service';
-import { faHeart, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faEye, faFire } from '@fortawesome/free-solid-svg-icons';
 import { CustomerType } from 'src/app/common/types/account';
 import { CartUnit } from 'src/app/common/types/cart';
 import { ProductBanner } from 'src/app/common/types/shop';
@@ -15,18 +15,22 @@ import { ProductBanner } from 'src/app/common/types/shop';
 export class ProductComponent {
   @Input() product: any;
   @Input() customerType: CustomerType = CustomerType.Retail;
+  @Input() showSoldCount = true;
 
   imageUrl: string;
   unit: CartUnit = CartUnit.Unit;
   quantity: number = 1;
 
-  banner: ProductBanner = {
-    message: 'In stock',
-    class: 'in-stock'
+  stockBanner: ProductBanner = {
+    message: '',
+    class: ''
   };
+
+  soldBanner: string = ''
 
   faHeart = faHeart;
   faEye = faEye;
+  fire = faFire
 
   constructor(
     private urlService: UrlService,
@@ -39,6 +43,7 @@ export class ProductComponent {
   ngOnInit() {
     this.product.adjusted_quantity = this.product.quantity;
     this.setProductBanner();
+    this.showSoldCount && this.setSoldBanner();
   }
 
   setProductBanner() {
@@ -48,15 +53,25 @@ export class ProductComponent {
     }
 
     if (this.product.quantity > 10) {
-      this.banner.message = 'In stock'
-      this.banner.class = 'in-stock';
+      this.stockBanner.message = ''
+      this.stockBanner.class = '';
     } else if (this.product.quantity > 0) {
-      this.banner.message = 'Low on stock!';
-      this.banner.class = 'low-stock';
+      this.stockBanner.message = 'Low on stock!';
+      this.stockBanner.class = 'low-stock';
     } else {
       this.product.quantity = 0;
-      this.banner.message = 'Out of stock!';
-      this.banner.class = 'out-of-stock';
+      this.stockBanner.message = 'Out of stock!';
+      this.stockBanner.class = 'out-of-stock';
+    }
+  }
+
+  setSoldBanner() {
+    if (this.product.quantity != 0) {
+      let number = Math.floor(Math.random() * 10);
+      if (number == 1) {
+        number = Math.floor(Math.random() * 15) + 3
+        this.soldBanner = `${number} sold in the last hour`;
+      }
     }
   }
 

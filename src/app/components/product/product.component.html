@@ -1,14 +1,23 @@
 <div class="product-container">
-  <div class="discount-banner">
-    @if (product.discount && product.discount != null) {
-    <p>{{ product.discount }}% OFF</p>
-    } @if (banner.message) {
-    <p
-      [class]="product.discount && product.discount != null ? 'secondary' : ''"
-      [ngClass]="banner.class"
-    >
-      {{ banner.message }}
-    </p>
+  <div class="banner-container">
+    <div class="discount-banner">
+      @if (product.discount && product.discount != null) {
+      <p>{{ product.discount }}% OFF</p>
+      } @if (stockBanner.message) {
+      <p
+        [class]="
+          product.discount && product.discount != null ? 'secondary' : ''
+        "
+        [ngClass]="stockBanner.class"
+      >
+        {{ stockBanner.message }}
+      </p>
+      }
+    </div>
+    @if (soldBanner != '') {
+    <div class="sold-banner">
+      <p><fa-icon [icon]="fire" />{{ soldBanner }}</p>
+    </div>
     }
   </div>
   <img
