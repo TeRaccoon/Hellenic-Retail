@@ -64,12 +64,13 @@ export class CartService {
     }
   }
 
-  formatProduct(product: Product, cartItem: CartItem): CartProduct {
+  async formatProduct(product: Product, cartItem: CartItem): Promise<CartProduct> {
     let price = this.getProductPrice(product, cartItem.unit);
+    let size = await this.getProductSize(product.name, cartItem.unit);
     let discountedPrice =
       product.discount !== 0 ? price * ((100 - product.discount) / 100) : price;
 
-    let name = `${product.name} ${cartItem.unit === CartUnit.Unit ? '' : '(' + cartItem.unit + ')'
+    let name = `${product.name} ${cartItem.unit === CartUnit.Unit ? '' : '(' + cartItem.unit + ' of ' + size + ')'
       }`;
 
     let total = price * cartItem.quantity;
@@ -87,6 +88,24 @@ export class CartService {
       discount: product.discount,
       image_location: imageLocation,
     };
+  }
+
+  async getProductSize(productName: string, unit: CartUnit): Promise<number> {
+    let product: ProductDetails = await this.dataService.processGet(
+      'product-view-details',
+      { productName: productName },
+      false
+    );
+
+    switch (unit) {
+      case 'Box':
+      case 'Retail Box':
+        return product.box_size ?? 1;
+      case 'Pallet':
+        return product.pallet_size ?? 1;
+    }
+
+    return 1
   }
 
   getProductPrice(product: Product, unit: CartUnit) {

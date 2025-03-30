@@ -72,7 +72,7 @@ export class ViewDetailsComponent {
     private clipboard: Clipboard,
     private location: Location,
     private formService: FormService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
