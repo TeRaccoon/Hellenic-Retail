@@ -69,9 +69,8 @@ export class CartService {
     let discountedPrice =
       product.discount !== 0 ? price * ((100 - product.discount) / 100) : price;
 
-    let name = `${product.name} ${
-      cartItem.unit === CartUnit.Unit ? '' : '(' + cartItem.unit + ')'
-    }`;
+    let name = `${product.name} ${cartItem.unit === CartUnit.Unit ? '' : '(' + cartItem.unit + ')'
+      }`;
 
     let total = price * cartItem.quantity;
     let discountedTotal = discountedPrice * cartItem.quantity;
@@ -196,9 +195,7 @@ export class CartService {
       } else {
         const newCartItem: CartItem = {
           id:
-            currentCartItems.length > 0
-              ? currentCartItems[currentCartItems.length - 1].id ?? 0 + 1
-              : 1,
+            currentCartItems.length + 1,
           item_id: productId,
           item_name: productName,
           quantity: quantity,
