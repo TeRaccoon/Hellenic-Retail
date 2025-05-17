@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { UrlService } from 'src/app/services/url.service';
-import { CartService } from 'src/app/services/cart.service';
+import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 import { CartItem, CartProduct } from 'src/app/common/types/cart';
 import { CheckoutSummary, CheckoutType } from 'src/app/common/types/checkout';
+import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
-import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
+import { DataService } from 'src/app/services/data.service';
+import { UrlService } from 'src/app/services/url.service';
 
 @Component({
   selector: 'app-checkout-order-summary',
@@ -18,12 +19,14 @@ export class CheckoutOrderSummaryComponent {
   imageUrl = '';
 
   deliveryMinimum = 30;
+  deliveryCost = 7.5;
 
   constructor(
     private consts: ConstManager,
     private urlService: UrlService,
     private cartService: CartService,
-    private checkoutService: CheckoutService
+    private checkoutService: CheckoutService,
+    private dataService: DataService
   ) {
     this.checkoutSummary = checkoutService.getCheckoutSummary();
   }
@@ -36,6 +39,10 @@ export class CheckoutOrderSummaryComponent {
   }
 
   async getDeliveryMinimum() {
+    this.deliveryCost = await this.dataService.processGet(
+      'retail_delivery_cost'
+    );
+
     this.deliveryMinimum = await this.consts.getConstant(
       settingKeys.free_delivery_minimum
     );

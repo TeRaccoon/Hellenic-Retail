@@ -2,18 +2,32 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
+  faAddressBook,
   faCircleExclamation,
   faCircleNotch,
-  faAddressBook,
 } from '@fortawesome/free-solid-svg-icons';
+import { ICreateOrderRequest, IPayPalConfig } from 'ngx-paypal';
 import { lastValueFrom, Subscription } from 'rxjs';
+import {
+  ConstManager,
+  dataKeys,
+  settingKeys,
+} from 'src/app/common/const/const-manager';
+import {
+  AccountResponse,
+  CustomerDetails,
+  RegistrationForm,
+} from 'src/app/common/types/account';
+import { CartItem, CartProduct } from 'src/app/common/types/cart';
+import { AccountService } from 'src/app/services/account.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService } from 'src/app/services/cart.service';
+import { CheckoutService } from 'src/app/services/checkout.service';
 import { DataService } from 'src/app/services/data.service';
 import { FormService } from 'src/app/services/form.service';
 import { MailService } from 'src/app/services/mail.service';
-import { CheckoutService } from 'src/app/services/checkout.service';
 import {
+  CheckoutFormFull,
   CheckoutSummary,
   CheckoutType,
   Coupon,
@@ -22,17 +36,7 @@ import {
   PaymentMethod,
   YesNo,
 } from '../../common/types/checkout';
-import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
-import { CartItem, CartProduct } from 'src/app/common/types/cart';
-import {
-  AccountResponse,
-  CustomerDetails,
-  RegistrationForm,
-} from 'src/app/common/types/account';
-import { CheckoutFormFull } from '../../common/types/checkout';
 import { Response } from '../../common/types/data-response';
-import { AccountService } from 'src/app/services/account.service';
-import { ConstManager, settingKeys } from 'src/app/common/const/const-manager';
 
 @Component({
   selector: 'app-checkout',
@@ -84,6 +88,8 @@ export class CheckoutComponent {
   invoiceId: number | null = null;
   invoicedItemIDs: number[] = [];
   originalSubtotal: number | null = null;
+
+  freeDeliveryMinimum = 30;
 
   constructor(
     private accountService: AccountService,
@@ -141,6 +147,9 @@ export class CheckoutComponent {
 
     this.checkoutSummary = this.checkoutService.getCheckoutSummary();
     this.supportEmail = this.consts.getConstant(settingKeys.support_email);
+    this.freeDeliveryMinimum = await this.consts.getConstant(
+      settingKeys.free_delivery_minimum
+    );
     this.invoicedItemIDs = [];
   }
 
@@ -311,7 +320,10 @@ export class CheckoutComponent {
     let deliveryMinimum = await this.consts.getConstant(
       settingKeys.free_delivery_minimum
     );
-    let delivery = subtotal < deliveryMinimum ? 7.5 : 0;
+
+    let deliveryCost = await this.consts.getConstant(dataKeys.delivery_cost);
+
+    let delivery = subtotal < deliveryMinimum ? deliveryCost : 0;
     // let vat = Number(Number((subtotal + delivery) * 0.2).toFixed(2)); This is VAT added onto the product prices which may already have VAT
     let vat = (subtotal * 0.2) / (1 + 0.2); //This is VAT taken from the products
 
@@ -449,19 +461,46 @@ export class CheckoutComponent {
         this.dataService.submitFormData(invoicedItemForm)
       );
 
-      if (!response.success) {
-        this.orderError =
-          'There was an error processing this order! You have not been charged.';
-        this.formService.setPopupMessage(
-          'There was an error processing this order!',
-          true,
-          10000
-        );
-        return false;
-      }
-
-      this.invoicedItemIDs.push(response.id);
+      if (!this.handleInvoicedItemResponse(response)) return;
     }
+
+    if (this.checkoutSummary.subtotal < this.freeDeliveryMinimum) {
+      let deliveryItemId = this.consts.getConstant(dataKeys.delivery_item);
+
+      let invoicedItemForm = {
+        invoice_id: invoiceId,
+        item_id: deliveryItemId,
+        quantity: 1,
+        discount: 0,
+        unit: 'Unit',
+        table_name: 'invoiced_items',
+        action: 'add',
+      };
+
+      let response = await lastValueFrom(
+        this.dataService.submitFormData(invoicedItemForm)
+      );
+
+      if (!this.handleInvoicedItemResponse(response)) return;
+    }
+
+    return true;
+  }
+
+  handleInvoicedItemResponse(response: any) {
+    if (!response.success) {
+      this.orderError =
+        'There was an error processing this order! You have not been charged.';
+      this.formService.setPopupMessage(
+        'There was an error processing this order!',
+        true,
+        10000
+      );
+      return false;
+    }
+
+    this.invoicedItemIDs.push(response.id);
+
     return true;
   }
 
@@ -526,8 +565,6 @@ export class CheckoutComponent {
       };
     });
 
-    console.log(this.checkoutSummary.discount);
-
     const formData = this.billingForm.value;
     const emailInformation = {
       reference: this.orderReference,
@@ -571,9 +608,7 @@ export class CheckoutComponent {
       status: 'Pending',
       delivery_date: null,
       printed: 'No',
-      gross_value: Number(
-        this.checkoutSummary.subtotal + this.checkoutSummary.delivery
-      ).toFixed(2),
+      gross_value: Number(this.checkoutSummary.subtotal).toFixed(2),
       VAT: Number(this.checkoutSummary.vat).toFixed(2),
       total: Number(this.checkoutSummary.total).toFixed(2),
       discount_value: Number(

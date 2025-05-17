@@ -1,71 +1,76 @@
 <h3>Your order</h3>
 <table class="product-table">
   @if (cartProducts) {
-    <tr>
-      <th class="width65">Product</th>
-      <th>Subtotal</th>
-    </tr>
-    @for (product of cartProducts; track product; let i = $index) {
-      <tr>
-        <td class="row-details">
-          <div>
-            <img [alt]="product.name" [src]="imageUrl + product.image_location" (error)="onImageError($event)">
-            <p>{{ cart[i].quantity }}</p>
-          </div>
-          <p>{{ product.name }}</p>
-        </td>
-        <td class="row-price">
-          <p>{{ product.discounted_price | currency: 'GBP' }}</p>
-        </td>
-      </tr>
+  <tr>
+    <th class="width65">Product</th>
+    <th>Subtotal</th>
+  </tr>
+  @for (product of cartProducts; track product; let i = $index) {
+  <tr>
+    <td class="row-details">
+      <div>
+        <img
+          [alt]="product.name"
+          [src]="imageUrl + product.image_location"
+          (error)="onImageError($event)"
+        />
+        <p>{{ cart[i].quantity }}</p>
+      </div>
+      <p>{{ product.name }}</p>
+    </td>
+    <td class="row-price">
+      <p>{{ product.discounted_price | currency : "GBP" }}</p>
+    </td>
+  </tr>
+  }
+  <tr>
+    <td>
+      <p class="title">Subtotal (inc VAT)</p>
+    </td>
+    <td>
+      <p class="row-price">{{ checkoutSummary.subtotal | currency : "GBP" }}</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p class="title">VAT</p>
+    </td>
+    <td>
+      <p class="row-price">{{ checkoutSummary.vat | currency : "GBP" }}</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p class="title">Delivery</p>
+    </td>
+    @if (checkoutSummary.total < deliveryMinimum) {
+    <td>
+      <p class="row-price">£{{ deliveryCost }}</p>
+    </td>
+    } @else {
+    <p class="row-price">--</p>
     }
-    <tr>
-      <td>
-        <p class="title">Subtotal (inc VAT)</p>
-      </td>
-      <td>
-        <p class="row-price">{{ checkoutSummary.subtotal | currency: 'GBP' }}</p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p class="title">VAT</p>
-      </td>
-      <td>
-        <p class="row-price">{{ checkoutSummary.vat | currency: 'GBP' }}</p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p class="title">Delivery</p>
-      </td>
-      @if (checkoutSummary.total < deliveryMinimum) {
-        <td>
-          <p class="row-price">£7.50</p>
-        </td>
-      } @else {
-        <p class="row-price">--</p>
-      }
-      <td>
-      </td>
-    </tr>
-    @if (checkoutSummary.discount != null) {
-      <tr>
-        <td>
-          <p class="title">{{ checkoutSummary.discount.title }}</p>
-        </td>
-        <td>
-          <p class="row-price">{{ checkoutSummary.discount.value | currency: 'GBP' }}</p>
-        </td>
-      </tr>
-    }
-    <tr>
-      <td>
-        <p class="title">Total</p>
-      </td>
-      <td>
-        <p class="row-price">{{ checkoutSummary.total | currency: 'GBP' }}</p>
-      </td>
-    </tr>
+    <td></td>
+  </tr>
+  @if (checkoutSummary.discount != null) {
+  <tr>
+    <td>
+      <p class="title">{{ checkoutSummary.discount.title }}</p>
+    </td>
+    <td>
+      <p class="row-price">
+        {{ checkoutSummary.discount.value | currency : "GBP" }}
+      </p>
+    </td>
+  </tr>
+  }
+  <tr>
+    <td>
+      <p class="title">Total</p>
+    </td>
+    <td>
+      <p class="row-price">{{ checkoutSummary.total | currency : "GBP" }}</p>
+    </td>
+  </tr>
   }
 </table>

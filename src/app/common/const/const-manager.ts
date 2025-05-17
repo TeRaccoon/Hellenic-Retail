@@ -8,11 +8,19 @@ const SETTING_KEYS = [
   'support_phone',
   'address',
 ];
+
+const DATA_KEYS = ['delivery_cost', 'delivery_item'];
+
 export enum settingKeys {
   free_delivery_minimum = 'free_delivery_minimum',
   support_email = 'support_email',
   support_phone = 'support_phone',
   address = 'address',
+}
+
+export enum dataKeys {
+  delivery_cost = 'delivery_cost',
+  delivery_item = 'delivery_item',
 }
 
 @Injectable({
@@ -37,9 +45,13 @@ export class ConstManager {
         key: key,
       });
     }
+
+    for (let key of DATA_KEYS) {
+      this.consts[key] = await this.dataService.processGet(key);
+    }
   }
 
-  getConstant(key: settingKeys) {
+  getConstant(key: settingKeys | dataKeys) {
     return this.consts[key];
   }
 }
