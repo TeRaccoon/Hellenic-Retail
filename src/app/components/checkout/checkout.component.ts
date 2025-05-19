@@ -147,7 +147,7 @@ export class CheckoutComponent {
 
     this.checkoutSummary = this.checkoutService.getCheckoutSummary();
     this.supportEmail = this.consts.getConstant(settingKeys.support_email);
-    this.freeDeliveryMinimum = await this.consts.getConstant(
+    this.freeDeliveryMinimum = this.consts.getConstant(
       settingKeys.free_delivery_minimum
     );
     this.invoicedItemIDs = [];
